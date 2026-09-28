@@ -50,7 +50,7 @@ html, body { min-height: 100%; }
 }
 .footer__brand-icon {
   font-size: var(--icon-sm);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
 }
 .footer__brand-name {
   font-family: var(--font-family-heading);
@@ -98,7 +98,7 @@ html, body { min-height: 100%; }
   transition: width var(--motion-fast);
 }
 .footer__links a:hover {
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
 }
 .footer__links a:hover::after {
   width: 100%;

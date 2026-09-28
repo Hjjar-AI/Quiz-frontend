@@ -66,7 +66,7 @@ vi.mock('@/stores/testSessionStore', () => ({
   useTestSessionStore: () => testState.store,
 }))
 
-import TestQuestion from '@/features/testCommon/TestQuestion.vue'
+import TestQuestion from '@/features/testCommon/views/TestQuestion.vue'
 import { mountWithGlobals } from '../../../helpers/mountWithGlobals'
 
 beforeEach(() => {
@@ -101,7 +101,10 @@ function makeStoreMock(overrides = {}) {
     }),
     submitAnswer: vi.fn().mockResolvedValue({}),
     finish: vi.fn().mockResolvedValue({
-      results: [], total_questions: 0, correct_count: 0, accuracy: 0,
+      results: [],
+      total_questions: 0,
+      correct_count: 0,
+      accuracy: 0,
     }),
     pause: vi.fn(),
     resume: vi.fn(),

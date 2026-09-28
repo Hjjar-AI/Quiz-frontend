@@ -18,16 +18,26 @@
 
   "theme": {
     "label": "السمة",
+    "auto": "النظام",
     "light": "فاتح",
     "stone": "حجري",
+    "iris": "سوسني",
     "dark": "داكن",
+    "midnight": "منتصف الليل",
     "onyx": "أسود حالك",
     "blossom": "أزهار",
     "fresh": "منعش",
+    "lagoon": "بحيرة",
     "contrast": "تباين عالٍ",
     "ink": "حبر",
     "slate": "أردوازي",
     "amber": "كهرماني",
+    "group": {
+      "automatic": "تلقائي",
+      "light": "فاتح",
+      "dark": "داكن",
+      "accessibility": "إمكانية الوصول"
+    },
     "changed": "تم تغيير السمة إلى {theme}"
   },
 
@@ -347,11 +357,11 @@
     "hard": "صعب"
   },
 
- "roles": {
-  "admin": "مدير النظام",
-  "moderator": "مشرف",
-  "member": "عضو"
-},
+  "roles": {
+    "admin": "مدير النظام",
+    "moderator": "مشرف",
+    "member": "عضو"
+  },
 
   "timer": {
     "stopwatch": "ساعة توقيت",

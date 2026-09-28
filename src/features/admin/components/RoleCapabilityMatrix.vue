@@ -13,10 +13,9 @@
     • the "unsaved changes" indicator and buttons
 
   The parent view supplies the catalog and the initial role caps
-  from a single `permissionStore.fetchCatalog()` call. On save, this
-  component emits `role-caps-changed` with the newly-updated map so
-  the parent's `roleCaps` ref — and, by extension, this component's
-  `initialRoleCaps` prop on next mount — reflects the change.
+  from a single `permissionStore.fetchCatalog()` call. On save,
+  `permissionStore.updateRole()` updates the canonical store state;
+  this component only keeps its local saved/draft copies in sync.
 -->
 <template>
   <div class="role-matrix">
@@ -158,8 +157,6 @@ const props = defineProps({
   initialRoleCaps: { type: Object, required: true },
 })
 
-const emit = defineEmits(['role-caps-changed'])
-
 const editableRoles = computed(() => [ROLES.MODERATOR, ROLES.MEMBER])
 
 // ── Local state ───────────────────────────────────────────────────
@@ -237,7 +234,6 @@ async function saveActiveRole() {
       ...roleCaps.value,
       [activeRole.value]: [...caps],
     }
-    emit('role-caps-changed', { ...roleCaps.value })
     notify(t('admin.permissions.roleSaved', { role: roleLabel(activeRole.value) }), 'success')
   } catch (e) {
     error.value = e?.message || t('admin.permissions.saveFailed')

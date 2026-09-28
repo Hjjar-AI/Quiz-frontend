@@ -123,7 +123,7 @@ html[data-density="compact"] .list-toolbar {
 }
 .page-header__title i {
   flex-shrink: 0;
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
 }
 .page-header__badges,
 .page-header__actions {
@@ -173,7 +173,7 @@ html[data-density="compact"] .list-toolbar {
   font-size: var(--font-size-xl);
   line-height: var(--line-height-heading);
 }
-.section-header__title i { color: var(--color-primary); }
+.section-header__title i { color: var(--color-primary-soft-text); }
 .section-header__description { margin: var(--space-2xs) 0 0; color: var(--color-text-muted); font-size: var(--font-size-sm); }
 .section-header__badges,
 .section-header__actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-xs); }

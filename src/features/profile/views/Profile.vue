@@ -7,11 +7,11 @@
       size="base"
       page-class="profile-page"
     >
-        <template #actions>
-          <BaseButton variant="secondary" @click="router.push('/change-password')">
-            <i class="bi bi-key"></i> {{ t('profile.changePassword') }}
-          </BaseButton>
-        </template>
+      <template #actions>
+        <BaseButton variant="secondary" @click="router.push('/change-password')">
+          <i class="bi bi-key"></i> {{ t('profile.changePassword') }}
+        </BaseButton>
+      </template>
       <div class="profile-grid">
         <BaseCard class="profile-card profile-card--main">
           <div class="profile-avatar">
@@ -24,10 +24,12 @@
                 <BaseBadge
                   v-if="authorRankLabel"
                   :variant="authorRankVariant"
-                  :title="t('profile.rankTrustTooltip', {
-                    trust: (user.trust_score || 0).toFixed(1),
-                    count: user.questions_count || 0,
-                  })"
+                  :title="
+                    t('profile.rankTrustTooltip', {
+                      trust: (user.trust_score || 0).toFixed(1),
+                      count: user.questions_count || 0,
+                    })
+                  "
                 >
                   <i :class="authorRankIcon"></i>
                   {{ authorRankLabel }}
@@ -56,13 +58,13 @@
 
         <div class="profile-stats">
           <StatTile :value="user.questions_count || 0" :label="t('profile.statQuestions')" />
-          <StatTile :value="(user.trust_score || 0).toFixed(1) + '%'" :label="t('profile.statTrust')" />
+          <StatTile
+            :value="(user.trust_score || 0).toFixed(1) + '%'"
+            :label="t('profile.statTrust')"
+          />
         </div>
 
-        <BaseCard
-          v-if="user.expires_at"
-          class="profile-card profile-card--expiry"
-        >
+        <BaseCard v-if="user.expires_at" class="profile-card profile-card--expiry">
           <h4 class="card-title">
             <i class="card-title__icon bi bi-hourglass-split"></i>
             {{ t('profile.subscriptionTitle') }}
@@ -95,10 +97,7 @@
           buttons — the shared registry is the single source of
           truth for admin destinations.
         -->
-        <BaseCard
-          v-if="profileAdminLinks.length > 0"
-          class="profile-card profile-card--admin"
-        >
+        <BaseCard v-if="profileAdminLinks.length > 0" class="profile-card profile-card--admin">
           <h4 class="card-title">
             <i class="card-title__icon bi bi-shield-lock"></i>
             {{ t('profile.adminTitle') }}
@@ -136,17 +135,13 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import { formatDate, formatLongDate } from '@/utils/formatters'
 import { ROLES, ROLE_LABEL_KEYS } from '@/utils/constants'
 import { ADMIN_LINKS, PROFILE_ADMIN_SHORTCUTS } from '@/constants/adminLinks'
-import {
-  authorRankVariantFor,
-  authorRankIconFor,
-  authorRankLabelFor,
-} from '@/utils/authorRank'
+import { authorRankVariantFor, authorRankIconFor, authorRankLabelFor } from '@/utils/authorRank'
 
 const { t } = useI18n()
 
 const router = useRouter()
 const authStore = useAuthStore()
-const { currentTheme, getThemeLabel } = useTheme()
+const { themePreference, getThemeLabel } = useTheme()
 
 const user = computed(() => authStore.user || {})
 
@@ -158,26 +153,29 @@ const avatarInitial = computed(() => {
 const roleLabel = computed(() => {
   const role = user.value.role
   const key = ROLE_LABEL_KEYS[role]
-  return key ? t(key) : (role || '')
+  return key ? t(key) : role || ''
 })
 
 const roleBadgeClass = computed(() => {
   switch (user.value.role) {
-    case ROLES.ADMIN:     return 'danger'
-    case ROLES.MODERATOR: return 'warning'
+    case ROLES.ADMIN:
+      return 'danger'
+    case ROLES.MODERATOR:
+      return 'warning'
     case ROLES.MEMBER:
-    default:              return 'info'
+    default:
+      return 'info'
   }
 })
 
-const themeLabel = computed(() => getThemeLabel(currentTheme.value))
+const themeLabel = computed(() => getThemeLabel(themePreference.value))
 
 // Subset of ADMIN_LINKS that belongs on the profile page, filtered
 // by the caller's capabilities. Order follows PROFILE_ADMIN_SHORTCUTS.
 const profileAdminLinks = computed(() => {
-  return PROFILE_ADMIN_SHORTCUTS
-    .map(cap => ADMIN_LINKS.find(link => link.cap === cap))
-    .filter(link => link && authStore.can(link.cap))
+  return PROFILE_ADMIN_SHORTCUTS.map((cap) => ADMIN_LINKS.find((link) => link.cap === cap)).filter(
+    (link) => link && authStore.can(link.cap),
+  )
 })
 
 const authorRankLabel = computed(() => {
@@ -188,20 +186,12 @@ const authorRankLabel = computed(() => {
   // for a missing key, which changes behavior for a backend state
   // that should not normally occur but is not explicitly prevented.
   if (!user.value.author_rank) return ''
-  return authorRankLabelFor(
-    user.value.author_rank,
-    t,
-    user.value.author_rank_label_ar || '',
-  )
+  return authorRankLabelFor(user.value.author_rank, t, user.value.author_rank_label_ar || '')
 })
 
-const authorRankVariant = computed(() =>
-  authorRankVariantFor(user.value.author_rank)
-)
+const authorRankVariant = computed(() => authorRankVariantFor(user.value.author_rank))
 
-const authorRankIcon = computed(() =>
-  authorRankIconFor(user.value.author_rank)
-)
+const authorRankIcon = computed(() => authorRankIconFor(user.value.author_rank))
 
 const daysUntilExpiry = computed(() => {
   if (!user.value.expires_at) return null

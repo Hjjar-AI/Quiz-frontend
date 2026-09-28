@@ -1,4 +1,4 @@
-<!-- frontend/src/features/admin/FileImport.vue -->
+<!-- frontend/src/features/admin/components/FileImport.vue -->
 <template>
   <SimpleImportTab
     accept=".xlsx,.xls,.csv,.json"
@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import SimpleImportTab from './components/SimpleImportTab.vue'
+import SimpleImportTab from './SimpleImportTab.vue'
 import { useAdminDatabaseStore } from '@/stores/adminDatabaseStore'
 
 const { t } = useI18n()

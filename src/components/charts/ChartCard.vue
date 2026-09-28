@@ -51,6 +51,8 @@ const { palette, refreshPalette } = useChartPalette()
 let chartInstance = null
 let observer = null
 const isVisible = ref(false)
+const pointStyles = ['circle', 'rect', 'triangle', 'rectRot', 'crossRot', 'star']
+const lineDashes = [[], [8, 4], [3, 3], [10, 3, 2, 3], [2, 4], [12, 4]]
 
 function mergeChartOptions(base, override) {
   const out = { ...base, ...override }
@@ -119,8 +121,18 @@ function renderChart() {
 
   if (chartData.datasets) {
     chartData.datasets.forEach((ds, i) => {
-      if (!ds.backgroundColor) ds.backgroundColor = palette.value[i % palette.value.length]
-      if (!ds.borderColor) ds.borderColor = palette.value[i % palette.value.length]
+      const color = palette.value[i % palette.value.length]
+      if (!ds.backgroundColor) {
+        ds.backgroundColor =
+          props.type === 'pie' || props.type === 'doughnut'
+            ? (ds.data || []).map((_, index) => palette.value[index % palette.value.length])
+            : color
+      }
+      if (!ds.borderColor) ds.borderColor = color
+      if (!ds.pointStyle) ds.pointStyle = pointStyles[i % pointStyles.length]
+      if (props.type === 'line' && !ds.borderDash) {
+        ds.borderDash = lineDashes[i % lineDashes.length]
+      }
     })
   }
 
@@ -133,6 +145,7 @@ function renderChart() {
       legend: {
         labels: {
           color: textColor,
+          usePointStyle: true,
         },
       },
     },

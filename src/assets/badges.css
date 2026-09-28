@@ -9,6 +9,7 @@
   display: inline-flex; align-items: center; gap: var(--space-xs);
   letter-spacing: var(--letter-spacing-badge);
   vertical-align: middle;
+  border: var(--border-width) solid transparent;
   background: color-mix(in srgb, var(--badge-accent) 8%, var(--color-bg-card));
   color: var(--badge-foreground);
 }
@@ -48,7 +49,7 @@
 .chip--primary {
   --chip-accent: var(--color-primary);
   background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg-card));
-  color: var(--color-primary-dark);
+  color: var(--color-primary-soft-text);
 }
 .chip__remove {
   display: inline-grid;
@@ -64,7 +65,7 @@
   font-size: 0.9em;
   line-height: 1;
 }
-.chip__remove:hover { background: color-mix(in srgb, var(--color-danger) 12%, transparent); color: var(--color-danger); }
+.chip__remove:hover { background: color-mix(in srgb, var(--color-danger) 12%, transparent); color: var(--color-danger-soft-text); }
 
 .base-chip {
   --chip-accent: var(--color-text-muted);
@@ -105,17 +106,21 @@
   .base-chip__remove { min-width: var(--control-height); min-height: var(--control-height); }
 }
 
-.icon-hero { width: 64px; height: 64px; border-radius: var(--radius-circle); display: grid; place-items: center; font-size: var(--icon-xl); background: color-mix(in srgb, currentColor 12%, transparent); color: var(--color-primary); }
+.icon-hero { width: 64px; height: 64px; border-radius: var(--radius-circle); display: grid; place-items: center; font-size: var(--icon-xl); background: color-mix(in srgb, currentColor 12%, transparent); color: var(--color-primary-soft-text); }
 .icon-hero--lg { width: 96px; height: 96px; font-size: var(--icon-2xl); }
 .icon-hero--sm { width: 48px; height: 48px; font-size: var(--icon-lg); }
 
 .difficulty-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.6rem; border-radius: var(--radius-pill); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); white-space: nowrap; }
 .difficulty-badge__dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-.difficulty-badge--easy { background: color-mix(in srgb, var(--color-success) 15%, transparent); color: var(--color-success-dark); }
+.difficulty-badge--easy { background: color-mix(in srgb, var(--color-success) 15%, transparent); color: var(--color-success-soft-text); }
 .difficulty-badge--easy .difficulty-badge__dot { background: var(--color-success); }
-.difficulty-badge--medium { background: color-mix(in srgb, var(--color-warning) 15%, transparent); color: var(--color-warning-dark); }
+.difficulty-badge--medium { background: color-mix(in srgb, var(--color-warning) 15%, transparent); color: var(--color-warning-soft-text); }
 .difficulty-badge--medium .difficulty-badge__dot { background: var(--color-warning); }
-.difficulty-badge--hard { background: color-mix(in srgb, var(--color-danger) 15%, transparent); color: var(--color-danger-dark); }
+.difficulty-badge--hard { background: color-mix(in srgb, var(--color-danger) 15%, transparent); color: var(--color-danger-soft-text); }
+
+@media (forced-colors: active) {
+  .badge { border-color: CanvasText; }
+}
 .difficulty-badge--hard .difficulty-badge__dot { background: var(--color-danger); }
 
 .difficulty-dot { display: inline-block; width: 10px; height: 10px; border-radius: var(--radius-circle); margin-inline-end: var(--space-2xs); vertical-align: middle; }

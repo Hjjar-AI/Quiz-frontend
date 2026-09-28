@@ -1,4 +1,4 @@
-<!-- frontend/src/features/testCommon/TestQuestion.vue -->
+<!-- frontend/src/features/testCommon/views/TestQuestion.vue -->
 <template>
   <div ref="swipeContainer" class="test-question" :class="{ 'test-question--critical': isCritical }">
     <div class="top-bar">
@@ -77,15 +77,15 @@
 import { computed } from 'vue'
 import Timer from '@/components/common/Timer.vue'
 import ProgressBar from '@/components/common/ProgressBar.vue'
-import QuestionDisplay from './QuestionDisplay.vue'
-import TestNavigation from './TestNavigation.vue'
-import ExplanationSection from './ExplanationSection.vue'
+import QuestionDisplay from '../components/QuestionDisplay.vue'
+import TestNavigation from '../components/TestNavigation.vue'
+import ExplanationSection from '../components/ExplanationSection.vue'
 import QuestionNavDots from '@/components/base/QuestionNavDots.vue'
 import ShortcutHint from '@/components/common/ShortcutHint.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import { useTestQuestionController } from './composables/useTestQuestionController'
-import { MODES } from './modes'
+import { useTestQuestionController } from '../composables/useTestQuestionController'
+import { MODES } from '../modes'
 import { localizedQuestion } from '@/utils/localizedQuestion'
 
 const { t, locale } = useI18n()

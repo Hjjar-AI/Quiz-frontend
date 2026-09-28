@@ -29,9 +29,9 @@ import { useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import TabStrip from '@/components/common/TabStrip.vue'
-import FileImport from '../FileImport.vue'
-import TelegramImport from '../TelegramImport.vue'
-import StateImport from '../StateImport.vue'
+import FileImport from '../components/FileImport.vue'
+import TelegramImport from '../components/TelegramImport.vue'
+import StateImport from '../components/StateImport.vue'
 
 const { t } = useI18n()
 const router = useRouter()

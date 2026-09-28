@@ -1,4 +1,4 @@
-<!-- frontend/src/features/testCommon/TestSetup.vue -->
+<!-- frontend/src/features/testCommon/components/TestSetup.vue -->
 <template>
   <Layout>
     <PageShell

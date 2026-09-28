@@ -1,4 +1,4 @@
-<!-- frontend/src/features/testCommon/ExplanationSection.vue -->
+<!-- frontend/src/features/testCommon/components/ExplanationSection.vue -->
 
 <template>
   <Transition name="slide-down">

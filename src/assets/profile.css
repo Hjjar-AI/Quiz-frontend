@@ -50,7 +50,7 @@
 }
 .detail-item i {
   font-size: var(--icon-lg);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   margin-bottom: var(--space-2xs);
 }
 .detail-label {
@@ -89,9 +89,9 @@
   gap: var(--space-xs);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-success);
+  color: var(--color-success-soft-text);
 }
-.expiry-days.text-danger { color: var(--color-danger); }
+.expiry-days.text-danger { color: var(--color-danger-soft-text); }
 .admin-actions {
   display: flex;
   gap: var(--space-sm);

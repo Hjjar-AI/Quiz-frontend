@@ -44,7 +44,7 @@
       },
       "arabicUI": {
         "title": "Professional Arabic interface",
-        "description": "Full Arabic support with RTL and four visual themes."
+        "description": "Full Arabic support with RTL, eleven visual themes, and an automatic system mode."
       }
     },
     "team": {
@@ -130,7 +130,7 @@
       "title": "The system in numbers",
       "categories": { "value": "18+", "label": "Medical categories" },
       "questions": { "value": "∞", "label": "Addable questions" },
-      "themes": { "value": "4", "label": "Visual themes" },
+      "themes": { "value": "11", "label": "Visual themes" },
       "files": { "value": "100+", "label": "Source files" }
     },
     "a11y": {

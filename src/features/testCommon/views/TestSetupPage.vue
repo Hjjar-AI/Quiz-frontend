@@ -1,4 +1,4 @@
-<!-- frontend/src/features/testCommon/TestSetupPage.vue -->
+<!-- frontend/src/features/testCommon/views/TestSetupPage.vue -->
 <template>
   <TestSetup
     :mode="routeMode"
@@ -17,7 +17,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import TestSetup from './TestSetup.vue'
+import TestSetup from '../components/TestSetup.vue'
 import { useTestPage } from '@/composables/useTestPage'
 import { useTestSessionStore } from '@/stores/testSessionStore'
 

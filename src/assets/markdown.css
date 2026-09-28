@@ -7,7 +7,7 @@
 }
 .markdown-help-link {
   font-size: var(--font-size-xs);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -23,7 +23,7 @@
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
 }
-.char-count--warn { color: var(--color-danger); }
+.char-count--warn { color: var(--color-danger-soft-text); }
 .word-count {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
@@ -67,7 +67,7 @@
   align-items: center;
   justify-content: center;
 }
-.markdown-toolbar__help:hover { color: var(--color-primary); }
+.markdown-toolbar__help:hover { color: var(--color-primary-soft-text); }
 
 /* Sanitized markdown output. */
 .base-markdown {

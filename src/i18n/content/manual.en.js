@@ -6,7 +6,8 @@
 export default {
   lead: 'Everything you need to know about <strong>Mukhtabir</strong> for managing psychiatry questions and exams. This manual is your sole reference — from your first sign-in to mastering every feature.',
 
-  footerNote: 'You have now mastered <strong>Mukhtabir</strong>. We wish you a fruitful and enjoyable learning experience.',
+  footerNote:
+    'You have now mastered <strong>Mukhtabir</strong>. We wish you a fruitful and enjoyable learning experience.',
 
   sections: [
     {
@@ -25,7 +26,7 @@ export default {
       <li><strong>Integrated verification system:</strong> question review with detailed statistics and a trust score per user.</li>
       <li><strong>Tag and category management:</strong> organise questions by topic and difficulty.</li>
       <li><strong>Backup and import/export:</strong> protect your data in multiple formats (Excel, CSV, JSON).</li>
-      <li><strong>Fully localised interface:</strong> RTL support with four visual themes.</li>
+      <li><strong>Fully localised interface:</strong> RTL support with eleven visual themes and an automatic system mode.</li>
       <li><strong>Offline mode:</strong> smart notifications when the internet drops.</li>
       <li><strong>Accessibility:</strong> screen-reader support, keyboard shortcuts, and adequate colour contrast.</li>
     </ul>
@@ -46,7 +47,7 @@ export default {
         <tr><td>Account</td><td>Created by the system administrator</td></tr>
         <tr><td>Connection</td><td>Required for core operations; some pages work offline</td></tr>
       </tbody>
-    </table>`
+    </table>`,
     },
 
     {
@@ -87,7 +88,7 @@ export default {
       <li>Set the default number of questions per page.</li>
       <li>Choose your preferred difficulty filter.</li>
       <li>Turn auto-advance and sound effects on or off.</li>
-    </ol>`
+    </ol>`,
     },
 
     {
@@ -121,7 +122,7 @@ export default {
     </ul>
     <blockquote>
       <p><strong>💡 Tip:</strong> dashboard stats update automatically when you add or remove questions. There is no need to reload the page manually.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -191,7 +192,7 @@ export default {
       <li><strong>Verify selected:</strong> verify all selected questions at once</li>
       <li><strong>Unverify:</strong> unverify the selected questions</li>
       <li><strong>Edit tags:</strong> add or remove tags across several questions</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -244,7 +245,7 @@ export default {
       <li>That at least two choices are filled</li>
       <li>That the correct-answer index points at a filled choice</li>
       <li>That no field exceeds its character limit</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -288,7 +289,7 @@ export default {
     </ol>
     <blockquote>
       <p><strong>💡 Tip:</strong> use specific, clear tags. For example: "depression, CBT, SSRIs" rather than overly generic ones.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -329,7 +330,7 @@ export default {
       <li><strong>Add category:</strong> name, description, colour (from a palette or custom), icon</li>
       <li><strong>Edit category:</strong> change any attribute</li>
       <li><strong>Delete category:</strong> questions are kept; they simply become uncategorised</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -356,7 +357,7 @@ export default {
     <ul>
       <li><strong>Exam:</strong> when you want to test yourself seriously under time pressure.</li>
       <li><strong>Self-study:</strong> when you want to learn, understand every question, and filter by category and difficulty.</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -406,7 +407,7 @@ export default {
     </ul>
     <blockquote>
       <p><strong>⚠️ Warning:</strong> if the timer runs out before you finish, the exam ends automatically and only the answers you submitted are counted.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -456,7 +457,7 @@ export default {
     <h4>Smart review</h4>
     <p>If you have questions due for review (per the spaced-repetition algorithm), a card appears on the setup page with a "Smart review" button. Click it to start a session of the most important questions to revisit.</p>
     <h4>Drilling your mistakes</h4>
-    <p>From the "Mistakes notebook" or "Fragile knowledge" pages, click "Quiz me on my mistakes" or "Review these questions" to start a self-study session with those specific questions.</p>`
+    <p>From the "Mistakes notebook" or "Fragile knowledge" pages, click "Quiz me on my mistakes" or "Review these questions" to start a self-study session with those specific questions.</p>`,
     },
 
     {
@@ -486,7 +487,7 @@ export default {
     </ul>
     <blockquote>
       <p><strong>💡 Tip:</strong> use bookmarks to save questions you find difficult. Then run repeated tests on them until you have them down.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -540,7 +541,7 @@ export default {
       <li>Top verifiers</li>
       <li>Verification by category</li>
       <li>A monthly chart</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -601,7 +602,7 @@ export default {
     <ul>
       <li><strong>Activate:</strong> activate all selected</li>
       <li><strong>Deactivate:</strong> deactivate all selected</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -631,7 +632,7 @@ export default {
     </ol>
     <blockquote>
       <p><strong>💡 Tip:</strong> changing the exam duration only affects new exams. In-flight exams keep the duration they started with.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -667,7 +668,7 @@ export default {
       <li>Click "View question" to verify.</li>
       <li>If there is an error: fix the question, then resolve the report.</li>
       <li>If the question is correct: resolve the report with a note explaining why.</li>
-    </ol>`
+    </ol>`,
     },
 
     {
@@ -693,7 +694,7 @@ export default {
     <ul>
       <li>A user counts as active if they had activity within the last <strong>5 minutes</strong>.</li>
       <li>Stale sessions are cleaned up automatically every hour.</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -737,7 +738,7 @@ export default {
     <h4>Downloading backups</h4>
     <blockquote>
       <p><strong>💡 Important tip:</strong> backups are stored on the same server. To protect your data against server failure, download backups regularly and keep them somewhere external and safe.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -787,7 +788,7 @@ export default {
       <li><strong>JSON (.json):</strong> structured data for developers</li>
     </ul>
     <h4>Exporting verified questions only</h4>
-    <p>You can export only the verified questions from the <strong>"Export verified"</strong> button on the verification-statistics page.</p>`
+    <p>You can export only the verified questions from the <strong>"Export verified"</strong> button on the verification-statistics page.</p>`,
     },
 
     {
@@ -858,7 +859,7 @@ which can be titrated based on response.
 Source: Kaplan & Sadock's, 12th edition</code></pre>
     <blockquote>
       <p><strong>💡 Tip:</strong> use the "Preview" button in the Markdown editor to see the final rendering before saving.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -891,7 +892,7 @@ Source: Kaplan & Sadock's, 12th edition</code></pre>
       <li><strong>Swipe left:</strong> next question</li>
       <li><strong>Swipe right:</strong> previous question</li>
       <li>The swipe must cover at least 50 pixels</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -899,23 +900,31 @@ Source: Kaplan & Sadock's, 12th edition</code></pre>
       num: 21,
       icon: 'bi bi-palette',
       title: 'Themes and appearance',
-      content: `<p>The system offers <strong>four visual themes</strong> to match your preference and lighting conditions.</p>
+      content: `<p>The system offers <strong>eleven visual themes</strong>, plus an automatic mode that follows your operating-system preference.</p>
     <h4>Available themes</h4>
     <table class="table-shared">
       <thead>
         <tr><th>Theme</th><th>Description</th><th>Best for</th></tr>
       </thead>
       <tbody>
-        <tr><td>Light ☀️</td><td>Warm beige / brown</td><td>Daytime use</td></tr>
-        <tr><td>Dark 🌙</td><td>Dark background with light text</td><td>Night-time use</td></tr>
-        <tr><td>Blossom 🌸</td><td>Soft pink tones</td><td>A calm, warm look</td></tr>
-        <tr><td>Fresh 🌳</td><td>Natural greens</td><td>A relaxing, natural look</td></tr>
+        <tr><td>System</td><td>Stone by day, Midnight in dark mode</td><td>Following your device automatically</td></tr>
+        <tr><td>Stone</td><td>Neutral canvas with deep rust accents</td><td>Balanced everyday use</td></tr>
+        <tr><td>Iris</td><td>Cool violet accents</td><td>A distinctive light palette</td></tr>
+        <tr><td>Blossom</td><td>Soft rose surfaces with orchid accents</td><td>A calm, warm look</td></tr>
+        <tr><td>Lagoon</td><td>Teal surfaces with blue accents</td><td>A cool, natural look</td></tr>
+        <tr><td>Slate</td><td>Cool blue-grey surfaces</td><td>A restrained professional look</td></tr>
+        <tr><td>Ink</td><td>Minimal monochrome accents</td><td>Low-distraction reading</td></tr>
+        <tr><td>Amber</td><td>Warm cream and amber tones</td><td>A warm reading environment</td></tr>
+        <tr><td>Dark</td><td>Warm accents on dark surfaces</td><td>Night-time use</td></tr>
+        <tr><td>Midnight</td><td>Cool indigo night palette</td><td>Cool-toned dark mode</td></tr>
+        <tr><td>Onyx</td><td>True-black OLED surfaces</td><td>Maximum darkness on OLED screens</td></tr>
+        <tr><td>High contrast</td><td>Stronger borders and 7:1 solid fills</td><td>Accessibility and maximum clarity</td></tr>
       </tbody>
     </table>
     <h4>Changing the theme</h4>
     <ol>
       <li>Click the theme icon in the top navigation bar.</li>
-      <li>A dropdown with the four themes appears.</li>
+      <li>A grouped menu of automatic, light, dark, and accessibility options appears.</li>
       <li>Click the theme you want.</li>
       <li>The theme is applied instantly with a smooth transition.</li>
     </ol>
@@ -925,7 +934,7 @@ Source: Kaplan & Sadock's, 12th edition</code></pre>
       <li>It loads instantly on every visit.</li>
     </ul>
     <h4>Smooth transition</h4>
-    <p>When you change the theme, a 350 ms transition is applied to all colours, borders, and shadows, avoiding a jarring flash.</p>`
+    <p>When you change the theme, a 350 ms transition is applied to all colours, borders, and shadows, avoiding a jarring flash.</p>`,
     },
 
     {
@@ -957,7 +966,7 @@ Source: Kaplan & Sadock's, 12th edition</code></pre>
       <li>Starting new tests</li>
       <li>Refreshing data</li>
       <li>Signing in / out</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -995,7 +1004,7 @@ Source: Kaplan & Sadock's, 12th edition</code></pre>
       <li>Request deletion of your account (via the administrator)</li>
       <li>Withdraw consent at any time</li>
       <li>Contact about privacy: <strong>hjjarmhmmdali@gmail.com</strong></li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -1021,7 +1030,7 @@ Source: Kaplan & Sadock's, 12th edition</code></pre>
       <li><code>Shift+Tab</code>: move backwards</li>
       <li><code>Enter</code> or <code>Space</code>: activate the focused element</li>
       <li><code>Esc</code>: close modals</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -1048,7 +1057,7 @@ Source: Kaplan & Sadock's, 12th edition</code></pre>
     <h4>How do I add a new tag?</h4>
     <p>When adding or editing a question, type the tag into the tag field. If it does not exist yet, it is created automatically.</p>
     <h4>Can I delete my own account?</h4>
-    <p>No. Account deletion requires administrator intervention. Contact the administrator at <strong>hjjarmhmmdali@gmail.com</strong> if you want your account deleted.</p>`
+    <p>No. Account deletion requires administrator intervention. Contact the administrator at <strong>hjjarmhmmdali@gmail.com</strong> if you want your account deleted.</p>`,
     },
 
     {
@@ -1100,7 +1109,7 @@ Source: Kaplan & Sadock's, 12th edition</code></pre>
       <li>System errors you cannot resolve yourself</li>
       <li>Requests to create new accounts</li>
     </ul>
-    <p>Contact: <strong>hjjarmhmmdali@gmail.com</strong></p>`
+    <p>Contact: <strong>hjjarmhmmdali@gmail.com</strong></p>`,
     },
 
     {
@@ -1125,12 +1134,12 @@ Source: Kaplan & Sadock's, 12th edition</code></pre>
         <tr><td>Backup</td><td>A copy of the database for protection against loss</td></tr>
         <tr><td>Validity</td><td>How long an account remains active before expiring</td></tr>
         <tr><td>Auto-renew</td><td>Automatic extension of account validity at expiry</td></tr>
-        <tr><td>Theme</td><td>The visual appearance of the app (light, dark, blossom, fresh)</td></tr>
+        <tr><td>Theme</td><td>The selected visual palette, or System mode that follows your device</td></tr>
         <tr><td>Markdown</td><td>A lightweight formatting language used to author questions</td></tr>
         <tr><td>Session</td><td>One test from start to finish</td></tr>
         <tr><td>Pause</td><td>Saving test progress to come back to later</td></tr>
       </tbody>
-    </table>`
-    }
-  ]
+    </table>`,
+    },
+  ],
 }

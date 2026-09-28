@@ -1,4 +1,4 @@
-<!-- frontend/src/features/testCommon/UnifiedTestSetup.vue -->
+<!-- frontend/src/features/testCommon/components/UnifiedTestSetup.vue -->
 <!--
   Unified exam/study setup.
 
@@ -210,7 +210,7 @@ import BaseSelect from '@/components/base/BaseSelect.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import SourceGridPicker from '@/components/common/SourceGridPicker.vue'
 import DifficultySelector from '@/features/questions/components/DifficultySelector.vue'
-import { useTestSetupState } from './composables/useTestSetupState'
+import { useTestSetupState } from '../composables/useTestSetupState'
 
 const { t } = useI18n()
 

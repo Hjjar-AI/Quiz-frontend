@@ -1,10 +1,10 @@
 // frontend/src/i18n/content/privacy.en.js
 
-
 export default {
   lastUpdate: '13 September 2026',
 
-  introLead: '<p>At <strong>Mukhtabir</strong>, we take your privacy seriously. This policy explains how we collect, use, and protect your personal data when you use our educational system. Please read it carefully to understand our practices regarding your data.</p>',
+  introLead:
+    '<p>At <strong>Mukhtabir</strong>, we take your privacy seriously. This policy explains how we collect, use, and protect your personal data when you use our educational system. Please read it carefully to understand our practices regarding your data.</p>',
 
   sections: [
     {
@@ -30,7 +30,7 @@ export default {
     </ul>
     <blockquote>
       <p><strong>ℹ️ Legal note:</strong> this system is subject to Syrian Law No. 12 of 2024 on the Protection of Electronic Personal Data, which came into force on 1 January 2025. That law classifies sensitive personal data in a special category that requires explicit consent and additional protection measures. We seek to comply with this law within the limits of our available means and resources. For the international framework, we are guided by the principles of the EU General Data Protection Regulation (GDPR) where possible.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -77,7 +77,7 @@ export default {
       <li>Questions you author in the medical field</li>
       <li>Verification notes tied to evaluating medical content</li>
     </ul>
-    <p>We handle this data with additional protection and request your explicit and separate consent when processing it.</p>`
+    <p>We handle this data with additional protection and request your explicit and separate consent when processing it.</p>`,
     },
 
     {
@@ -114,7 +114,7 @@ export default {
     </ul>
     <blockquote>
       <p><strong>⚠️ Important:</strong> we do not sell your personally identifying data to any third party, and we do not share it with external parties except where required by law or with your explicit consent. However, we may sell fully anonymized data (after all personal identifiers have been removed) for statistical, research, or commercial purposes.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -145,7 +145,7 @@ export default {
       <p><strong>⚠️ Notice:</strong> we do our best to protect your data, but we are not professional cybersecurity experts and cannot guarantee absolute security. We are not responsible for any breach or data loss outside our reasonable control. We recommend that users take their own precautions and avoid sharing unnecessary sensitive data. No electronic system is 100% secure.</p>
     </blockquote>
     <h4>4.4 Backups</h4>
-    <p>The system can create database backups. These are stored locally on the same server. Administrators are advised to download backups periodically and keep them in a safe external location to protect the data against server failure.</p>`
+    <p>The system can create database backups. These are stored locally on the same server. Administrators are advised to download backups periodically and keep them in a safe external location to protect the data against server failure.</p>`,
     },
 
     {
@@ -166,13 +166,13 @@ export default {
     <h4>5.3 Local storage</h4>
     <p>We use browser local storage to keep:</p>
     <ul>
-      <li>Your preferred visual theme (light / dark / blossom / fresh)</li>
+      <li>Your preferred visual theme or automatic system-mode choice</li>
       <li>Your user preferences (default question count, etc.)</li>
       <li>Questions you viewed recently</li>
     </ul>
     <p>This data is kept locally on your device and is not sent to the server. You can clear it at any time from your browser settings.</p>
     <h4>5.4 No tracking pixels</h4>
-    <p>We do not use cookies for tracking or advertising. We do not track your behavior across other websites and do not share your data with advertising networks.</p>`
+    <p>We do not use cookies for tracking or advertising. We do not track your behavior across other websites and do not share your data with advertising networks.</p>`,
     },
 
     {
@@ -209,7 +209,7 @@ export default {
     <p>To exercise any of your rights, contact the system administrator through the approved internal channels or by email at <strong>hjjarmhmmdali@gmail.com</strong>. We will respond within 30 days at most.</p>
     <blockquote>
       <p><strong>🛡️ Identity verification:</strong> before carrying out sensitive requests (such as account deletion or data export) we may ask you for a national identity document, a video call, or in-person contact to verify your identity. This is to protect you from unauthorized access to your data.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -234,7 +234,7 @@ export default {
     <p>Backups created by the administrator remain on the server until manually deleted. Periodic review and removal of old backups is recommended.</p>
     <blockquote>
       <p><strong>ℹ️ Note:</strong> we may retain some data for longer to comply with legal obligations or for security purposes. Once the retention period ends, the data is deleted securely or anonymized.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -254,7 +254,7 @@ export default {
       <li>To prevent fraud or illegal activity</li>
     </ul>
     <h4>8.4 Data transfer</h4>
-    <p>We do not transfer your data outside Syria or outside the local network, except for external backups performed by authorized administrators.</p>`
+    <p>We do not transfer your data outside Syria or outside the local network, except for external backups performed by authorized administrators.</p>`,
     },
 
     {
@@ -266,7 +266,7 @@ export default {
     <p>We do not knowingly collect personal data from children. If you learn that a child has provided us with personal data, please contact us immediately so we can take the appropriate steps and delete that data.</p>
     <blockquote>
       <p><strong>ℹ️ Note:</strong> all accounts are created by the system administrator after verifying the user's identity and medical credentials.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -304,7 +304,7 @@ export default {
     </ul>
     <blockquote>
       <p><strong>⚠️ Limits of notification:</strong> we regret that we cannot guarantee immediate breach notification in all cases, given our limited resources and experience. We will do our best to handle any security incident, but formal notification may be outside our current capacity. We apologize for any inconvenience this may cause.</p>
-    </blockquote>`
+    </blockquote>`,
     },
 
     {
@@ -329,7 +329,7 @@ export default {
       <li>Using data for new purposes</li>
       <li>Sharing data with new third parties</li>
       <li>Changing the retention period of data</li>
-    </ul>`
+    </ul>`,
     },
 
     {
@@ -345,8 +345,8 @@ export default {
     </ul>
     <blockquote>
       <p><strong>ℹ️ Note:</strong> the system runs over the network and requires a connection to the server to access data and process requests. The system cannot be used in fully offline mode.</p>
-    </blockquote>`
-    }
+    </blockquote>`,
+    },
   ],
 
   summaryItems: [
@@ -354,18 +354,20 @@ export default {
     'We do not sell your personally identifying data to any third party',
     'Passwords are hashed and cannot be read',
     'You have the right to access and delete your data',
-    'We do our utmost to protect your data'
+    'We do our utmost to protect your data',
   ],
 
-  contactIntro: 'If you have any questions about this privacy policy or our data-handling practices, please contact the system administrator through the approved internal channels or by email at <strong>hjjarmhmmdali@gmail.com</strong>',
+  contactIntro:
+    'If you have any questions about this privacy policy or our data-handling practices, please contact the system administrator through the approved internal channels or by email at <strong>hjjarmhmmdali@gmail.com</strong>',
 
   contactItems: [
     { icon: 'bi bi-building', text: 'Mukhtabir team (independent development initiative)' },
     { icon: 'bi bi-person-badge', text: 'System administrator' },
-    { icon: 'bi bi-envelope', text: 'hjjarmhmmdali@gmail.com' }
+    { icon: 'bi bi-envelope', text: 'hjjarmhmmdali@gmail.com' },
   ],
 
   footerMain: 'By using the Mukhtabir system, you agree to the terms of this privacy policy.',
 
-  footerDisclaimer: 'This policy is provided "as is" within the limits of our means and resources; we do our best to comply with applicable laws.'
+  footerDisclaimer:
+    'This policy is provided "as is" within the limits of our means and resources; we do our best to comply with applicable laws.',
 }

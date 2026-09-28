@@ -45,7 +45,7 @@
 }
 .image-dropzone__icon {
   font-size: var(--icon-xl);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   margin-bottom: var(--space-xs);
 }
 .image-dropzone__text {

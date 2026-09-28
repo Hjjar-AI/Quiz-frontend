@@ -3,7 +3,7 @@
 export function getChartPalette() {
   const styles = getComputedStyle(document.documentElement)
 
-    function token(name, altNames = []) {
+  function token(name, altNames = []) {
     let val = styles.getPropertyValue(name).trim()
     if (val) return val
     for (const a of altNames) {
@@ -14,8 +14,8 @@ export function getChartPalette() {
       // eslint-disable-next-line no-console
       console.warn(
         `[chartPalette] token "${name}" ` +
-        `(alternatives: ${altNames.length ? altNames.join(', ') : 'none'}) ` +
-        `resolved empty. Verify the token is defined on :root or [data-theme].`
+          `(alternatives: ${altNames.length ? altNames.join(', ') : 'none'}) ` +
+          `resolved empty. Verify the token is defined on :root or [data-theme].`,
       )
     }
     return ''
@@ -29,8 +29,10 @@ export function getChartPalette() {
   const text = token('--color-text-primary', ['--color-text-secondary', '--color-text-muted'])
   const border = token('--color-border', ['--color-selected', '--color-text-muted'])
 
-  // Standard metric colors: always same hue for same metric.
-  // The `series` array order is load-bearing — see the CONTRACT above.
+  const series = [1, 2, 3, 4, 5, 6].map((index) =>
+    token(`--color-chart-${index}`, ['--color-primary', '--color-info', '--color-success']),
+  )
+
   return {
     primary,
     success,
@@ -39,7 +41,7 @@ export function getChartPalette() {
     danger,
     text,
     border,
-    // Series palette for categorical data
-    series: [primary, success, info, warning, danger],
+    // Categorical data does not borrow semantic success/danger colors.
+    series,
   }
 }

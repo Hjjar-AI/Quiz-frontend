@@ -6,7 +6,7 @@
   margin: var(--space-lg) 0;
 }
 .knowledge-summary__card { display: grid; gap: var(--space-xs); text-align: center; }
-.knowledge-summary__card i { color: var(--color-primary); font-size: var(--icon-lg); }
+.knowledge-summary__card i { color: var(--color-primary-soft-text); font-size: var(--icon-lg); }
 .knowledge-summary__card strong { font-size: var(--font-size-xl); }
 .knowledge-map-page__filters { display: flex; flex-wrap: wrap; gap: var(--space-2xs); margin-bottom: var(--space-lg); }
 .knowledge-group { margin-block: var(--space-xl); }

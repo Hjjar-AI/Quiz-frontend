@@ -18,7 +18,7 @@
   opacity: 0;
   overflow: hidden;
 }
-.drop-zone__icon { font-size: var(--icon-xl); color: var(--color-primary); margin-bottom: var(--space-sm); }
+.drop-zone__icon { font-size: var(--icon-xl); color: var(--color-primary-soft-text); margin-bottom: var(--space-sm); }
 .drop-zone__text { font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-bottom: var(--space-xs); }
 .drop-zone__hint { color: var(--color-text-muted); display: block; margin-bottom: var(--space-md); }
 
@@ -28,14 +28,6 @@
 .import-preview-table__question-cell { max-width: 200px; word-break: break-word; }
 .import-preview-table__choices { list-style: none; padding: 0; margin: 0; }
 .import-preview-table__choices li { font-size: var(--font-size-xs); margin-bottom: 2px; }
-.import-preview-table__choice--correct { font-weight: var(--font-weight-bold); color: var(--color-success); }
+.import-preview-table__choice--correct { font-weight: var(--font-weight-bold); color: var(--color-success-soft-text); }
 .import-preview-table__more { color: var(--color-text-muted); font-style: italic; }
 .import-preview-table__more-info { text-align: center; color: var(--color-text-muted); font-size: var(--font-size-sm); margin-top: var(--space-sm); }
-
-.import-tabs {
-display: flex;
-gap: var(--space-sm);
-margin: var(--space-lg) 0;
-border-bottom: var(--border-width-strong) solid var(--color-border);
-padding-bottom: var(--space-sm);
-}

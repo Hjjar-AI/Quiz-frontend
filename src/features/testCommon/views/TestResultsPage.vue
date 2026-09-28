@@ -1,4 +1,4 @@
-<!-- frontend/src/features/testCommon/TestResultsPage.vue -->
+<!-- frontend/src/features/testCommon/views/TestResultsPage.vue -->
 
 <template>
   <TestResults
@@ -18,10 +18,10 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import TestResults from './TestResults.vue'
+import TestResults from '../components/TestResults.vue'
 import { useTestSessionStore } from '@/stores/testSessionStore'
 import { useNotify } from '@/composables/useNotify'
-import { MODES } from './modes'
+import { MODES } from '../modes'
 
 const { t } = useI18n()
 

@@ -117,17 +117,18 @@ import BaseChip from '@/components/base/BaseChip.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
 import AsyncContent from '@/components/common/AsyncContent.vue'
 import SectionHeader from '@/components/common/SectionHeader.vue'
-import { knowledgeService } from '@/services/knowledgeService'
+import { useKnowledgeStore } from '@/stores/knowledgeStore'
 import { useTestSessionStore } from '@/stores/testSessionStore'
 import '@/assets/knowledge-map.css'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const knowledgeStore = useKnowledgeStore()
 const sessionStore = useTestSessionStore()
-const payload = ref(null)
-const loading = ref(true)
-const error = ref(null)
+const payload = computed(() => knowledgeStore.mapPayload)
+const loading = computed(() => knowledgeStore.isMapLoading)
+const error = computed(() => knowledgeStore.mapError)
 const validStatuses = new Set(['all', 'mastered', 'developing', 'needs_work', 'unstarted'])
 const initialStatus = String(route.query.status || 'all')
 const activeStatus = ref(validStatuses.has(initialStatus) ? initialStatus : 'all')
@@ -209,15 +210,7 @@ async function reviewObject(item) {
 }
 
 async function load() {
-  loading.value = true
-  error.value = null
-  try {
-    payload.value = await knowledgeService.map()
-  } catch (exc) {
-    error.value = exc?.message || t('knowledge.loadFailed')
-  } finally {
-    loading.value = false
-  }
+  await knowledgeStore.fetchMap()
 }
 
 onMounted(load)

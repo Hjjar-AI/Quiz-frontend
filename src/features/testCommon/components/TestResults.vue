@@ -1,4 +1,4 @@
-<!-- frontend/src/features/testCommon/TestResults.vue -->
+<!-- frontend/src/features/testCommon/components/TestResults.vue -->
 <template>
   <Layout>
     <PageShell
@@ -122,7 +122,7 @@ import { useCountUp } from '@/composables/useCountUp'
 import { useRotatingContent } from '@/composables/useRotatingContent'
 import { copyTextToClipboard } from '@/utils/clipboard'
 import { useNotify } from '@/composables/useNotify'
-import { MODES } from './modes'
+import { MODES } from '../modes'
 import { selectMotivationalQuotes, DIFFICULTY_LABEL_KEYS } from '@/utils/constants'
 
 const { t, locale } = useI18n()

@@ -35,7 +35,7 @@
   height: 44px;
   border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--color-primary) 12%, transparent);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   font-size: var(--icon-md);
   flex-shrink: 0;
 }
@@ -120,7 +120,7 @@
 .leaderboard__self-marker {
   margin-inline-start: var(--space-2xs);
   font-size: var(--font-size-xs);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   font-weight: normal;
 }
 .leaderboard__streak {
@@ -135,9 +135,9 @@
   font-variant-numeric: tabular-nums;
   font-weight: var(--font-weight-semibold);
 }
-.leaderboard__accuracy--great { color: var(--color-success); }
-.leaderboard__accuracy--ok { color: var(--color-warning); }
-.leaderboard__accuracy--low { color: var(--color-danger); }
+.leaderboard__accuracy--great { color: var(--color-success-soft-text); }
+.leaderboard__accuracy--ok { color: var(--color-warning-soft-text); }
+.leaderboard__accuracy--low { color: var(--color-danger-soft-text); }
 
 /* Visibility toggle row on the member page. */
 .group-visibility-row {

@@ -9,9 +9,19 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { useTheme, applyTheme, loadSavedTheme } from '@/composables/useTheme'
 import { storageService } from '@/services/storageService'
 
+let prefersDark = false
+let systemThemeListener = null
+
 beforeEach(() => {
   vi.useFakeTimers()
   localStorage.clear()
+  prefersDark = false
+  window.matchMedia = vi.fn(() => ({
+    matches: prefersDark,
+    addEventListener: vi.fn((_event, listener) => {
+      systemThemeListener = listener
+    }),
+  }))
   // Reset the DOM to a known baseline. `loadSavedTheme` with an
   // empty storage defaults `currentTheme` to Stone and writes it on
   // the html element.
@@ -41,6 +51,23 @@ describe('useTheme — applyTheme', () => {
     expect(currentTheme.value).toBe('stone')
   })
 
+  it('resolves Auto from the system preference while persisting Auto', () => {
+    prefersDark = true
+    const { currentTheme, themePreference } = useTheme()
+    applyTheme('auto')
+    expect(themePreference.value).toBe('auto')
+    expect(currentTheme.value).toBe('midnight')
+    expect(storageService.getItem('theme')).toBe('auto')
+  })
+
+  it('follows system preference changes while Auto is selected', () => {
+    const { currentTheme } = useTheme()
+    applyTheme('auto')
+    systemThemeListener({ matches: true })
+    expect(currentTheme.value).toBe('midnight')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('midnight')
+  })
+
   it('adds then removes the theme-transition class', () => {
     applyTheme('dark')
     expect(document.documentElement.classList.contains('theme-transition')).toBe(true)
@@ -59,12 +86,14 @@ describe('useTheme — applyTheme', () => {
 })
 
 describe('useTheme — loadSavedTheme', () => {
-  it('restores the theme from localStorage', () => {
+  it('migrates the retired Fresh theme to Lagoon', () => {
     storageService.setItem('theme', 'fresh')
-    const { currentTheme } = useTheme()
+    const { currentTheme, themePreference } = useTheme()
     loadSavedTheme()
-    expect(currentTheme.value).toBe('fresh')
-    expect(document.documentElement.getAttribute('data-theme')).toBe('fresh')
+    expect(themePreference.value).toBe('lagoon')
+    expect(currentTheme.value).toBe('lagoon')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('lagoon')
+    expect(storageService.getItem('theme')).toBe('lagoon')
   })
 
   it('falls back to Stone when the stored value is not a known theme', () => {
@@ -82,21 +111,36 @@ describe('useTheme — loadSavedTheme', () => {
 })
 
 describe('useTheme — getters', () => {
-  it('isDark is true only for the dark theme', () => {
+  it('isDark tracks every dark palette', () => {
     const { isDark } = useTheme()
     applyTheme('dark')
     expect(isDark.value).toBe(true)
+    applyTheme('midnight')
+    expect(isDark.value).toBe(true)
+    applyTheme('onyx')
+    expect(isDark.value).toBe(true)
     applyTheme('light')
     expect(isDark.value).toBe(false)
-    applyTheme('fresh')
+    applyTheme('lagoon')
     expect(isDark.value).toBe(false)
   })
 
   it('THEMES exposes every supported theme', () => {
     const { THEMES } = useTheme()
-    expect([...THEMES].sort()).toEqual([
-      'blossom', 'contrast', 'dark', 'fresh', 'ink',
-      'onyx', 'sepia', 'slate', 'stone',
-    ])
+    expect([...THEMES].sort()).toEqual(
+      [
+        'amber',
+        'blossom',
+        'contrast',
+        'dark',
+        'ink',
+        'iris',
+        'lagoon',
+        'midnight',
+        'onyx',
+        'slate',
+        'stone',
+      ].sort(),
+    )
   })
 })

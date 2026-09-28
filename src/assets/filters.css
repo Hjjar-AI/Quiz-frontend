@@ -65,7 +65,7 @@
   transition: background var(--motion-fast);
 }
 .tag-input__suggestion:hover { background: var(--color-bg-alt); }
-.tag-input__suggestion i { color: var(--color-primary); font-size: var(--icon-sm); }
+.tag-input__suggestion i { color: var(--color-primary-soft-text); font-size: var(--icon-sm); }
 .suggestions-enter-active, .suggestions-leave-active { transition: opacity var(--motion-fast), transform var(--motion-fast); }
 .suggestions-enter-from, .suggestions-leave-to { opacity: 0; transform: translateY(-4px); }
 
@@ -82,9 +82,9 @@
   margin-bottom: var(--space-md);
   color: var(--color-text-primary);
 }
-.last-viewed-chip i { color: var(--color-primary); }
+.last-viewed-chip i { color: var(--color-primary-soft-text); }
 .last-viewed-link {
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   text-decoration: none;
   font-weight: var(--font-weight-semibold);
   display: inline-flex;
@@ -102,7 +102,7 @@
   display: inline-flex;
   align-items: center;
 }
-.last-viewed-clear:hover { color: var(--color-danger); background: var(--color-bg-alt); }
+.last-viewed-clear:hover { color: var(--color-danger-soft-text); background: var(--color-bg-alt); }
 .filter-chips { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-md); }
 .filter-chips .chip button {
   display: inline-grid;
@@ -121,10 +121,10 @@
   line-height: 1;
 }
 .filter-chips .chip button .bi::before { vertical-align: 0; }
-.filter-chips .chip button:hover { background: color-mix(in srgb, var(--color-danger) 12%, transparent); color: var(--color-danger); }
+.filter-chips .chip button:hover { background: color-mix(in srgb, var(--color-danger) 12%, transparent); color: var(--color-danger-soft-text); }
 .filter-chips .chip button:focus-visible { outline: var(--border-width-strong) solid var(--color-focus-ring); outline-offset: 1px; }
 .clear-all-filters {
-  background: none; border: none; color: var(--color-primary);
+  background: none; border: none; color: var(--color-primary-soft-text);
   cursor: pointer; font-size: var(--font-size-sm);
 }
 .clear-all-filters:hover { text-decoration: underline; }
@@ -137,4 +137,4 @@
   border: var(--border-width) solid var(--color-border); background: var(--color-bg-card); color: var(--color-text-primary);
 }
 
-.question-link { color: var(--color-primary); font-size: var(--font-size-sm); text-decoration: none; }
+.question-link { color: var(--color-primary-soft-text); font-size: var(--font-size-sm); text-decoration: none; }

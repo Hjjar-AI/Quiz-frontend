@@ -1,4 +1,4 @@
-<!-- frontend/src/features/errors/NotFound.vue -->
+<!-- frontend/src/features/errors/views/NotFound.vue -->
 <template>
   <Layout>
     <div class="not-found">

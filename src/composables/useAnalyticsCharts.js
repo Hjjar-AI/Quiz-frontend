@@ -48,22 +48,22 @@ import { useI18n } from 'vue-i18n'
 export function useAnalyticsCharts({ store, palette }) {
   const { t } = useI18n()
 
-  // Short-name handle for the five palette slots. Recomputed on
-  // every palette change (i.e. every theme switch).
+  // Positional categorical slots, deliberately separate from semantic
+  // success/warning/danger colors. Recomputed on every theme switch.
   const C = computed(() => {
-    const [primary, success, info, warning, danger] = palette.value
-    return { primary, success, info, warning, danger }
+    const [chart1, chart2, chart3, chart4, chart5] = palette.value
+    return { chart1, chart2, chart3, chart4, chart5 }
   })
 
   const performanceChartData = computed(() => {
     const perf = store.summary?.user_performance || []
     return {
-      labels: perf.map(p => p.date),
+      labels: perf.map((p) => p.date),
       datasets: [
         {
           label: t('analytics.seriesAccuracy'),
-          data: perf.map(p => p.accuracy),
-          borderColor: C.value.primary,
+          data: perf.map((p) => p.accuracy),
+          borderColor: C.value.chart1,
           tension: 0.3,
           fill: false,
         },
@@ -81,19 +81,17 @@ export function useAnalyticsCharts({ store, palette }) {
     const sorted = [...cats].sort((a, b) => b.total - a.total)
     const top = sorted.slice(0, 10)
     return {
-      labels: top.map(c => c.category_name),
+      labels: top.map((c) => c.category_name),
       datasets: [
         {
           label: t('analytics.seriesTotalQuestions'),
-          data: top.map(c => c.total),
+          data: top.map((c) => c.total),
           // Prefer the category's own color when it has one; fall
           // back to the palette in order. The fallback index is the
           // item's position in `top`, not its position in the full
           // list, so two charts from the same page render
           // consistently.
-          backgroundColor: top.map((c, i) =>
-            c.color || palette.value[i % palette.value.length]
-          ),
+          backgroundColor: top.map((c, i) => c.color || palette.value[i % palette.value.length]),
         },
       ],
     }
@@ -107,18 +105,18 @@ export function useAnalyticsCharts({ store, palette }) {
       hard: t('difficulty.hard'),
     }
     const byDifficulty = {
-      easy: C.value.success,
-      medium: C.value.warning,
-      hard: C.value.danger,
+      easy: C.value.chart2,
+      medium: C.value.chart4,
+      hard: C.value.chart5,
     }
     return {
-      labels: diff.map(d => labelMap[d.difficulty] || d.difficulty),
+      labels: diff.map((d) => labelMap[d.difficulty] || d.difficulty),
       datasets: [
         {
           label: t('analytics.seriesCorrectRate'),
           // `avg_correct_rate` is 0–1; the chart shows 0–100.
-          data: diff.map(d => d.avg_correct_rate * 100),
-          backgroundColor: diff.map(d => byDifficulty[d.difficulty] || C.value.primary),
+          data: diff.map((d) => d.avg_correct_rate * 100),
+          backgroundColor: diff.map((d) => byDifficulty[d.difficulty] || C.value.chart1),
         },
       ],
     }
@@ -129,12 +127,12 @@ export function useAnalyticsCharts({ store, palette }) {
     const sorted = [...tags].sort((a, b) => b.count - a.count)
     const top = sorted.slice(0, 10)
     return {
-      labels: top.map(item => item.tag_name),
+      labels: top.map((item) => item.tag_name),
       datasets: [
         {
           label: t('analytics.seriesQuestionCount'),
-          data: top.map(item => item.count),
-          backgroundColor: C.value.info,
+          data: top.map((item) => item.count),
+          backgroundColor: C.value.chart3,
         },
       ],
     }
@@ -143,17 +141,17 @@ export function useAnalyticsCharts({ store, palette }) {
   const activeUsersChartData = computed(() => {
     const users = store.activeUsers || []
     return {
-      labels: users.map(u => u.date),
+      labels: users.map((u) => u.date),
       datasets: [
         {
           label: t('analytics.seriesActiveUsers'),
-          data: users.map(u => u.active_users),
-          backgroundColor: C.value.primary,
+          data: users.map((u) => u.active_users),
+          backgroundColor: C.value.chart1,
         },
         {
           label: t('analytics.seriesNewUsers'),
-          data: users.map(u => u.new_users),
-          backgroundColor: C.value.success,
+          data: users.map((u) => u.new_users),
+          backgroundColor: C.value.chart2,
         },
       ],
     }

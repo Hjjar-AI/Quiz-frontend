@@ -35,15 +35,11 @@
       </div>
 
       <div class="report-bars">
-        <div
-          v-for="cat in categories"
-          :key="cat.category_id"
-          class="report-bar"
-        >
+        <div v-for="cat in categories" :key="cat.category_id" class="report-bar">
           <span class="report-bar__label">
             <span
               class="report-bar__label-dot"
-              :style="{ background: cat.category_color }"
+              :style="{ '--category-accent': cat.category_color }"
             ></span>
             <span class="report-bar__label-text" :title="cat.category_name">
               {{ cat.category_name }}
@@ -59,7 +55,7 @@
               class="report-bar__fill"
               :style="{
                 width: scoreFor(cat) + '%',
-                background: cat.category_color,
+                '--category-accent': cat.category_color,
               }"
             ></div>
           </div>
@@ -87,9 +83,7 @@ const props = defineProps({
 const categories = computed(() => props.data?.categories || [])
 const totalCategories = computed(() => props.data?.total_categories || 0)
 
-const masteredCount = computed(
-  () => categories.value.filter(c => c.mastered).length
-)
+const masteredCount = computed(() => categories.value.filter((c) => c.mastered).length)
 
 const scoreFor = (category) => category.mastery_score ?? category.accuracy ?? 0
 

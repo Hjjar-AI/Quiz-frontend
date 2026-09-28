@@ -18,16 +18,26 @@
 
   "theme": {
     "label": "Theme",
+    "auto": "System",
     "light": "Light",
     "stone": "Stone",
+    "iris": "Iris",
     "dark": "Dark",
+    "midnight": "Midnight",
     "onyx": "Onyx",
     "blossom": "Blossom",
     "fresh": "Fresh",
+    "lagoon": "Lagoon",
     "contrast": "High contrast",
     "ink": "Ink",
     "slate": "Slate",
     "amber": "Amber",
+    "group": {
+      "automatic": "Automatic",
+      "light": "Light",
+      "dark": "Dark",
+      "accessibility": "Accessibility"
+    },
     "changed": "Theme changed to {theme}"
   },
 
@@ -119,7 +129,7 @@
     "manual": "Manual",
     "admin": "Admin",
     "users": "Users",
-     "studyMode": "Study mode",
+    "studyMode": "Study mode",
     "studyModeShort": "Study",
     "analytics": "Analytics",
     "verificationStats": "Statistics",
@@ -193,7 +203,7 @@
     "actionSuccess": "Action completed",
     "copied": "Copied",
     "copyFailed": "Could not copy",
-"heatmapLoadFailed": "Failed to load activity data",
+    "heatmapLoadFailed": "Failed to load activity data",
     "chartExported": "Chart exported",
     "exportingAs": "Exporting data as {format}",
     "fileTypeNotAllowed": "File type not allowed: {name}",
@@ -347,11 +357,11 @@
     "hard": "Hard"
   },
 
- "roles": {
-  "admin": "Administrator",
-  "moderator": "Moderator",
-  "member": "Member"
-},
+  "roles": {
+    "admin": "Administrator",
+    "moderator": "Moderator",
+    "member": "Member"
+  },
 
   "timer": {
     "stopwatch": "Stopwatch",
@@ -372,7 +382,7 @@
     "streakTooltip": "Study streak: {current} days — longest: {longest} days"
   },
 
- "ui": {
+  "ui": {
     "confirmTitle": "Confirm",
     "warningTitle": "Warning",
     "alertTitle": "Alert",

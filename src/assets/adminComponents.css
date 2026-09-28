@@ -57,7 +57,7 @@
   background: color-mix(in srgb, var(--color-danger) 8%, transparent);
   border-inline-start: 3px solid var(--color-danger);
   border-radius: var(--radius-sm);
-  color: var(--color-danger);
+  color: var(--color-danger-soft-text);
   font-size: var(--font-size-sm);
 }
 .state-import__actions {
@@ -204,14 +204,14 @@
   font-weight: var(--font-weight-bold);
 }
 .export-filters__title i,
-.export-filters__summary i { color: var(--color-primary); }
+.export-filters__summary i { color: var(--color-primary-soft-text); }
 .export-filters__clear {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2xs);
   background: none;
   border: none;
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   font-family: inherit;
   font-size: var(--font-size-xs);
   cursor: pointer;
@@ -314,7 +314,7 @@
 .role-matrix .role-chip--active {
   border-color: var(--color-primary);
   background: color-mix(in srgb, var(--color-primary) 12%, transparent);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
 }
 .role-matrix .role-chip--readonly { cursor: pointer; opacity: 0.85; }
 .role-matrix .role-chip__count {
@@ -351,7 +351,7 @@
   padding: 2px var(--space-xs);
   border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--color-warning) 18%, transparent);
-  color: var(--color-warning);
+  color: var(--color-warning-soft-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
 }
@@ -374,7 +374,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2xs);
-  color: var(--color-warning);
+  color: var(--color-warning-soft-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
 }
@@ -518,7 +518,7 @@
   padding: 2px var(--space-xs);
   border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--color-info) 15%, transparent);
-  color: var(--color-info);
+  color: var(--color-info-soft-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
 }
@@ -538,8 +538,8 @@
   gap: 4px;
 }
 .user-override-editor .override-legend__item--inherit { color: var(--color-text-muted); }
-.user-override-editor .override-legend__item--on { color: var(--color-success); }
-.user-override-editor .override-legend__item--off { color: var(--color-danger); }
+.user-override-editor .override-legend__item--on { color: var(--color-success-soft-text); }
+.user-override-editor .override-legend__item--off { color: var(--color-danger-soft-text); }
 .user-override-editor .capability-row--tri { cursor: default; }
 .user-override-editor .capability-row__role-tag {
   display: inline-flex;
@@ -552,7 +552,7 @@
 }
 .user-override-editor .capability-row__role-tag--on {
   background: color-mix(in srgb, var(--color-success) 15%, transparent);
-  color: var(--color-success);
+  color: var(--color-success-soft-text);
 }
 .user-override-editor .capability-row__role-tag--off {
   background: color-mix(in srgb, var(--color-text-muted) 15%, transparent);
@@ -579,7 +579,7 @@
 }
 .user-override-editor .tri-button:hover {
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
 }
 .user-override-editor .tri-button--inherit.tri-button--active {
   border-color: var(--color-text-muted);
@@ -589,12 +589,12 @@
 .user-override-editor .tri-button--on.tri-button--active {
   border-color: var(--color-success);
   background: color-mix(in srgb, var(--color-success) 15%, transparent);
-  color: var(--color-success);
+  color: var(--color-success-soft-text);
 }
 .user-override-editor .tri-button--off.tri-button--active {
   border-color: var(--color-danger);
   background: color-mix(in srgb, var(--color-danger) 15%, transparent);
-  color: var(--color-danger);
+  color: var(--color-danger-soft-text);
 }
 .user-override-editor .empty-hint-card { padding: var(--space-xl); }
 

@@ -114,7 +114,7 @@
 .srs-card__count {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-extrabold);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   line-height: 1;
   font-variant-numeric: tabular-nums;
   margin-inline-end: var(--space-xs);

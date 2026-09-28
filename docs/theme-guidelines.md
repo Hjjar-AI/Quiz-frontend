@@ -14,6 +14,10 @@ values locally.
 - Normal-size text must reach at least 4.5:1 against its surface. This applies
   both to semantic colors used as text on a card and to each solid semantic
   fill against its `--color-on-*` foreground. The Contrast theme targets 7:1.
+- Semantic text on tinted surfaces uses `--color-*-soft-text`: the derived
+  dark value in light themes and the brighter seed in dark themes.
+- Form boundaries use `--color-border-strong` and must remain at least 3:1
+  against the control background. Placeholder text must remain at least 4.5:1.
 - A light theme's elevation shadows use a low-alpha tint of that palette's
   primary text color. Dark themes use neutral black shadows.
 - Streak and rank colors are part of each palette. Do not let a new light
@@ -21,8 +25,12 @@ values locally.
 
 Category colors are different: they are user-authored, persisted data and are
 also used in exports. They stay stable across themes so category identity does
-not change. Every category color marker must be adjacent to its category name;
-color alone must not carry meaning.
+not change. Every category color marker must be adjacent to its category name
+and have a theme-derived outline; color alone must not carry meaning.
+
+Charts use `--color-chart-1` through `--color-chart-6`, not semantic status
+colors. Series also use point shapes and dash patterns so color is never the
+only distinction.
 
 ## Type and shape rules
 
@@ -42,14 +50,21 @@ color alone must not carry meaning.
 
 1. Add a complete palette block in `tokens.css`; only Onyx may share Dark's
    semantic block because it is deliberately a surface-only variant.
-2. Add the canonical name to `THEMES` in `src/utils/constants.js` and to the
-   pre-paint allowlist in `index.html`.
-3. Add its selector icon and the two small locale labels used by the theme
-   menu and accessibility announcement.
+2. Add the canonical name to `THEMES` and the appropriate entry in
+   `THEME_GROUPS` in `src/utils/constants.js`, then update the pre-paint
+   allowlist and body-color map in `index.html`.
+3. Add its selector icon and locale label used by the theme menu and
+   accessibility announcement.
 4. Add it to `DARK_THEMES` if it uses dark native controls.
-5. Check text/card, muted/card, semantic/card, and semantic/on-color contrast.
-6. Confirm the theme menu, charts, native date inputs, focus rings, print view,
-   streaks, ranks, and avatar tones.
+5. Add the matching PDF palette to
+   `backend/apps/questions/services/exporting/pdf_export.py`. If a palette is
+   retired, add an alias in both front-end and PDF registries so saved
+   preferences and old requests continue to work.
+6. Run `tests/unit/themeTokens.test.js`; it checks text and placeholder
+   contrast, control boundaries, semantic fills/tints, and chart separation.
+7. Confirm the grouped theme menu, Auto light/dark resolution, browser chrome,
+   charts, native date inputs, focus rings, print view, streaks, ranks, and
+   avatar tones.
 
 Use the repeatable [visual QA checklist](./visual-qa-checklist.md) for every
 theme and density before release.

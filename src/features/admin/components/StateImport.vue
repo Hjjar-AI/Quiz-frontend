@@ -1,4 +1,4 @@
-<!-- frontend/src/features/admin/StateImport.vue -->
+<!-- frontend/src/features/admin/components/StateImport.vue -->
 <template>
   <div class="state-import">
     <DropZone
@@ -133,8 +133,8 @@ import { useAdminDatabaseStore } from '@/stores/adminDatabaseStore'
 import { useUserStore } from '@/stores/userStore'
 import DropZone from '@/components/common/DropZone.vue'
 import BaseRadio from '@/components/base/BaseRadio.vue'
-import AuthorMappingModal from './components/AuthorMappingModal.vue'
-import ConflictResolutionModal from './components/ConflictResolutionModal.vue'
+import AuthorMappingModal from './AuthorMappingModal.vue'
+import ConflictResolutionModal from './ConflictResolutionModal.vue'
 
 const { t } = useI18n()
 

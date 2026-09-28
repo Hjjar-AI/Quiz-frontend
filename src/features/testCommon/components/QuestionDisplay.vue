@@ -1,4 +1,4 @@
-<!-- frontend/src/features/testCommon/QuestionDisplay.vue -->
+<!-- frontend/src/features/testCommon/components/QuestionDisplay.vue -->
 <template>
   <div>
     <CaseStemPanel v-if="question.case?.stem" :stem="question.case.stem" />

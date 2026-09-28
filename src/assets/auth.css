@@ -1,28 +1,11 @@
 /* frontend/src/assets/auth.css
-   Login and change-password page layouts.
-
-   These rules previously lived at the top of analytics.css — they
-   were written when the auth views were first added and never moved
-   out. All declarations are byte-identical to the originals; only
-   the file location changed. */
+   Login page layout and change-password card styles. */
 
 /* ── Change password ───────────────────────────────────────────── */
-.change-password-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-bg-body);
-  padding: var(--space-md);
-}
 .change-password-card {
   max-width: 480px;
   width: 100%;
   padding: var(--space-2xl) var(--space-xl);
-}
-.change-password-card__header {
-  text-align: center;
-  margin-bottom: var(--space-xl);
 }
 .change-password-form {
   display: flex;
@@ -42,6 +25,7 @@
 /* ── Login ─────────────────────────────────────────────────────── */
 .login-page {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -72,7 +56,7 @@
 }
 .success-icon {
   font-size: var(--icon-2xl);
-  color: var(--color-success);
+  color: var(--color-success-soft-text);
   animation: scaleIn 0.4s ease;
 }
 @keyframes scaleIn {
@@ -104,7 +88,7 @@
 .login-disclaimer p { margin-bottom: var(--space-xs); }
 .login-disclaimer p:last-child { margin-bottom: 0; }
 .login-disclaimer a {
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   text-decoration: none;
 }
 .login-disclaimer a:hover { text-decoration: underline; }

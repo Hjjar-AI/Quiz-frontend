@@ -29,7 +29,6 @@
           :capability-catalog="capabilityCatalog"
           :capability-groups="capabilityGroups"
           :initial-role-caps="roleCaps"
-          @role-caps-changed="onRoleCapsChanged"
         />
         <UserOverrideEditor
           v-else
@@ -104,10 +103,6 @@ async function loadCatalog() {
   const data = await permissionStore.fetchCatalog()
   if (!data) catalogError.value = permissionStore.error || t('admin.permissions.loadRolesFailed')
   loadingCatalog.value = false
-}
-
-function onRoleCapsChanged(value) {
-  permissionStore.roleCapabilities = value
 }
 
 function onUserSelected(userId) {

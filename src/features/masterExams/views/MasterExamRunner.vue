@@ -243,7 +243,7 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseMarkdown from '@/components/markdown/BaseMarkdown.vue'
 import QuestionNavDots from '@/components/base/QuestionNavDots.vue'
-import QuestionDisplay from '@/features/testCommon/QuestionDisplay.vue'
+import QuestionDisplay from '@/features/testCommon/components/QuestionDisplay.vue'
 import { useMasterExamRunner } from '../composables/useMasterExamRunner'
 
 const {

@@ -1,34 +1,28 @@
-// frontend/src/composables/useTheme.js
+// Theme preference, resolved palette, and browser-chrome coordination.
 //
-// Theme state and switching.
-//
-// BOOT-TIME COORDINATION
-// ----------------------
-// The initial value of `currentTheme` here is the Stone default, but the
-// actual DOM `data-theme` attribute is written by an inline script
-// in index.html BEFORE any CSS paints. That script reads
-// `localStorage['theme']` and sets `<html data-theme>` so the very
-// first paint is already on the correct theme (no default-theme flash).
-//
-// `loadSavedTheme()` below runs from main.js after the i18n and
-// pinia setup, and syncs the reactive ref to match what the
-// bootstrap script already wrote. If a caller imports this module
-// and reads `currentTheme.value` before `loadSavedTheme()` runs,
-// the value it sees is `'stone'` — reading `document.documentElement
-// .dataset.theme` is the correct way to see the actual active theme
-// in that window.
+// `themePreference` is what the user selected and what localStorage keeps.
+// `currentTheme` is the concrete palette applied to <html>. They differ only
+// for the Auto preference, which resolves to Stone or Midnight from the OS
+// color-scheme preference. index.html mirrors this resolution before paint.
 
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { i18n } from '@/i18n'
 import {
+  AUTO_THEME,
   DARK_THEMES,
   DEFAULT_THEME,
+  THEME_GROUPS,
+  THEME_OPTIONS,
   THEMES,
-  normalizeTheme,
+  normalizeThemePreference,
+  resolveTheme,
 } from '@/utils/constants'
 import { storageService } from '@/services/storageService'
 
 const currentTheme = ref(DEFAULT_THEME)
+const themePreference = ref(DEFAULT_THEME)
+let systemThemeQuery = null
+let systemThemeListenerAttached = false
 
 function translateTheme(theme) {
   return i18n.global.t(`theme.${theme}`)
@@ -43,39 +37,69 @@ function announceTheme(theme) {
   }
 }
 
-export function applyTheme(theme) {
-  // Two guards, both cheap and both necessary.
-  //
-  // 1. Unknown theme → fall back to Stone. The value came from
-  //    user input or a caller bug; THEMES is the source of truth
-  //    for what the CSS actually styles.
-  //
-  // 2. Same theme as current → no-op. Prevents a redundant
-  //    `theme-transition` class toggle (which briefly disables
-  //    transitions on every animated element) when the user
-  //    re-selects the theme they are already on.
-  //
-  // The previous implementation carried a third guard — a module-
-  // level `applying` boolean set/reset synchronously inside this
-  // function. It was dead: nothing else could observe the flag
-  // because JavaScript is single-threaded and the function never
-  // yields between setting and clearing it. The `setTimeout` that
-  // removes the transition class runs later, when `applying` is
-  // already `false`. Removing it makes the control flow obvious
-  // without changing behavior.
-  theme = normalizeTheme(theme)
-  if (currentTheme.value === theme) return
+function prefersDarkTheme() {
+  return (
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  )
+}
 
-  document.documentElement.classList.add('theme-transition')
+function updateBrowserChrome() {
+  if (typeof document === 'undefined') return
+  const meta = document.querySelector('meta[name="theme-color"]')
+  if (!meta) return
+  const color = getComputedStyle(document.documentElement)
+    .getPropertyValue('--color-bg-body')
+    .trim()
+  if (color) meta.setAttribute('content', color)
+}
+
+function writeResolvedTheme(theme, withTransition = false) {
+  if (typeof document === 'undefined') return
+  if (withTransition) document.documentElement.classList.add('theme-transition')
   currentTheme.value = theme
   document.documentElement.setAttribute('data-theme', theme)
-  storageService.setItem('theme', theme)
+  updateBrowserChrome()
 
-  announceTheme(theme)
+  if (withTransition) {
+    setTimeout(() => {
+      document.documentElement.classList.remove('theme-transition')
+    }, 350)
+  }
+}
 
-  setTimeout(() => {
-    document.documentElement.classList.remove('theme-transition')
-  }, 350)
+function handleSystemThemeChange(event) {
+  if (themePreference.value !== AUTO_THEME) return
+  const resolved = resolveTheme(AUTO_THEME, event.matches)
+  if (resolved !== currentTheme.value) writeResolvedTheme(resolved, true)
+}
+
+function ensureSystemThemeListener() {
+  if (
+    systemThemeListenerAttached ||
+    typeof window === 'undefined' ||
+    typeof window.matchMedia !== 'function'
+  ) {
+    return
+  }
+
+  systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  systemThemeQuery.addEventListener?.('change', handleSystemThemeChange)
+  systemThemeListenerAttached = true
+}
+
+export function applyTheme(theme) {
+  const preference = normalizeThemePreference(theme)
+  const resolved = resolveTheme(preference, prefersDarkTheme())
+  const preferenceChanged = themePreference.value !== preference
+  const themeChanged = currentTheme.value !== resolved
+  if (!preferenceChanged && !themeChanged) return
+
+  themePreference.value = preference
+  if (themeChanged) writeResolvedTheme(resolved, true)
+  storageService.setItem('theme', preference)
+  announceTheme(preference)
 }
 
 export function getThemeLabel(theme) {
@@ -84,19 +108,16 @@ export function getThemeLabel(theme) {
 
 export function loadSavedTheme() {
   const saved = storageService.getItem('theme')
-  if (saved) {
-    const normalized = normalizeTheme(saved)
-    if (currentTheme.value !== normalized) {
-      currentTheme.value = normalized
-      document.documentElement.setAttribute('data-theme', normalized)
-    }
-    // Persist the canonical name when migrating the former `light` or
-    // `sepia` values, or when recovering from an unknown stored value.
-    if (saved !== normalized) storageService.setItem('theme', normalized)
-  } else {
-    currentTheme.value = DEFAULT_THEME
-    document.documentElement.setAttribute('data-theme', DEFAULT_THEME)
-  }
+  const preference = saved ? normalizeThemePreference(saved) : DEFAULT_THEME
+  const resolved = resolveTheme(preference, prefersDarkTheme())
+
+  themePreference.value = preference
+  writeResolvedTheme(resolved)
+  ensureSystemThemeListener()
+
+  // Persist canonical names when migrating aliases or recovering from an
+  // unknown stored value. Empty storage remains empty until a user choice.
+  if (saved && saved !== preference) storageService.setItem('theme', preference)
 }
 
 export function useTheme() {
@@ -104,10 +125,13 @@ export function useTheme() {
 
   return {
     currentTheme,
+    themePreference,
     isDark,
     applyTheme,
     getThemeLabel,
     loadSavedTheme,
     THEMES,
+    THEME_OPTIONS,
+    THEME_GROUPS,
   }
 }

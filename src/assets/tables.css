@@ -56,7 +56,7 @@
 .sortable { cursor: pointer; user-select: none; }
 .sortable:hover { background: var(--color-bg-alt); }
 .sortable:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
-.sorted { color: var(--color-primary); }
+.sorted { color: var(--color-primary-soft-text); }
 .sortable i { margin-inline-start: var(--space-xs); font-size: 0.8em; }
 .sticky-col { position: sticky; inset-inline-start: 0; z-index: 2; background: var(--color-bg-card); }
 .table-shared thead .sticky-col { background: var(--color-bg-alt); z-index: 3; }

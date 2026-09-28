@@ -5,8 +5,8 @@
   Rendered above the question text whenever a question carries a
   shared case stem. Extracted from three near-identical inline
   copies in:
-    • features/testCommon/TestQuestion.vue
-    • features/testCommon/QuestionDisplay.vue
+    • features/testCommon/views/TestQuestion.vue
+    • features/testCommon/components/QuestionDisplay.vue
     • features/masterExams/views/MasterExamRunner.vue
 
   The three copies were byte-identical modulo the source of `stem`.

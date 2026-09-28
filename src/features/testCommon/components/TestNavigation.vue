@@ -1,3 +1,4 @@
+<!-- frontend/src/features/testCommon/components/TestNavigation.vue -->
 <template>
   <div class="nav-buttons">
     <BaseButton

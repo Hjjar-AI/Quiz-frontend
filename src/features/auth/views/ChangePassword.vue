@@ -6,16 +6,11 @@
       :subtitle="t('auth.changePasswordSubtitle')"
       icon="bi bi-key"
       size="form"
-      page-class="change-password-page"
       :error="authStore.error || ''"
       @dismiss-feedback="authStore.error = null"
     >
     <BaseCard class="change-password-card">
-      <div class="change-password-card__header">
-        <div class="icon-hero"><i class="bi bi-key"></i></div>
-      </div>
-
-      <form @submit.prevent="handleChange" class="change-password-form">
+      <form class="change-password-form" @submit.prevent="handleChange">
         <FormGrid>
           <BaseInput
             v-model="currentPassword"

@@ -18,28 +18,30 @@
         :class="{ 'theme-dropdown__arrow--open': isOpen }"
       ></i>
     </BaseButton>
+
     <BasePopoverPanel :open="isOpen" panel-class="theme-dropdown__menu">
+      <section v-for="group in THEME_GROUPS" :key="group.key" class="theme-dropdown__group">
+        <p class="theme-dropdown__group-label">{{ t(`theme.group.${group.key}`) }}</p>
         <BaseButton
-          v-for="theme in THEMES"
+          v-for="theme in group.themes"
           :key="theme"
           variant="ghost"
           size="small"
           raw-content
           class="theme-dropdown__item"
-          :class="{ 'theme-dropdown__item--active': theme === currentTheme }"
+          :class="{ 'theme-dropdown__item--active': theme === themePreference }"
+          :aria-pressed="theme === themePreference"
           @click="selectTheme(theme)"
         >
-          <span class="theme-dropdown__swatch" :data-theme="theme" aria-hidden="true">
+          <span class="theme-dropdown__swatch" :data-theme="previewTheme(theme)" aria-hidden="true">
             <span class="theme-dropdown__swatch-card"></span>
             <span class="theme-dropdown__swatch-primary"></span>
-            <span class="theme-dropdown__swatch-info"></span>
+            <span class="theme-dropdown__swatch-text"></span>
           </span>
           <span class="theme-dropdown__item-label">{{ t(`theme.${theme}`) }}</span>
-          <i
-            v-if="theme === currentTheme"
-            class="bi bi-check2 theme-dropdown__item-check"
-          ></i>
+          <i v-if="theme === themePreference" class="bi bi-check2 theme-dropdown__item-check"></i>
         </BaseButton>
+      </section>
     </BasePopoverPanel>
   </div>
 </template>
@@ -52,24 +54,29 @@ import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 
 const { t } = useI18n()
-const { currentTheme, applyTheme, THEMES } = useTheme()
-
-// All of open/close/toggle/click-outside/Escape/focus-return now
-// live in useDropdown().
+const { currentTheme, themePreference, applyTheme, THEME_GROUPS } = useTheme()
 const { isOpen, rootRef, close, toggle } = useDropdown()
 
 const themeIcons = {
+  auto: 'bi bi-circle-half',
   stone: 'bi bi-gem',
-  dark: 'bi bi-moon-fill',
-  onyx: 'bi bi-moon-stars-fill',
+  iris: 'bi bi-stars',
   blossom: 'bi bi-flower1',
-  fresh: 'bi bi-tree-fill',
-  contrast: 'bi bi-circle-half',
-  ink: 'bi bi-pen-fill',
+  lagoon: 'bi bi-water',
   slate: 'bi bi-cloud-fill',
+  ink: 'bi bi-pen-fill',
   amber: 'bi bi-sun-fill',
+  dark: 'bi bi-moon-fill',
+  midnight: 'bi bi-moon-stars-fill',
+  onyx: 'bi bi-circle-fill',
+  contrast: 'bi bi-circle-half',
 }
-const currentThemeIcon = computed(() => themeIcons[currentTheme.value] || 'bi bi-palette')
+
+const currentThemeIcon = computed(() => themeIcons[themePreference.value] || 'bi bi-palette')
+
+function previewTheme(theme) {
+  return theme === 'auto' ? currentTheme.value : theme
+}
 
 function selectTheme(theme) {
   applyTheme(theme)

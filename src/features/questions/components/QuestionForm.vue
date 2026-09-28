@@ -359,7 +359,7 @@ import {
 import { FALLBACK_MAX_CHOICES } from '@/utils/constants'
 import { useNotify } from '@/composables/useNotify'
 import { validateFile, FILE_VALIDATION_REASONS } from '@/utils/fileValidation'
-import { knowledgeService } from '@/services/knowledgeService'
+import { useKnowledgeStore } from '@/stores/knowledgeStore'
 
 const { t } = useI18n()
 
@@ -371,6 +371,7 @@ const { isSubmitting, guard } = useSubmitGuard()
 const { notify } = useNotify()
 const configStore = useConfigStore()
 const caseStore = useCaseStore()
+const knowledgeStore = useKnowledgeStore()
 
 const isLoading = computed(() => Boolean(props.loading))
 const isEdit = computed(() => !!props.question)
@@ -381,9 +382,9 @@ const pendingImageFile = ref(null)
 const imagePreview = ref(null)
 const imageCleared = ref(false)
 const isDraggingImage = ref(false)
-const knowledgeObjects = ref([])
+const knowledgeObjects = computed(() => knowledgeStore.items)
 const showKnowledgeCreator = ref(false)
-const creatingKnowledgeObject = ref(false)
+const creatingKnowledgeObject = computed(() => knowledgeStore.isCreateLoading)
 const initialRevisionDate = ref('')
 
 const knowledgeDraft = reactive({
@@ -507,14 +508,9 @@ onMounted(async () => {
 })
 
 async function loadKnowledgeObjects() {
-  try {
-    // Include draft/retired objects so an existing question never loses its
-    // visible selection merely because the linked objective changed status.
-    const result = await knowledgeService.list()
-    knowledgeObjects.value = result?.items || []
-  } catch {
-    knowledgeObjects.value = []
-  }
+  // Include draft/retired objects so an existing question never loses its
+  // visible selection merely because the linked objective changed status.
+  await knowledgeStore.fetchList()
 }
 
 function lines(value) {
@@ -530,33 +526,31 @@ async function createKnowledgeObject() {
     return
   }
 
-  creatingKnowledgeObject.value = true
-  try {
-    const created = await knowledgeService.create({
-      title: knowledgeDraft.title,
-      learning_objective: knowledgeDraft.learning_objective,
-      canonical_answer: knowledgeDraft.canonical_answer,
-      key_facts: lines(knowledgeDraft.key_facts),
-      category: form.category_id || null,
-      status: 'active',
-    })
-    knowledgeObjects.value = [...knowledgeObjects.value, created].sort((left, right) =>
-      left.title.localeCompare(right.title),
+  const created = await knowledgeStore.create({
+    title: knowledgeDraft.title,
+    learning_objective: knowledgeDraft.learning_objective,
+    canonical_answer: knowledgeDraft.canonical_answer,
+    key_facts: lines(knowledgeDraft.key_facts),
+    category: form.category_id || null,
+    status: 'active',
+  })
+  if (!created) {
+    notify(
+      knowledgeStore.createError || t('questions.knowledgeObjectCreateFailed'),
+      'error',
     )
-    form.knowledge_object = created.id
-    showKnowledgeCreator.value = false
-    Object.assign(knowledgeDraft, {
-      title: '',
-      learning_objective: '',
-      canonical_answer: '',
-      key_facts: '',
-    })
-    notify(t('questions.knowledgeObjectCreated'), 'success')
-  } catch (error) {
-    notify(error?.message || t('questions.knowledgeObjectCreateFailed'), 'error')
-  } finally {
-    creatingKnowledgeObject.value = false
+    return
   }
+
+  form.knowledge_object = created.id
+  showKnowledgeCreator.value = false
+  Object.assign(knowledgeDraft, {
+    title: '',
+    learning_objective: '',
+    canonical_answer: '',
+    key_facts: '',
+  })
+  notify(t('questions.knowledgeObjectCreated'), 'success')
 }
 
 watch(

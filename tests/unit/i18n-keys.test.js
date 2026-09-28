@@ -66,11 +66,9 @@ function* walkSourceFiles(dir) {
 
 // ── Key extraction ────────────────────────────────────────────────
 
-const LITERAL_KEY_RE =
-  /\b(?:t|safeT)\s*\(\s*(['"`])([^'"`$\\]+)\1/g
+const LITERAL_KEY_RE = /\b(?:t|safeT)\s*\(\s*(['"`])([^'"`$\\]+)\1/g
 
-const DYNAMIC_PREFIX_RE =
-  /\b(?:t|safeT)\s*\(\s*`([^`]*)\$\{/g
+const DYNAMIC_PREFIX_RE = /\b(?:t|safeT)\s*\(\s*`([^`]*)\$\{/g
 
 const EXPECTED_DYNAMIC_PREFIXES = new Set([
   'about.features.',
@@ -83,6 +81,7 @@ const EXPECTED_DYNAMIC_PREFIXES = new Set([
   'admin.permissions.capability.',
   'knowledge.status.',
   'theme.',
+  'theme.group.',
 ])
 
 function extractKeysAndPrefixes() {
@@ -155,10 +154,7 @@ describe('i18n catalog coverage', () => {
       if (arKeys.has(key)) continue
       for (const where of whereSet) missing.push(`${key}  (${where})`)
     }
-    expect(
-      missing,
-      `\nMissing ar keys:\n  ${missing.join('\n  ')}\n`,
-    ).toEqual([])
+    expect(missing, `\nMissing ar keys:\n  ${missing.join('\n  ')}\n`).toEqual([])
   })
 
   it('every literal t() key exists in the en catalog', () => {
@@ -167,10 +163,7 @@ describe('i18n catalog coverage', () => {
       if (enKeys.has(key)) continue
       for (const where of whereSet) missing.push(`${key}  (${where})`)
     }
-    expect(
-      missing,
-      `\nMissing en keys:\n  ${missing.join('\n  ')}\n`,
-    ).toEqual([])
+    expect(missing, `\nMissing en keys:\n  ${missing.join('\n  ')}\n`).toEqual([])
   })
 
   it('ar and en catalogs have the same key set', () => {
@@ -179,21 +172,19 @@ describe('i18n catalog coverage', () => {
     expect(
       { onlyInAr, onlyInEn },
       `\n  only in ar: ${onlyInAr.join(', ') || '(none)'}\n` +
-      `  only in en: ${onlyInEn.join(', ') || '(none)'}\n`,
+        `  only in en: ${onlyInEn.join(', ') || '(none)'}\n`,
     ).toEqual({ onlyInAr: [], onlyInEn: [] })
   })
 
   it('every dynamic t() prefix is on the expected list', () => {
-    const unexpected = [...dynamic.keys()]
-      .filter((p) => !EXPECTED_DYNAMIC_PREFIXES.has(p))
-      .sort()
+    const unexpected = [...dynamic.keys()].filter((p) => !EXPECTED_DYNAMIC_PREFIXES.has(p)).sort()
     expect(
       unexpected,
       `\nUnexpected dynamic t() prefixes:\n` +
-      `  ${unexpected.join('\n  ')}\n\n` +
-      `Add each prefix to EXPECTED_DYNAMIC_PREFIXES after verifying\n` +
-      `the expansions exist in both catalogs, or convert the call\n` +
-      `site to a literal key.\n`,
+        `  ${unexpected.join('\n  ')}\n\n` +
+        `Add each prefix to EXPECTED_DYNAMIC_PREFIXES after verifying\n` +
+        `the expansions exist in both catalogs, or convert the call\n` +
+        `site to a literal key.\n`,
     ).toEqual([])
   })
 })

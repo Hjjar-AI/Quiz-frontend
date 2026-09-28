@@ -16,8 +16,8 @@
 .review-choice--correct { background: color-mix(in srgb, var(--color-success) 15%, transparent); }
 .review-choice--wrong { background: color-mix(in srgb, var(--color-danger) 15%, transparent); }
 .review-choice--user { font-weight: var(--font-weight-bold); }
-.review-choice__check { color: var(--color-success); }
-.review-choice__cross { color: var(--color-danger); }
+.review-choice__check { color: var(--color-success-soft-text); }
+.review-choice__cross { color: var(--color-danger-soft-text); }
 .review-item__explanation { margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: var(--color-bg-alt); border-radius: var(--radius-md); }
 .review-item__recall {
   margin-bottom: var(--space-sm);

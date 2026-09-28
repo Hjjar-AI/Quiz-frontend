@@ -18,7 +18,7 @@
   gap: var(--space-xs);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-sm);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   margin-bottom: var(--space-sm);
 }
 .case-stem-panel__body {
@@ -42,7 +42,7 @@
   gap: var(--space-xs);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-sm);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   list-style: none;
 }
 .question-card__case-summary::-webkit-details-marker { display: none; }
@@ -88,7 +88,7 @@
 .question-form__case-badge {
   margin-inline-start: auto;
   font-size: var(--font-size-xs);
-  color: var(--color-primary);
+  color: var(--color-primary-soft-text);
   background: color-mix(in srgb, var(--color-primary) 15%, transparent);
   padding: 2px 8px;
   border-radius: var(--radius-sm);

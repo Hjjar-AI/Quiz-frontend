@@ -9,23 +9,45 @@ export const FALLBACK_MAX_CHOICES = 8
 export const FALLBACK_ITEMS_PER_PAGE = 20
 
 export const DEFAULT_THEME = 'stone'
+export const AUTO_THEME = 'auto'
+export const AUTO_LIGHT_THEME = DEFAULT_THEME
+export const AUTO_DARK_THEME = 'midnight'
 export const THEMES = [
   'stone',
-  'dark',
-  'onyx',
+  'iris',
   'blossom',
-  'fresh',
-  'contrast',
-  'ink',
+  'lagoon',
   'slate',
+  'ink',
   'amber',
+  'dark',
+  'midnight',
+  'onyx',
+  'contrast',
 ]
-export const DARK_THEMES = ['dark', 'onyx']
-export const THEME_ALIASES = { light: DEFAULT_THEME, sepia: 'amber' }
+export const DARK_THEMES = ['dark', 'midnight', 'onyx']
+export const THEME_ALIASES = { light: DEFAULT_THEME, sepia: 'amber', fresh: 'lagoon' }
+export const THEME_OPTIONS = [AUTO_THEME, ...THEMES]
+export const THEME_GROUPS = [
+  { key: 'automatic', themes: [AUTO_THEME] },
+  { key: 'light', themes: ['stone', 'iris', 'blossom', 'lagoon', 'slate', 'ink', 'amber'] },
+  { key: 'dark', themes: ['dark', 'midnight', 'onyx'] },
+  { key: 'accessibility', themes: ['contrast'] },
+]
 
 export function normalizeTheme(theme) {
   const normalized = THEME_ALIASES[theme] || theme
   return THEMES.includes(normalized) ? normalized : DEFAULT_THEME
+}
+
+export function normalizeThemePreference(theme) {
+  return theme === AUTO_THEME ? AUTO_THEME : normalizeTheme(theme)
+}
+
+export function resolveTheme(preference, prefersDark = false) {
+  const normalized = normalizeThemePreference(preference)
+  if (normalized !== AUTO_THEME) return normalized
+  return prefersDark ? AUTO_DARK_THEME : AUTO_LIGHT_THEME
 }
 
 export const ROLES = {
@@ -87,14 +109,14 @@ export const DIFFICULTY_OPTIONS = [
 ]
 
 export const DIFFICULTY_LABEL_KEYS = Object.fromEntries(
-  DIFFICULTY_OPTIONS.map(opt => [opt.value, opt.labelKey])
+  DIFFICULTY_OPTIONS.map((opt) => [opt.value, opt.labelKey]),
 )
 
 // Value-keyed lookup for the full entry. Consumers that need more
 // than the label key (icon, colour) read the entry from here
 // instead of re-declaring the metadata.
 export const DIFFICULTY_BY_VALUE = Object.fromEntries(
-  DIFFICULTY_OPTIONS.map(opt => [opt.value, opt])
+  DIFFICULTY_OPTIONS.map((opt) => [opt.value, opt]),
 )
 
 /**
@@ -207,7 +229,7 @@ export const MOTIVATIONAL_QUOTES_EN = [
   'Whoever takes a path seeking knowledge, God eases for him a path to Paradise.',
   'God loves that when one of you does a job, he perfects it.',
   'Whomever God wishes good for, He grants understanding in religion.',
-  'Be keen on what benefits you, seek God\'s aid, and do not be helpless.',
+  "Be keen on what benefits you, seek God's aid, and do not be helpless.",
   'Whoever strives, finds; whoever sows, reaps.',
   'Two blessings many people squander: health and free time.',
   'Give each rightful person his right.',
