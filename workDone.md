@@ -9,4 +9,5 @@
 - No frontend source changes were required for the model/PDF reliability fixes;
   those fixes were implemented in the backend.
 - Added the project-root working documentation files.
-
+- Added a comprehensive frontend README covering setup, architecture, API usage,
+  localization, exports, production builds, and troubleshooting.
