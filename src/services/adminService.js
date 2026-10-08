@@ -121,14 +121,18 @@ export const adminService = {
     return `${API_BASE}${endpoint}`
   },
 
-  async exportPdf(options = {}, { verifiedOnly = false } = {}) {
+  async exportQuestions(format, options = {}, { verifiedOnly = false } = {}) {
     const endpoint = verifiedOnly
-      ? ENDPOINTS.DATABASE.EXPORT_VERIFIED('pdf')
-      : ENDPOINTS.DATABASE.EXPORT('pdf')
+      ? ENDPOINTS.DATABASE.EXPORT_VERIFIED(format)
+      : ENDPOINTS.DATABASE.EXPORT(format)
     return apiClient.post(endpoint, options, {
       responseType: 'blob',
       rawResponse: true,
     })
+  },
+
+  exportPdf(options = {}, requestOptions = {}) {
+    return adminService.exportQuestions('pdf', options, requestOptions)
   },
 
   async importState(file, mode = 'merge', opts = {}) {

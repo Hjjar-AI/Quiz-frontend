@@ -27,3 +27,14 @@
 - Database export controls select current-theme study PDF or compact white/light-grey answer-free quiz. Study answers: inline, end, after each 25 questions, or omitted. Quiz displays disabled no-answer placement while retaining the previous study choice; clear resets defaults.
 - Structured POST forwards validated `pdf_mode` and `answer_layout` alongside existing title/theme/locale/filters/front matter. Arabic/English labels/hints explain bidirectional answer links and quiz omissions. Existing download/CSRF/error handling and non-PDF exports retained.
 - Source/locale/markup/whitespace checks only; Node and PDF/API dependencies are unavailable. No builds, test-suite work or version changes. Matching backend required; browser/PDF-viewer/print verification remains pending.
+
+## Manual PDF question selection — 2026-10-08
+
+- PDF source switches between existing filters and manual search/picking. Public question search uses the existing paginated API; previews include case/image/choices. Selected questions persist across queries/pages/source switches and can be removed/reordered; empty manual selection disables PDF export.
+- POST sends ordered `question_ids` with empty content filters; title, quiz/study options, locale and front matter retained. Non-PDF formats retain filter-based selection. Shared search/async/row/checkbox controls and Arabic/English copy are used; stale responses/unmounted requests cannot overwrite current picker results.
+- Isolated production-script checks with substituted Vue hooks/API passed for dedup/order/removal, stale searches, pagination errors and unmount handling. Source/locale/markup/whitespace checks passed; browser/Vue/API/PDF integration remains pending. No builds, test-suite work or versions changed.
+
+## Custom selection for all question exports — 2026-10-08
+
+- The shared manual picker now supplies PDF/Excel/CSV/JSON; empty manual selection disables every format, ordered picks replace content filters, and source switching retains picks. Existing filter-based flat downloads use GET; PDF settings and structured POST remain. Portable state packages retain filters; Arabic/English copy clarifies this scope. Generic service/store requests preserve the existing PDF wrapper, CSRF, blob errors and download filenames.
+- Nineteen isolated production JavaScript assertions passed for payload/options, all formats, filenames, empty selection, failures, legacy GET/PDF callbacks and ordinary/verified service routing; Vue/browser/API/DOM were substituted. Source/locale/markup/whitespace checks passed. No builds/test suites/version changes; matching backend and actual browser/Excel/PDF integration remain pending.

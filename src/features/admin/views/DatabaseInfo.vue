@@ -103,6 +103,8 @@
               :pdf-options="pdfOptions"
               :pdf-mode="exportFilters.pdf_mode"
               :answer-layout="exportFilters.answer_layout"
+              :selection-disabled="exportFilters.export_selection === 'manual' && !exportFilters.selected_questions.length"
+              :export-request="exportFilters.export_selection === 'manual' ? requestQuestionExport : null"
               :pdf-request="requestPdfExport"
             />
           </BaseCard>
@@ -336,6 +338,8 @@ const qualityIssueCounts = computed(() =>
 // and is used by PDF export only. Every key is initialised so the
 // template and the panel can read it without `?.` chains.
 const exportFilters = ref({
+  export_selection: 'filters',
+  selected_questions: [],
   pdf_mode: 'study',
   answer_layout: 'inline',
   title: '',
@@ -398,7 +402,16 @@ const pdfOptions = computed(() => ({
     .filter((field) => field.label && field.value),
 }))
 
-const requestPdfExport = (options) => adminDatabaseStore.exportPdf(options)
+const requestQuestionExport = (format, options) => {
+  if (exportFilters.value.export_selection === 'manual') {
+    const questionIds = exportFilters.value.selected_questions.map(question => question.id)
+    if (!questionIds.length) throw new Error(t('admin.database.pdfChooseQuestions'))
+    return adminDatabaseStore.exportQuestions(format, { ...options, filters: {}, question_ids: questionIds })
+  }
+  return adminDatabaseStore.exportQuestions(format, options)
+}
+
+const requestPdfExport = options => requestQuestionExport('pdf', options)
 
 async function loadDbInfo() {
   await adminDatabaseStore.fetchDatabaseInfo()

@@ -105,6 +105,10 @@ export const useAdminDatabaseStore = defineStore('adminDatabase', {
       return adminService.exportUrl(format, options)
     },
 
+    exportQuestions(format, options = {}, requestOptions = {}) {
+      return adminService.exportQuestions(format, options, requestOptions)
+    },
+
     exportPdf(options = {}, requestOptions = {}) {
       return adminService.exportPdf(options, requestOptions)
     },

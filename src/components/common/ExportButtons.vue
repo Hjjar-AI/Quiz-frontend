@@ -6,7 +6,7 @@
       :key="fmt.value"
       :variant="fmt.variant"
       :loading="exportingFormat === fmt.value"
-      :disabled="exportingFormat !== null && exportingFormat !== fmt.value"
+      :disabled="selectionDisabled || (exportingFormat !== null && exportingFormat !== fmt.value) || (fmt.value === 'pdf' && pdfDisabled)"
       :aria-label="t('ui.exportAs', { format: fmt.label })"
       @click="exportFile(fmt.value)"
     >
@@ -43,6 +43,10 @@ const props = defineProps({
   pdfOptions: { type: Object, default: () => ({}) },
   pdfMode: { type: String, default: 'study' },
   answerLayout: { type: String, default: 'inline' },
+  // A custom source may disable every format and supply a structured POST.
+  selectionDisabled: { type: Boolean, default: false },
+  exportRequest: { type: Function, default: null },
+  pdfDisabled: { type: Boolean, default: false },
   pdfRequest: { type: Function, default: null },
 })
 
@@ -102,7 +106,7 @@ function defaultFilename(format) {
 //
 
 async function exportFile(format) {
-  if (exportingFormat.value !== null) return
+  if (exportingFormat.value !== null || props.selectionDisabled || (format === 'pdf' && props.pdfDisabled)) return
   exportingFormat.value = format
 
   notify(t('notifications.exportingAs', { format: format.toUpperCase() }), 'info')
@@ -110,22 +114,24 @@ async function exportFile(format) {
   const url = buildUrl(format)
 
   try {
-    if (format === 'pdf' && props.pdfRequest) {
+    if (props.exportRequest || (format === 'pdf' && props.pdfRequest)) {
       const filters = { ...props.filterParams }
       const title = filters.title || ''
       delete filters.title
-      const response = await props.pdfRequest({
-        title,
-        filters,
+      const options = { title, filters }
+      if (format === 'pdf') Object.assign(options, {
         theme: document.documentElement.dataset.theme,
         locale: locale.value,
         front_matter: props.pdfOptions,
         pdf_mode: props.pdfMode,
         answer_layout: props.answerLayout,
       })
+      const response = props.exportRequest
+        ? await props.exportRequest(format, options)
+        : await props.pdfRequest(options)
       const blob = response.data instanceof Blob
         ? response.data
-        : new Blob([response.data], { type: 'application/pdf' })
+        : new Blob([response.data], { type: { pdf: 'application/pdf', json: 'application/json', csv: 'text/csv', excel: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }[format] })
       const filename = getResponseFilename(response) || defaultFilename(format)
       downloadBlob(blob, filename)
       return

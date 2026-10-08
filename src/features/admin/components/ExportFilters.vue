@@ -15,6 +15,8 @@
         title:        '',      // free text, PDF only
         pdf_mode:     'study', // 'study' | 'quiz'; PDF only
         answer_layout: 'inline', // 'inline' | 'end' | 'after_25' | 'none'
+        export_selection: 'filters', // 'filters' | 'manual'; all question export formats
+        selected_questions: [], // ordered { id, question } snapshots
         include_about: false,  // PDF only
         about_title: '',
         about_body: '',
@@ -163,6 +165,22 @@
 
     <div class="export-filters__divider"></div>
 
+    <BaseSelect
+      :model-value="modelValue.export_selection || 'filters'"
+      :label="t('admin.database.pdfSelectionLabel')"
+      :options="[
+        { value: 'filters', label: t('admin.database.pdfSelectionFilters') },
+        { value: 'manual', label: t('admin.database.pdfSelectionManual') },
+      ]"
+      @update:model-value="update('export_selection', $event)"
+    />
+    <ManualExportQuestions
+      v-if="modelValue.export_selection === 'manual'"
+      :model-value="modelValue.selected_questions || []"
+      @update:model-value="update('selected_questions', $event)"
+    />
+    <div v-else>
+
     <!-- ── Search (single input, not a grid) ───────────────────── -->
     <div class="export-filters__section">
       <BaseInput
@@ -214,6 +232,7 @@
       />
     </div>
 
+    </div>
     <!-- ── Live summary line ───────────────────────────────────── -->
     <p v-if="activeSummary" class="export-filters__summary">
       <i class="bi bi-info-circle"></i>
@@ -230,10 +249,13 @@ import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import SourceGridPicker from '@/components/common/SourceGridPicker.vue'
+import ManualExportQuestions from './ManualExportQuestions.vue'
+import { useLocaleFormatters } from '@/i18n/helpers/format'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useTagStore } from '@/stores/tagStore'
 
 const { t } = useI18n()
+const { formatNumber } = useLocaleFormatters()
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
@@ -287,6 +309,7 @@ const hasActiveFilters = computed(() => {
     v.title ||
     v.include_about ||
     v.pdf_mode === 'quiz' ||
+    v.export_selection === 'manual' ||
     (v.answer_layout && v.answer_layout !== 'inline') ||
     v.search ||
     (v.difficulties && v.difficulties.length) ||
@@ -300,6 +323,9 @@ const hasActiveFilters = computed(() => {
 // and mixing it into "الفلاتر المطبقة" would be misleading.
 const activeSummary = computed(() => {
   const v = props.modelValue
+  if (v.export_selection === 'manual') {
+    return t('admin.database.pdfSelectedCount', { count: formatNumber((v.selected_questions || []).length) })
+  }
   const parts = []
 
   if (v.search) {
@@ -362,6 +388,8 @@ function clearAll() {
   emit('update:modelValue', {
     title: '',
     pdf_mode: 'study',
+    export_selection: 'filters',
+    selected_questions: [],
     answer_layout: 'inline',
     include_about: false,
     about_title: '',
