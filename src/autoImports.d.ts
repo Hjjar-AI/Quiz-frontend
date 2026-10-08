@@ -35,6 +35,7 @@ declare global {
   const isReadonly: typeof import('vue').isReadonly
   const isRef: typeof import('vue').isRef
   const isShallow: typeof import('vue').isShallow
+  const loadSavedFont: typeof import('./composables/useFont.js').loadSavedFont
   const loadSavedTheme: typeof import('./composables/useTheme.js').loadSavedTheme
   const mapActions: typeof import('pinia').mapActions
   const mapGetters: typeof import('pinia').mapGetters
@@ -92,7 +93,9 @@ declare global {
   const useDialog: typeof import('./composables/useDialog.js').useDialog
   const useDirection: typeof import('./composables/useDirection.js').useDirection
   const useDropdown: typeof import('./composables/useDropdown.js').useDropdown
+  const useElementHeightToken: typeof import('./composables/useElementHeightToken.js').useElementHeightToken
   const useFocusReturn: typeof import('./composables/useFocusReturn.js').useFocusReturn
+  const useFont: typeof import('./composables/useFont.js').useFont
   const useFormValidation: typeof import('./composables/useFormValidation.js').useFormValidation
   const useI18n: typeof import('vue-i18n').useI18n
   const useId: typeof import('vue').useId
