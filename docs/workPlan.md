@@ -2,6 +2,9 @@
 
 ## Current priorities
 
+- Address the eight findings in [frontendShellReview.md](frontendShellReview.md): mobile Analytics access, desktop toggle cascade, actual navbar height, offline banner stacking, table-container sticky offsets, modal focus visibility, undefined knowledge font token and reversed spacing tiers. Application corrections remain pending.
+- Browser-verify shell/container behavior at 320/360/480/640/768/769/900px and desktop, both locales/densities, touch pointers, long content, dialogs/keyboard/safe areas, every theme and print. Standalone source/jsdom checks do not establish rendering.
+
 1. Keep frontend export options aligned with the backend request serializer.
 2. Surface backend PDF limit errors clearly without replacing their localized messages.
 3. Perform a browser download smoke check after the backend PDF runtime is available.

@@ -1,5 +1,10 @@
 # Work Done
 
+## Frontend shell/layout review — 2026-10-08
+
+- Reviewed shared shell/navigation, responsive layout/container rules, theme/locale/density wiring, controls/dialogs/tables and token usage. Recorded eight findings and remaining browser checks in `frontendShellReview.md`; application code unchanged.
+- Scanned 57 non-test-named CSS files and 187 declared custom properties. Standalone source/jsdom checks confirmed mobile Analytics omission, desktop hamburger cascade, table offset and hidden modal focus candidates; navbar height mismatch follows source geometry. No full app/browser layout, contrast, print or device verification. No builds, test-suite work, installations, versions, backend or Android changes.
+
 ## 2026-10-06
 
 - Reviewed the frontend model usage and its backend API contracts.
