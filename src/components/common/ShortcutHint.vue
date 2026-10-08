@@ -4,11 +4,11 @@
     <BaseIconButton
       class="shortcut-hint__toggle"
       icon="bi bi-keyboard"
+      size="small"
       :label="t('tests.shortcutToggle')"
       :aria-expanded="isOpen"
       @click.stop="toggle"
     >
-      <template #badge><BaseBadge variant="info" small class="shortcut-hint__badge">⌨</BaseBadge></template>
     </BaseIconButton>
     <BasePopoverPanel :open="isOpen" panel-class="shortcut-hint__panel" transition="hint">
         <BaseIconButton
@@ -43,7 +43,6 @@ import { FALLBACK_MAX_CHOICES } from '@/utils/constants'
 import { useDropdown } from '@/composables/useDropdown'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
-import BaseBadge from '@/components/base/BaseBadge.vue'
 import { storageService } from '@/services/storageService'
 
 

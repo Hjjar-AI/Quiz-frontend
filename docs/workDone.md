@@ -1,5 +1,39 @@
 # Work Done
 
+## Ruby theme naming — 2026-10-08
+
+- Renamed the crimson palette to Ruby (ياقوت), updated canonical CSS/registry/boot/PDF keys and changed the picker icon to a diamond. Compatibility aliases migrate existing saved choices and export requests; the former name has no visible UI label. Palette values remain identical.
+- Source checks passed for both canonical/legacy normalization, pre-paint theme/browser chrome, both locale labels, frontend/PDF registry agreement and scoped whitespace. Actual browser/PDF rendering remains pending. No builds, compilation, test suites, installs, versions or Android changes.
+
+## Ruby theme — 2026-10-08
+
+- Added `ruby` as a light palette with deep crimson accents, warm pale surfaces, contrasting status colors, chart seeds, streak/rank colors and tinted elevation shadows. Registered it in the theme/options/light-group lists, pre-paint allowlist/browser chrome, diamond icon and both locale labels. Preferences consumes the shared options automatically.
+- Added matching backend PDF palette seeds/surfaces/text so exports preserve the selected theme. Existing theme blocks and default/automatic/dark behavior remain intact.
+- 48 source-derived text/semantic/chart/print contrast pairs passed 4.5:1 (minimum 4.65:1); control boundary passed 3:1 at 3.84:1. Registry/group/preference/bootstrap/icon contracts, backend AST/palette matching, 176 settings/source checks, CSS parses/token references and scoped whitespace checks passed. Actual browser/device/PDF rendering remains pending. No builds, compilation, test suites, installs, version changes or Android edits; previous edits preserved.
+
+## Count-up precision and overflow correction — 2026-10-08
+
+- StatTile now formats animated values through locale-aware number formatting at the target's decimal precision. Integer counts no longer expose raw interpolated fractional strings; formatted percentages, times and leading-zero strings remain verbatim. Negative-zero frames normalize to zero. Long values receive a smaller shared font tier and can wrap; tiles retain bounded inline sizing.
+- Count-up uses RAF timestamps consistently and clamps elapsed progress/value endpoints. Exact final values, finite-target/duration guards, stale-frame generations, frame-handle-zero cancellation, reduced-motion snapping and deferred-mount/unmount cleanup prevent oversized or leaked frames.
+- 26 isolated assertions passed using production helper/component code, Vue refs, simulated RAF clocks and Intl formatting: integer/decimal/scientific targets, preformatted strings, Arabic digits, backward timestamps, decreasing/negative targets, rapid retargeting, cancellation, reduced motion and cleanup. The 176 settings/source checks, CSS parsing/token references and whitespace checks passed. Actual app/browser font/layout rendering remains pending. No builds, compilation, test suites, installs, versions, backend or Android changes; prior edits preserved.
+
+## Study/exam navigation control layout — 2026-10-08
+
+- Moved keyboard shortcut help from fixed viewport positioning into TestNavigation's tools group beside Pause, separate from Previous/Next/Finish. Removed its redundant keyboard badge, kept existing keyboard-only visibility and constrained the upward popover width/height with wrapping hints.
+- Reduced the shared question navigation window from nine/five entries to five/three for desktop/narrow screens. Retained arrows, current/answered status and 44px coarse-pointer targets; used shared compact geometry for fine pointers, reduced surrounding margins and an inline localized numeric counter with a full accessible label. This also updates the master-exam consumer.
+- Pause now uses the shared filled warning variant, filled pause icon, bold label and existing accessible pause/save label. Existing support/disabled/action contracts remain. Below 480px, tools and step actions get separate flexible rows.
+- 143 isolated runner assertions passed: four production Vue structure/template/script parses, navigation bounds/current inclusion, pause semantics, control placement and production CSS under simulated widths 320/480/640/769/1024px and fine/coarse pointers. Production runner CSS parsing and whitespace checks passed. jsdom has no layout engine; actual app/device/RTL/large-font geometry remains pending. No builds, compilation, test suites, installs, versions, backend or Android changes; earlier reliability edits preserved.
+
+## Global and page-specific reliability corrections — 2026-10-08
+
+- Startup mounts with existing defaults before fetching public configuration; the config read is bounded to 5 seconds with no retries. Ordinary API requests have a 30-second timeout; admin exports allow 120 seconds. Identical JSON mutations share their pending promise, without cancelling an earlier write or retrying uncertain mutations. Binary bodies use object identity to avoid conflating distinct uploads.
+- Added request-ownership checks to shared CRUD wrapping and question-list reads, including reset invalidation and suppression of stale errors/status/results. Cancellation releases loading silently. Toasts deduplicate matching message/type, cap visible entries at five and clean timers on removal/reset.
+- User-form updates omit expiry/renewal unless explicitly changed, preserving exact expired deadlines and existing renewal intervals on unrelated edits. Create still sends defaults; save guards and native disabled fieldsets protect pending writes. Profile expiry refreshes every minute and on focus/visibility changes with interval/listener cleanup.
+- Question load failures remain retryable in the editor; only confirmed 404s/invalid IDs redirect. Question save spans text and image work under one guard. A failed image upload/delete retains its original File/question ID and the frozen draft, shows persistent localized recovery feedback and retries only the image without another create/update.
+- Choices/correct-answer/translation errors remain beside their controls; submission focuses the offending input and opens enclosing details. Touched errors revalidate as values/language change. Markdown fields now forward required/error/aria descriptions and blur through BaseField. Shared fieldset styling avoids compounded disabled opacity.
+- 64 isolated reliability assertions passed using production functions, Vue refs and mocked transport/DOM/store/lifecycle: duplicate writes/failure cleanup/distinct files, stale responses/reset/cancellation, toast caps/timers, preserved subscriptions, image-only retry, validation/focus, load retry/404 and profile time/cleanup. Parsed seven changed Vue structures/templates/scripts; 176 settings/source checks, 58 CSS parses/token references, changed-JavaScript syntax and whitespace passed. No test suites, builds, compilation, installs, configured versions, backend or Android changes.
+- Browser automation tools are not exposed. A read-only check confirmed no preview responding on configured localhost:5173 after sandbox socket access required approved escalation. Full application/browser/device/network/RTL/theme/print verification remains pending; isolated checks do not establish rendering or server-side concurrency.
+
 ## Four additional Arabic font choices — 2026-10-08
 
 - Added Tajawal, Cairo, IBM Plex Sans Arabic and Amiri to the existing selector, pre-paint allowlist, localized labels and body/heading token rules. Preferences remain browser-local; only selected families register CDN styles, with no local text-font fallback or preload.

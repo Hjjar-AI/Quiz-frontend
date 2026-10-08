@@ -109,6 +109,7 @@ export const adminService = {
     if (format === 'xlsx') params.format = 'xlsx'
     return apiClient.get(ENDPOINTS.DATABASE.EXPORT_STATE, {
       params,
+      timeout: 120000,
       responseType: 'blob',
       rawResponse: true,
     })
@@ -126,6 +127,7 @@ export const adminService = {
       ? ENDPOINTS.DATABASE.EXPORT_VERIFIED(format)
       : ENDPOINTS.DATABASE.EXPORT(format)
     return apiClient.post(endpoint, options, {
+      timeout: 120000,
       responseType: 'blob',
       rawResponse: true,
     })

@@ -66,6 +66,7 @@ const themeIcons = {
   slate: 'bi bi-cloud-fill',
   ink: 'bi bi-pen-fill',
   amber: 'bi bi-sun-fill',
+  'ruby': 'bi bi-diamond-fill',
   dark: 'bi bi-moon-fill',
   midnight: 'bi bi-moon-stars-fill',
   onyx: 'bi bi-circle-fill',

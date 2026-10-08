@@ -1,79 +1,14 @@
 // frontend/src/features/questions/composables/useQuestionSave.js
 //
-// Shared post-save work for the question create/edit flow.
-//
-// AddView.vue and EditView.vue do the following after a successful
-// save, in the same order, with the same error handling:
-//
-//   1. STRIP two sentinel image fields the form injected
-//      (`__pending_image`, `__clear_image`) BEFORE the request goes
-//      out, so they do not leak into the API payload.
-//   2. If either was set, upload the new image (or issue the delete).
-//      A failure here does NOT undo the save — the question is
-//      already persisted — so it surfaces a warning, not an error.
-//   3. Record the chosen category and each tag in the per-user
-//      recent-items lists, so the pickers on the next form open
-//      default to the most recently used values.
-//
-// The two views differ in exactly two ways:
-//
-//   • EditView sends `expected_version` on the update payload, to
-//     detect a concurrent edit. That field is read from the loaded
-//     question, which only Edit has. The helper does not know about
-//     it and does not touch it.
-//   • The image-failure message key differs: one for create, one
-//     for update. That key is a parameter to `finishSave`.
-//
-// USAGE (AddView)
-// ---------------
-//   const { extractSentinels, finishSave } = useQuestionSave()
-//
-//   const sentinels = extractSentinels(formData)
-//   const result = await questionStore.create(formData)
-//   if (!result) return
-//   await finishSave({
-//     questionId: result.id,
-//     sentinels,
-//     payload: formData,
-//     uploadFailureKey: 'questions.imageUploadFailed',
-//   })
-//   router.push('/questions')
-//
-// USAGE (EditView)
-// ----------------
-//   if (question.value?.version !== undefined) {
-//     formData.expected_version = question.value.version
-//   }
-//   const sentinels = extractSentinels(formData)
-//   const result = await questionStore.update(id, formData)
-//   if (!result) return
-//   await finishSave({
-//     questionId: id,
-//     sentinels,
-//     payload: formData,
-//     uploadFailureKey: 'questions.imageUploadFailedUpdate',
-//   })
-//   router.push('/questions')
-//
-// WHY TWO FUNCTIONS AND NOT ONE
-// -----------------------------
-// `extractSentinels` MUST run before the save call — the API
-// payload cannot contain the two sentinel keys. `finishSave` MUST
-// run after the save call — it needs the saved question's id and a
-// confirmed success. There is a `questionStore.create/update` call
-// in between that belongs to the caller (each view decides whether
-// to send `expected_version`, and each has its own store call
-// shape). Splitting the helper into the two phases it actually has
-// is what lets the caller keep ownership of that middle step.
+// Post-save image handling and recovery for question create/edit.
 
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useNotify } from '@/composables/useNotify'
 import { useRecentItems } from '@/composables/useRecentItems'
 import { questionService } from '@/services/questionService'
 
 export function useQuestionSave() {
   const { t } = useI18n()
-  const { notify } = useNotify()
   const { add: addRecentCategory } = useRecentItems('categories')
   const { add: addRecentTag } = useRecentItems('tags')
 
@@ -110,10 +45,11 @@ export function useQuestionSave() {
    *                                          `tags` after the save
    * @param {string} options.uploadFailureKey i18n key for the image
    *                                          upload warning
-   * @returns {Promise<void>}
+   * @returns {Promise<string>} Image failure message, or an empty string.
    */
   async function finishSave({ questionId, sentinels, payload, uploadFailureKey }) {
     const { pendingImage, clearImage } = sentinels
+    let imageError = ''
 
     // ── Image upload (best-effort) ────────────────────────────
     //
@@ -124,11 +60,7 @@ export function useQuestionSave() {
       try {
         await questionService.uploadImage(questionId, pendingImage)
       } catch (e) {
-        // Warning, not error: the question itself saved fine. The
-        // caller proceeds to its success navigation; the user sees
-        // one warning toast and can retry the image from the edit
-        // form.
-        notify(e?.message || t(uploadFailureKey), 'warning')
+        imageError = e?.message || t(uploadFailureKey)
       }
     }
 
@@ -144,7 +76,45 @@ export function useQuestionSave() {
         if (trimmed) addRecentTag(trimmed)
       })
     }
+    return imageError
   }
 
   return { extractSentinels, finishSave }
+}
+/** Freeze the draft through text/image work, and retry only a failed image. */
+export function useQuestionSaveFlow({ persist, formRef, afterSave, uploadFailureKey }) {
+  const { extractSentinels, finishSave } = useQuestionSave()
+  const saving = ref(false)
+  const imageError = ref('')
+  const recovery = ref(null)
+  const hasPendingImage = computed(() => recovery.value !== null)
+
+  async function completeImage() {
+    imageError.value = await finishSave(recovery.value)
+    if (imageError.value) return
+    formRef.value?.markClean()
+    await afterSave()
+    recovery.value = null
+  }
+
+  async function save(payload) {
+    if (saving.value || recovery.value) return
+    saving.value = true
+    try {
+      const sentinels = extractSentinels(payload)
+      const result = await persist(payload)
+      if (!result) return
+      recovery.value = { questionId: result.id, sentinels, payload, uploadFailureKey }
+      await completeImage()
+    } finally { saving.value = false }
+  }
+
+  async function retryImage() {
+    if (saving.value || !recovery.value) return
+    saving.value = true
+    try { await completeImage() }
+    finally { saving.value = false }
+  }
+
+  return { saving, imageError, hasPendingImage, save, retryImage }
 }

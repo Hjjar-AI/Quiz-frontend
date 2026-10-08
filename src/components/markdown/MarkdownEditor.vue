@@ -5,9 +5,11 @@
     class="markdown-editor"
     :label="label"
     :required="required"
+    :error="error"
     :current-length="charCount"
     :max-length="maxlength"
   >
+    <template #default="{ describedBy, invalid }">
     <div v-show="toolbarVisible" class="toolbar-row">
       <MarkdownToolbar @insert="(action) => insertMarkdown(action)" />
       <router-link to="/manual#markdown" class="markdown-help-link" :title="t('markdown.helpLink')">
@@ -21,6 +23,10 @@
         :value="modelValue"
         :rows="rows"
         :maxlength="maxlength"
+        :required="required"
+        :aria-describedby="describedBy"
+        :aria-invalid="invalid"
+        @blur="$emit('blur')"
         dir="auto"
         class="form-control"
         @input="onInput"
@@ -44,6 +50,7 @@
     <div v-if="showPreview" class="markdown-preview">
       <BaseMarkdown :text="modelValue" />
     </div>
+    </template>
   </BaseField>
 </template>
 
@@ -64,9 +71,10 @@ const props = defineProps({
   rows: { type: Number, default: 3 },
   maxlength: { type: Number, default: 500 },
   required: { type: Boolean, default: false },
+  error: { type: String, default: '' },
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'blur'])
 
 const textareaRef = ref(null)
 const toolbarVisible = ref(false)

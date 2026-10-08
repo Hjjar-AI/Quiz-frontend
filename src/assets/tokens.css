@@ -745,6 +745,55 @@
   color-scheme: light;
 }
 
+/* ===== RUBY THEME ===== */
+[data-theme='ruby'] {
+  --color-tint-base: #ffffff;
+  --color-light-foreground: #ffffff;
+  --color-palette-primary: #8b0000;
+  --color-primary: var(--color-palette-primary);
+  --color-palette-success: #176544;
+  --color-success: var(--color-palette-success);
+  --color-palette-danger: #ae2455;
+  --color-danger: var(--color-palette-danger);
+  --color-palette-warning: #805500;
+  --color-warning: var(--color-palette-warning);
+  --color-palette-info: #235b85;
+  --color-info: var(--color-palette-info);
+
+  --color-bg-body: #f3e6e7;
+  --color-bg-card: #ffffff;
+  --color-bg-alt: #ead6d8;
+  --color-text-primary: #2b1015;
+  --color-text-secondary: #4c2b32;
+  --color-text-muted: #634c50;
+
+  --color-on-primary: var(--color-light-foreground);
+  --color-on-success: var(--color-light-foreground);
+  --color-on-danger: var(--color-light-foreground);
+  --color-on-warning: var(--color-light-foreground);
+  --color-on-info: var(--color-light-foreground);
+  --color-on-primary-light: var(--color-text-primary);
+  --color-text-inverse: var(--color-light-foreground);
+
+  --color-streak-start: #9f1c2b;
+  --color-streak-end: #6d0717;
+  --color-rank-gold: #66500d;
+  --color-rank-silver: #624f55;
+  --color-rank-bronze: #774126;
+  --color-chart-1: #8b0000;
+  --color-chart-2: #1a6846;
+  --color-chart-3: #155f9b;
+  --color-chart-4: #7d5100;
+  --color-chart-5: #6948a8;
+  --color-chart-6: #495d72;
+
+  --elevation-1: 0 4px 12px rgba(43, 16, 21, 0.06);
+  --elevation-2: 0 8px 24px rgba(43, 16, 21, 0.1);
+  --elevation-3: 0 16px 32px rgba(43, 16, 21, 0.14);
+  --elevation-4: 0 20px 40px rgba(43, 16, 21, 0.18);
+  color-scheme: light;
+}
+
 /* Recompute every derived colour on the themed root. Custom property
    formulas inherited from :root retain that element's inputs, so this
    shared rule is what lets every palette reuse one derivation model

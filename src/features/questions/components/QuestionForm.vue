@@ -8,6 +8,7 @@
     </Transition>
 
     <form class="question-form__form" @submit.prevent="submitWithGuard">
+      <fieldset class="form-lock-group" :disabled="isLoading || saveBlocked">
       <!--
         Case section (feature: case-based question chains).
 
@@ -187,9 +188,13 @@
         <TagInput v-model="form.tags" />
       </FormGrid>
 
-      <div class="question-form__choices">
-        <h4>{{ t('questions.choicesLabel') }}</h4>
+      <div id="q-choices" class="question-form__choices" role="group" aria-labelledby="q-choices-label" tabindex="-1" :aria-describedby="(validationErrors.choices || validationErrors.answer) ? 'q-choices-errors' : undefined" @focusout="touchChoices">
+        <h4 id="q-choices-label">{{ t('questions.choicesLabel') }}</h4>
         <ChoiceEditor v-model="form.choices" v-model:correct-answer="form.correct_answer" />
+        <div v-if="validationErrors.choices || validationErrors.answer" id="q-choices-errors" role="alert">
+          <p v-if="validationErrors.choices" class="base-field__error">{{ validationErrors.choices }}</p>
+          <p v-if="validationErrors.answer" class="base-field__error">{{ validationErrors.answer }}</p>
+        </div>
       </div>
 
       <MarkdownEditor
@@ -254,6 +259,8 @@
         </p>
         <div class="question-form__translation-add">
           <BaseInput
+            id="q-translation-locale"
+            :error="validationErrors.translationLocale"
             v-model.trim="translationLocale"
             :label="t('questions.translationLocaleLabel')"
             :maxlength="6"
@@ -284,6 +291,8 @@
           </header>
           <MarkdownEditor
             :id="`q-translation-${locale}-question`"
+            :error="validationErrors.translations[locale]?.question || ''"
+            @blur="touchTranslations"
             v-model="translation.question"
             :label="t('questions.translationQuestionLabel')"
             :maxlength="3000"
@@ -292,6 +301,9 @@
             <BaseInput
               v-for="(_, index) in form.choices"
               :key="`${locale}-${index}`"
+              :id="`q-translation-${locale}-choice-${index}`"
+              :error="!String(translation.choices[index] || '').trim() ? validationErrors.translations[locale]?.choices || '' : ''"
+              @blur="touchTranslations"
               v-model="translation.choices[index]"
               :label="t('questions.choiceN', { n: index + 1 })"
               :maxlength="1000"
@@ -327,12 +339,13 @@
           t('common.cancel')
         }}</BaseButton>
       </div>
+      </fieldset>
     </form>
   </BaseCard>
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, computed, watch } from 'vue'
+import { reactive, ref, onMounted, computed, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useConfigStore } from '@/stores/configStore'
 import { useCaseStore } from '@/stores/caseStore'
@@ -361,9 +374,9 @@ import { useNotify } from '@/composables/useNotify'
 import { validateFile, FILE_VALIDATION_REASONS } from '@/utils/fileValidation'
 import { useKnowledgeStore } from '@/stores/knowledgeStore'
 
-const { t } = useI18n()
+const { t, locale: uiLocale } = useI18n()
 
-const props = defineProps({ question: Object, loading: Boolean })
+const props = defineProps({ question: Object, loading: Boolean, saveBlocked: Boolean })
 const emit = defineEmits(['save'])
 
 const router = useRouter()
@@ -447,6 +460,39 @@ const selectedKnowledgeObject = computed(() =>
 const knowledgeObjectOptions = computed(() =>
   knowledgeObjects.value.map(item => ({ value: item.id, label: item.title })),
 )
+
+const validationErrors = reactive({ choices: '', answer: '', translationLocale: '', translations: {} })
+const choicesTouched = ref(false)
+const translationsTouched = ref(false)
+function validateChoiceFields() {
+  const max = configStore.maxChoices || FALLBACK_MAX_CHOICES
+  validationErrors.choices = validateChoices(form.choices, 2, max).message || ''
+  validationErrors.answer = validateCorrectAnswer(form.correct_answer, form.choices, max).message || ''
+}
+function touchChoices() { choicesTouched.value = true; validateChoiceFields() }
+function touchTranslations() { translationsTouched.value = true; buildTranslations() }
+watch(() => [form.choices, form.correct_answer], () => {
+  if (choicesTouched.value) validateChoiceFields()
+}, { deep: true })
+watch(() => form.translations, () => {
+  if (translationsTouched.value) buildTranslations()
+}, { deep: true })
+watch(uiLocale, () => {
+  if (choicesTouched.value) validateChoiceFields()
+  if (translationsTouched.value) buildTranslations()
+  if (validationErrors.translationLocale) validationErrors.translationLocale = t('questions.translationLocaleInvalid')
+})
+async function focusInvalid(id) {
+  await nextTick()
+  const element = document.getElementById(id)
+  let parent = element?.parentElement
+  while (parent) {
+    if (parent.tagName === 'DETAILS') parent.open = true
+    parent = parent.parentElement
+  }
+  const control = element?.matches('input, textarea, select') ? element : element?.querySelector('input, textarea, select') || element
+  control?.focus()
+}
 
 const translationLocale = ref('')
 const translationCount = computed(() => Object.keys(form.translations).length)
@@ -578,7 +624,8 @@ function syncTranslationChoices() {
 function addTranslation() {
   const locale = normalizeLocale(translationLocale.value)
   if (!/^[a-z]{2,3}(?:-[A-Z]{2})?$/.test(locale)) {
-    notify(t('questions.translationLocaleInvalid'), 'error')
+    validationErrors.translationLocale = t('questions.translationLocaleInvalid')
+    focusInvalid('q-translation-locale')
     return
   }
   if (!form.translations[locale]) {
@@ -588,6 +635,7 @@ function addTranslation() {
       explanation: '',
     }
   }
+  validationErrors.translationLocale = ''
   translationLocale.value = ''
 }
 
@@ -597,6 +645,8 @@ function removeTranslation(locale) {
 
 function buildTranslations() {
   const output = {}
+  validationErrors.translations = {}
+  let valid = true
   for (const [locale, content] of Object.entries(form.translations)) {
     const question = String(content.question || '').trim()
     const explanation = String(content.explanation || '').trim()
@@ -607,12 +657,12 @@ function buildTranslations() {
     const hasContent = question || explanation || hasChoices
     if (!hasContent) continue
     if (!question) {
-      notify(t('questions.translationQuestionRequired', { locale }), 'error')
-      return null
+      validationErrors.translations[locale] = { question: t('questions.translationQuestionRequired', { locale }) }
+      valid = false
     }
     if (hasChoices && choices.some((choice) => !choice)) {
-      notify(t('questions.translationChoicesIncomplete', { locale }), 'error')
-      return null
+      validationErrors.translations[locale] = { ...validationErrors.translations[locale], choices: t('questions.translationChoicesIncomplete', { locale }) }
+      valid = false
     }
     output[locale] = {
       question,
@@ -620,7 +670,7 @@ function buildTranslations() {
       explanation,
     }
   }
-  return output
+  return valid ? output : null
 }
 
 function validateImageFile(file) {
@@ -670,17 +720,21 @@ function clearImage() {
 }
 
 async function handleSubmit() {
-  const maxChoices = configStore.maxChoices || FALLBACK_MAX_CHOICES
-
-  const choicesResult = validateChoices(form.choices, 2, maxChoices)
-  if (!choicesResult.valid) {
-    notify(choicesResult.message, 'error')
-    return
-  }
-
-  const correctResult = validateCorrectAnswer(form.correct_answer, form.choices, maxChoices)
-  if (!correctResult.valid) {
-    notify(correctResult.message, 'error')
+  touchChoices()
+  if (validationErrors.choices || validationErrors.answer) {
+    const seen = new Set()
+    let index = form.choices.findIndex(choice => !String(choice || '').trim())
+    if (validationErrors.choices) {
+      const duplicate = form.choices.findIndex(choice => {
+        const value = String(choice || '').trim().toLowerCase()
+        if (!value) return false
+        if (seen.has(value)) return true
+        seen.add(value)
+        return false
+      })
+      if (duplicate >= 0) index = duplicate
+    } else index = form.correct_answer - 1
+    await focusInvalid(`q-choice-${Math.max(0, index)}`)
     return
   }
 
@@ -691,13 +745,19 @@ async function handleSubmit() {
 
   if (remappedCorrectAnswer === null) {
     showSplash.value = false
-    notify(t('validation.correctAnswerEmpty'), 'error')
+    validationErrors.answer = t('validation.correctAnswerEmpty')
+    await focusInvalid('q-choices')
     return
   }
 
+  translationsTouched.value = true
   const translations = buildTranslations()
   if (translations === null) {
     showSplash.value = false
+    const locale = Object.keys(validationErrors.translations)[0]
+    const errors = validationErrors.translations[locale]
+    const index = form.translations[locale].choices.findIndex(choice => !String(choice || '').trim())
+    await focusInvalid(errors.question ? `q-translation-${locale}-question` : `q-translation-${locale}-choice-${index}`)
     return
   }
 
@@ -732,6 +792,7 @@ async function handleSubmit() {
 }
 
 function submitWithGuard() {
+  if (props.loading || props.saveBlocked) return
   guard(handleSubmit)
 }
 </script>

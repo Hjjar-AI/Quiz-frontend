@@ -4,6 +4,7 @@
     <div v-for="(choice, index) in choices" :key="index" class="choice-editor__row">
       <span class="choice-editor__number">{{ index + 1 }}</span>
       <BaseInput
+        :id="`q-choice-${index}`"
         v-model="choices[index]"
         :placeholder="t('questions.choiceN', { n: index + 1 })"
         maxlength="300"

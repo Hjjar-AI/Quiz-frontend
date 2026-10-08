@@ -47,7 +47,9 @@
         @previous="goPrevious"
         @next="goNext"
         @finish="finish"
-      />
+      >
+        <template #tools><ShortcutHint /></template>
+      </TestNavigation>
 
       <QuestionNavDots
         :total="store.totalQuestions"
@@ -56,8 +58,6 @@
         :disabled="navigationDisabled"
         @go="goTo"
       />
-
-      <ShortcutHint />
     </template>
 
     <div v-else-if="questionLoadFailed" class="test-question__loading">

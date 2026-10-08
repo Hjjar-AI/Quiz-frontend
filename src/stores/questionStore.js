@@ -18,6 +18,7 @@ import {
 // Requesting 1000 caused the store's local `pagination.per_page` to
 // record 1000 while the server returned at most 500 rows, silently
 // desynchronising any consumer that trusted the local value.
+const listRequests = new WeakMap()
 const MAX_PER_PAGE = 500
 
 // ──────────────────────────────────────────────────────────────────
@@ -99,10 +100,13 @@ export const useQuestionStore = defineStore('questions', {
     },
 
     async fetchList(params = {}) {
+      const token = {}
+      listRequests.set(this, token)
       const { wrap } = useCrudActions(this)
       const cacheKey = `questions_${JSON.stringify(params)}`
       return await wrap(() => questionService.list(params), {
         cacheKey,
+        isCurrent: () => listRequests.get(this) === token,
         errorMsgFallbackKey: 'notifications.questionsLoadFailed',
         onSuccess: (res) => {
           const items = res.items || []
@@ -352,19 +356,22 @@ export const useQuestionStore = defineStore('questions', {
       storageService.setItem(`last_viewed_question_id_${userId}`, String(id))
     },
 
-    reset: makeReset({
-      byId: {},
-      ids: [],
-      currentItem: null,
-      pagination: { page: 1, per_page: 20, total: 0, total_pages: 1 },
-      filters: {},
-      unverifiedStatus: 'idle',
-      unverifiedError: null,
-      unverifiedIds: [],
-      unverifiedById: {},
-      unverifiedPagination: { page: 1, per_page: 20, total: 0, total_pages: 1 },
-      status: 'idle',
-      error: null,
-    }),
+    reset() {
+      listRequests.delete(this)
+      return makeReset({
+        byId: {},
+        ids: [],
+        currentItem: null,
+        pagination: { page: 1, per_page: 20, total: 0, total_pages: 1 },
+        filters: {},
+        unverifiedStatus: 'idle',
+        unverifiedError: null,
+        unverifiedIds: [],
+        unverifiedById: {},
+        unverifiedPagination: { page: 1, per_page: 20, total: 0, total_pages: 1 },
+        status: 'idle',
+        error: null,
+      }).call(this)
+    },
   },
 })

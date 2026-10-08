@@ -1191,3 +1191,16 @@ input[type='date']:focus {
 .base-field.base-field--disabled .base-input__number--disabled {
   opacity: 1;
 }
+
+.form-lock-group {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* A disabled group freezes input without dimming every descendant twice. */
+.form-lock-group:disabled { opacity: 1; }

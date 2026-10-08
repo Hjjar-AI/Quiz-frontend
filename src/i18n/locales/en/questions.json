@@ -1,5 +1,8 @@
 {
   "questions": {
+    "imageRecovery": "The question is saved, but its image change is pending. Retry the image without saving the question again.",
+    "retryImage": "Retry image change",
+
     "title": "All questions",
     "addTitle": "Add new question",
     "editTitle": "Edit question",

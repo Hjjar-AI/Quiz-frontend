@@ -23,13 +23,13 @@
       :disabled="disabled"
       :aria-label="
         t('questions.navDotAriaLabel', {
-          index: index + 1,
+          index: formatNumber(index + 1),
           status: statusLabel(index),
         })
       "
       @click="emit('go', index)"
     >
-      {{ index + 1 }}
+      {{ formatNumber(index + 1) }}
     </button>
 
     <button
@@ -42,23 +42,25 @@
       <DirectionalIcon ltr="bi bi-chevron-right" rtl="bi bi-chevron-left" />
     </button>
 
-    <span v-if="total > visibleLimit" class="question-nav-dots__summary">
-      {{ t('questions.navDotSummary', { current: current + 1, total }) }}
+    <span v-if="total > visibleLimit" class="question-nav-dots__summary" dir="ltr" :aria-label="t('questions.navDotSummary', { current: formatNumber(current + 1), total: formatNumber(total) })">
+      {{ formatNumber(current + 1) }} / {{ formatNumber(total) }}
     </span>
   </nav>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { useLocaleFormatters } from '@/i18n/helpers/format'
 import { useMediaQuery } from '@/composables/useMediaQuery'
 
 const { t } = useI18n()
+const { formatNumber } = useLocaleFormatters()
 
 const props = defineProps({
   total: { type: Number, required: true },
   current: { type: Number, required: true },
   hasAnswer: { type: Function, required: true },
-  maxVisibleDots: { type: Number, default: 9 },
+  maxVisibleDots: { type: Number, default: 5 },
   disabled: { type: Boolean, default: false },
 })
 
@@ -66,7 +68,7 @@ const emit = defineEmits(['go'])
 const isMobile = useMediaQuery('(max-width: 640px)')
 
 const visibleLimit = computed(() =>
-  Math.max(1, Math.min(props.maxVisibleDots, isMobile.value ? 5 : 9)),
+  Math.max(1, Math.min(props.maxVisibleDots, isMobile.value ? 3 : 5)),
 )
 
 const visibleIndexes = computed(() => {

@@ -1,13 +1,14 @@
 <!-- frontend/src/components/base/StatTile.vue -->
 <template>
   <BaseCard class="stat-tile" :style="{ '--card-accent': accent }">
-    <span class="stat-tile__value">{{ displayValue }}</span>
+    <span class="stat-tile__value" :class="{ 'stat-tile__value--long': String(displayValue).length > 8 }" dir="auto">{{ displayValue }}</span>
     <span class="stat-tile__label">{{ label }}</span>
   </BaseCard>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { useLocaleFormatters } from '@/i18n/helpers/format'
 import { useCountUp } from '@/composables/useCountUp'
 import BaseCard from './BaseCard.vue'
 
@@ -49,6 +50,14 @@ function isAnimatable(value) {
   return false
 }
 
+const { formatNumber } = useLocaleFormatters()
+// Display precision comes from the target, never from intermediate RAF floats.
+const fractionDigits = computed(() => {
+  if (!isAnimatable(props.value)) return 0
+  const [coefficient, exponent = '0'] = String(Number(props.value)).toLowerCase().split('e')
+  return Math.min(20, Math.max(0, (coefficient.split('.')[1]?.length || 0) - Number(exponent)))
+})
+
 const animatable = computed(() => isAnimatable(props.value))
 
 // When `animatable` is false the composable's target is pinned to 0
@@ -60,7 +69,9 @@ const numericTarget = computed(() => (animatable.value ? Number(props.value) : 0
 
 const { displayValue: animatedValue } = useCountUp(numericTarget, 1000, true)
 
-const displayValue = computed(() =>
-  animatable.value ? animatedValue.value : props.value
-)
+const displayValue = computed(() => {
+  if (!animatable.value) return props.value
+  const rounded = Number(animatedValue.value.toFixed(fractionDigits.value))
+  return formatNumber(rounded === 0 ? 0 : rounded, fractionDigits.value)
+})
 </script>

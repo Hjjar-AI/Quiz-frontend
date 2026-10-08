@@ -92,6 +92,7 @@
             'slate',
             'ink',
             'amber',
+            'ruby',
             'dark',
             'midnight',
             'onyx',
@@ -105,6 +106,7 @@
             slate: '#e7edf2',
             ink: '#e6e6e3',
             amber: '#efebe4',
+            'ruby': '#f3e6e7',
             dark: '#0d1218',
             midnight: '#0a0f1e',
             onyx: '#000000',
@@ -114,6 +116,7 @@
           if (saved === 'light') saved = 'stone'
           if (saved === 'sepia') saved = 'amber'
           if (saved === 'fresh') saved = 'lagoon'
+          if (saved === 'blood-red') saved = 'ruby'
           var theme =
             saved === 'auto'
               ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches

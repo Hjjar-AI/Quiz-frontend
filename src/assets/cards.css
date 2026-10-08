@@ -114,6 +114,8 @@
 }
 
 .stat-tile {
+  min-inline-size: 0;
+  max-inline-size: 100%;
   background: transparent;
   border: 0;
   border-radius: var(--radius-md);
@@ -122,6 +124,8 @@
   box-shadow: none;
 }
 .stat-tile__value {
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
   display: block;
   font-size: var(--font-size-display);
   font-weight: var(--font-weight-extrabold);
@@ -129,6 +133,7 @@
   line-height: var(--line-height-numeral);
   font-variant-numeric: tabular-nums;
 }
+.stat-tile__value--long { font-size: var(--font-size-xl); }
 .stat-tile__label {
   display: block;
   font-size: var(--font-size-sm);

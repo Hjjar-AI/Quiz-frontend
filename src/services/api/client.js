@@ -15,6 +15,7 @@ import {
 const client = axios.create({
   baseURL: API_BASE + '/',
   withCredentials: true,
+  timeout: 30000,
 })
 
 const pendingRequests = new Map()
@@ -61,86 +62,29 @@ function ensureCsrfToken() {
   return promise
 }
 
-// ── Request identity ──────────────────────────────────────────────
-//
-// `getRequestKey` builds the key used by the in-flight-mutation map
-// to cancel a duplicate of the same request. Its purpose is to stop
-// a double-clicked submit from issuing two mutations; it is not a
-// content hash and does not need to distinguish payloads byte for
-// byte.
-//
-// The previous implementation collapsed every binary body to
-// `[binary:FormData]` / `[binary:Blob]` / `[binary:ArrayBuffer]`.
-// That works for the double-click case (identical file, identical
-// key) but is wrong for any OTHER pair of concurrent FormData POSTs
-// to the same URL: the second call cancelled the first even though
-// the two payloads were distinct. The concrete failure was a
-// scripted batch importing two different backup files back-to-back
-// — the second import cancelled the first.
-//
-// `describeFormData` produces a bounded, content-aware identity for
-// a FormData instance. For each entry it records:
-//   • the field name,
-//   • for a File/Blob value: the file name and byte size,
-//   • for any other value: up to 100 characters of its string form.
-//
-// Scalars are truncated so a very large text field cannot make the
-// cache key arbitrarily long. The file-name+size pair in the same
-// key makes collisions on truncated scalars effectively impossible
-// in practice.
-function describeFormData(formData) {
-  const parts = []
-  try {
-    for (const [key, value] of formData.entries()) {
-      if (value && typeof value === 'object' && typeof value.size === 'number') {
-        // File or Blob.
-        const name = typeof value.name === 'string' ? value.name : ''
-        parts.push(`${key}\u0001${name}\u0001${value.size}`)
-      } else {
-        parts.push(`${key}\u0001${String(value).slice(0, 100)}`)
-      }
-    }
-  } catch {
-    // `entries()` is standard everywhere this app targets. The
-    // defensive branch keeps the key well-formed rather than
-    // throwing inside the request interceptor if some environment
-    // ever hands us an exotic FormData-like object.
-    return '[formdata:unknown]'
-  }
-  return `[formdata:${parts.join('\u0002')}]`
-}
-
+// Identical JSON mutations share their pending promise. Binary bodies use
+// object identity so distinct files/form payloads cannot silently collide.
+const bodyIdentities = new WeakMap()
+let nextBodyIdentity = 0
 function getRequestKey(config) {
-  let bodyKey = ''
-  if (config.data) {
-    if (config.data instanceof FormData) {
-      bodyKey = describeFormData(config.data)
-    } else if (config.data instanceof Blob) {
-      bodyKey = `[blob:${config.data.size}:${config.data.type || ''}]`
-    } else if (config.data instanceof ArrayBuffer) {
-      bodyKey = `[arraybuffer:${config.data.byteLength}]`
-    } else {
-      try {
-        bodyKey = JSON.stringify(config.data)
-      } catch {
-        bodyKey = '[unserializable]'
-      }
-    }
+  let body = config.data
+  let bodyType = 'json'
+  if (body && typeof body === 'object' &&
+      (body instanceof FormData || body instanceof Blob || body instanceof ArrayBuffer)) {
+    bodyType = 'binary'
+    if (!bodyIdentities.has(body)) bodyIdentities.set(body, ++nextBodyIdentity)
+    body = { binaryIdentity: bodyIdentities.get(body) }
   }
-  return `${config.method}:${config.url}:${JSON.stringify(config.params || {})}:${bodyKey}`
+  try {
+    return JSON.stringify([
+      (config.method || 'GET').toUpperCase(), config.url, config.params, bodyType, body,
+      config.responseType, config.rawResponse, config.headers, config.timeout,
+    ])
+  } catch { return null }
 }
 
 function isMutationMethod(method) {
   return ['post', 'put', 'delete', 'patch'].includes((method || '').toLowerCase())
-}
-
-function clearPendingEntry(config) {
-  if (!config || !isMutationMethod(config.method)) return
-  const key = getRequestKey(config)
-  const entry = pendingRequests.get(key)
-  if (entry && entry.token === config.cancelToken) {
-    pendingRequests.delete(key)
-  }
 }
 
 // Whether a 403 is a CSRF rejection (as opposed to a real permission
@@ -218,24 +162,11 @@ client.interceptors.request.use(async (config) => {
     }
   }
 
-  if (isMutationMethod(config.method)) {
-    const key = getRequestKey(config)
-    if (pendingRequests.has(key)) {
-      const entry = pendingRequests.get(key)
-      entry.cancel()
-      pendingRequests.delete(key)
-    }
-    const source = axios.CancelToken.source()
-    config.cancelToken = source.token
-    pendingRequests.set(key, { token: source.token, cancel: source.cancel })
-  }
-
   return config
 }, (error) => Promise.reject(error))
 
 client.interceptors.response.use(
   (response) => {
-    clearPendingEntry(response.config)
 
     // Binary downloads need headers (not just response.data) so callers can
     // honor Content-Disposition. Opt in explicitly to keep the normal API
@@ -257,7 +188,6 @@ client.interceptors.response.use(
     return body
   },
   async (error) => {
-    clearPendingEntry(error.config)
 
     if (axios.isCancel(error)) {
       return Promise.reject({
@@ -294,7 +224,7 @@ client.interceptors.response.use(
 
 const IDEMPOTENT_METHODS = new Set(['GET', 'HEAD', 'OPTIONS'])
 
-async function request(config, retryOptions = {}) {
+async function requestOnce(config, retryOptions = {}) {
   const { maxRetries = 1, retryDelay = 1000 } = retryOptions
   const method = (config.method || 'GET').toUpperCase()
   const isIdempotent = IDEMPOTENT_METHODS.has(method)
@@ -330,6 +260,20 @@ async function request(config, retryOptions = {}) {
       attempt += 1
     }
   }
+}
+
+function request(config, retryOptions = {}) {
+  // Explicit cancellation belongs to its caller and cannot be shared safely.
+  const key = isMutationMethod(config.method) && !config.signal && !config.cancelToken
+    ? getRequestKey(config) : null
+  if (key && pendingRequests.has(key)) return pendingRequests.get(key)
+  const promise = requestOnce(config, retryOptions)
+  if (!key) return promise
+  const shared = promise.finally(() => {
+    if (pendingRequests.get(key) === shared) pendingRequests.delete(key)
+  })
+  pendingRequests.set(key, shared)
+  return shared
 }
 
 export const apiClient = {

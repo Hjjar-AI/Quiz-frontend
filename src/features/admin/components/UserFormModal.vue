@@ -7,6 +7,7 @@
     @update:is-open="close"
   >
     <form @submit.prevent="handleSubmit" class="user-form">
+      <fieldset :disabled="isSaving" class="form-lock-group">
       <FormGrid>
         <BaseInput
           v-model="form.username"
@@ -36,13 +37,14 @@
         />
         <BaseInput
           v-model.number="form.expiry_days"
+          @update:model-value="expiryChanged = true"
           type="number"
           :label="t('admin.users.formExpiryDays')"
           :hint="t('admin.users.formExpiryHint')"
           min="0"
           inputmode="numeric"
         />
-        <BaseCheckbox v-model="form.auto_renew" :label="t('admin.users.formAutoRenew')" />
+        <BaseCheckbox @update:model-value="renewalChanged = true" v-model="form.auto_renew" :label="t('admin.users.formAutoRenew')" />
         <BaseCheckbox v-model="form.is_active" :label="t('admin.users.formIsActive')" />
 
         <BaseInput
@@ -65,11 +67,12 @@
         <BaseButton
           type="submit"
           variant="primary"
-          :loading="userStore.isLoading"
+          :loading="isSaving"
         >
           {{ editMode ? t('admin.users.update') : t('admin.users.create') }}
         </BaseButton>
       </div>
+      </fieldset>
     </form>
   </BaseModal>
 </template>
@@ -92,6 +95,9 @@ const { t } = useI18n()
 const userStore = useUserStore()
 const adminSettingsStore = useAdminSettingsStore()
 
+const expiryChanged = ref(false)
+const renewalChanged = ref(false)
+const isSaving = ref(false)
 const isOpen = ref(false)
 const editMode = ref(false)
 const editingId = ref(null)
@@ -171,37 +177,45 @@ function open(user = null) {
     applyDefaults()
     form.is_active = true
   }
+  expiryChanged.value = false
+  renewalChanged.value = false
   isOpen.value = true
 }
 
 function close() {
+  if (isSaving.value) return
   isOpen.value = false
 }
 
 async function handleSubmit() {
-  if (!validateAll()) return
+  if (isSaving.value || !validateAll()) return
 
   const data = {
     username: form.username,
     full_name: form.full_name,
     role: form.role,
-    expiry_days: form.expiry_days,
-    auto_renew_days: form.auto_renew
-      ? parseIntOr(adminSettingsStore.settings?.default_renewal_days, 30)
-      : 0,
     is_active: form.is_active,
     admin_password: form.admin_password,
   }
 
-  let result
-  if (editMode.value) {
-    if (form.password) data.new_password = form.password
-    result = await userStore.update(editingId.value, data)
-  } else {
-    data.password = form.password
-    result = await userStore.create(data)
+  // Preserve the exact stored deadline/renewal interval unless explicitly edited.
+  if (!editMode.value || expiryChanged.value) data.expiry_days = form.expiry_days
+  if (!editMode.value || renewalChanged.value) {
+    data.auto_renew_days = form.auto_renew
+      ? parseIntOr(adminSettingsStore.settings?.default_renewal_days, 30) : 0
   }
-  if (result) close()
+  isSaving.value = true
+  try {
+    let result
+    if (editMode.value) {
+      if (form.password) data.new_password = form.password
+      result = await userStore.update(editingId.value, data)
+    } else {
+      data.password = form.password
+      result = await userStore.create(data)
+    }
+    if (result) isOpen.value = false
+  } finally { isSaving.value = false }
 }
 
 defineExpose({ open, close })

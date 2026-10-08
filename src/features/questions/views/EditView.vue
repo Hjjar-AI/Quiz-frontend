@@ -1,95 +1,78 @@
-<!-- frontend/src/features/questions/views/EditView.vue -->
 <template>
   <Layout>
-    <PageShell
-      :title="t('questions.editTitle')"
-      icon="bi bi-pencil-square"
-      size="base"
-      page-class="question-form-page"
-      :error="questionStore.error || ''"
-      @dismiss-feedback="questionStore.error = null"
-    >
-      <QuestionForm
-        v-if="question"
-        ref="questionFormRef"
-        :question="question"
-        :loading="questionStore.isLoading"
-        @save="handleSave"
-      />
-      <div v-else class="loading-placeholder">
-        <BaseSkeleton height="400px" />
-      </div>
+    <PageShell :title="t('questions.editTitle')" icon="bi bi-pencil-square" size="base" page-class="question-form-page" :error="question ? questionStore.error || '' : ''" @dismiss-feedback="questionStore.error = null">
+      <FeedbackRegion v-if="imageError" :warning="`${t('questions.imageRecovery')} ${imageError}`" />
+      <BaseButton v-if="imageError" variant="secondary" :loading="saving" @click="retryImage">{{ t('questions.retryImage') }}</BaseButton>
+      <AsyncContent :loading="loadingQuestion" :error="loadError" @retry="loadQuestion">
+        <QuestionForm v-if="question" ref="questionFormRef" :question="question" :loading="saving || questionStore.isLoading" :save-blocked="hasPendingImage" @save="save" />
+      </AsyncContent>
     </PageShell>
   </Layout>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
+import AsyncContent from '@/components/common/AsyncContent.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import QuestionForm from '../components/QuestionForm.vue'
-import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import { useQuestionStore } from '@/stores/questionStore'
+import { questionService } from '@/services/questionService'
 import { useAuthStore } from '@/stores/authStore'
 import { useNotify } from '@/composables/useNotify'
-import { useQuestionSave } from '../composables/useQuestionSave'
+import { useQuestionSaveFlow } from '../composables/useQuestionSave'
 
 const { t } = useI18n()
-
 const router = useRouter()
 const route = useRoute()
 const questionStore = useQuestionStore()
 const authStore = useAuthStore()
 const { notify } = useNotify()
-const { extractSentinels, finishSave } = useQuestionSave()
-
 const question = ref(null)
 const questionFormRef = ref(null)
+const loadingQuestion = ref(false)
+const loadError = ref('')
+let disposed = false
 
-onMounted(async () => {
-  const id = parseInt(route.params.id)
-  if (isNaN(id)) {
+async function loadQuestion() {
+  if (loadingQuestion.value) return
+  const id = Number(route.params.id)
+  if (!Number.isSafeInteger(id) || id < 1) {
     notify(t('questions.invalidId'), 'error')
-    router.push('/questions')
+    router.replace('/questions')
     return
   }
-
-  const q = await questionStore.fetchOne(id)
-  if (q) {
-    question.value = q
+  loadingQuestion.value = true
+  loadError.value = ''
+  try {
+    const data = await questionService.get(id)
+    if (disposed) return
+    question.value = data
     questionStore.rememberLastViewed(id, authStore.user?.id || 'guest')
-  } else {
-    notify(t('questions.notFound'), 'error')
-    router.push('/questions')
-  }
-})
-
-async function handleSave(formData) {
-  const id = parseInt(route.params.id)
-
-  // Include expected_version for optimistic locking. Unchanged from
-  // the pre-refactor behaviour. This is the one payload difference
-  // between Add and Edit that the shared helper does NOT handle —
-  // the value comes from the loaded `question.value`, which only
-  // Edit has.
-  if (question.value && question.value.version !== undefined) {
-    formData.expected_version = question.value.version
-  }
-
-  const sentinels = extractSentinels(formData)
-
-  const result = await questionStore.update(id, formData)
-  if (!result) return
-
-  await finishSave({
-    questionId: id,
-    sentinels,
-    payload: formData,
-    uploadFailureKey: 'questions.imageUploadFailedUpdate',
-  })
-
-  questionFormRef.value?.markClean()
-  router.push('/questions')
+  } catch (error) {
+    if (disposed) return
+    if (error?.code === 404) {
+      notify(t('questions.notFound'), 'error')
+      router.replace('/questions')
+    } else if (error?.code !== 'CANCEL') {
+      loadError.value = error?.message || t('notifications.questionFetchFailed')
+    }
+  } finally { loadingQuestion.value = false }
 }
+
+const { saving, imageError, hasPendingImage, save, retryImage } = useQuestionSaveFlow({
+  persist: payload => {
+    if (question.value?.version !== undefined) payload.expected_version = question.value.version
+    return questionStore.update(question.value.id, payload)
+  },
+  formRef: questionFormRef,
+  afterSave: () => router.push('/questions'),
+  uploadFailureKey: 'questions.imageUploadFailedUpdate',
+})
+onMounted(loadQuestion)
+onBeforeUnmount(() => { disposed = true })
 </script>

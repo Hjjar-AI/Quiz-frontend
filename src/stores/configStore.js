@@ -35,7 +35,7 @@ export const useConfigStore = defineStore('appConfig', {
   actions: {
     async fetchConfig() {
       const { wrap } = useCrudActions(this)
-      return await wrap(() => apiClient.get(ENDPOINTS.CONFIG), {
+      return await wrap(() => apiClient.get(ENDPOINTS.CONFIG, { timeout: 5000 }, { maxRetries: 0 }), {
         successMsg: null,
         errorMsgFallbackKey: 'notifications.settingsLoadFailed',
         suppressErrorToast: true,

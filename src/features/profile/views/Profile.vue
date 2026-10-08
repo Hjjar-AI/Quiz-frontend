@@ -122,7 +122,7 @@
 
 <script setup>
 import '@/assets/profile.css'
-import { computed } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { useTheme } from '@/composables/useTheme'
@@ -193,9 +193,23 @@ const authorRankVariant = computed(() => authorRankVariantFor(user.value.author_
 
 const authorRankIcon = computed(() => authorRankIconFor(user.value.author_rank))
 
+const currentTime = ref(Date.now())
+let expiryTimer
+function refreshExpiryTime() { currentTime.value = Date.now() }
+onMounted(() => {
+  expiryTimer = setInterval(refreshExpiryTime, 60000)
+  window.addEventListener('focus', refreshExpiryTime)
+  document.addEventListener('visibilitychange', refreshExpiryTime)
+})
+onBeforeUnmount(() => {
+  clearInterval(expiryTimer)
+  window.removeEventListener('focus', refreshExpiryTime)
+  document.removeEventListener('visibilitychange', refreshExpiryTime)
+})
+
 const daysUntilExpiry = computed(() => {
   if (!user.value.expires_at) return null
-  const diff = new Date(user.value.expires_at) - new Date()
+  const diff = new Date(user.value.expires_at).getTime() - currentTime.value
   return Math.ceil(diff / (1000 * 60 * 60 * 24))
 })
 </script>

@@ -62,7 +62,7 @@ watch(() => i18n.global.locale.value, applyDocumentTitle)
 const configStore = useConfigStore()
 const testSessionStore = useTestSessionStore()
 
-configStore.fetchConfig().finally(() => {
-  testSessionStore.hydrateFromSession()
-  app.mount('#app')
-})
+// Render with the existing safe defaults; configuration cannot hold the shell hostage.
+testSessionStore.hydrateFromSession()
+app.mount('#app')
+configStore.fetchConfig()

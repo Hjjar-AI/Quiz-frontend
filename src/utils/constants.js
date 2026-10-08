@@ -20,17 +20,18 @@ export const THEMES = [
   'slate',
   'ink',
   'amber',
+  'ruby',
   'dark',
   'midnight',
   'onyx',
   'contrast',
 ]
 export const DARK_THEMES = ['dark', 'midnight', 'onyx']
-export const THEME_ALIASES = { light: DEFAULT_THEME, sepia: 'amber', fresh: 'lagoon' }
+export const THEME_ALIASES = { light: DEFAULT_THEME, sepia: 'amber', fresh: 'lagoon', 'blood-red': 'ruby' }
 export const THEME_OPTIONS = [AUTO_THEME, ...THEMES]
 export const THEME_GROUPS = [
   { key: 'automatic', themes: [AUTO_THEME] },
-  { key: 'light', themes: ['stone', 'iris', 'blossom', 'lagoon', 'slate', 'ink', 'amber'] },
+  { key: 'light', themes: ['stone', 'iris', 'blossom', 'lagoon', 'slate', 'ink', 'amber', 'ruby'] },
   { key: 'dark', themes: ['dark', 'midnight', 'onyx'] },
   { key: 'accessibility', themes: ['contrast'] },
 ]

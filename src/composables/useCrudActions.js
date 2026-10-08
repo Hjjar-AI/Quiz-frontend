@@ -85,10 +85,12 @@ export function useCrudActions(store, options = {}) {
       onError = null,
       cacheKey = null,
       cacheTtlMs = DEFAULT_CACHE_TTL,
+      isCurrent = () => true,
       suppressErrorToast = false,
       invalidateOnSuccess = null,
     } = opts
 
+    if (!isCurrent()) return null
     if (cacheKey && cache.has(cacheKey)) {
       const { data, timestamp, ttl } = cache.get(cacheKey)
       if (Date.now() - timestamp < ttl) {
@@ -102,7 +104,7 @@ export function useCrudActions(store, options = {}) {
           // return value.
           await runOnSuccessSafely(onSuccess, cachedCopy)
         }
-        return cachedCopy
+        return isCurrent() ? cachedCopy : null
       }
       // Stale entry: delete inline. This is the only path that
       // removes entries between the LRU-at-cap eviction and now,
@@ -115,6 +117,7 @@ export function useCrudActions(store, options = {}) {
 
     try {
       const result = await callback()
+      if (!isCurrent()) return null
 
       _patchState(store, statusKey, 'success')
 
@@ -159,8 +162,14 @@ export function useCrudActions(store, options = {}) {
         await runOnSuccessSafely(onSuccess, result)
       }
 
-      return result
+      return isCurrent() ? result : null
     } catch (err) {
+      if (!isCurrent()) return null
+      if (err?.code === 'CANCEL') {
+        _patchState(store, statusKey, 'idle')
+        _patchState(store, errorKey, null)
+        return null
+      }
 
       const msg = err?.message
         || (errorMsgFallbackKey
