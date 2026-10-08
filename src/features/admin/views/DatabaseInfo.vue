@@ -101,6 +101,8 @@
               :url-builder="buildExportUrl"
               :filter-params="exportFilterParams"
               :pdf-options="pdfOptions"
+              :pdf-mode="exportFilters.pdf_mode"
+              :answer-layout="exportFilters.answer_layout"
               :pdf-request="requestPdfExport"
             />
           </BaseCard>
@@ -334,6 +336,8 @@ const qualityIssueCounts = computed(() =>
 // and is used by PDF export only. Every key is initialised so the
 // template and the panel can read it without `?.` chains.
 const exportFilters = ref({
+  pdf_mode: 'study',
+  answer_layout: 'inline',
   title: '',
   include_about: false,
   about_title: '',

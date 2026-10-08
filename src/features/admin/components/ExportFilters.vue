@@ -13,6 +13,8 @@
   --------------------
       {
         title:        '',      // free text, PDF only
+        pdf_mode:     'study', // 'study' | 'quiz'; PDF only
+        answer_layout: 'inline', // 'inline' | 'end' | 'after_25' | 'none'
         include_about: false,  // PDF only
         about_title: '',
         about_body: '',
@@ -59,6 +61,32 @@
         :hint="t('admin.database.exportTitleHint')"
         :maxlength="150"
         @update:model-value="update('title', $event)"
+      />
+    </div>
+
+    <div class="export-filters__section">
+      <BaseSelect
+        :model-value="modelValue.pdf_mode || 'study'"
+        :label="t('admin.database.pdfModeLabel')"
+        :options="[
+          { value: 'study', label: t('admin.database.pdfModeStudy') },
+          { value: 'quiz', label: t('admin.database.pdfModeQuiz') },
+        ]"
+        :hint="t('admin.database.pdfModeHint')"
+        @update:model-value="update('pdf_mode', $event)"
+      />
+      <BaseSelect
+        :model-value="modelValue.pdf_mode === 'quiz' ? 'none' : (modelValue.answer_layout || 'inline')"
+        :label="t('admin.database.pdfAnswersLabel')"
+        :disabled="modelValue.pdf_mode === 'quiz'"
+        :options="[
+          { value: 'inline', label: t('admin.database.pdfAnswersInline') },
+          { value: 'end', label: t('admin.database.pdfAnswersEnd') },
+          { value: 'after_25', label: t('admin.database.pdfAnswers25') },
+          { value: 'none', label: t('admin.database.pdfAnswersNone') },
+        ]"
+        :hint="t(modelValue.pdf_mode === 'quiz' ? 'admin.database.pdfQuizHint' : 'admin.database.pdfAnswersHint')"
+        @update:model-value="update('answer_layout', $event)"
       />
     </div>
 
@@ -258,6 +286,8 @@ const hasActiveFilters = computed(() => {
   return Boolean(
     v.title ||
     v.include_about ||
+    v.pdf_mode === 'quiz' ||
+    (v.answer_layout && v.answer_layout !== 'inline') ||
     v.search ||
     (v.difficulties && v.difficulties.length) ||
     (v.category_ids && v.category_ids.length) ||
@@ -331,6 +361,8 @@ function removeAboutField(index) {
 function clearAll() {
   emit('update:modelValue', {
     title: '',
+    pdf_mode: 'study',
+    answer_layout: 'inline',
     include_about: false,
     about_title: '',
     about_body: '',

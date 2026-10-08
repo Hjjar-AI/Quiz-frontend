@@ -21,3 +21,9 @@
 - Checked documentation targets, moved content and whitespace; no builds, test-suite or migration work, dependency/version changes or runtime changes were performed.
 
 - Documentation compaction: retained commands, technical literals, dates, headings/links and checklist states; consolidated repeated prose/verification scope. Documentation/whitespace checks only.
+
+## PDF study layouts and paper quiz — 2026-10-08
+
+- Database export controls select current-theme study PDF or compact white/light-grey answer-free quiz. Study answers: inline, end, after each 25 questions, or omitted. Quiz displays disabled no-answer placement while retaining the previous study choice; clear resets defaults.
+- Structured POST forwards validated `pdf_mode` and `answer_layout` alongside existing title/theme/locale/filters/front matter. Arabic/English labels/hints explain bidirectional answer links and quiz omissions. Existing download/CSRF/error handling and non-PDF exports retained.
+- Source/locale/markup/whitespace checks only; Node and PDF/API dependencies are unavailable. No builds, test-suite work or version changes. Matching backend required; browser/PDF-viewer/print verification remains pending.

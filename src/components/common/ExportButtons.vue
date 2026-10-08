@@ -41,6 +41,8 @@ const props = defineProps({
   // Structured PDF-only options. Supplying pdfRequest switches PDF export to
   // POST so free text and repeatable custom fields never enter the URL.
   pdfOptions: { type: Object, default: () => ({}) },
+  pdfMode: { type: String, default: 'study' },
+  answerLayout: { type: String, default: 'inline' },
   pdfRequest: { type: Function, default: null },
 })
 
@@ -118,6 +120,8 @@ async function exportFile(format) {
         theme: document.documentElement.dataset.theme,
         locale: locale.value,
         front_matter: props.pdfOptions,
+        pdf_mode: props.pdfMode,
+        answer_layout: props.answerLayout,
       })
       const blob = response.data instanceof Blob
         ? response.data

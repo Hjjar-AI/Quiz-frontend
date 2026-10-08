@@ -118,6 +118,17 @@
     },
 
     "database": {
+      "pdfModeLabel": "PDF format",
+      "pdfModeStudy": "Study PDF (current theme)",
+      "pdfModeQuiz": "Paper quiz (compact, print-friendly)",
+      "pdfModeHint": "PDF only. Other export formats stay unchanged.",
+      "pdfAnswersLabel": "Answer placement",
+      "pdfAnswersInline": "With each question",
+      "pdfAnswersEnd": "Answer section at the end",
+      "pdfAnswers25": "Answer pages after every 25 questions",
+      "pdfAnswersNone": "No answers",
+      "pdfAnswersHint": "Separate answer sections include links from each question to its answer and back.",
+      "pdfQuizHint": "White/light-grey compact layout. Answers, explanations, answer links and source/tag hints are omitted.",
       "exportTitleLabel": "Export title",
 "exportTitlePlaceholder": "e.g. Schizophrenia questions — monthly review",
       "exportTitleHint": "This title appears in the PDF header and filename only. Excel / CSV / JSON formats ignore it. Leave empty for the default title.",
