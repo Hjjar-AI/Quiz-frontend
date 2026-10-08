@@ -1,5 +1,10 @@
 # Work Done
 
+## Agent guidance refresh — 2026-10-08
+
+- Recorded durable frontend contracts for shared tokens/measured shell geometry, coordinated theme naming/PDF palettes, browser-local lazy fonts, bounded startup/requests, pending writes/latest reads, partial-save recovery, preserved account policies and safe animation/touch sizing. Clarified that production study/exam files are application sources while automated test-suite restrictions remain.
+- Added matching PDF-theme coordination guidance to the backend agent file. Documentation/link/whitespace checks only; no application behavior, permission requirements or configured versions changed.
+
 ## Ruby theme naming — 2026-10-08
 
 - Renamed the crimson palette to Ruby (ياقوت), updated canonical CSS/registry/boot/PDF keys and changed the picker icon to a diamond. Compatibility aliases migrate existing saved choices and export requests; the former name has no visible UI label. Palette values remain identical.
