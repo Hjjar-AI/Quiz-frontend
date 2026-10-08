@@ -4,10 +4,10 @@ These contracts keep feature screens visually and behaviorally consistent.
 
 ## Hierarchy and actions
 
-- Every routed page has one `PageShell`/`PageHeader` `h1`.
+- Each routed page: one `PageShell`/`PageHeader` `h1`.
 - Use `SectionHeader` (`h2`) for page sections and `CardHeader` (`h3`) inside cards.
 - Put page commands in the `PageShell` `actions` slot. Use one primary action per page or section.
-- Use primary for the main commit/create action, secondary or ghost for navigation, refresh, and export, and danger only for destructive commands.
+- Primary: commit/create; secondary/ghost: navigation/refresh/export; danger: destructive actions only.
 - Feature, navigation, toolbar, and editor actions use `BaseButton`/`BaseIconButton`; native buttons are reserved for shared primitive internals. Use `raw-content` only when an established compound control needs to preserve its internal layout.
 
 ## Feedback and async states
@@ -15,13 +15,13 @@ These contracts keep feature screens visually and behaviorally consistent.
 - Field validation belongs in `BaseField` through the control's `error` prop.
 - Section/page failures use `FeedbackRegion` or `PageShell` feedback props.
 - Short confirmation after a completed command uses the notification/toast service.
-- Loading, failure, empty, and content branches use `AsyncContent` or `BaseListContainer`.
+- Loading/failure/empty/content: `AsyncContent` or `BaseListContainer`.
 - Empty states identify their cause with `first-use`, `no-results`, `filtered`, `unavailable`, or `generic`; creation CTAs belong only on first-use states.
 
 ## Forms
 
 - Validate a field after its first blur, then revalidate it on input. Submit validates all fields.
-- Protect long or destructive-to-recreate forms with `useUnsavedChanges` and mark them clean after a successful save.
+- Protect long or destructive-to-recreate forms with `useUnsavedChanges` and mark them clean after successful save.
 - Use the `small`, `medium`, and `large` control sizes and `auto`/`full` width APIs instead of feature-specific heights.
 - Native attributes such as `name`, `autocomplete`, `pattern`, and `autofocus` belong on `BaseInput`, `BaseSelect`, or `BaseTextarea`; the primitives forward them to the native control.
 

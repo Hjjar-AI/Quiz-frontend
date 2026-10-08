@@ -1,29 +1,20 @@
 # Mukhtabir Frontend
 
-Vue single-page application for Mukhtabir, a bilingual Arabic/English question
-bank, study, examination, and administration platform. The frontend consumes the
-Django API in `../backend` and is also built into a static bundle that the backend
-can serve in production.
+Arabic/English Vue SPA for Mukhtabir question bank/study/exam/admin; consumes Django in `../backend` and builds a backend-served production bundle.
 
 ## Main capabilities
 
 - Session authentication, password changes, expiry handling, and capability-aware navigation.
-- Question browsing, authoring, review, verification, tags, ratings, bookmarks,
-  images, cases, translations, and knowledge objects.
-- Exam, study, and recall modes with resumable sessions, confidence/reflection,
-  navigation, timers, and detailed results.
+- Question browsing, authoring, review, verification, tags, ratings, bookmarks, images, cases, translations, and knowledge objects.
+- Exam, study, and recall modes with resumable sessions, confidence/reflection, navigation, timers, and detailed results.
 - Master-exam composition, lifecycle management, attempts, acknowledgement, and reports.
-- Planner, spaced repetition, mistakes, fragile knowledge, streaks, activity,
-  groups, leaderboards, analytics, and history.
-- User, permission, taxonomy, group, blueprint, flag, settings, import/export,
-  backup, and database administration.
+- Planner, spaced repetition, mistakes, fragile knowledge, streaks, activity, groups, leaderboards, analytics, and history.
+- User, permission, taxonomy, group, blueprint, flag, settings, import/export, backup, and database administration.
 - Arabic RTL and English LTR layouts, themes, responsive UI, Markdown, and local fonts.
 
 ## Technology
 
-Vue 3, Vite, Pinia, Vue Router, Vue I18n, Axios, Chart.js, Markdown-It,
-DOMPurify, and pnpm. Exact versions are pinned in `package.json` and
-`pnpm-lock.yaml`.
+Stack: Vue 3/Vite/Pinia/Router/I18n, Axios/Chart.js/Markdown-It/DOMPurify/pnpm. Pins: `package.json`, `pnpm-lock.yaml`.
 
 ## Prerequisites
 
@@ -39,8 +30,9 @@ pnpm install
 pnpm dev
 ```
 
-The dev server listens on `http://localhost:5173`. `/api` requests are proxied to
-`http://127.0.0.1:5004`, matching the backend SQLite launcher default.
+The dev server listens on `http://localhost:5173`. `/api` requests are proxied to `http://127.0.0.1:5004`, matching the backend SQLite launcher default.
+
+Other backend ports (e.g. MariaDB 5005): set `VITE_BACKEND_PROXY_TARGET=http://127.0.0.1:5005` in `.env.local`; restart `pnpm dev`. Proxy forwards `/api`/`/media`; leave `VITE_API_BASE_URL` unset or `/api/v1`. [Startup guide](../backend/docs/START_HERE.md): simultaneous instances/Termux. Occupied frontend ports fail; select `pnpm dev --port 5174`.
 
 To select another API origin, create an uncommitted `.env`:
 
@@ -48,8 +40,7 @@ To select another API origin, create an uncommitted `.env`:
 VITE_API_BASE_URL=https://example.test/api/v1
 ```
 
-The value may include or omit a trailing slash. When omitted, the app uses the
-same-origin `/api/v1` path.
+The value may include or omit a trailing slash. When omitted, the app uses the same-origin `/api/v1` path.
 
 ## Commands
 
@@ -80,26 +71,19 @@ src/
 └── main.js          Application bootstrap
 ```
 
-Configured components and Vue/Pinia/router/i18n APIs are auto-imported. `@`
-resolves to `src/`.
+Configured components and Vue/Pinia/router/i18n APIs are auto-imported. `@` resolves to `src/`.
 
 ## API and authentication
 
-Endpoint definitions live in `src/services/api/endpoints.js`. Feature services
-wrap them, while Pinia stores manage UI state and request lifecycles.
+Endpoint definitions live in `src/services/api/endpoints.js`. Feature services wrap them, while Pinia stores manage UI state and request lifecycles.
 
-The shared API client sends session cookies, acquires/caches Django CSRF tokens,
-retries a mutation once after a genuine CSRF rejection, cancels duplicate
-mutations, unwraps the standard API envelope, handles session expiry, and decodes
-JSON errors returned as download blobs.
+Shared client sends cookies, acquires/caches CSRF, retries mutation once after genuine CSRF rejection, cancels duplicate mutations, unwraps API envelopes, handles expiry and decodes download-blob JSON errors.
 
-Use the shared client for ordinary requests. Reuse `src/utils/downloadFile.js` for
-downloads so filenames and object-URL cleanup remain consistent.
+Use shared requests and `src/utils/downloadFile.js` for consistent filenames/object-URL cleanup.
 
 ## Localization, direction, and themes
 
-Arabic is the default locale; English is the fallback. Locale, direction, theme,
-and density are applied before first paint to prevent visual flashes.
+Default Arabic, fallback English; locale/direction/theme/density apply before paint to prevent flashes.
 
 When adding a theme, keep these synchronized:
 
@@ -108,14 +92,11 @@ When adding a theme, keep these synchronized:
 - the bootstrap theme registry in `index.html`
 - backend PDF theme tokens when exported documents should match
 
-User-facing additions should normally include Arabic and English messages.
+User-facing additions should include Arabic and English messages.
 
 ## Imports and exports
 
-The admin UI supports flat Excel/CSV/JSON/PDF exports and portable question-bank
-state packages. PDF options use a structured POST body so titles and front matter
-do not enter URLs. Portable state is the lossless transfer/backup format; flat
-formats are intended mainly for review and editing.
+Admin exports: flat Excel/CSV/JSON/PDF and portable state. PDF structured POST keeps titles/front matter out of URLs. Portable state is lossless transfer/backup; flat formats target review/editing.
 
 ## Production
 
@@ -123,9 +104,7 @@ formats are intended mainly for review and editing.
 pnpm build
 ```
 
-The output is written to `dist/`. Django can serve it with history fallback, or a
-separate static host can serve it. For a separate origin, coordinate
-`VITE_API_BASE_URL`, backend CORS/CSRF origins, HTTPS, and cookie settings.
+Output: `dist/`; Django history fallback or separate static host. Separate origin requires aligned `VITE_API_BASE_URL`, CORS/CSRF, HTTPS/cookies.
 
 ## Troubleshooting
 
@@ -138,9 +117,10 @@ separate static host can serve it. For a separate origin, coordinate
 
 ## Working documents
 
-- `Agents.md` — local contributor constraints
-- `workPlan.md` — current planned work
-- `workDone.md` — completed work log
-- `docs/theme-guidelines.md` — visual theme guidance
-- `docs/visual-qa-checklist.md` — manual visual verification
+See the [documentation index](docs/README.md) for all supporting guides.
 
+- [Agents.md](Agents.md) — local contributor constraints
+- [workPlan.md](docs/workPlan.md) — current planned work
+- [workDone.md](docs/workDone.md) — completed work log
+- [theme-guidelines.md](docs/theme-guidelines.md) — visual theme guidance
+- [visual-qa-checklist.md](docs/visual-qa-checklist.md) — manual visual verification

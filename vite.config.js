@@ -1,11 +1,27 @@
 // frontend/vite.config.js
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import path from 'path'
 
-export default defineConfig({
+function devProxy(mode) {
+  const env = { ...loadEnv(mode, import.meta.dirname, 'VITE_'), ...process.env }
+  const target = env.VITE_BACKEND_PROXY_TARGET || 'http://127.0.0.1:5004'
+  const url = new URL(target)
+  if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) {
+    throw new Error('VITE_BACKEND_PROXY_TARGET must be an HTTP(S) origin without credentials.')
+  }
+  if (url.pathname !== '/' || url.search || url.hash) {
+    throw new Error('VITE_BACKEND_PROXY_TARGET must be an origin, e.g. http://127.0.0.1:5005.')
+  }
+  return {
+    '/api': { target, changeOrigin: true },
+    '/media': { target, changeOrigin: true },
+  }
+}
+
+export default defineConfig(({ mode }) => ({
   plugins: [
     vue(),
     AutoImport({
@@ -45,12 +61,8 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    proxy: {
-      '/api': {
-        target: 'http://127.0.0.1:5004', // Django dev server
-        changeOrigin: true,
-      },
-    },
+    strictPort: true,
+    proxy: devProxy(mode),
   },
   build: {
     rollupOptions: {
@@ -134,4 +146,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))
