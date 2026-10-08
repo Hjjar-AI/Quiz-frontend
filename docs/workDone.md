@@ -1,5 +1,16 @@
 # Work Done
 
+## Tokenization corrections — 2026-10-08
+
+- Theme transitions and cleanup timing share the motion token; explicit reduced-motion precedence disables theme animation. Repeated changes cancel stale cleanup timers.
+- Nested modal layers resolve the CSS base/step tokens directly. Mobile bottom-nav height is measured with the existing resize/cleanup helper; floating controls and page padding share clearance including safe-area padding once.
+- Source contracts, balanced CSS braces, token references across 57 non-test-named CSS files and whitespace checks passed. Python modeled duration parsing, layer ordering and clearance at multiple text-derived heights/safe-area sizes; these are not JavaScript execution or browser layout checks. Node is unavailable. No builds, test suites, installs, configured versions, backend or Android changes.
+
+## Tokenization risk review — 2026-10-08
+
+- Scanned 57 non-test-named CSS files; no unresolved no-fallback token references or new critical hardcoded screen palette found. Recorded accessibility/motion, modal-tier synchronization and mobile-clearance risks in `frontendShellReview.md` and the work plan.
+- Used source specificity and Python geometry calculations. Current modal constants match CSS; larger-text clearance risk remains browser-unverified. Node is unavailable in this shell. Application code unchanged; no builds/test suites, installs or version changes.
+
 ## Shared-control corrections — 2026-10-08
 
 - Applied disabled opacity once at BaseField while preserving native disabled behavior and standalone/boundary-only styling. Enlarged coarse-pointer number stepper/field/clear targets and markdown toolbar/help controls to 44px; side-by-side steppers and wrapping preserve narrow-container usability. Kept existing fine-pointer behavior.

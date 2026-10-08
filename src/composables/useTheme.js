@@ -23,6 +23,7 @@ const currentTheme = ref(DEFAULT_THEME)
 const themePreference = ref(DEFAULT_THEME)
 let systemThemeQuery = null
 let systemThemeListenerAttached = false
+let themeTransitionTimer = null
 
 function translateTheme(theme) {
   return i18n.global.t(`theme.${theme}`)
@@ -57,15 +58,24 @@ function updateBrowserChrome() {
 
 function writeResolvedTheme(theme, withTransition = false) {
   if (typeof document === 'undefined') return
-  if (withTransition) document.documentElement.classList.add('theme-transition')
+  clearTimeout(themeTransitionTimer)
+  themeTransitionTimer = null
+  document.documentElement.classList.remove('theme-transition')
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  const duration = getComputedStyle(document.documentElement)
+    .getPropertyValue('--motion-theme-duration').trim().match(/^(\d*\.?\d+)(ms|s)$/)
+  const durationMs = duration ? Number(duration[1]) * (duration[2] === 's' ? 1000 : 1) : 0
+  const animate = withTransition && !reducedMotion && durationMs > 0
+  if (animate) document.documentElement.classList.add('theme-transition')
   currentTheme.value = theme
   document.documentElement.setAttribute('data-theme', theme)
   updateBrowserChrome()
 
-  if (withTransition) {
-    setTimeout(() => {
+  if (animate) {
+    themeTransitionTimer = setTimeout(() => {
       document.documentElement.classList.remove('theme-transition')
-    }, 350)
+      themeTransitionTimer = null
+    }, durationMs)
   }
 }
 

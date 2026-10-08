@@ -239,6 +239,7 @@
   --motion-fast: 0.15s;
   --motion-base: 0.25s;
   --motion-slow: 0.35s;
+  --motion-theme-duration: var(--motion-slow);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
@@ -259,6 +260,7 @@
   --z-sticky: 1020;
   --z-nav: 1030;
   --z-modal-overlay: 1040;
+  --z-modal-step: 2;
   --z-modal: 1050;
   --z-toast: 1060;
   --z-tooltip: 1070;
@@ -290,6 +292,10 @@
   --navbar-height: var(--navbar-min-height);
   --offline-banner-height: 0px;
   --shell-sticky-offset: calc(var(--navbar-height) + var(--offline-banner-height));
+  --bottom-nav-inset: 6px;
+  --bottom-nav-padding-block: 3px;
+  --bottom-nav-height: calc(var(--control-height) + 2 * var(--bottom-nav-padding-block) + 2 * var(--border-width) + env(safe-area-inset-bottom));
+  --bottom-nav-clearance: calc(var(--bottom-nav-height) + var(--bottom-nav-inset) + var(--space-sm));
 
   /* ----- CONTROL GEOMETRY ----- */
   --control-height: 44px;
@@ -796,8 +802,18 @@ html.theme-transition *,
 html.theme-transition *::before,
 html.theme-transition *::after {
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease !important;
+    background-color var(--motion-theme-duration) var(--ease-out),
+    color var(--motion-theme-duration) var(--ease-out),
+    border-color var(--motion-theme-duration) var(--ease-out),
+    box-shadow var(--motion-theme-duration) var(--ease-out) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-theme-duration: 0s; }
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: none !important;
+  }
 }

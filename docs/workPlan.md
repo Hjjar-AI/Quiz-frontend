@@ -2,6 +2,8 @@
 
 ## Current priorities
 
+- Browser-verify the completed tokenization corrections in `frontendShellReview.md`: reduced-motion theme switching, live modal-tier token overrides, and measured bottom-nav clearance under larger typography/safe areas. Source contracts and Python calculations passed; Node/JavaScript runtime and actual browser/device verification remain unavailable in this shell.
+
 - Browser-verify the completed shared-control corrections in `frontendShellReview.md`: single disabled dimming, enlarged numeric/markdown touch targets, narrow number-field wrapping and unified modal-close sizing. Forty-eight isolated CSS/jsdom assertions passed; actual device/layout verification remains pending.
 
 - Browser-verify the completed additional visual corrections and intentional theme-aware print enhancement in `frontendShellReview.md`: selected theme/language rows, LTR/RTL select arrows, pagination touch sizing, paper accents/borders and full table printing. All 55 semantic screen seeds are preserved; source print contrast calculations passed. Actual print pagination/background retention remains pending.

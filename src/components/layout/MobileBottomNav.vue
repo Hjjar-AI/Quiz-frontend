@@ -1,7 +1,7 @@
 <!-- Four persistent destinations only. All secondary destinations live in
      the navbar menu, avoiding a second mobile information architecture. -->
 <template>
-  <nav class="bottom-nav no-print" :aria-label="t('a11y.bottomNav')">
+  <nav ref="bottomNavRef" class="bottom-nav no-print" :aria-label="t('a11y.bottomNav')">
     <div class="bottom-nav__bar">
       <router-link
         v-for="link in bottomLinks"
@@ -18,14 +18,17 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { navigationLinksFor, isNavigationLinkActive } from '@/constants/navigationLinks'
+import { useElementHeightToken } from '@/composables/useElementHeightToken'
 
 const { t } = useI18n()
 const route = useRoute()
 const authStore = useAuthStore()
+const bottomNavRef = ref(null)
+useElementHeightToken(bottomNavRef, '--bottom-nav-height')
 
 const canUseLink = link => !link.capability || authStore.can(link.capability)
 const bottomLinks = computed(() => navigationLinksFor('bottomNav').filter(canUseLink))

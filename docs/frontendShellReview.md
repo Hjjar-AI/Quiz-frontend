@@ -1,5 +1,22 @@
 # Frontend shell, layout and token review — 2026-10-08
 
+## Tokenization risk review — 2026-10-08
+
+No new critical hardcoded screen palette was found. The 57 non-test-named CSS files have no undefined custom-property references without fallbacks. Persisted category colors, intentional paper neutrals, CSS media-query breakpoints and small decorative geometry are not automatically defects.
+
+- Medium, accessibility: `tokens.css:794–802` hardcodes 0.3s transitions with !important on `html.theme-transition` and descendants. Its specificity exceeds the universal reduced-motion duration override in `states.css:11–17`, so theme changes can retain transitions under reduced-motion preference. Use shared motion tokens and an explicit reduced-motion override with sufficient precedence; coordinate the class-removal timer in `useTheme.js`.
+- Medium, future layering: `useModalStack.js:54` hardcodes BASE_Z=1040 instead of consuming `--z-modal-overlay`. Current values match, so this is not a reproduced layering failure. Editing CSS stacking tokens alone can leave inline modal layers behind navigation/overlays. Prefer a CSS calc based on the shared modal tier and the stack index.
+- Medium, typography resilience: `mobile.css:32/:96` fixes scroll-to-top/toast clearance at 60px plus safe area, while bottom-nav height depends on text/control sizes. Source geometry gives 58px clearance at the existing compact label minimum, but 62.6px with 18px labels and 70.7px with 24.75px labels. Larger typography tokens can cause overlap. Measure bottom-nav clearance (including safe area/position), or derive it from common geometry tokens, and share it with main-content bottom padding.
+
+This is a source/geometry review, not browser/real-device verification. Node is unavailable in the current shell; Python source scans/calculations were used. Application code unchanged; no builds, test-suite work, installs or configured versions changed.
+
+### Tokenization corrections — 2026-10-08
+
+- `--motion-theme-duration` supplies CSS transitions and JavaScript cleanup timing. An explicit reduced-motion rule matches transition specificity and disables it; JavaScript skips the animation class under that preference and cancels stale timers on subsequent changes.
+- Modal stacking uses `calc(var(--z-modal-overlay) + index * var(--z-modal-step))`; CSS tier changes apply to open dialogs without duplicated JavaScript constants.
+- Mobile navigation reuses `useElementHeightToken` to measure its complete height, including safe-area padding. Shared inset/padding/clearance tokens keep toasts, the scroll control and main content above the bar as its height changes. CSS supplies fallback geometry before measurement; the existing helper handles resize and removal cleanup.
+- Source contracts, all 57 non-test-named CSS token-reference/brace checks and whitespace checks passed. Python calculations covered duration units, layer ordering/token overrides and multiple navigation heights/safe areas. JavaScript execution and browser/device layout remain unverified because Node is unavailable. No builds, test-suite work, installs or version changes.
+
 ## Shared-control follow-up — corrected (2026-10-08)
 
 - Medium: disabled controls are dimmed at multiple nested levels. `forms.css:184` dims BaseField, `:827` dims the disabled select, and number inputs add a dimmed wrapper (`:487`) plus global disabled-input opacity (`states.css:5`). With the 0.5 token, select text has 0.25 combined opacity and number text 0.125, unlike standalone controls. Production CSS/jsdom with the token supplied confirmed these combined values. Apply disabled opacity once per composed control while retaining native disabled behavior.
