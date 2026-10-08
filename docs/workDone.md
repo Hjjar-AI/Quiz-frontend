@@ -1,5 +1,16 @@
 # Work Done
 
+## Shared-control corrections — 2026-10-08
+
+- Applied disabled opacity once at BaseField while preserving native disabled behavior and standalone/boundary-only styling. Enlarged coarse-pointer number stepper/field/clear targets and markdown toolbar/help controls to 44px; side-by-side steppers and wrapping preserve narrow-container usability. Kept existing fine-pointer behavior.
+- Removed conflicting modal-close dimensions so shared icon-button sizing owns both axes; header shrink prevention retained.
+- Forty-eight isolated production-CSS/jsdom assertions passed across LTR/RTL and explicitly simulated fine/coarse pointer media. CSS parsing/whitespace checks passed. Actual browser layout/device verification remains pending. No builds, test suites, installs, configured versions, backend or Android changes.
+
+## Shared-control consistency review — 2026-10-08
+
+- Identified compounded disabled opacity, remaining number-stepper/markdown touch sizing gaps and mixed modal-close geometry. Recorded pending corrections in `frontendShellReview.md` and the work plan. Application code unchanged.
+- Production CSS/jsdom confirmed 0.25 combined select opacity, 0.125 number-input opacity, and 36px inline/44px height declarations on the modal close button. Touch sizing was source-traced. No actual layout/device checks, builds, test-suite work, installs or version changes.
+
 ## Visual corrections and theme-aware print enhancement — 2026-10-08
 
 - Fixed theme/language selected-row precedence, native select arrow direction and pagination coarse-pointer sizing; widened the per-page select for its value/arrow.

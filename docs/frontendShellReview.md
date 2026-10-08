@@ -1,5 +1,21 @@
 # Frontend shell, layout and token review — 2026-10-08
 
+## Shared-control follow-up — corrected (2026-10-08)
+
+- Medium: disabled controls are dimmed at multiple nested levels. `forms.css:184` dims BaseField, `:827` dims the disabled select, and number inputs add a dimmed wrapper (`:487`) plus global disabled-input opacity (`states.css:5`). With the 0.5 token, select text has 0.25 combined opacity and number text 0.125, unlike standalone controls. Production CSS/jsdom with the token supplied confirmed these combined values. Apply disabled opacity once per composed control while retaining native disabled behavior.
+- Medium: editor touch controls do not consistently meet the shared sizing policy. Number steppers are 24×22px under the coarse-pointer rule (`forms.css:588`); markdown toolbar buttons use the higher-specificity `.markdown-toolbar .btn-icon` compact minimum (`markdown.css:55`) and its help link retains 36px minimums (`:64`). These need coherent touch sizing without breaking the numeric field layout. Actual touch rendering was not measured.
+- Low: modal close geometry mixes two scales. BaseModal passes `size="small"` (`BaseModal.vue:60`); the compound icon-only selector sets 36px inline size (`buttons.css:48`), while `.base-modal__close` retains 44px physical height (`dialogs.css:28`). On fine pointers this conflicts with the intended square/circular geometry. Production CSS/jsdom confirmed those computed declarations; jsdom is not a layout engine. Use one size scale for both axes.
+
+These are new findings beyond the completed fixes. Application code is unchanged in this review; no builds, test-suite work, installs or versions changed. Narrow-navbar/long-dialog/safe-area behavior remains a browser verification gate, not an additional measured finding.
+
+### Corrections
+
+- BaseField owns disabled dimming once. Scoped descendant rules neutralize extra opacity on natively disabled children and the number wrapper, retaining native disabled behavior and standalone/boundary-only disabled styling.
+- Coarse-pointer number steppers use 44px targets side by side, retaining the original fine-pointer arrangement. The number field and clear action also receive full touch targets. Narrow number containers can wrap rather than clip enlarged controls. Markdown toolbar buttons/help use scoped 44px minimums that outrank compact styles.
+- Dialog close buttons defer dimensions and shape to the shared small icon-button primitive: matching 36px compact axes on fine pointers and 44px touch axes on coarse pointers. The close action cannot shrink in its header.
+- Forty-eight isolated production-CSS/jsdom assertions passed across both directions and simulated fine/coarse pointer media: single disabled opacity, retained boundary-only dimming, stepper arrangement/sizes, numeric/clear touch targets, markdown sizing and unified close geometry. CSS parsing and whitespace checks passed. jsdom does not establish rendered layout or actual touch-device behavior.
+- No builds, test suites, dependency/version changes, backend or Android edits were performed. Browser checks for narrow controls, dialog layout and mobile safe areas remain pending.
+
 ## Additional visual follow-up — addressed (2026-10-08)
 
 - Medium: selected theme/language rows lose their tinted background. `navigation.css:481` and `:603` use one-class active selectors; the later `buttons.css:27` ghost background has equal specificity and wins. The row components render both class sets. Use the shared active-button API or scoped active selectors with explicit precedence. Production CSS in jsdom confirmed both selected backgrounds resolve to transparent.

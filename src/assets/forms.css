@@ -442,8 +442,8 @@ input[type='date']:focus {
 
    Disabled state
    --------------
-   Two layers: the wrapper gets an `--disabled` class (which dims the
-   border and the spinner), and each interactive child is marked
+   The BaseField wrapper dims the composed control once. Each interactive
+   child is marked
    `:disabled` so the browser suppresses their own hover/focus states.
    We do not use `pointer-events: none` on the wrapper because that
    would also swallow the tooltip on a disabled control.
@@ -585,10 +585,27 @@ input[type='date']:focus {
 }
 
 @media (pointer: coarse) {
+  /* Put full touch targets side by side instead of doubling field height. */
+  .base-input__number {
+    padding-inline: var(--space-xs);
+    flex-wrap: wrap;
+  }
+  .base-input__number-spinner {
+    flex-direction: row;
+    gap: var(--space-2xs);
+    margin-top: 0;
+  }
   .base-input__number-btn {
-    width: 24px;
-    height: 22px;
+    width: var(--control-height);
+    height: var(--control-height);
+    min-width: var(--control-height);
+    min-height: var(--control-height);
+    flex-shrink: 0;
     font-size: 0.65rem;
+  }
+  .base-input__number-field {
+    min-width: var(--control-height);
+    min-height: var(--control-height);
   }
 }
 
@@ -642,6 +659,13 @@ input[type='date']:focus {
   padding: 0.2rem 0.4rem;
   border-radius: var(--radius-sm);
   transition: background var(--motion-fast);
+}
+
+@media (pointer: coarse) {
+  .base-input__number-clear {
+    width: var(--control-height);
+    height: var(--control-height);
+  }
 }
 .base-checkbox:hover:not(.base-checkbox--disabled) {
   background: var(--color-bg-alt);
@@ -1159,4 +1183,11 @@ input[type='date']:focus {
   display: flex;
   align-items: center;
   gap: var(--space-2xs);
+}
+
+/* BaseField owns disabled dimming. Keep descendant controls natively
+   disabled without multiplying their opacity through nested wrappers. */
+.base-field.base-field--disabled :disabled,
+.base-field.base-field--disabled .base-input__number--disabled {
+  opacity: 1;
 }

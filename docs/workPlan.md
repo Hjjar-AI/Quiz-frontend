@@ -2,6 +2,8 @@
 
 ## Current priorities
 
+- Browser-verify the completed shared-control corrections in `frontendShellReview.md`: single disabled dimming, enlarged numeric/markdown touch targets, narrow number-field wrapping and unified modal-close sizing. Forty-eight isolated CSS/jsdom assertions passed; actual device/layout verification remains pending.
+
 - Browser-verify the completed additional visual corrections and intentional theme-aware print enhancement in `frontendShellReview.md`: selected theme/language rows, LTR/RTL select arrows, pagination touch sizing, paper accents/borders and full table printing. All 55 semantic screen seeds are preserved; source print contrast calculations passed. Actual print pagination/background retention remains pending.
 
 - Browser-verify the eight completed corrections in [frontendShellReview.md](frontendShellReview.md): mobile Analytics access, desktop toggle cascade, measured navbar/banner offsets, table-container sticky behavior, modal focus/nesting and normalized tokens. Forty isolated assertions passed; Vue lint needs recovery from the installed parser's `Invalid Version: main` error without changing configured versions.

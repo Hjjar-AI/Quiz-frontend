@@ -69,6 +69,14 @@
 }
 .markdown-toolbar__help:hover { color: var(--color-primary-soft-text); }
 
+@media (pointer: coarse) {
+  .markdown-toolbar .btn-icon,
+  .markdown-toolbar__help {
+    min-width: var(--control-height);
+    min-height: var(--control-height);
+  }
+}
+
 /* Sanitized markdown output. */
 .base-markdown {
   word-wrap: break-word;
