@@ -19,16 +19,16 @@
       <template #actions>
         <div class="master-exam-results__header-actions">
           <BaseButton variant="ghost" size="small" @click="load">
-            <i class="bi bi-arrow-repeat"></i> {{ t('masterExams.resultsRefresh') }}
+            <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ t('masterExams.resultsRefresh') }}
           </BaseButton>
           <BaseButton variant="ghost" size="small" @click="downloadSummaryCsv">
-            <i class="bi bi-filetype-csv"></i> {{ t('masterExams.resultsSummaryCsv') }}
+            <i class="bi bi-filetype-csv" aria-hidden="true"></i> {{ t('masterExams.resultsSummaryCsv') }}
           </BaseButton>
           <BaseButton variant="ghost" size="small" @click="downloadMatrixCsv">
-            <i class="bi bi-filetype-csv"></i> {{ t('masterExams.resultsMatrixCsv') }}
+            <i class="bi bi-filetype-csv" aria-hidden="true"></i> {{ t('masterExams.resultsMatrixCsv') }}
           </BaseButton>
           <BaseButton v-if="canPublishToBank" variant="primary" size="small" @click="publishToBank">
-            <i class="bi bi-cloud-upload"></i> {{ t('masterExams.resultsPublish') }}
+            <i class="bi bi-cloud-upload" aria-hidden="true"></i> {{ t('masterExams.resultsPublish') }}
           </BaseButton>
         </div>
       </template>
@@ -42,11 +42,11 @@
         />
         <div class="master-exam-flags-list">
           <div v-for="flag in results.flags" :key="flag.flag_id" class="master-exam-flag-item">
-            <i class="bi bi-flag-fill"></i>
+            <i class="bi bi-flag-fill" aria-hidden="true"></i>
             <div class="master-exam-flag-item__body">
               <strong>{{ flag.question_text }}</strong>
               <div class="master-exam-flag-item__meta">
-                <i class="bi bi-person"></i> {{ flag.flagger_username }}
+                <i class="bi bi-person" aria-hidden="true"></i> {{ flag.flagger_username }}
                 <span v-if="flag.reason"> — {{ flag.reason }}</span>
               </div>
             </div>

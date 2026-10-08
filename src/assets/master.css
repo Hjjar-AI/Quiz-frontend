@@ -252,7 +252,7 @@
   padding: 0;
   line-height: 1;
   color: var(--color-text-muted);
-  font-size: 0.7rem;
+  font-size: var(--font-size-xs);
   transition: color var(--motion-fast);
 }
 .master-exam-question-row__reorder button:hover:not(:disabled) {
@@ -882,7 +882,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.65rem;
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   transition: flex var(--motion-fast);
 }
@@ -985,7 +985,7 @@
 .draft-choice-index {
   min-width: 24px;
   height: 24px;
-  font-size: 0.7rem;
+  font-size: var(--font-size-xs);
 }
 .draft-correct-label { white-space: nowrap; }
 

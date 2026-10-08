@@ -1,8 +1,10 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useSessionLeaveGuard } from '@/composables/useSessionLeaveGuard'
 import { useRouter } from 'vue-router'
 import { useTestSessionStore } from '@/stores/testSessionStore'
 import { usePreferencesStore } from '@/stores/preferencesStore'
 import { useAnswerSubmission } from '@/composables/useAnswerSubmission'
+import { isModalOpen } from '@/composables/useModalStack'
 import { useTestNavigation } from '@/composables/useTestNavigation'
 import { useNotify } from '@/composables/useNotify'
 import { useDialog } from '@/composables/useDialog'
@@ -38,6 +40,12 @@ export function useTestQuestionController(modeRef) {
   let advanceTimer = null
   let pendingSubmission = null
   const finishing = ref(false)
+
+  useSessionLeaveGuard({
+    active: () => store.isActive,
+    busy: () => submitting.value || interactionBusy.value || finishing.value,
+    beforeLeave: clearAdvanceTimer,
+  })
 
   const examTotalSeconds = computed(() => {
     if (['exam', 'study', 'recall'].includes(mode()) && store.durationMinutes) {
@@ -177,7 +185,8 @@ export function useTestQuestionController(modeRef) {
   }
 
   function handleAnswer(answer) {
-    if (interactionBusy.value || submitting.value || awaitingReflection.value) return
+    if (answerControlsBusy.value || awaitingReflection.value) return
+    if ((mode() === 'study' || mode() === 'recall') && store.hasAnswer(store.currentIndex)) return
     selectedAnswer.value = answer
     showReflectionPrompt.value = false
     awaitingReflection.value = false
@@ -199,8 +208,11 @@ export function useTestQuestionController(modeRef) {
     }
   }
 
+  watch(isModalOpen, (open) => { if (open) clearAdvanceTimer() })
+
   function scheduleAdvance(questionId, delay) {
     clearAdvanceTimer()
+    if (isModalOpen.value) return
     advanceTimer = setTimeout(() => {
       advanceTimer = null
       if (awaitingReflection.value) return
@@ -355,9 +367,6 @@ export function useTestQuestionController(modeRef) {
     onNext: goNext,
     onPrevious: goPrevious,
     onAnswer: handleAnswer,
-    onFinish: () => {
-      if (!finishing.value) finish()
-    },
     enabled: () => !navigationDisabled.value,
   })
 

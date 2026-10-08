@@ -29,23 +29,28 @@
       'timer--critical': isCritical,
       'timer--overtime': isOvertime,
     }"
-    aria-live="off"
-    aria-atomic="true"
   >
-    <i class="bi bi-stopwatch timer__icon"></i>
-    <span class="timer__time">{{ display }}</span>
+    <i class="bi bi-stopwatch timer__icon" aria-hidden="true"></i>
+    <span class="sr-only">{{ t(totalSeconds == null ? 'a11y.timerElapsed' : 'a11y.timerRemaining') }}</span>
+    <span class="timer__time" aria-live="off">{{ display }}</span>
+    <span v-if="isOvertime || status" class="timer__status">{{ isOvertime ? t('a11y.timerOvertime') : status }}</span>
+    <span class="sr-only" role="status" aria-atomic="true">{{ announcement }}</span>
   </div>
 </template>
 
 <script setup>
 import { computed, watch, onUnmounted } from 'vue'
+import { useCountdownAnnouncements } from '@/composables/useCountdownAnnouncements'
 import { useTimer } from '@/composables/useTimer'
 import { formatTime } from '@/utils/timer'
+
+const { t } = useI18n()
 
 const props = defineProps({
   startTime: { type: Date, default: null },
   isActive: { type: Boolean, default: true },
   totalSeconds: { type: Number, default: null },
+  announceTimeUp: { type: Boolean, default: true },
   overtime: { type: Boolean, default: false },
 })
 
@@ -67,6 +72,13 @@ onUnmounted(() => timer.stop())
 const remainingRaw = computed(() => {
   if (props.totalSeconds == null) return null
   return props.totalSeconds - timer.seconds.value
+})
+
+const { announcement, status } = useCountdownAnnouncements({
+  remaining: remainingRaw,
+  total: () => props.totalSeconds,
+  sessionKey: () => props.startTime?.getTime(),
+  announceTimeUp: () => props.announceTimeUp,
 })
 
 // Clamped remaining (never negative) — used for ratio calculations.

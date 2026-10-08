@@ -46,7 +46,7 @@
         size="small"
         @click="form.choices.push('')"
       >
-        <i class="bi bi-plus"></i> {{ t('masterExams.addChoice') }}
+        <i class="bi bi-plus" aria-hidden="true"></i> {{ t('masterExams.addChoice') }}
       </BaseButton>
     </div>
 

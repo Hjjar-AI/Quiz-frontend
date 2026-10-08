@@ -8,9 +8,9 @@
       :class="{ 'question-card--disabled': disabled }"
     >
       <div class="question-display__header">
-        <h4 class="question-display__text">
+        <h2 :id="`${groupId}-question`" class="question-display__text">
           <BaseMarkdown :text="displayQuestion.text" />
-        </h4>
+        </h2>
         <template v-if="showVerification">
           <BaseBadge
             v-if="question.verified"
@@ -18,10 +18,10 @@
             status
             :title="`${t('questions.verified')} — ${question.verified_by || ''}`"
           >
-            <i class="bi bi-patch-check-fill"></i> {{ t('questions.verified') }}
+            <i class="bi bi-patch-check-fill" aria-hidden="true"></i> {{ t('questions.verified') }}
           </BaseBadge>
           <BaseBadge v-else variant="warning" status :title="t('questions.unverified')">
-            <i class="bi bi-patch-check"></i> {{ t('questions.unverified') }}
+            <i class="bi bi-patch-check" aria-hidden="true"></i> {{ t('questions.unverified') }}
           </BaseBadge>
         </template>
       </div>
@@ -57,12 +57,12 @@
           :disabled="disabled || !preAnswer.trim()"
           @click="revealChoices"
         >
-          <i class="bi bi-eye"></i> {{ t('tests.revealOptions') }}
+          <i class="bi bi-eye" aria-hidden="true"></i> {{ t('tests.revealOptions') }}
         </BaseButton>
         <small class="text-muted">{{ t('tests.recallPrivacyHint') }}</small>
       </div>
 
-      <div v-if="!answerBeforeOptions || choicesRevealed" class="question-card__choices">
+      <div v-if="!answerBeforeOptions || choicesRevealed" class="question-card__choices" role="radiogroup" :aria-labelledby="`${groupId}-question`">
         <div
           v-for="(choice, idx) in displayQuestion.choices"
           :key="idx"
@@ -73,6 +73,7 @@
             <input
               v-model="selectedAnswer"
               type="radio"
+              :name="`${groupId}-answer`"
               :value="idx + 1"
               :disabled="disabled || showReflectionPrompt || lockAnswerChoices"
               @change="onUserSelect(idx + 1)"
@@ -84,9 +85,17 @@
         </div>
       </div>
 
-      <div v-if="selectedAnswer" class="confidence-row confidence-score">
-        <span class="confidence-score__label">{{ t('tests.confidencePrompt') }}</span>
-        <div class="confidence-score__options" role="radiogroup">
+      <BaseButton
+        ref="submitButton"
+        v-if="requireAnswerConfirmation && !lockAnswerChoices && selectedAnswer"
+        variant="primary"
+        :disabled="disabled || showReflectionPrompt"
+        @click="commitAnswer"
+      >{{ t('tests.submitAnswer') }}</BaseButton>
+
+      <div v-if="requireAnswerConfirmation ? initialAnswer : selectedAnswer" class="confidence-row confidence-score">
+        <span :id="`${groupId}-confidence-label`" class="confidence-score__label">{{ t('tests.confidencePrompt') }}</span>
+        <div class="confidence-score__options" role="radiogroup" :aria-labelledby="`${groupId}-confidence-label`">
           <label
             v-for="option in confidenceOptions"
             :key="option.value"
@@ -96,42 +105,43 @@
           <input
             v-model.number="confidenceScore"
             type="radio"
+            :name="`${groupId}-confidence`"
             :value="option.value"
             :disabled="disabled"
             @change="onConfidenceChange"
           />
           <span>
-            <i :class="option.icon"></i> {{ t(option.labelKey) }}
+            <i :class="option.icon" aria-hidden="true"></i> {{ t(option.labelKey) }}
           </span>
           </label>
         </div>
         <span v-if="showConfidenceHint" class="confidence-hint">
-          <i class="bi bi-info-circle"></i>
+          <i class="bi bi-info-circle" aria-hidden="true"></i>
           {{ t('tests.confidenceHint') }}
         </span>
       </div>
 
       <div v-if="showReflectionPrompt" class="reflection-prompt">
         <div class="reflection-prompt__header">
-          <i class="bi bi-question-circle"></i>
+          <i class="bi bi-question-circle" aria-hidden="true"></i>
           <strong>{{ t('tests.reflectionTitle') }}</strong>
           <span class="reflection-prompt__hint">{{ t('tests.reflectionHint') }}</span>
         </div>
         <div class="reflection-prompt__buttons">
           <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('unknown')">
-            <i class="bi bi-x-octagon"></i>
+            <i class="bi bi-x-octagon" aria-hidden="true"></i>
             {{ t('tests.reflectionUnknown') }}
           </BaseButton>
           <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('misread')">
-            <i class="bi bi-eye-slash"></i>
+            <i class="bi bi-eye-slash" aria-hidden="true"></i>
             {{ t('tests.reflectionMisread') }}
           </BaseButton>
           <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('confused')">
-            <i class="bi bi-signpost-split"></i>
+            <i class="bi bi-signpost-split" aria-hidden="true"></i>
             {{ t('tests.reflectionConfused') }}
           </BaseButton>
           <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('guessed')">
-            <i class="bi bi-dice-5"></i>
+            <i class="bi bi-dice-5" aria-hidden="true"></i>
             {{ t('tests.reflectionGuessed') }}
           </BaseButton>
         </div>
@@ -142,7 +152,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, useId, nextTick } from 'vue'
 import BaseMarkdown from '@/components/markdown/BaseMarkdown.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
@@ -162,6 +172,7 @@ const props = defineProps({
   showVerification: { type: Boolean, default: true },
   showConfidenceHint: { type: Boolean, default: true },
   showReflectionPrompt: { type: Boolean, default: false },
+  requireAnswerConfirmation: { type: Boolean, default: false },
   lockAnswerChoices: { type: Boolean, default: false },
   // When true, the answer radios and the confidence checkbox are
   // disabled. The master-exam runner binds this to the store's
@@ -174,6 +185,9 @@ const props = defineProps({
 
 const emit = defineEmits(['answer', 'confidence', 'reflection', 'reveal'])
 
+const groupId = useId()
+const submitButton = ref(null)
+let restoreAnswerFocus = false
 const selectedAnswer = ref(props.initialAnswer)
 const confidenceScore = ref(normalizeConfidenceScore(props.initialConfidence, null))
 const preAnswer = ref(props.initialPreAnswer || '')
@@ -214,8 +228,20 @@ watch(
   },
 )
 
+function commitAnswer() {
+  restoreAnswerFocus = submitButton.value?.$el === document.activeElement
+  emit('answer', selectedAnswer.value)
+}
+
+watch(() => props.lockAnswerChoices && !props.disabled, async (locked) => {
+  if (!locked || !restoreAnswerFocus) return
+  restoreAnswerFocus = false
+  await nextTick()
+  document.getElementsByName(`${groupId}-confidence`)[0]?.focus()
+})
+
 function onUserSelect(val) {
-  emit('answer', val)
+  if (!props.requireAnswerConfirmation) emit('answer', val)
 }
 
 function onConfidenceChange() {

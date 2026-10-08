@@ -9,7 +9,7 @@
     >
         <template #actions>
           <BaseButton variant="primary" @click="formModalRef?.open()">
-            <i class="bi bi-plus-circle"></i> {{ t('admin.blueprints.addButton') }}
+            <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('admin.blueprints.addButton') }}
           </BaseButton>
         </template>
       <FeedbackRegion
@@ -28,7 +28,7 @@
       >
         <template #emptyActions>
           <BaseButton variant="primary" @click="formModalRef?.open()">
-            <i class="bi bi-plus-circle"></i> {{ t('admin.blueprints.createFirst') }}
+            <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('admin.blueprints.createFirst') }}
           </BaseButton>
         </template>
         <template #default="{ items }">

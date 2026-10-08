@@ -189,7 +189,7 @@
   --font-family-heading: 'Noto Sans Arabic', 'Outfit', 'Tahoma', sans-serif;
   --font-family-mono: 'Consolas', 'Monaco', 'Courier New', monospace;
 
-  --font-size-xs: clamp(0.6875rem, 0.6rem + 0.2vw, 0.75rem);
+  --font-size-xs: 0.75rem;
   --font-size-sm: clamp(0.8125rem, 0.7rem + 0.3vw, 0.875rem);
   --font-size-base: clamp(0.9375rem, 0.85rem + 0.3vw, 1rem);
   --font-size-lg: clamp(1.0625rem, 0.95rem + 0.35vw, 1.125rem);
@@ -298,6 +298,7 @@
   --bottom-nav-clearance: calc(var(--bottom-nav-height) + var(--bottom-nav-inset) + var(--space-sm));
 
   /* ----- CONTROL GEOMETRY ----- */
+  --control-hit-size-min: 24px;
   --control-height: 44px;
   --control-height-compact: 36px;
   --control-radius: var(--radius-md);

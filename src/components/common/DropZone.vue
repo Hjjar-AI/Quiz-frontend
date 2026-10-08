@@ -22,7 +22,7 @@
       @change="handleFileSelect"
     />
     <div class="drop-zone__content">
-      <i class="bi bi-cloud-upload drop-zone__icon"></i>
+      <i class="bi bi-cloud-upload drop-zone__icon" aria-hidden="true"></i>
       <p class="drop-zone__text">{{ resolvedLabel }}</p>
       <small class="drop-zone__hint" v-if="hint">{{ hint }}</small>
       <BaseButton

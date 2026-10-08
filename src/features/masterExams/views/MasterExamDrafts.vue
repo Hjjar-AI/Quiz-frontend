@@ -51,7 +51,7 @@
       >
         <template #emptyActions>
           <BaseButton variant="primary" @click="router.push('/master-exams/new')">
-            <i class="bi bi-plus-circle"></i> {{ t('masterExams.draftsStartNew') }}
+            <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('masterExams.draftsStartNew') }}
           </BaseButton>
         </template>
         <template #default="{ items }">
@@ -61,29 +61,29 @@
                 <p class="master-exam-draft-item__text">{{ draft.question }}</p>
                 <div class="master-exam-draft-item__meta">
                   <span>
-                    <i class="bi bi-list-ol"></i>
+                    <i class="bi bi-list-ol" aria-hidden="true"></i>
                     {{ t('masterExams.draftChoicesCount', { n: draft.choices?.length || 0 }) }}
                   </span>
                   <span>
-                    <i class="bi bi-check-circle"></i>
+                    <i class="bi bi-check-circle" aria-hidden="true"></i>
                     {{ t('masterExams.draftCorrectAnswer', { n: draft.correct_answer }) }}
                   </span>
                   <span>
-                    <i class="bi bi-speedometer"></i> {{ difficultyLabel(draft.difficulty) }}
+                    <i class="bi bi-speedometer" aria-hidden="true"></i> {{ difficultyLabel(draft.difficulty) }}
                   </span>
                   <span v-if="draft.category_name">
-                    <i class="bi bi-folder2"></i> {{ draft.category_name }}
+                    <i class="bi bi-folder2" aria-hidden="true"></i> {{ draft.category_name }}
                   </span>
                   <span v-if="draft.case" :title="draft.case.title || draft.case.key">
-                    <i class="bi bi-journal-medical"></i>
+                    <i class="bi bi-journal-medical" aria-hidden="true"></i>
                     {{ draft.case.key }}
                   </span>
-                  <span> <i class="bi bi-calendar"></i> {{ formatDate(draft.created_at) }} </span>
+                  <span> <i class="bi bi-calendar" aria-hidden="true"></i> {{ formatDate(draft.created_at) }} </span>
                 </div>
               </div>
               <div class="master-exam-draft-item__actions">
                 <BaseButton variant="secondary" size="small" @click="openEdit(draft)">
-                  <i class="bi bi-pencil"></i> {{ t('masterExams.edit') }}
+                  <i class="bi bi-pencil" aria-hidden="true"></i> {{ t('masterExams.edit') }}
                 </BaseButton>
                 <BaseIconButton
                   icon="bi bi-trash"

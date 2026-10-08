@@ -10,7 +10,7 @@
 <template>
   <div>
     <div v-if="!rows.length" class="report-empty">
-      <i class="bi bi-people"></i>
+      <i class="bi bi-people" aria-hidden="true"></i>
       {{ t('analytics.cohortComparisonEmpty') }}
     </div>
 

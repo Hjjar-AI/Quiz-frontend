@@ -1,11 +1,13 @@
 <!-- frontend/src/features/testCommon/views/TestQuestion.vue -->
 <template>
   <div ref="swipeContainer" class="test-question" :class="{ 'test-question--critical': isCritical }">
+    <h1 class="sr-only" tabindex="-1">{{ t(mode === 'exam' ? 'tests.modeExamLabel' : mode === 'recall' ? 'tests.modeRecallLabel' : 'tests.modeStudyLabel') }}</h1>
     <div class="top-bar">
       <Timer
         v-if="config.showTime"
         :start-time="startTime"
         :total-seconds="examTotalSeconds"
+        :announce-time-up="mode !== 'exam'"
         :overtime="config.overtime || false"
         @tick="onTimerTick"
       />
@@ -23,6 +25,7 @@
         :answer-before-options="mode === 'recall'"
         :initial-pre-answer="preAnswer"
         :choices-revealed="choicesRevealed"
+        :require-answer-confirmation="mode === 'study' || mode === 'recall'"
         :lock-answer-choices="(mode === 'study' || mode === 'recall') && store.hasAnswer(store.currentIndex)"
         :disabled="answerControlsBusy"
         :show-reflection-prompt="showReflectionPrompt"

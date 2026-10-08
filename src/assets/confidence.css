@@ -34,7 +34,13 @@
   pointer-events: none;
 }
 
+.confidence-score__option:has(input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
 .confidence-score__option--active {
+  font-weight: var(--font-weight-bold);
   border-color: var(--color-primary);
   background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-card));
   color: var(--color-primary-soft-text);

@@ -524,6 +524,7 @@ input[type='date']:focus {
 }
 
 .base-input__number-field:focus {
+  /* a11y-focus-owner: .base-input__number:focus-within */
   outline: none;
 }
 
@@ -536,35 +537,31 @@ input[type='date']:focus {
   opacity: 1;
 }
 
-/* Two chevrons stacked vertically. Each is a real <button> so the
+/* Two chevron controls. Each is a real <button> so the
    component works with a screen reader and a keyboard, but they are
    `tabindex="-1"` in the template so Tab lands on the input — the
    spinner is a convenience, not a required step in the form flow. */
+/* Side-by-side steppers keep readable glyphs inside separate pointer targets. */
 .base-input__number-spinner {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
-  gap: 0;
-  /* Nudge the spinner down by one pixel so the visual midpoint of the
-     pair lines up with the visual midpoint of the number text. The
-     number renders at line-height ~1.4 within an ~18 px box; the two
-     stacked 10 px buttons have their own natural center. Without this
-     nudge the spinner reads about 1 px high. */
-  margin-top: 1px;
+  gap: var(--space-2xs);
+  margin-top: 0;
 }
 
 .base-input__number-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 10px;
+  width: var(--control-hit-size-min);
+  height: var(--control-hit-size-min);
   padding: 0;
   border: none;
   background: none;
   cursor: pointer;
   color: var(--color-text-muted);
-  font-size: 0.55rem;
+  font-size: var(--font-size-xs);
   line-height: 1;
   transition: color var(--motion-fast);
 }
@@ -601,7 +598,7 @@ input[type='date']:focus {
     min-width: var(--control-height);
     min-height: var(--control-height);
     flex-shrink: 0;
-    font-size: 0.65rem;
+    font-size: var(--font-size-xs);
   }
   .base-input__number-field {
     min-width: var(--control-height);
@@ -975,7 +972,7 @@ input[type='date']:focus {
 }
 
 .base-dropdown__arrow {
-  font-size: 0.7rem;
+  font-size: var(--font-size-xs);
   opacity: 0.7;
   margin-inline-start: var(--space-xs);
   transition: transform var(--motion-base-out);
@@ -1120,7 +1117,7 @@ input[type='date']:focus {
   border: var(--border-width-strong) solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-bg-card);
-  font-size: 0.7rem;
+  font-size: var(--font-size-xs);
   color: transparent;
   flex-shrink: 0;
   transition:

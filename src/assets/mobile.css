@@ -76,6 +76,9 @@
   flex-direction: column-reverse;
   gap: var(--space-sm);
   max-width: 400px;
+  max-block-size: calc(100dvh - var(--navbar-height) - var(--bottom-nav-clearance) - var(--space-xl));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .toast {
   display: flex;

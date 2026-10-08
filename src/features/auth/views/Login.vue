@@ -3,7 +3,7 @@
   <div class="login-page">
     <BaseCard class="login-card">
       <div class="login-card__header">
-        <div class="icon-hero"><i class="bi bi-book-half"></i></div>
+        <div class="icon-hero"><i class="bi bi-book-half" aria-hidden="true"></i></div>
         <h1 class="login-card__title">{{ t('app.name') }}</h1>
         <p class="login-card__subtitle">{{ t('auth.loginTitle') }}</p>
       </div>
@@ -16,7 +16,7 @@
 
       <Transition name="success-fade">
         <div v-if="loginSuccess" class="login-success">
-          <i class="bi bi-check-circle-fill success-icon"></i>
+          <i class="bi bi-check-circle-fill success-icon" aria-hidden="true"></i>
           <p>{{ t('auth.loginSuccess') }}</p>
         </div>
       </Transition>
@@ -50,7 +50,7 @@
           :loading="authStore.isLoading || isSubmitting"
           class="login-form__submit"
         >
-          <i class="bi bi-box-arrow-in-right"></i> {{ t('auth.loginButton') }}
+          <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> {{ t('auth.loginButton') }}
         </BaseButton>
       </form>
 
@@ -62,7 +62,7 @@
 
       <div class="login-disclaimer">
         <p>
-          <i class="bi bi-info-circle"></i>
+          <i class="bi bi-info-circle" aria-hidden="true"></i>
           {{ t('auth.disclaimer') }}
         </p>
         <p>

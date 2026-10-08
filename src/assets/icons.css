@@ -32,3 +32,16 @@
 .icon-button:hover::after {
   opacity: 1;
 }
+/* Compatibility names use glyphs available in the bundled font.
+   Keep persisted category icon values readable without a CDN or font upgrade. */
+.bi-brain::before { content: "\f46b"; }
+.bi-capsule::before { content: "\f681"; }
+.bi-cookie::before { content: "\f538"; }
+.bi-database::before { content: "\f52c"; }
+.bi-database-add::before { content: "\f4fa"; }
+.bi-database-fill::before { content: "\f410"; }
+.bi-gavel::before { content: "\f3ff"; }
+.bi-hand-wave::before { content: "\f407"; }
+.bi-person-gear::before { content: "\f4d3"; }
+.bi-rocket-takeoff::before { content: "\f589"; }
+.bi-universal-access::before { content: "\f4d7"; }

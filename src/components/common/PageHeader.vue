@@ -2,7 +2,7 @@
 <template>
   <div class="page-header">
     <component :is="`h${level}`" class="page-header__title" dir="auto">
-      <i v-if="icon" :class="icon"></i>
+      <i v-if="icon" :class="icon" aria-hidden="true"></i>
       {{ title }}
     </component>
     <div v-if="$slots.badges" class="page-header__badges">

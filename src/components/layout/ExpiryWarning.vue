@@ -13,10 +13,10 @@
     dead code and has been removed from `expiryMessage`.
   -->
   <div v-if="authStore.isExpiringSoon" class="expiry-warning">
-    <i class="bi bi-exclamation-triangle"></i>
+    <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
     {{ expiryMessage }}
     <a :href="contactHref" class="contact-link">
-      <i class="bi bi-envelope"></i> {{ t('profile.contactAdminButton') }}
+      <i class="bi bi-envelope" aria-hidden="true"></i> {{ t('profile.contactAdminButton') }}
     </a>
   </div>
 </template>

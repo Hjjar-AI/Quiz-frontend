@@ -18,7 +18,6 @@
     "examDescShort": "بمؤقت، بدون شرح فوري، إنهاء تلقائي",
     "studyDescShort": "مع شرح فوري بعد كل إجابة، ووقت إضافي عند انتهاء المؤقت",
     "recallDescShort": "اكتب إجابتك قبل إظهار الخيارات",
-
     "exam": "امتحان",
     "study": "مذاكرة",
     "recall": "الإجابة قبل الخيارات",
@@ -26,7 +25,6 @@
     "studyTitle": "إعداد المذاكرة ذاتية",
     "examDesc": "إجابة واحدة لكل سؤال. سيتم احتساب النتيجة في النهاية.",
     "studyDesc": "يظهر شرح كل سؤال عند الإجابة عليه.\nجميع وسائل التصفية اختيارية",
-
     "examStart": "ابدأ الامتحان",
     "studyStart": "ابدأ المذاكرة ذاتية",
     "recallStart": "ابدأ المراجعة قبل الخيارات",
@@ -36,12 +34,10 @@
     "examFinish": "إنهاء الامتحان",
     "studyFinish": "إنهاء المذاكرة ذاتية",
     "retryLabel": "إعادة المحاولة",
-
     "resumeBox": "لديك جلسة محفوظة",
     "resume": "استئناف",
     "discard": "تجاهل",
     "discardConfirm": "هل أنت متأكد من حذف التقدم المحفوظ؟",
-
     "numQuestions": "عدد الأسئلة",
     "numAvailable": "المتاح: {count} سؤال",
     "numLoading": "جارٍ حساب الأسئلة المتاحة...",
@@ -55,16 +51,13 @@
     "blueprintNone": "بدون نموذج — اختر تصنيفاً أو وسماً",
     "blueprintHint": "عند اختيار نموذج، يتم تجاهل التصنيف والوسم وتوزيع الأسئلة حسب أوزان النموذج.",
     "chooseSource": "الرجاء اختيار مصدر",
-
     "examPickCategory": "التصنيف",
     "examPickTag": "الوسم",
     "examNoTags": "لا توجد وسوم",
     "examSourceHint": "اختر مصدراً واحداً فقط لبدء الامتحان",
-
     "srsCard": "{count} سؤال مستحق للمراجعة الذكية",
     "srsCardDesc": "ابدأ مراجعة سريعة بالأسئلة الأكثر عرضة للنسيان.",
     "srsStart": "مراجعة ذكية",
-
     "questionProgress": "سؤال {current} من {total}",
     "pause": "إيقاف مؤقت",
     "pauseAria": "إيقاف مؤقت وحفظ التقدم",
@@ -72,21 +65,17 @@
     "pauseFailed": "فشل الإيقاف",
     "resumeFailed": "فشل الاستئناف",
     "noSavedSession": "تعذر استئناف الجلسة المحفوظة. ابدأ جلسة جديدة.",
-
     "previous": "السابق",
     "next": "التالي",
     "finish": "إنهاء",
     "finishShortcut": "إنهاء الاختبار",
-
     "unansweredWarning": "لديك {count} سؤال غير مجاب. هل تريد إنهاء الاختبار؟",
     "timeUp": "انتهى وقت الامتحان، سيتم إنهاؤه تلقائياً.",
     "finishFailed": "فشل إنهاء الاختبار. يرجى المحاولة مرة أخرى.",
-
     "answerSaveFailed": "فشل حفظ الإجابة، يرجى المحاولة مرة أخرى.",
     "confidenceSaveFailed": "فشل تحديث مستوى الثقة، يرجى المحاولة مرة أخرى.",
     "navigationFailed": "فشل الانتقال إلى السؤال المطلوب، يرجى المحاولة مرة أخرى.",
     "invalidAnswer": "إجابة غير صالحة. يجب أن تكون بين 1 و {max}",
-
     "confidence": "متأكد من إجابتي",
     "notConfident": "غير متأكد",
     "confidenceHint": "يظهر هذا السؤال في دفتر المعرفة الهشة إذا كنت غير متأكد.",
@@ -99,7 +88,6 @@
     "revealOptions": "احفظ وأظهر الخيارات",
     "recallPrivacyHint": "تُحفظ إجابتك المكتوبة في هذه الجلسة وتظهر في النتائج التفصيلية.",
     "recallSaveFailed": "تعذر حفظ إجابتك المكتوبة.",
-
     "reflectionTitle": "لماذا أخطأت؟",
     "reflectionHint": "سيساعدنا هذا في جدولة هذا السؤال بشكل أفضل.",
     "reflectionUnknown": "لم أكن أعرف",
@@ -108,15 +96,12 @@
     "reflectionGuessed": "خمّنت",
     "reflectionThanks": "شكراً — سيتكيف جدول المراجعة بناءً على إجابتك.",
     "reflectionSaveFailed": "فشل حفظ سبب الخطأ، يرجى المحاولة مرة أخرى.",
-
     "resultsTotal": "إجمالي الأسئلة",
     "resultsCorrect": "إجابات صحيحة",
     "resultsAnswered": "تمت الإجابة",
     "resultsTotalTime": "الوقت الكلي",
     "resultsAccuracy": "نسبة الدقة",
-
     "fragileCallout": "أجبت على {count} سؤال بشكل صحيح لكنك لم تكن واثقاً من إجابتك. هذه الأسئلة معرّضة للنسيان، وقد تجدها في صفحة المعرفة الهشة للمراجعة لاحقاً.",
-
     "breakdown": "تحليل الأداء",
     "breakdownByCategory": "حسب التصنيف",
     "breakdownByDifficulty": "حسب الصعوبة",
@@ -124,20 +109,17 @@
     "printTableCorrect": "صحيح",
     "printTableTotal": "إجمالي",
     "printTableAccuracy": "الدقة",
-
     "reviewDetail": "مراجعة تفصيلية",
     "reviewCorrect": "صحيح",
     "reviewWrong": "خطأ",
     "reviewExplanation": "الشرح:",
     "reviewRecallAnswer": "إجابتك قبل رؤية الخيارات:",
     "reviewConfidence": "مستوى الثقة",
-
     "retry": "إعادة المحاولة",
     "home": "الرئيسية",
     "share": "مشاركة",
     "shareCopied": "تم نسخ النتائج",
     "shareFailed": "تعذر نسخ النتائج",
-
     "warningExamIncomplete": "تم إنهاء الاختبار قبل الإكمال.",
     "warningStudyIncomplete": "تم إنهاء المذاكرة ذاتية قبل الإكمال.",
     "noResults": "لا توجد نتائج",
@@ -150,17 +132,20 @@
     "resultsTagLabel": "الوسم",
     "newQuote": "اقتباس جديد",
     "shareText": "{title}: {correct}/{total} ({accuracy}%)",
-
     "genericTag": "عام",
     "smartReviewTag": "مراجعة ذكية",
     "caseStemTitle": "حالة سريرية",
     "questionImageAlt": "صورة السؤال",
-"setupTitle": "نمط الدراسة",
+    "setupTitle": "نمط الدراسة",
     "setupDesc": "اختر الوضع والمصدر، ثم ابدأ الجلسة.",
     "modeExamLabel": "امتحان",
     "modeStudyLabel": "مراجعة ذاتية",
     "modeRecallLabel": "الإجابة قبل الخيارات",
     "sourceMultiTag": "{count} وسوم",
-    "categoryPickerEmptyHint": "لا يوجد تصنيف محدد — ستشمل الجلسة جميع التصنيفات."
+    "categoryPickerEmptyHint": "لا يوجد تصنيف محدد — ستشمل الجلسة جميع التصنيفات.",
+    "submitAnswer": "إرسال الإجابة",
+    "shortcutScope": "تعمل الاختصارات عندما يكون التركيز داخل منطقة السؤال. ترسل مفاتيح الأرقام الإجابة.",
+    "leaveConfirm": "هل تريد مغادرة الجلسة؟ يمكنك استئناف الإجابات المحفوظة. ستفقد الإجابات أو النصوص غير المرسلة، وقد يستمر عداد الاختبار المحدد بوقت.",
+    "waitForSave": "يرجى انتظار اكتمال الإجراء الحالي قبل المغادرة."
   }
 }

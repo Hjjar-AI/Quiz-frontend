@@ -18,7 +18,7 @@
       </template>
       <div class="base-list-container__content">
         <div v-if="error" class="base-list-container__inline-error" role="alert">
-          <i class="bi bi-exclamation-triangle"></i>
+          <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
           <span>{{ error }}</span>
           <BaseIconButton
             icon="bi bi-arrow-repeat"

@@ -5,7 +5,7 @@
       <span class="error-banner__text">{{ error }}</span>
       <div class="error-banner__actions">
         <BaseButton v-if="retry" variant="ghost" size="small" @click="$emit('retry')">
-          <i class="bi bi-arrow-repeat"></i> {{ t('common.retry') }}
+          <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ t('common.retry') }}
         </BaseButton>
         <BaseIconButton
           icon="bi bi-x"

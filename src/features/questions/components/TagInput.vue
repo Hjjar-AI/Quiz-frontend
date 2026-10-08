@@ -41,7 +41,7 @@
             class="tag-input__suggestion"
             @mousedown.prevent="appendTag(tag)"
           >
-            <i class="bi bi-tag"></i> {{ tag }}
+            <i class="bi bi-tag" aria-hidden="true"></i> {{ tag }}
           </BaseButton>
         </div>
       </Transition>

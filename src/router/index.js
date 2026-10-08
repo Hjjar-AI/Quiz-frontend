@@ -33,7 +33,7 @@ export function createChunkLoadErrorComponent() {
     render() {
       const t = i18n.global.t
       return h('div', { style: wrapperStyle }, [
-        h('i', { class: 'bi bi-wifi-off', style: iconStyle }),
+        h('i', { class: 'bi bi-wifi-off', style: iconStyle, 'aria-hidden': 'true' }),
         h('h1', null, t('errors.chunkLoad')),
         h('p', { style: mutedStyle }, t('errors.chunkLoadMessage')),
         h(
@@ -495,6 +495,10 @@ const routes = [
   },
   { path: '/:pathMatch(.*)*', redirect: '/404' },
 ]
+
+for (const route of routes) {
+  if (route.name) route.meta = { ...route.meta, titleKey: `routes.${route.name}` }
+}
 
 const router = createRouter({
   history: createWebHistory(),

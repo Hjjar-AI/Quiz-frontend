@@ -10,18 +10,18 @@
         <BaseMarkdown :text="result.question" inline />
       </h5>
       <BaseBadge :variant="result.is_correct ? 'success' : 'danger'">
-        <i :class="result.is_correct ? 'bi bi-check-lg' : 'bi bi-x-lg'"></i>
+        <i :class="result.is_correct ? 'bi bi-check-lg' : 'bi bi-x-lg'" aria-hidden="true"></i>
         {{ result.is_correct ? t('tests.reviewCorrect') : t('tests.reviewWrong') }}
       </BaseBadge>
     </div>
 
     <div v-if="result.pre_answer" class="review-item__recall">
-      <strong><i class="bi bi-pencil-square"></i> {{ t('tests.reviewRecallAnswer') }}</strong>
+      <strong><i class="bi bi-pencil-square" aria-hidden="true"></i> {{ t('tests.reviewRecallAnswer') }}</strong>
       <p dir="auto">{{ result.pre_answer }}</p>
     </div>
 
     <div v-if="result.confidence_score" class="review-item__confidence">
-      <i class="bi bi-speedometer2"></i>
+      <i class="bi bi-speedometer2" aria-hidden="true"></i>
       {{ t('tests.reviewConfidence') }}: {{ confidenceLabel(result.confidence_score) }}
     </div>
 
@@ -37,13 +37,13 @@
         }"
       >
         <span class="review-choice__text" dir="auto">{{ cidx + 1 }}. {{ choice }}</span>
-        <i v-if="cidx + 1 === result.correct_answer" class="bi bi-check-lg review-choice__check"></i>
-        <i v-if="cidx + 1 === result.user_answer && cidx + 1 !== result.correct_answer" class="bi bi-x-lg review-choice__cross"></i>
+        <i v-if="cidx + 1 === result.correct_answer" class="bi bi-check-lg review-choice__check" aria-hidden="true"></i>
+        <i v-if="cidx + 1 === result.user_answer && cidx + 1 !== result.correct_answer" class="bi bi-x-lg review-choice__cross" aria-hidden="true"></i>
       </div>
     </div>
 
     <div v-if="result.explanation" class="review-item__explanation">
-      <strong><i class="bi bi-lightbulb"></i> {{ t('tests.reviewExplanation') }}</strong>
+      <strong><i class="bi bi-lightbulb" aria-hidden="true"></i> {{ t('tests.reviewExplanation') }}</strong>
       <BaseMarkdown :text="result.explanation" />
     </div>
   </BaseCard>

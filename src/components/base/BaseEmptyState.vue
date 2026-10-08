@@ -2,8 +2,8 @@
 <template>
   <div class="base-empty-state" role="status" aria-live="polite" :data-reason="reason">
     <div class="base-empty-state__illustration">
-      <i class="illustration__bg" :class="bgIcon"></i>
-      <i class="illustration__fg" :class="fgIcon"></i>
+      <i class="illustration__bg" :class="bgIcon" aria-hidden="true"></i>
+      <i class="illustration__fg" :class="fgIcon" aria-hidden="true"></i>
     </div>
     <component :is="`h${level}`" class="base-empty-state__title">{{ displayTitle }}</component>
     <p class="base-empty-state__message" v-if="message">{{ message }}</p>

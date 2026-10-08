@@ -9,7 +9,7 @@
     >
       <template #actions>
         <BaseButton variant="secondary" @click="router.push('/change-password')">
-          <i class="bi bi-key"></i> {{ t('profile.changePassword') }}
+          <i class="bi bi-key" aria-hidden="true"></i> {{ t('profile.changePassword') }}
         </BaseButton>
       </template>
       <div class="profile-grid">
@@ -31,7 +31,7 @@
                     })
                   "
                 >
-                  <i :class="authorRankIcon"></i>
+                  <i :class="authorRankIcon" aria-hidden="true"></i>
                   {{ authorRankLabel }}
                 </BaseBadge>
               </div>
@@ -39,17 +39,17 @@
           </div>
           <div class="profile-details">
             <div class="detail-item">
-              <i class="bi bi-person-badge"></i>
+              <i class="bi bi-person-badge" aria-hidden="true"></i>
               <span class="detail-label">{{ t('profile.usernameLabel') }}</span>
               <span class="detail-value">@{{ user.username }}</span>
             </div>
             <div class="detail-item">
-              <i class="bi bi-calendar-check"></i>
+              <i class="bi bi-calendar-check" aria-hidden="true"></i>
               <span class="detail-label">{{ t('profile.joinedLabel') }}</span>
               <span class="detail-value">{{ formatDate(user.created_at) }}</span>
             </div>
             <div class="detail-item">
-              <i class="bi bi-palette"></i>
+              <i class="bi bi-palette" aria-hidden="true"></i>
               <span class="detail-label">{{ t('profile.themeLabel') }}</span>
               <span class="detail-value">{{ themeLabel }}</span>
             </div>
@@ -66,7 +66,7 @@
 
         <BaseCard v-if="user.expires_at" class="profile-card profile-card--expiry">
           <h4 class="card-title">
-            <i class="card-title__icon bi bi-hourglass-split"></i>
+            <i class="card-title__icon bi bi-hourglass-split" aria-hidden="true"></i>
             {{ t('profile.subscriptionTitle') }}
           </h4>
           <div class="expiry-info">
@@ -75,7 +75,7 @@
               <span class="value">{{ formatLongDate(user.expires_at) }}</span>
             </div>
             <div class="expiry-days" :class="{ 'text-danger': daysUntilExpiry <= 7 }">
-              <i class="bi bi-clock"></i>
+              <i class="bi bi-clock" aria-hidden="true"></i>
               <span v-if="daysUntilExpiry > 0">
                 {{ t('profile.subscriptionDaysLeft', { days: daysUntilExpiry }) }}
               </span>
@@ -99,7 +99,7 @@
         -->
         <BaseCard v-if="profileAdminLinks.length > 0" class="profile-card profile-card--admin">
           <h4 class="card-title">
-            <i class="card-title__icon bi bi-shield-lock"></i>
+            <i class="card-title__icon bi bi-shield-lock" aria-hidden="true"></i>
             {{ t('profile.adminTitle') }}
           </h4>
           <p class="text-muted">{{ t('profile.adminDesc') }}</p>
@@ -111,7 +111,7 @@
               size="small"
               @click="router.push(link.to)"
             >
-              <i :class="link.icon"></i> {{ t(link.labelKey) }}
+              <i :class="link.icon" aria-hidden="true"></i> {{ t(link.labelKey) }}
             </BaseButton>
           </div>
         </BaseCard>

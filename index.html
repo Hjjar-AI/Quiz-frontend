@@ -15,7 +15,7 @@
        Reads the persisted language from localStorage and applies
        it to <html lang dir data-locale> BEFORE any CSS paints.
        Must run above the font stylesheet links and the
-       __cdnFallback utility so the initial render is already in
+       theme bootstrap so the initial render is already in
        the correct direction (no LTR→RTL flash).
        Mirrors the theme bootstrap below.
        ============================================================ -->
@@ -135,76 +135,8 @@
       })()
     </script>
 
-    <!-- ============================================================
-       CDN-first asset loader utility
-       Tries CDN first. If the CDN is blocked, returns an error,
-       or takes longer than the timeout (default 5 s), the local
-       copy is injected automatically.
-       ============================================================ -->
-    <script>
-      window.__cdnFallback = (function () {
-        var DEFAULT_TIMEOUT = 5000
-        function loadCSS(id, cdnUrl, localUrl, timeout) {
-          timeout = timeout || DEFAULT_TIMEOUT
-          var link = document.createElement('link')
-          link.rel = 'stylesheet'
-          link.id = id
-          link.href = cdnUrl
-          var settled = false
-          function useLocal() {
-            if (settled) return
-            settled = true
-            link.href = localUrl
-          }
-          link.onload = function () {
-            settled = true
-          }
-          link.onerror = function () {
-            useLocal()
-          }
-          document.head.appendChild(link)
-          setTimeout(function () {
-            if (!settled) useLocal()
-          }, timeout)
-        }
-        function loadJS(id, cdnUrl, localUrl, timeout) {
-          timeout = timeout || DEFAULT_TIMEOUT
-          var script = document.createElement('script')
-          script.id = id
-          script.src = cdnUrl
-          var settled = false
-          function useLocal() {
-            if (settled) return
-            settled = true
-            var localScript = document.createElement('script')
-            localScript.src = localUrl
-            localScript.id = id + '-local'
-            document.body.appendChild(localScript)
-          }
-          script.onload = function () {
-            settled = true
-          }
-          script.onerror = function () {
-            useLocal()
-          }
-          document.body.appendChild(script)
-          setTimeout(function () {
-            if (!settled) useLocal()
-          }, timeout)
-        }
-        return { loadCSS: loadCSS, loadJS: loadJS }
-      })()
-    </script>
-
-    <!-- Bootstrap Icons CSS: CDN first → local fallback -->
-    <script>
-      window.__cdnFallback.loadCSS(
-        'bootstrapIconsCss',
-        'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css',
-        '/bootstrapIcons.css',
-        5000,
-      )
-    </script>
+    <!-- Icons are independent of the optional text-font CDN. -->
+    <link id="bootstrapIconsCss" rel="stylesheet" href="/bootstrapIcons.css" />
   </head>
   <body>
     <div id="app"></div>

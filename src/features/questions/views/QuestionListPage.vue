@@ -39,14 +39,14 @@
               :disabled="items.length === 0"
               @click="startDrill"
             >
-              <i class="bi bi-play-circle"></i> {{ drillButtonLabel }}
+              <i class="bi bi-play-circle" aria-hidden="true"></i> {{ drillButtonLabel }}
             </BaseButton>
             <BaseButton
               variant="ghost"
               size="small"
               @click="() => fetchPage(currentPage)"
             >
-              <i class="bi bi-arrow-repeat"></i> {{ t('common.refresh') }}
+              <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ t('common.refresh') }}
             </BaseButton>
           </div>
           <BaseButton
@@ -54,12 +54,12 @@
             variant="primary"
             @click="router.push('/questions/add')"
           >
-            <i class="bi bi-plus-circle"></i> {{ t('questions.addButton') }}
+            <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('questions.addButton') }}
           </BaseButton>
         </template>
       <!-- Last-viewed chip (all only) -->
       <div v-if="mode === 'all' && lastViewedId" class="last-viewed-chip">
-        <i class="bi bi-clock-history"></i>
+        <i class="bi bi-clock-history" aria-hidden="true"></i>
         <span>{{ t('questions.lastViewed') }}</span>
         <router-link
           :to="`/questions/edit/${lastViewedId}`"
@@ -133,11 +133,11 @@
           :disabled="selectedIds.length === 0"
           @click="handleBulkVerify('verify')"
         >
-          <i class="bi bi-patch-check"></i>
+          <i class="bi bi-patch-check" aria-hidden="true"></i>
           {{ t('questions.bulkVerifyWithCount', { count: selectedIds.length }) }}
         </BaseButton>
         <BaseButton variant="secondary" size="small" @click="clearSelection">
-          <i class="bi bi-x-circle"></i> {{ t('questions.bulkClear') }}
+          <i class="bi bi-x-circle" aria-hidden="true"></i> {{ t('questions.bulkClear') }}
         </BaseButton>
       </div>
 
@@ -156,14 +156,14 @@
             size="small"
             @click="bulkTagModalOpen = true"
           >
-            <i class="bi bi-tags"></i> {{ t('questions.bulkTagsShort') }}
+            <i class="bi bi-tags" aria-hidden="true"></i> {{ t('questions.bulkTagsShort') }}
           </BaseButton>
         </template>
       </BulkActions>
 
       <!-- Fragile-knowledge callout (fragile only) -->
       <div v-if="mode === 'fragile'" class="fragile-callout">
-        <i class="bi bi-info-circle"></i>
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
         <div class="fragile-callout__body">
           <span class="fragile-callout__title">
             {{ t('questions.fragileCalloutTitle') }}

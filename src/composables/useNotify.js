@@ -4,9 +4,8 @@ import { useToastStore } from '@/stores/toastStore'
 export function useNotify() {
   const toastStore = useToastStore()
 
-  function notify(message, type = 'info', duration = 4000) {
-    const effectiveDuration = type === 'error' ? 8000 : duration
-    return toastStore.addToast(message, type, effectiveDuration)
+  function notify(message, type = 'info', duration) {
+    return toastStore.addToast(message, type, duration)
   }
 
   return { notify }

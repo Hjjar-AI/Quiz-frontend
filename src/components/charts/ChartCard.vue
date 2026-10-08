@@ -12,14 +12,35 @@
       />
     </div>
     <div class="chart-card__body">
-      <canvas ref="chartCanvas" :width="width" :height="height"></canvas>
+      <canvas ref="chartCanvas" :width="width" :height="height" role="img" :aria-label="title"></canvas>
     </div>
+    <details class="accessible-data">
+      <summary>{{ t('a11y.chartData') }}</summary>
+      <BaseTableShell :aria-label="title">
+        <table>
+          <caption>{{ title }}</caption>
+          <thead><tr>
+            <th scope="col">{{ t('a11y.chartLabel') }}</th>
+            <th v-for="(dataset, index) in data.datasets || []" :key="index" scope="col">
+              {{ dataset.label || t('a11y.chartSeries', { number: formatNumber(index + 1) }) }}
+            </th>
+          </tr></thead>
+          <tbody><tr v-for="row in dataRows" :key="row.index">
+            <th scope="row" dir="auto">{{ row.label }}</th>
+            <td v-for="(value, index) in row.values" :key="index" dir="auto">{{ formatValue(value) }}</td>
+          </tr></tbody>
+        </table>
+      </BaseTableShell>
+    </details>
   </BaseCard>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import Chart from 'chart.js/auto'
+import BaseTableShell from '@/components/common/BaseTableShell.vue'
+import { useMediaQuery } from '@/composables/useMediaQuery'
+import { useLocaleFormatters } from '@/i18n/helpers/format'
 import { useTheme } from '@/composables/useTheme'
 import { useNotify } from '@/composables/useNotify'
 import { useChartPalette } from '@/composables/useChartPalette'
@@ -28,6 +49,8 @@ import { downloadUrl } from '@/utils/downloadFile'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
 
 const { t } = useI18n()
+const { formatNumber } = useLocaleFormatters()
+const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -42,6 +65,26 @@ const props = defineProps({
   height: { type: Number, default: 300 },
   allowExport: { type: Boolean, default: true },
 })
+
+const dataRows = computed(() => {
+  const datasets = props.data.datasets || []
+  const count = Math.max(props.data.labels?.length || 0, ...datasets.map(dataset => dataset.data?.length || 0))
+  return Array.from({ length: count }, (_, index) => ({
+    index,
+    label: props.data.labels?.[index] ?? formatNumber(index + 1),
+    values: datasets.map(dataset => dataset.data?.[index]),
+  }))
+})
+
+function formatValue(value) {
+  if (value == null) return '—'
+  if (Array.isArray(value)) return value.map(formatValue).join(' – ')
+  if (typeof value === 'object') return Object.entries(value).map(([key, item]) => `${key}: ${formatValue(item)}`).join(', ')
+  if (typeof value !== 'number' || !Number.isFinite(value)) return String(value)
+  const [coefficient, exponent = '0'] = String(value).toLowerCase().split('e')
+  const decimals = Math.max(0, (coefficient.split('.')[1]?.length || 0) - Number(exponent))
+  return formatNumber(value, Math.min(20, decimals))
+}
 
 const chartCanvas = ref(null)
 const { currentTheme } = useTheme()
@@ -159,6 +202,7 @@ function renderChart() {
   }
 
   const mergedOptions = mergeChartOptions(defaultOptions, props.options)
+  if (reducedMotion.value) mergedOptions.animation = false
 
   chartInstance = new Chart(ctx, {
     type: props.type,
@@ -187,7 +231,7 @@ function restoreAfterPrint() {
   if (isVisible.value) nextTick(renderChart)
 }
 
-watch(currentTheme, () => {
+watch([currentTheme, reducedMotion], () => {
   refreshPalette()
   if (isVisible.value) {
     nextTick(renderChart)

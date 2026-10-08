@@ -1,4 +1,5 @@
 // frontend/eslint.config.js
+import accessibility from './scripts/eslintAccessibility.js'
 import pluginVue from 'eslint-plugin-vue'
 import unusedImports from 'eslint-plugin-unused-imports'
 import eslintConfigPrettier from 'eslint-config-prettier'
@@ -18,8 +19,12 @@ export default [
   {
     plugins: {
       'unused-imports': unusedImports,
+      accessibility,
     },
     rules: {
+      'accessibility/icon-semantics': 'error',
+      'accessibility/radio-name': 'error',
+
       // ── Vue specific ─────────────────────────────────────────────
       'vue/multi-word-component-names': 'error',
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],

@@ -4,14 +4,14 @@
     <PageShell :title="t('dashboard.title')" icon="bi bi-speedometer2" page-class="dashboard">
       <div class="dashboard__welcome" :class="{ 'dashboard__welcome--animated': bannerAnimated }">
         <h2>
-          <i class="bi bi-hand-wave"></i> {{ t('dashboard.welcome', { name: authStore.fullName }) }}
+          <i class="bi bi-hand-wave" aria-hidden="true"></i> {{ t('dashboard.welcome', { name: authStore.fullName }) }}
         </h2>
         <p class="text-muted">{{ t('dashboard.overview') }}</p>
         <div
           v-if="daysSinceLastLogin !== null && daysSinceLastLogin > 0"
           class="welcome-back-banner"
         >
-          <i class="bi bi-stars"></i>
+          <i class="bi bi-stars" aria-hidden="true"></i>
           <span>{{
             t('dashboard.welcomeBack', {
               days: daysSinceLastLogin,
@@ -33,7 +33,7 @@
         <BaseCard class="today-card" variant="primary">
           <div class="today-card__action">
             <div class="today-card__icon" aria-hidden="true">
-              <i :class="todayAction.icon"></i>
+              <i :class="todayAction.icon" aria-hidden="true"></i>
             </div>
             <div class="today-card__copy">
               <span class="today-card__eyebrow">{{ t('dashboard.nextBestAction') }}</span>
@@ -94,7 +94,7 @@
             :style="{ '--card-accent': test.color, '--i': idx }"
             @click="router.push(test.path)"
           >
-            <div class="test-card__icon"><i :class="test.icon"></i></div>
+            <div class="test-card__icon"><i :class="test.icon" aria-hidden="true"></i></div>
             <div class="test-card__copy">
               <div class="test-card__title">{{ test.label }}</div>
               <div class="test-card__desc">{{ test.desc }}</div>
@@ -105,7 +105,7 @@
 
         <div class="dashboard__actions" :aria-label="t('dashboard.secondaryActions')">
           <BaseButton variant="secondary" @click="router.push('/questions/add')">
-            <i class="bi bi-plus-circle"></i> {{ t('nav.addQuestion') }}
+            <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('nav.addQuestion') }}
           </BaseButton>
           <BaseButton variant="ghost" @click="router.push('/questions')">
             {{ t('nav.questions') }}
@@ -198,7 +198,7 @@
       </section>
 
       <div v-if="currentTip" :key="tipKey" class="dashboard__tip">
-        <i class="bi bi-lightbulb"></i>
+        <i class="bi bi-lightbulb" aria-hidden="true"></i>
         <span><strong>{{ t('dashboard.didYouKnow') }}</strong> {{ currentTip }}</span>
       </div>
     </PageShell>

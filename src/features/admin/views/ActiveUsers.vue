@@ -48,10 +48,10 @@
               variant="default"
             >
               <template #meta>
-                <span><i class="bi bi-wifi"></i> {{ user.ip }}</span>
+                <span><i class="bi bi-wifi" aria-hidden="true"></i> {{ user.ip }}</span>
          
                 <span class="user-time" :title="formatDateTime(user.last_seen)">
-                  <i class="bi bi-clock"></i>
+                  <i class="bi bi-clock" aria-hidden="true"></i>
                   <TimeAgo :date="user.last_seen" />
                 </span>
               </template>

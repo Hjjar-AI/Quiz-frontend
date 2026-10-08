@@ -29,7 +29,7 @@
   <div class="source-grid-picker">
     <div class="source-grid-picker__header">
       <label class="source-grid-picker__label">
-        <i v-if="icon" :class="icon"></i>
+        <i v-if="icon" :class="icon" aria-hidden="true"></i>
         {{ label }}
         <span v-if="optional" class="source-grid-picker__optional">
           {{ t('common.optional') }}
@@ -73,7 +73,7 @@
           @change="toggle(item.value)"
         />
         <span class="source-grid-picker__check" aria-hidden="true">
-          <i class="bi bi-check-lg"></i>
+          <i class="bi bi-check-lg" aria-hidden="true"></i>
         </span>
         <span
           v-if="item.color"
@@ -100,7 +100,7 @@
     </div>
 
     <p v-if="hint && !loading && items.length > 0" class="source-grid-picker__hint">
-      <i class="bi bi-info-circle"></i>
+      <i class="bi bi-info-circle" aria-hidden="true"></i>
       {{ hint }}
     </p>
   </div>

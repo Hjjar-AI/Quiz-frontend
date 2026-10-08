@@ -53,11 +53,13 @@ loadSavedFont()
 
 function applyDocumentTitle() {
   if (typeof document !== 'undefined') {
-    document.title = i18n.global.t('app.name')
+    const appName = i18n.global.t('app.name')
+    const titleKey = router.currentRoute.value.meta.titleKey
+    document.title = titleKey ? `${i18n.global.t(titleKey)} — ${appName}` : appName
   }
 }
 applyDocumentTitle()
-watch(() => i18n.global.locale.value, applyDocumentTitle)
+watch([() => i18n.global.locale.value, () => router.currentRoute.value.meta.titleKey], applyDocumentTitle)
 
 const configStore = useConfigStore()
 const testSessionStore = useTestSessionStore()

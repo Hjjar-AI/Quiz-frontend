@@ -28,9 +28,7 @@
           <kbd>{{ nextArrowGlyph }}</kbd> <span>{{ t('tests.shortcutNext') }}</span>
           <kbd>{{ prevArrowGlyph }}</kbd> <span>{{ t('tests.shortcutPrevious') }}</span>
         </div>
-        <div class="shortcut-hint__item">
-          <kbd>Esc</kbd> <span>{{ t('tests.shortcutFinish') }}</span>
-        </div>
+        <p class="shortcut-hint__item">{{ t('tests.shortcutScope') }}</p>
     </BasePopoverPanel>
   </div>
 </template>

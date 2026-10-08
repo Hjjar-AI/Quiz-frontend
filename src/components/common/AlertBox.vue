@@ -6,7 +6,7 @@
     :role="variant === 'danger' || variant === 'warning' ? 'alert' : 'status'"
     :aria-live="variant === 'danger' || variant === 'warning' ? 'assertive' : 'polite'"
   >
-    <i :class="icon"></i>
+    <i :class="icon" aria-hidden="true"></i>
     <span>{{ message }}</span>
   </div>
 </template>

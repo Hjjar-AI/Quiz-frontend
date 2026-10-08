@@ -40,7 +40,7 @@
             {{ opt.label }}
           </option>
         </select>
-        <i v-if="!multiple" class="bi bi-chevron-down base-select__arrow"></i>
+        <i v-if="!multiple" class="bi bi-chevron-down base-select__arrow" aria-hidden="true"></i>
       </div>
     </template>
   </BaseField>

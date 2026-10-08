@@ -7,7 +7,7 @@
 </template>
 <template #actions>
 <BaseButton variant="secondary" size="small" @click="refresh" :loading="isRefreshing">
-<i class="bi bi-arrow-repeat"></i> {{ t('common.refresh') }}
+<i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ t('common.refresh') }}
 </BaseButton>
 </template>
 <FeedbackRegion :error="flagStore.error" @dismiss="flagStore.error = null" />
@@ -43,15 +43,15 @@ icon="bi-flag-fill"
 @toggle-select="toggleSelection(flag.id)"
 >
 <template #actions>
-<BaseButton variant="secondary" size="small" @click="resolve(flag.id)"><i class="bi bi-check-circle"></i> {{ t('admin.flags.resolve') }}</BaseButton>
+<BaseButton variant="secondary" size="small" @click="resolve(flag.id)"><i class="bi bi-check-circle" aria-hidden="true"></i> {{ t('admin.flags.resolve') }}</BaseButton>
 </template>
 <template #meta>
-<span><i class="bi bi-pencil"></i> {{ t('admin.flags.author', { name: flag.question_author || t('questions.unknownAuthor') }) }}</span>
-<span><i class="bi bi-calendar"></i> {{ formatDate(flag.created_at) }}</span>
-<span v-if="flag.reason"><i class="bi bi-chat-dots"></i> {{ t('admin.flags.reason', { reason: flag.reason }) }}</span>
+<span><i class="bi bi-pencil" aria-hidden="true"></i> {{ t('admin.flags.author', { name: flag.question_author || t('questions.unknownAuthor') }) }}</span>
+<span><i class="bi bi-calendar" aria-hidden="true"></i> {{ formatDate(flag.created_at) }}</span>
+<span v-if="flag.reason"><i class="bi bi-chat-dots" aria-hidden="true"></i> {{ t('admin.flags.reason', { reason: flag.reason }) }}</span>
 </template>
 <template #body>
-<router-link :to="`/questions/edit/${flag.question_id}`" class="question-link"><i class="bi bi-eye"></i> {{ t('admin.flags.viewQuestion') }}</router-link>
+<router-link :to="`/questions/edit/${flag.question_id}`" class="question-link"><i class="bi bi-eye" aria-hidden="true"></i> {{ t('admin.flags.viewQuestion') }}</router-link>
 </template>
 </ModerationCard>
 </template>

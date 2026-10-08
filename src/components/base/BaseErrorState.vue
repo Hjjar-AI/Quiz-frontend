@@ -1,11 +1,11 @@
 <!-- frontend/src/components/base/BaseErrorState.vue -->
 <template>
   <div class="base-error-state">
-    <i class="bi bi-exclamation-triangle"></i>
+    <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
     <h4>{{ title || t('errors.dataLoadFailed') }}</h4>
     <p class="text-muted">{{ message || t('common.unexpectedError') }}</p>
     <BaseButton v-if="retry" variant="primary" @click="$emit('retry')">
-      <i class="bi bi-arrow-repeat"></i> {{ t('common.retry') }}
+      <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ t('common.retry') }}
     </BaseButton>
   </div>
 </template>

@@ -25,12 +25,12 @@
       :aria-haspopup="true"
       @click.stop="toggle"
     >
-      <i :class="icon"></i>
+      <i :class="icon" aria-hidden="true"></i>
       <span>{{ label }}</span>
       <i
         class="bi bi-chevron-down navbar-dropdown__arrow"
         :class="{ 'navbar-dropdown__arrow--open': isOpen }"
-      ></i>
+       aria-hidden="true"></i>
     </BaseButton>
     <BasePopoverPanel
         :open="isOpen"

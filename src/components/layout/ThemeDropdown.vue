@@ -12,11 +12,11 @@
       aria-haspopup="true"
       @click.stop="toggle"
     >
-      <i :class="currentThemeIcon"></i>
+      <i :class="currentThemeIcon" aria-hidden="true"></i>
       <i
         class="bi bi-chevron-down theme-dropdown__arrow"
         :class="{ 'theme-dropdown__arrow--open': isOpen }"
-      ></i>
+       aria-hidden="true"></i>
     </BaseButton>
 
     <BasePopoverPanel :open="isOpen" panel-class="theme-dropdown__menu">
@@ -39,7 +39,7 @@
             <span class="theme-dropdown__swatch-text"></span>
           </span>
           <span class="theme-dropdown__item-label">{{ t(`theme.${theme}`) }}</span>
-          <i v-if="theme === themePreference" class="bi bi-check2 theme-dropdown__item-check"></i>
+          <i v-if="theme === themePreference" class="bi bi-check2 theme-dropdown__item-check" aria-hidden="true"></i>
         </BaseButton>
       </section>
     </BasePopoverPanel>

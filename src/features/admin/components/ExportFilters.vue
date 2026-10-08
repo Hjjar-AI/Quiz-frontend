@@ -40,7 +40,7 @@
   <div class="export-filters">
     <div class="export-filters__header">
       <h4 class="export-filters__title">
-        <i class="bi bi-funnel"></i>
+        <i class="bi bi-funnel" aria-hidden="true"></i>
         {{ t('admin.database.filtersTitle') }}
       </h4>
       <BaseButton
@@ -128,7 +128,7 @@
             :disabled="aboutFields.length >= 10"
             @click="addAboutField"
           >
-            <i class="bi bi-plus-lg"></i>
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
             {{ t('admin.database.aboutAddField') }}
           </BaseButton>
         </div>
@@ -235,7 +235,7 @@
     </div>
     <!-- ── Live summary line ───────────────────────────────────── -->
     <p v-if="activeSummary" class="export-filters__summary">
-      <i class="bi bi-info-circle"></i>
+      <i class="bi bi-info-circle" aria-hidden="true"></i>
       {{ activeSummary }}
     </p>
   </div>

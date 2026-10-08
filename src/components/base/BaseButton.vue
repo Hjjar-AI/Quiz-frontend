@@ -13,7 +13,7 @@
     :aria-busy="loading || undefined"
     @click="handleClick"
   >
-    <i v-if="loading" class="bi bi-arrow-repeat spin-icon"></i>
+    <i v-if="loading" class="bi bi-arrow-repeat spin-icon" aria-hidden="true"></i>
     <i v-else-if="icon" :class="icon" aria-hidden="true"></i>
     <slot v-if="rawContent && !iconOnly" />
     <span v-else-if="!iconOnly && $slots.default" class="base-button__label"><slot /></span>

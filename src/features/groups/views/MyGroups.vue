@@ -24,7 +24,7 @@
           >
             <div class="group-card__header">
               <div class="group-card__icon">
-                <i class="bi bi-people-fill"></i>
+                <i class="bi bi-people-fill" aria-hidden="true"></i>
               </div>
               <div class="group-card__title">
                 <h4 class="group-card__name">{{ group.name }}</h4>

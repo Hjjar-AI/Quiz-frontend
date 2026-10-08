@@ -50,10 +50,10 @@
 
         <div class="change-password-form__actions">
           <BaseButton type="submit" variant="primary" :loading="authStore.isLoading">
-            <i class="bi bi-check-lg"></i> {{ t('common.save') }}
+            <i class="bi bi-check-lg" aria-hidden="true"></i> {{ t('common.save') }}
           </BaseButton>
           <BaseButton type="button" variant="secondary" @click="router.push('/')">
-            <i class="bi bi-x-lg"></i> {{ t('common.cancel') }}
+            <i class="bi bi-x-lg" aria-hidden="true"></i> {{ t('common.cancel') }}
           </BaseButton>
         </div>
       </form>

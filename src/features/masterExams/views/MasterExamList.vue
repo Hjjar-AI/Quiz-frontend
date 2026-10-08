@@ -13,14 +13,14 @@
               variant="primary"
               @click="router.push('/master-exams/new')"
             >
-              <i class="bi bi-plus-circle"></i> {{ t('masterExams.newButton') }}
+              <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('masterExams.newButton') }}
             </BaseButton>
             <BaseButton
               v-if="authStore.can('master_exams.drafts_library')"
               variant="secondary"
               @click="router.push('/master-exams/drafts')"
             >
-              <i class="bi bi-journal-text"></i> {{ t('masterExams.draftsButton') }}
+              <i class="bi bi-journal-text" aria-hidden="true"></i> {{ t('masterExams.draftsButton') }}
             </BaseButton>
           </div>
         </template>
@@ -47,7 +47,7 @@
             variant="primary"
             @click="router.push('/master-exams/new')"
           >
-            <i class="bi bi-plus-circle"></i> {{ t('masterExams.createFirst') }}
+            <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('masterExams.createFirst') }}
           </BaseButton>
         </template>
         <template #default="{ items }">

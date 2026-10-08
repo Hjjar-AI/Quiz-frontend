@@ -1,6 +1,7 @@
 // frontend/src/composables/useTestNavigation.js
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import { useConfigStore } from '@/stores/configStore'
+import { isModalOpen } from '@/composables/useModalStack'
 import { FALLBACK_MAX_CHOICES } from '@/utils/constants'
 
 export function useTestNavigation(options = {}) {
@@ -8,7 +9,6 @@ export function useTestNavigation(options = {}) {
     onNext = null,
     onPrevious = null,
     onAnswer = null,
-    onFinish = null,
     enabled,
   } = options
 
@@ -33,8 +33,10 @@ export function useTestNavigation(options = {}) {
   }
 
   function handleKeydown(e) {
-    if (!isEnabled()) return
-    if (isInputElement(e)) return
+    if (!isEnabled() || isModalOpen.value) return
+    if (e.defaultPrevented || e.ctrlKey || e.altKey || e.metaKey || e.shiftKey || e.repeat) return
+    if (!swipeContainer.value?.contains(e.target) || isInputElement(e)) return
+    if (e.target.closest('button, a, [role="button"], [role="menu"]')) return
 
     const key = e.key
 
@@ -53,18 +55,16 @@ export function useTestNavigation(options = {}) {
     } else if (key === 'ArrowLeft') {
       e.preventDefault()
       isRTL() ? onNext?.() : onPrevious?.()
-    } else if (key === 'Escape' && onFinish) {
-      onFinish()
     }
   }
 
   function handleTouchStart(e) {
-    if (!isEnabled()) return
+    if (!isEnabled() || isModalOpen.value) return
     touchStartX.value = e.changedTouches[0].screenX
   }
 
   function handleTouchEnd(e) {
-    if (!isEnabled()) return
+    if (!isEnabled() || isModalOpen.value) return
     const diff = e.changedTouches[0].screenX - touchStartX.value
     if (Math.abs(diff) < 50) return
 

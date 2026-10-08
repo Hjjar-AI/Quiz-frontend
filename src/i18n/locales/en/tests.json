@@ -18,7 +18,6 @@
     "examDescShort": "Timed, no feedback, auto-finish",
     "studyDescShort": "Explanation after each answer, overtime after timer ends",
     "recallDescShort": "Write your answer before the choices are revealed",
-
     "exam": "Exam",
     "study": "Study",
     "recall": "Answer before options",
@@ -26,7 +25,6 @@
     "studyTitle": "Set up self-study",
     "examDesc": "One answer per question. The score is calculated at the end.",
     "studyDesc": "Each question's explanation appears when you answer it.\nAll filters are optional.",
-
     "examStart": "Start exam",
     "studyStart": "Start self-study",
     "recallStart": "Start answer-first review",
@@ -36,12 +34,10 @@
     "examFinish": "Finish exam",
     "studyFinish": "Finish self-study",
     "retryLabel": "Try again",
-
     "resumeBox": "You have a saved session",
     "resume": "Resume",
     "discard": "Discard",
     "discardConfirm": "Are you sure you want to delete the saved progress?",
-
     "numQuestions": "Number of questions",
     "numAvailable": "Available: {count} questions",
     "numLoading": "Calculating available questions...",
@@ -55,16 +51,13 @@
     "blueprintNone": "No blueprint — choose a category or tag",
     "blueprintHint": "When a blueprint is selected, the category and tag are ignored and questions are distributed by the blueprint's weights.",
     "chooseSource": "Please choose a source",
-
     "examPickCategory": "Category",
     "examPickTag": "Tag",
     "examNoTags": "No tags",
     "examSourceHint": "Choose only one source to start the exam",
-
     "srsCard": "{count} questions due for smart review",
     "srsCardDesc": "Start a quick review with the questions most likely to be forgotten.",
     "srsStart": "Smart review",
-
     "questionProgress": "Question {current} of {total}",
     "pause": "Pause",
     "pauseAria": "Pause and save progress",
@@ -72,21 +65,17 @@
     "pauseFailed": "Pause failed",
     "resumeFailed": "Resume failed",
     "noSavedSession": "Could not resume the saved session. Start a new one.",
-
     "previous": "Previous",
     "next": "Next",
     "finish": "Finish",
     "finishShortcut": "Finish test",
-
     "unansweredWarning": "You have {count} unanswered questions. Do you want to finish?",
     "timeUp": "Time is up. The exam will be finished automatically.",
     "finishFailed": "Failed to finish the test. Please try again.",
-
     "answerSaveFailed": "Failed to save the answer. Please try again.",
     "confidenceSaveFailed": "Failed to update your confidence level. Please try again.",
     "navigationFailed": "Failed to navigate to the requested question. Please try again.",
     "invalidAnswer": "Invalid answer. Must be between 1 and {max}",
-
     "confidence": "I'm confident in my answer",
     "notConfident": "Not confident",
     "confidenceHint": "This question appears in the fragile-knowledge notebook if you aren't confident.",
@@ -99,7 +88,6 @@
     "revealOptions": "Save and reveal options",
     "recallPrivacyHint": "Your written recall is saved in this session and shown in the detailed results.",
     "recallSaveFailed": "Could not save your written answer.",
-
     "reflectionTitle": "Why did you get it wrong?",
     "reflectionHint": "This helps us schedule the question better.",
     "reflectionUnknown": "I didn't know",
@@ -108,15 +96,12 @@
     "reflectionGuessed": "I guessed",
     "reflectionThanks": "Thanks — the review schedule will adapt based on your answer.",
     "reflectionSaveFailed": "Failed to save the reason. Please try again.",
-
     "resultsTotal": "Total questions",
     "resultsCorrect": "Correct answers",
     "resultsAnswered": "Answered",
     "resultsTotalTime": "Total time",
     "resultsAccuracy": "Accuracy",
-
     "fragileCallout": "You answered {count} questions correctly but weren't confident about them. These are at risk of being forgotten — you'll find them in the Fragile Knowledge page for review.",
-
     "breakdown": "Performance analysis",
     "breakdownByCategory": "By category",
     "breakdownByDifficulty": "By difficulty",
@@ -124,20 +109,17 @@
     "printTableCorrect": "Correct",
     "printTableTotal": "Total",
     "printTableAccuracy": "Accuracy",
-
     "reviewDetail": "Detailed review",
     "reviewCorrect": "Correct",
     "reviewWrong": "Wrong",
     "reviewExplanation": "Explanation:",
     "reviewRecallAnswer": "Your answer before seeing the options:",
     "reviewConfidence": "Confidence",
-
     "retry": "Try again",
     "home": "Home",
     "share": "Share",
     "shareCopied": "Results copied",
     "shareFailed": "Could not copy results",
-
     "warningExamIncomplete": "The exam was finished before completion.",
     "warningStudyIncomplete": "Self-study was finished before completion.",
     "noResults": "No results",
@@ -150,17 +132,20 @@
     "resultsTagLabel": "Tag",
     "newQuote": "New quote",
     "shareText": "{title}: {correct}/{total} ({accuracy}%)",
-
     "genericTag": "General",
     "smartReviewTag": "Smart review",
     "caseStemTitle": "Clinical case",
     "questionImageAlt": "Question image",
- "setupTitle": "Study mode",
+    "setupTitle": "Study mode",
     "setupDesc": "Choose a mode and a source, then start the session.",
     "modeExamLabel": "Exam",
     "modeStudyLabel": "Self-review",
     "modeRecallLabel": "Answer before options",
-     "sourceMultiTag": "{count} tags",
-    "categoryPickerEmptyHint": "No category selected — the session will include all categories."
+    "sourceMultiTag": "{count} tags",
+    "categoryPickerEmptyHint": "No category selected — the session will include all categories.",
+    "submitAnswer": "Submit answer",
+    "shortcutScope": "Shortcuts work while focus is inside the question area. Number keys submit an answer.",
+    "leaveConfirm": "Leave this session? Saved answers can be resumed. Unsubmitted answers or text will be lost, and a timed exam may keep counting down.",
+    "waitForSave": "Please wait for the current action to finish before leaving."
   }
 }

@@ -384,10 +384,10 @@ export default {
       <li><strong>Navigation:</strong> Previous / Next buttons plus quick-nav dots.</li>
       <li><strong>Keyboard shortcuts:</strong>
         <ul>
-          <li><code>1</code>-<code>8</code>: pick an answer</li>
+          <li><code>1</code>-<code>8</code>: submit an answer</li>
           <li><code>→</code>: next question</li>
           <li><code>←</code>: previous question</li>
-          <li><code>Esc</code>: finish the exam</li>
+          <li>In self-study and recall, select an option and press <strong>Submit answer</strong>.</li>
         </ul>
       </li>
     </ul>
@@ -873,17 +873,17 @@ Source: Kaplan & Sadock's, 12th edition</code></pre>
         <tr><th>Key</th><th>Action</th><th>Where</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>1</code> - <code>8</code></td><td>Pick answer 1 to 8</td><td>Test questions</td></tr>
+        <tr><td><code>1</code> - <code>8</code></td><td>Submit answer 1 to 8</td><td>Test questions</td></tr>
         <tr><td><code>→</code> (right arrow)</td><td>Next question</td><td>Test questions</td></tr>
         <tr><td><code>←</code> (left arrow)</td><td>Previous question</td><td>Test questions</td></tr>
-        <tr><td><code>Esc</code></td><td>Finish the test</td><td>Test questions</td></tr>
+        <tr><td><code>Esc</code></td><td>Close a dismissable dialog</td><td>Dialogs</td></tr>
         <tr><td><code>Tab</code></td><td>Move between elements</td><td>Every page</td></tr>
         <tr><td><code>Enter</code></td><td>Confirm / activate the focused element</td><td>Every page</td></tr>
       </tbody>
     </table>
     <h4>Important notes</h4>
     <ul>
-      <li>Shortcuts do not fire when focus is inside a text field.</li>
+      <li>Question shortcuts work only while focus is inside the question area, outside inputs, links and buttons. Number keys submit an answer directly; radio arrow keys only select an option in self-study and recall until you press Submit answer.</li>
       <li>In the Arabic (RTL) interface, the left arrow means "next" and the right arrow means "previous".</li>
       <li>Shortcuts work with screen readers too.</li>
     </ul>

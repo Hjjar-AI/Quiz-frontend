@@ -16,7 +16,7 @@
             @click="refresh"
             :loading="store.isLoading"
           >
-            <i class="bi bi-arrow-repeat"></i>
+            <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
           </BaseButton>
         </template>
       <FeedbackRegion :error="store.error" @dismiss="store.error = null" />
@@ -64,14 +64,14 @@
       <!-- ═══ Member-facing advanced (features 1, 3) ═══════════════ -->
       <section v-if="store.summary" class="analytics-section">
         <h2 class="analytics-section__header">
-          <i class="bi bi-person-circle"></i>
+          <i class="bi bi-person-circle" aria-hidden="true"></i>
           {{ t('analytics.sectionMember') }}
         </h2>
 
         <div class="analytics-member-grid">
           <BaseCard>
             <h3 class="card-title">
-              <i class="card-title__icon bi bi-tags"></i>
+              <i class="card-title__icon bi bi-tags" aria-hidden="true"></i>
               {{ t('analytics.categoryMasteryTitle') }}
             </h3>
             <p class="report-accordion__desc">
@@ -91,7 +91,7 @@
 
           <BaseCard>
             <h3 class="card-title">
-              <i class="card-title__icon bi bi-calendar-check"></i>
+              <i class="card-title__icon bi bi-calendar-check" aria-hidden="true"></i>
               {{ t('analytics.streakHistoryTitle') }}
             </h3>
             <p class="report-accordion__desc">
@@ -114,7 +114,7 @@
       <!-- ═══ Admin advanced (features 4-8, lazy accordions) ══════ -->
       <section v-if="canViewAll" class="analytics-section">
         <h2 class="analytics-section__header">
-          <i class="bi bi-people-fill"></i>
+          <i class="bi bi-people-fill" aria-hidden="true"></i>
           {{ t('analytics.sectionAdmin') }}
         </h2>
 

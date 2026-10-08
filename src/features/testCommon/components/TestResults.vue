@@ -7,7 +7,7 @@
       page-class="test-results"
     >
       <BaseCard class="test-results__summary">
-        <p v-if="tag" class="text-muted"><i class="bi bi-tag"></i> {{ t('tests.resultsTagLabel') }}: <span class="test-tag">{{ tag }}</span></p>
+        <p v-if="tag" class="text-muted"><i class="bi bi-tag" aria-hidden="true"></i> {{ t('tests.resultsTagLabel') }}: <span class="test-tag">{{ tag }}</span></p>
         <AlertBox v-if="showWarning" variant="warning" :message="warningMessage" />
         <div class="test-results__score">
           <span class="score-number" :class="scoreClass">{{ formatNumber(correctCount) }}/{{ formatNumber(totalQuestions) }}</span>
@@ -22,10 +22,10 @@
         </div>
 
         <div v-if="fragileCount > 0" class="fragile-callout">
-          <i class="bi bi-shield-slash"></i>
+          <i class="bi bi-shield-slash" aria-hidden="true"></i>
           <div class="fragile-callout__body">
             <span class="fragile-callout__title">
-              <i class="bi bi-info-circle"></i> {{ t('questions.fragileTitle') }}
+              <i class="bi bi-info-circle" aria-hidden="true"></i> {{ t('questions.fragileTitle') }}
             </span>
             <p class="fragile-callout__text">
               {{ t('tests.fragileCallout', { count: fragileCount }) }}
@@ -35,7 +35,7 @@
         </div>
 
         <div v-if="categoryBreakdown.length || difficultyBreakdown.length" class="breakdown-section">
-          <h4><i class="bi bi-graph-up"></i> {{ t('tests.breakdown') }}</h4>
+          <h4><i class="bi bi-graph-up" aria-hidden="true"></i> {{ t('tests.breakdown') }}</h4>
           <div v-if="categoryBreakdown.length" class="breakdown-group">
             <h5>{{ t('tests.breakdownByCategory') }}</h5>
             <div v-for="cat in categoryBreakdown" :key="cat.name" class="breakdown-row">
@@ -76,7 +76,7 @@
 
         <div class="motivational-quote no-print">
           <Transition name="fade" mode="out-in">
-            <p :key="quoteKey"><i class="bi bi-quote"></i> {{ randomQuote }}</p>
+            <p :key="quoteKey"><i class="bi bi-quote" aria-hidden="true"></i> {{ randomQuote }}</p>
           </Transition>
           <BaseIconButton
             class="quote-refresh"
@@ -89,13 +89,13 @@
 
         <div class="test-results__actions no-print">
           <BaseButton variant="primary" @click="$emit('retry')">
-            <i class="bi bi-arrow-repeat"></i> {{ t(config.retryLabelKey) }}
+            <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ t(config.retryLabelKey) }}
           </BaseButton>
           <BaseButton variant="secondary" @click="$emit('home')">
-            <i class="bi bi-house"></i> {{ t('tests.home') }}
+            <i class="bi bi-house" aria-hidden="true"></i> {{ t('tests.home') }}
           </BaseButton>
           <BaseButton v-if="showShare" variant="secondary" @click="shareResults">
-            <i class="bi bi-share"></i> {{ t('tests.share') }}
+            <i class="bi bi-share" aria-hidden="true"></i> {{ t('tests.share') }}
           </BaseButton>
         </div>
       </BaseCard>

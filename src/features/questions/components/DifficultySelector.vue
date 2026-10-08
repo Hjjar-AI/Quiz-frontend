@@ -13,7 +13,7 @@
       @click="$emit('update:modelValue', opt.value)"
       :aria-pressed="modelValue === opt.value"
     >
-      <i :class="opt.icon"></i>
+      <i :class="opt.icon" aria-hidden="true"></i>
       {{ t(opt.labelKey) }}
     </BaseButton>
   </div>

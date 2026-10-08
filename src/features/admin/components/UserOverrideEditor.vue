@@ -85,7 +85,7 @@
         </div>
         <div class="override-editor__actions">
           <span v-if="hasUserChanges" class="role-header__dirty">
-            <i class="bi bi-exclamation-circle"></i>
+            <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
             {{ t('admin.permissions.unsavedChanges') }}
           </span>
           <BaseButton
@@ -103,26 +103,26 @@
             :disabled="!hasUserChanges || savingUser"
             @click="saveUserOverrides"
           >
-            <i class="bi bi-check-lg"></i> {{ t('common.save') }}
+            <i class="bi bi-check-lg" aria-hidden="true"></i> {{ t('common.save') }}
           </BaseButton>
         </div>
       </div>
 
       <div class="override-legend">
         <span class="override-legend__item override-legend__item--inherit">
-          <i class="bi bi-circle"></i> {{ t('admin.permissions.stateInherit') }}
+          <i class="bi bi-circle" aria-hidden="true"></i> {{ t('admin.permissions.stateInherit') }}
         </span>
         <span class="override-legend__item override-legend__item--on">
-          <i class="bi bi-check-circle-fill"></i> {{ t('admin.permissions.stateOn') }}
+          <i class="bi bi-check-circle-fill" aria-hidden="true"></i> {{ t('admin.permissions.stateOn') }}
         </span>
         <span class="override-legend__item override-legend__item--off">
-          <i class="bi bi-x-circle-fill"></i> {{ t('admin.permissions.stateOff') }}
+          <i class="bi bi-x-circle-fill" aria-hidden="true"></i> {{ t('admin.permissions.stateOff') }}
         </span>
       </div>
 
       <BaseCard v-for="group in capabilityGroups" :key="group.label" class="capability-group-card">
         <h4 class="capability-group-card__title">
-          <i class="bi bi-folder2-open"></i> {{ group.label }}
+          <i class="bi bi-folder2-open" aria-hidden="true"></i> {{ group.label }}
         </h4>
         <div class="capability-list">
           <div
@@ -138,7 +138,7 @@
                   v-if="roleHasCapability(cap)"
                   class="capability-row__role-tag capability-row__role-tag--on"
                 >
-                  <i class="bi bi-people-fill"></i>
+                  <i class="bi bi-people-fill" aria-hidden="true"></i>
                   {{ t('admin.permissions.grantedByRole') }}
                 </span>
                 <span v-else class="capability-row__role-tag capability-row__role-tag--off">

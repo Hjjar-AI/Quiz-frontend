@@ -3,7 +3,7 @@
 <template>
   <Transition name="slide-down">
     <div v-if="explanation" class="explanation-section">
-      <strong><i class="bi bi-lightbulb"></i> {{ t('tests.reviewExplanation') }}</strong>
+      <strong><i class="bi bi-lightbulb" aria-hidden="true"></i> {{ t('tests.reviewExplanation') }}</strong>
       <BaseMarkdown :text="explanation" />
     </div>
   </Transition>

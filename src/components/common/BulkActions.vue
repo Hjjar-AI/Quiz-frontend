@@ -2,7 +2,7 @@
 <template>
   <div class="bulk-actions">
     <span class="bulk-actions__count">
-      <i class="bi bi-check-square"></i>
+      <i class="bi bi-check-square" aria-hidden="true"></i>
       {{ t('questions.bulkSelectedCount', { count, label: resolvedItemLabel }) }}
     </span>
     <div class="bulk-actions__buttons">
@@ -12,7 +12,7 @@
         @click="$emit('verify')"
         :aria-label="resolvedVerifyLabel"
       >
-        <i class="bi bi-patch-check"></i> {{ resolvedVerifyLabel }}
+        <i class="bi bi-patch-check" aria-hidden="true"></i> {{ resolvedVerifyLabel }}
       </BaseButton>
       <BaseButton
         variant="secondary"
@@ -20,7 +20,7 @@
         @click="$emit('unverify')"
         :aria-label="resolvedUnverifyLabel"
       >
-        <i class="bi bi-x-circle"></i> {{ resolvedUnverifyLabel }}
+        <i class="bi bi-x-circle" aria-hidden="true"></i> {{ resolvedUnverifyLabel }}
       </BaseButton>
       <slot name="extra-actions" />
       <BaseButton
@@ -29,7 +29,7 @@
         @click="$emit('clear')"
         :aria-label="resolvedClearLabel"
       >
-        <i class="bi bi-x-lg"></i> {{ resolvedClearLabel }}
+        <i class="bi bi-x-lg" aria-hidden="true"></i> {{ resolvedClearLabel }}
       </BaseButton>
     </div>
   </div>

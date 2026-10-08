@@ -36,7 +36,7 @@
       @click="$emit('toggle')"
     >
       <span class="report-accordion__toggle-left">
-        <i :class="icon"></i>
+        <i :class="icon" aria-hidden="true"></i>
         <span class="report-accordion__title">{{ title }}</span>
         <i
           class="bi bi-chevron-down report-accordion__arrow"

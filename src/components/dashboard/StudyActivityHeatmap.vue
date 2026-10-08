@@ -12,7 +12,7 @@
       @click="expanded = !expanded"
     >
       <span class="heatmap-card__toggle-left">
-        <i class="bi bi-grid-3x3-gap"></i>
+        <i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>
         <span class="heatmap-card__toggle-title">{{ t('dashboard.heatmapTitle') }}</span>
         <i
           class="bi bi-chevron-down heatmap-card__toggle-arrow"
@@ -40,7 +40,7 @@
     <div v-show="expanded" id="heatmap-body" class="heatmap-card__body">
       <div class="heatmap-card__range">{{ visibleRangeLabel }}</div>
 
-      <div class="heatmap-scroll">
+      <div class="heatmap-scroll" aria-hidden="true">
         <!-- Month labels row -->
         <div v-if="monthLabels.length" class="heatmap-months" :style="monthsStyle">
           <span
@@ -81,8 +81,15 @@
         </div>
       </div>
 
+      <details class="accessible-data">
+        <summary>{{ t('a11y.heatmapData') }}</summary>
+        <ul class="accessible-data__list" tabindex="0" :aria-label="t('a11y.heatmapData')">
+          <li v-for="day in displayedDays" :key="day.date">{{ cellTooltip(day) }}</li>
+        </ul>
+      </details>
+
       <!-- Legend -->
-      <div class="heatmap-legend">
+      <div class="heatmap-legend" aria-hidden="true">
         <span class="heatmap-legend__label">{{ t('dashboard.heatmapLess') }}</span>
         <span class="heatmap-cell heatmap-cell--0"></span>
         <span class="heatmap-cell heatmap-cell--1"></span>

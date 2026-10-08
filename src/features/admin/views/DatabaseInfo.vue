@@ -10,7 +10,7 @@
       <div class="grid-2col">
         <BaseCard>
           <h4 class="card-title">
-            <i class="card-title__icon bi bi-info-circle"></i> {{ t('admin.database.infoTitle') }}
+            <i class="card-title__icon bi bi-info-circle" aria-hidden="true"></i> {{ t('admin.database.infoTitle') }}
           </h4>
           <BaseTableShell>
             <table class="table-shared">
@@ -54,7 +54,7 @@
         <div>
           <BaseCard>
             <h4 class="card-title">
-              <i class="card-title__icon bi bi-funnel"></i>
+              <i class="card-title__icon bi bi-funnel" aria-hidden="true"></i>
               {{ t('admin.database.filtersTitle') }}
             </h4>
             <p class="text-muted state-export-card__description">
@@ -65,7 +65,7 @@
 
           <BaseCard class="state-export-card">
             <h4 class="card-title">
-              <i class="card-title__icon bi bi-box-seam"></i>
+              <i class="card-title__icon bi bi-box-seam" aria-hidden="true"></i>
               {{ t('admin.database.exportStateTitle') }}
             </h4>
             <p class="text-muted state-export-card__description">
@@ -73,15 +73,15 @@
             </p>
             <div class="export-buttons">
               <BaseButton variant="secondary" @click="exportState(true, 'xlsx')">
-                <i class="bi bi-file-earmark-spreadsheet"></i>
+                <i class="bi bi-file-earmark-spreadsheet" aria-hidden="true"></i>
                 {{ t('admin.database.exportStateExcel') }}
               </BaseButton>
               <BaseButton variant="secondary" @click="exportState(true, 'json')">
-                <i class="bi bi-images"></i>
+                <i class="bi bi-images" aria-hidden="true"></i>
                 {{ t('admin.database.exportStateWithImages') }}
               </BaseButton>
               <BaseButton variant="secondary" @click="exportState(false, 'json')">
-                <i class="bi bi-file-earmark-code"></i>
+                <i class="bi bi-file-earmark-code" aria-hidden="true"></i>
                 {{ t('admin.database.exportStateWithoutImages') }}
               </BaseButton>
             </div>
@@ -89,7 +89,7 @@
 
           <BaseCard>
             <h4 class="card-title">
-              <i class="card-title__icon bi bi-download"></i>
+              <i class="card-title__icon bi bi-download" aria-hidden="true"></i>
               {{ t('admin.database.exportTitle') }}
             </h4>
 
@@ -111,7 +111,7 @@
 
           <BaseCard>
             <h4 class="card-title">
-              <i class="card-title__icon bi bi-life-preserver"></i>
+              <i class="card-title__icon bi bi-life-preserver" aria-hidden="true"></i>
               {{ t('admin.database.backupTitle') }}
             </h4>
             <p class="text-muted state-export-card__description">
@@ -123,14 +123,14 @@
                 @click="createBackup"
                 :loading="adminDatabaseStore.isLoading"
               >
-                <i class="bi bi-plus-circle"></i> {{ t('admin.database.createBackup') }}
+                <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('admin.database.createBackup') }}
               </BaseButton>
               <BaseButton
                 variant="secondary"
                 @click="fetchBackups"
                 :loading="adminDatabaseStore.isLoading"
               >
-                <i class="bi bi-list"></i> {{ t('admin.database.listBackups') }}
+                <i class="bi bi-list" aria-hidden="true"></i> {{ t('admin.database.listBackups') }}
               </BaseButton>
             </div>
 
@@ -144,7 +144,7 @@
                 <span>{{ backup.size }}</span>
                 <span>{{ formatDateTime(backup.modified) }}</span>
                 <BaseButton variant="danger" size="small" @click="openRestoreModal(backup.name)">
-                  <i class="bi bi-arrow-counterclockwise"></i>
+                  <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
                   {{ t('admin.database.restoreButton') }}
                 </BaseButton>
               </div>
@@ -153,7 +153,7 @@
 
           <BaseCard class="quality-card">
             <h4 class="card-title">
-              <i class="card-title__icon bi bi-clipboard-check"></i>
+              <i class="card-title__icon bi bi-clipboard-check" aria-hidden="true"></i>
               {{ t('admin.database.qualityTitle') }}
             </h4>
             <p class="text-muted state-export-card__description">
@@ -165,7 +165,7 @@
                 :loading="qualityLoading"
                 @click="loadQualityReport"
               >
-                <i class="bi bi-search"></i> {{ t('admin.database.qualityScan') }}
+                <i class="bi bi-search" aria-hidden="true"></i> {{ t('admin.database.qualityScan') }}
               </BaseButton>
               <BaseButton
                 variant="secondary"
@@ -173,7 +173,7 @@
                 :loading="qualityFlagging"
                 @click="flagQualityIssues"
               >
-                <i class="bi bi-flag"></i> {{ t('admin.database.qualityCreateFlags') }}
+                <i class="bi bi-flag" aria-hidden="true"></i> {{ t('admin.database.qualityCreateFlags') }}
               </BaseButton>
             </div>
 
@@ -216,7 +216,7 @@
           </BaseCard>
           <BaseCard class="danger-zone">
             <h4 class="card-title">
-              <i class="card-title__icon bi bi-exclamation-triangle"></i>
+              <i class="card-title__icon bi bi-exclamation-triangle" aria-hidden="true"></i>
               {{ t('admin.database.dangerTitle') }}
             </h4>
             <p class="danger-description">
@@ -246,7 +246,7 @@
               @click="clearDatabase"
               :loading="adminDatabaseStore.isLoading"
             >
-              <i class="bi bi-trash"></i> {{ t('admin.database.clearButton') }}
+              <i class="bi bi-trash" aria-hidden="true"></i> {{ t('admin.database.clearButton') }}
             </BaseButton>
           </BaseCard>
         </div>
@@ -282,7 +282,7 @@
             :loading="adminDatabaseStore.isLoading"
             @click="submitRestore"
           >
-            <i class="bi bi-arrow-counterclockwise"></i> {{ t('admin.database.restoreButton') }}
+            <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> {{ t('admin.database.restoreButton') }}
           </BaseButton>
         </template>
       </BaseModal>

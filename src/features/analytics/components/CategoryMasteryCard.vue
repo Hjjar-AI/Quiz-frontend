@@ -14,7 +14,7 @@
 <template>
   <div>
     <div v-if="!categories.length" class="report-empty">
-      <i class="bi bi-journal-x"></i>
+      <i class="bi bi-journal-x" aria-hidden="true"></i>
       {{ t('analytics.categoryMasteryEmpty') }}
     </div>
 
@@ -48,6 +48,8 @@
               v-if="cat.mastered"
               class="bi bi-patch-check-fill text-success"
               :title="t('analytics.categoryMasteryMastered')"
+              role="img"
+              :aria-label="t('analytics.categoryMasteryMastered')"
             ></i>
           </span>
           <div class="report-bar__track">

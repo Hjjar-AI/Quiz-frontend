@@ -3,15 +3,15 @@
   <slot v-if="!hasError" />
   <div v-else class="error-boundary">
     <div class="error-boundary__content">
-      <i class="bi bi-exclamation-triangle error-boundary__icon"></i>
+      <i class="bi bi-exclamation-triangle error-boundary__icon" aria-hidden="true"></i>
       <h3 class="error-boundary__title">{{ t('errors.boundaryTitle') }}</h3>
       <p class="error-boundary__message">{{ t('errors.boundaryMessage') }}</p>
       <div class="error-boundary__actions">
         <BaseButton variant="primary" @click="retry">
-          <i class="bi bi-arrow-repeat"></i> {{ t('common.retry') }}
+          <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ t('common.retry') }}
         </BaseButton>
         <BaseButton variant="secondary" @click="goHome">
-          <i class="bi bi-house"></i> {{ t('errors.backHome') }}
+          <i class="bi bi-house" aria-hidden="true"></i> {{ t('errors.backHome') }}
         </BaseButton>
       </div>
     </div>

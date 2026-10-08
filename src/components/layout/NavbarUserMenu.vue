@@ -26,7 +26,7 @@
       <i
         class="bi bi-chevron-down navbar__user-arrow"
         :class="{ 'navbar__user-arrow--open': isOpen }"
-      ></i>
+       aria-hidden="true"></i>
     </BaseButton>
 
     <BasePopoverPanel
@@ -40,17 +40,17 @@
         </div>
         <div class="navbar__user-divider"></div>
         <router-link to="/profile" class="nav-link">
-          <i class="bi bi-person-circle"></i> {{ t('nav.profile') }}
+          <i class="bi bi-person-circle" aria-hidden="true"></i> {{ t('nav.profile') }}
         </router-link>
         <router-link to="/change-password" class="nav-link">
-          <i class="bi bi-key"></i> {{ t('nav.changePassword') }}
+          <i class="bi bi-key" aria-hidden="true"></i> {{ t('nav.changePassword') }}
         </router-link>
         <router-link to="/preferences" class="nav-link">
-          <i class="bi bi-sliders"></i> {{ t('nav.settings') }}
+          <i class="bi bi-sliders" aria-hidden="true"></i> {{ t('nav.settings') }}
         </router-link>
         <div class="navbar__user-divider"></div>
         <BaseButton variant="ghost" size="small" raw-content class="nav-link nav-link--danger" @click="handleLogout">
-          <i class="bi bi-box-arrow-right"></i> {{ t('nav.logout') }}
+          <i class="bi bi-box-arrow-right" aria-hidden="true"></i> {{ t('nav.logout') }}
         </BaseButton>
     </BasePopoverPanel>
   </div>

@@ -98,7 +98,7 @@
               role="menuitem"
               @click="run('duplicate')"
             >
-              <i class="bi bi-files"></i>
+              <i class="bi bi-files" aria-hidden="true"></i>
               <span>{{ t('questions.duplicate') }}</span>
             </BaseButton>
 
@@ -110,7 +110,7 @@
               role="menuitem"
               @click="run('export')"
             >
-              <i class="bi bi-download"></i>
+              <i class="bi bi-download" aria-hidden="true"></i>
               <span>{{ t('questions.exportSingle') }}</span>
             </BaseButton>
 
@@ -122,7 +122,7 @@
               role="menuitem"
               @click="run('flag')"
             >
-              <i class="bi bi-flag"></i>
+              <i class="bi bi-flag" aria-hidden="true"></i>
               <span>{{ t('questions.flag') }}</span>
             </BaseButton>
 
@@ -136,7 +136,7 @@
               role="menuitem"
               @click="run('delete')"
             >
-              <i class="bi bi-trash"></i>
+              <i class="bi bi-trash" aria-hidden="true"></i>
               <span>{{ t('common.delete') }}</span>
             </BaseButton>
         </BasePopoverPanel>

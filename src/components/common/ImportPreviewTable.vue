@@ -2,7 +2,7 @@
 <template>
   <div class="import-preview-table">
     <div class="import-preview-table__header">
-      <h5><i class="bi bi-eye"></i> {{ t('admin.import.preview.title') }}</h5>
+      <h5><i class="bi bi-eye" aria-hidden="true"></i> {{ t('admin.import.preview.title') }}</h5>
       <BaseBadge variant="info">{{ t('admin.import.preview.badge', { total }) }}</BaseBadge>
     </div>
 

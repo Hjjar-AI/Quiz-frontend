@@ -5,14 +5,14 @@
     :class="[`master-exam-card--${status}`, { 'master-exam-card--makeup': isMakeup }]"
   >
     <div class="master-exam-card__icon">
-      <i :class="statusIcon"></i>
+      <i :class="statusIcon" aria-hidden="true"></i>
     </div>
 
     <div class="master-exam-card__body">
       <div class="d-flex justify-between align-center flex-wrap gap-2 mb-2">
         <h3 class="master-exam-card__name" dir="auto">{{ exam.name }}</h3>
         <BaseBadge :variant="statusVariant" status>
-          <i :class="statusIconSmall"></i>
+          <i :class="statusIconSmall" aria-hidden="true"></i>
           {{ statusLabel }}
         </BaseBadge>
       </div>
@@ -25,7 +25,7 @@
 
       <div v-if="showCountdown && countdownText" class="mt-2">
         <BaseBadge :variant="statusVariant" status>
-          <i class="bi bi-hourglass-split"></i>
+          <i class="bi bi-hourglass-split" aria-hidden="true"></i>
           {{ countdownText }}
         </BaseBadge>
       </div>
@@ -40,7 +40,7 @@
           size="small"
           @click="emitAction('edit')"
         >
-          <i class="bi bi-pencil"></i> {{ t('masterExams.edit') }}
+          <i class="bi bi-pencil" aria-hidden="true"></i> {{ t('masterExams.edit') }}
         </BaseButton>
         <BaseButton
           v-if="exam.can_edit_now && (exam.question_count || 0) > 0"
@@ -48,7 +48,7 @@
           size="small"
           @click="emitAction('preview')"
         >
-          <i class="bi bi-eye"></i> {{ t('masterExams.preview') }}
+          <i class="bi bi-eye" aria-hidden="true"></i> {{ t('masterExams.preview') }}
         </BaseButton>
         <BaseButton
           v-if="exam.status === 'draft'"
@@ -56,7 +56,7 @@
           size="small"
           @click="emitAction('publish')"
         >
-          <i class="bi bi-send"></i> {{ t('masterExams.publish') }}
+          <i class="bi bi-send" aria-hidden="true"></i> {{ t('masterExams.publish') }}
         </BaseButton>
         <BaseButton
           v-if="exam.status !== 'draft' && exam.status !== 'cancelled'"
@@ -64,7 +64,7 @@
           size="small"
           @click="emitAction('view-results')"
         >
-          <i class="bi bi-bar-chart"></i> {{ t('masterExams.viewResults') }}
+          <i class="bi bi-bar-chart" aria-hidden="true"></i> {{ t('masterExams.viewResults') }}
         </BaseButton>
         <BaseButton
           v-if="exam.status === 'scheduled' || exam.status === 'active'"
@@ -72,14 +72,14 @@
           size="small"
           @click="emitAction('cancel')"
         >
-          <i class="bi bi-x-circle"></i> {{ t('masterExams.cancel') }}
+          <i class="bi bi-x-circle" aria-hidden="true"></i> {{ t('masterExams.cancel') }}
         </BaseButton>
       </template>
 
       <!-- Participant actions -->
       <template v-else>
         <BaseButton v-if="canStart" variant="primary" size="small" @click="emitAction('start')">
-          <i class="bi bi-play-circle"></i> {{ t('masterExams.start') }}
+          <i class="bi bi-play-circle" aria-hidden="true"></i> {{ t('masterExams.start') }}
         </BaseButton>
 
         <BaseButton
@@ -88,7 +88,7 @@
           size="small"
           @click="emitAction('resume')"
         >
-          <i class="bi bi-play-circle-fill"></i> {{ t('masterExams.resume') }}
+          <i class="bi bi-play-circle-fill" aria-hidden="true"></i> {{ t('masterExams.resume') }}
         </BaseButton>
 
         <BaseButton
@@ -97,17 +97,17 @@
           size="small"
           @click="emitAction('start-makeup')"
         >
-          <i class="bi bi-arrow-repeat"></i> {{ t('masterExams.makeup') }}
+          <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ t('masterExams.makeup') }}
         </BaseButton>
 
         <template v-else-if="hasCompleted">
           <BaseButton variant="secondary" size="small" @click="emitAction('view-my-results')">
-            <i class="bi bi-trophy"></i> {{ t('masterExams.viewMyResults') }}
+            <i class="bi bi-trophy" aria-hidden="true"></i> {{ t('masterExams.viewMyResults') }}
           </BaseButton>
         </template>
 
         <span v-else class="text-muted master-exam-card__locked-hint">
-          <i class="bi bi-lock"></i>
+          <i class="bi bi-lock" aria-hidden="true"></i>
           {{
             exam.status === 'cancelled'
               ? t('masterExams.cancelledLabel')

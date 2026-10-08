@@ -8,7 +8,7 @@
     >
         <template #actions>
           <BaseButton variant="secondary" @click="router.push('/master-exams')">
-            <i class="bi bi-x-lg"></i> {{ t('common.cancel') }}
+            <i class="bi bi-x-lg" aria-hidden="true"></i> {{ t('common.cancel') }}
           </BaseButton>
           <BaseButton
             variant="primary"
@@ -16,14 +16,14 @@
             :disabled="isFrozen"
             @click="save"
           >
-            <i class="bi bi-check-lg"></i> {{ t('common.save') }}
+            <i class="bi bi-check-lg" aria-hidden="true"></i> {{ t('common.save') }}
           </BaseButton>
         </template>
       <div
         v-if="isFrozen"
         class="master-exam-runner__preview-banner master-exam-editor__frozen-banner"
       >
-        <i class="bi bi-lock"></i>
+        <i class="bi bi-lock" aria-hidden="true"></i>
         <span>{{ t('masterExams.frozen') }}</span>
       </div>
 
@@ -36,7 +36,7 @@
 
       <BaseCard>
         <h3 class="master-exam-editor__section-title">
-          <i class="bi bi-info-circle"></i>
+          <i class="bi bi-info-circle" aria-hidden="true"></i>
           {{ t('masterExams.sectionInfo') }}
         </h3>
         <FormGrid>
@@ -74,7 +74,7 @@
 
       <BaseCard>
         <h3 class="master-exam-editor__section-title">
-          <i class="bi bi-calendar-event"></i>
+          <i class="bi bi-calendar-event" aria-hidden="true"></i>
           {{ t('masterExams.sectionSchedule') }}
         </h3>
         <FormGrid>
@@ -108,7 +108,7 @@
 
       <BaseCard>
         <h3 class="master-exam-editor__section-title">
-          <i class="bi bi-people"></i>
+          <i class="bi bi-people" aria-hidden="true"></i>
           {{ t('masterExams.sectionAudience') }}
         </h3>
         <FormGrid>
@@ -143,7 +143,7 @@
 
       <BaseCard>
         <h3 class="master-exam-editor__section-title">
-          <i class="bi bi-sliders"></i>
+          <i class="bi bi-sliders" aria-hidden="true"></i>
           {{ t('masterExams.sectionAdvanced') }}
         </h3>
         <FormGrid>
@@ -183,7 +183,7 @@
 
       <BaseCard>
         <h3 class="master-exam-editor__section-title">
-          <i class="bi bi-list-ol"></i>
+          <i class="bi bi-list-ol" aria-hidden="true"></i>
           {{ t('masterExams.sectionQuestions') }}
           <span class="master-exam-editor__section-title-count">
             {{ t('masterExams.questionCount', { n: form.question_ids.length }) }}
@@ -241,17 +241,17 @@
                   small
                   class="master-exam-question-row__draft-badge"
                 >
-                  <i class="bi bi-pencil"></i> {{ t('masterExams.draftBadge') }}
+                  <i class="bi bi-pencil" aria-hidden="true"></i> {{ t('masterExams.draftBadge') }}
                 </BaseBadge>
                 <span v-if="questionsById[qid]?.difficulty">
-                  <i class="bi bi-speedometer"></i>
+                  <i class="bi bi-speedometer" aria-hidden="true"></i>
                   {{ difficultyLabel(questionsById[qid].difficulty) }}
                 </span>
                 <span v-if="questionsById[qid]?.category_name">
-                  <i class="bi bi-folder2"></i> {{ questionsById[qid].category_name }}
+                  <i class="bi bi-folder2" aria-hidden="true"></i> {{ questionsById[qid].category_name }}
                 </span>
                 <span v-if="questionsById[qid]?.case?.key">
-                  <i class="bi bi-journal-medical"></i> {{ questionsById[qid].case.key }}
+                  <i class="bi bi-journal-medical" aria-hidden="true"></i> {{ questionsById[qid].case.key }}
                 </span>
               </div>
             </div>
@@ -277,20 +277,20 @@
 
         <div class="master-exam-editor__toolbar">
           <BaseButton variant="primary" :disabled="isFrozen" @click="pickerOpen = true">
-            <i class="bi bi-plus-circle"></i> {{ t('masterExams.addFromBank') }}
+            <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('masterExams.addFromBank') }}
           </BaseButton>
           <BaseButton
             variant="secondary"
             :disabled="isFrozen"
             @click="draftFormOpen = !draftFormOpen"
           >
-            <i class="bi bi-pencil-square"></i> {{ t('masterExams.createDraft') }}
+            <i class="bi bi-pencil-square" aria-hidden="true"></i> {{ t('masterExams.createDraft') }}
           </BaseButton>
         </div>
 
         <div v-if="draftFormOpen">
           <div class="master-exam-draft-form__header">
-            <i class="bi bi-pencil-square"></i>
+            <i class="bi bi-pencil-square" aria-hidden="true"></i>
             <h4>{{ t('masterExams.draftNew') }}</h4>
             <BaseIconButton
               icon="bi bi-x-lg"
@@ -327,7 +327,7 @@
               @update:model-value="onPickerSearch"
             />
             <BaseButton variant="secondary" size="small" @click="loadPicker">
-              <i class="bi bi-arrow-repeat"></i> {{ t('common.refresh') }}
+              <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ t('common.refresh') }}
             </BaseButton>
           </div>
 
@@ -357,10 +357,10 @@
                 <div class="master-exam-picker__row-text">{{ q.question }}</div>
                 <div class="master-exam-picker__row-meta">
                   <BaseBadge variant="secondary" small class="master-exam-picker__row-badge">
-                    <i class="bi bi-speedometer"></i> {{ difficultyLabel(q.difficulty) }}
+                    <i class="bi bi-speedometer" aria-hidden="true"></i> {{ difficultyLabel(q.difficulty) }}
                   </BaseBadge>
                   <BaseBadge v-if="q.category_name" variant="info" small class="master-exam-picker__row-badge">
-                    <i class="bi bi-folder2"></i> {{ q.category_name }}
+                    <i class="bi bi-folder2" aria-hidden="true"></i> {{ q.category_name }}
                   </BaseBadge>
                   <BaseBadge
                     v-if="form.question_ids.includes(q.id)"
@@ -368,7 +368,7 @@
                     small
                     class="master-exam-picker__row-badge"
                   >
-                    <i class="bi bi-check-lg"></i> {{ t('masterExams.pickerAlready') }}
+                    <i class="bi bi-check-lg" aria-hidden="true"></i> {{ t('masterExams.pickerAlready') }}
                   </BaseBadge>
                 </div>
               </div>

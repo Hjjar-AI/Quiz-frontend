@@ -5,6 +5,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useMasterExamStore } from '@/stores/masterExamStore'
 import { useMasterExamAttemptStore } from '@/stores/masterExamAttemptStore'
 import { useDialog } from '@/composables/useDialog'
+import { useSessionLeaveGuard } from '@/composables/useSessionLeaveGuard'
+import { useCountdownAnnouncements } from '@/composables/useCountdownAnnouncements'
 import { useAutoRefresh } from '@/composables/useAutoRefresh'
 import { formatTime } from '@/utils/timer'
 
@@ -26,7 +28,11 @@ export function useMasterExamRunner() {
   let timerInterval = null
 
   const currentIndex = computed(() => attemptStore.currentIndex)
-  const answerSubmitting = computed(() => attemptStore.isAnswerLoading)
+  const answerSubmitting = computed(() => attemptStore.isAnswerLoading || finishing.value)
+  useSessionLeaveGuard({
+    active: () => Boolean(attemptStore.sessionId) && !attemptStore.isComplete,
+    busy: () => answerSubmitting.value,
+  })
   const currentSavedAnswer = computed(() => {
     const raw = attemptStore.answers[String(attemptStore.currentQuestionId)]
     return raw ? raw.answer : null
@@ -47,6 +53,12 @@ export function useMasterExamRunner() {
     if (!attemptStore.deadlineAt) return null
     const serverNow = nowTick.value + attemptStore.serverOffsetMs
     return Math.max(0, new Date(attemptStore.deadlineAt).getTime() - serverNow)
+  })
+  const { announcement: timerAnnouncement, status: timerStatus } = useCountdownAnnouncements({
+    remaining: () => remainingMs.value === null ? null : remainingMs.value / 1000,
+    total: () => attemptStore.durationMinutes * 60,
+    sessionKey: () => attemptStore.sessionId,
+    announceTimeUp: false, // The grace-window alert owns the time-up announcement.
   })
   const graceMs = computed(() => {
     if (!attemptStore.deadlineAt) return null
@@ -245,6 +257,8 @@ export function useMasterExamRunner() {
     currentSavedAnswer,
     currentConfidence,
     timerDisplay,
+    timerStatus,
+    timerAnnouncement,
     graceDisplay,
     timerClass,
     beginCountdown,

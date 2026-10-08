@@ -9,6 +9,7 @@ import { ref, computed, onBeforeUnmount } from 'vue'
 // Module-level stack. Insertion order = visual stacking order.
 // Never exported; consumers go through `useModalStack()`.
 const openStack = ref([])
+export const isModalOpen = computed(() => openStack.value.length > 0)
 let nextId = 0
 
 export function useModalStack() {

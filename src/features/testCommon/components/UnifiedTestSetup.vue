@@ -49,7 +49,7 @@
             :checked="mode === m.value"
             @change="setMode(m.value)"
           />
-          <span class="mode-card__icon"><i :class="m.icon"></i></span>
+          <span class="mode-card__icon"><i :class="m.icon" aria-hidden="true"></i></span>
           <span class="mode-card__body">
             <strong class="mode-card__title">{{ t(m.titleKey) }}</strong>
             <small class="mode-card__desc">{{ t(m.descKey) }}</small>
@@ -80,7 +80,7 @@
           :aria-selected="source === s.value"
           @click="setSource(s.value)"
         >
-          <i :class="s.icon"></i>
+          <i :class="s.icon" aria-hidden="true"></i>
           <span>{{ t(s.labelKey) }}</span>
           <BaseBadge v-if="s.badge != null" small class="source-tab__badge">{{ s.badge }}</BaseBadge>
         </BaseChip>
@@ -121,17 +121,17 @@
         />
 
         <p v-else-if="source === 'bookmarks'" class="source-note">
-          <i class="bi bi-bookmark-heart"></i>
+          <i class="bi bi-bookmark-heart" aria-hidden="true"></i>
           {{ t('tests.sourceBookmarksNote', { count: bookmarkStore.count }) }}
         </p>
 
         <p v-else-if="source === 'srs'" class="source-note">
-          <i class="bi bi-arrow-repeat"></i>
+          <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
           {{ t('tests.sourceSrsNote', { count: wrongAnswerStore.srsDueCount }) }}
         </p>
 
         <p v-else class="source-note source-note--muted">
-          <i class="bi bi-info-circle"></i>
+          <i class="bi bi-info-circle" aria-hidden="true"></i>
           {{ t('tests.chooseSource') }}
         </p>
       </div>
@@ -140,10 +140,10 @@
     <!-- ═══ Refinements (optional, collapsed) ════════════════════ -->
     <details class="unified-setup__refinements">
       <summary class="unified-setup__refinements-summary">
-        <i class="bi bi-sliders"></i>
+        <i class="bi bi-sliders" aria-hidden="true"></i>
         {{ t('tests.refinements') }}
         <span class="unified-setup__optional">{{ t('common.optional') }}</span>
-        <i class="bi bi-chevron-down unified-setup__refinements-arrow"></i>
+        <i class="bi bi-chevron-down unified-setup__refinements-arrow" aria-hidden="true"></i>
       </summary>
 
       <div class="unified-setup__refinements-body">
@@ -194,7 +194,7 @@
     </div>
 
     <p v-if="!canStart && !loading" class="no-questions-hint">
-      <i class="bi bi-info-circle"></i> {{ hintForDisabled }}
+      <i class="bi bi-info-circle" aria-hidden="true"></i> {{ hintForDisabled }}
     </p>
   </form>
 </template>

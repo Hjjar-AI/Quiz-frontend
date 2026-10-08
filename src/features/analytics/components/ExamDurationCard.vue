@@ -10,7 +10,7 @@
 <template>
   <div>
     <div v-if="!buckets.length || totalSessions === 0" class="report-empty">
-      <i class="bi bi-stopwatch"></i>
+      <i class="bi bi-stopwatch" aria-hidden="true"></i>
       {{ t('analytics.examDurationEmpty') }}
     </div>
 

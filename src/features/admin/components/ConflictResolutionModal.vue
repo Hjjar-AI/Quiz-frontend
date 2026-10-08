@@ -8,7 +8,7 @@
     @update:is-open="onModalClose"
   >
     <p class="author-mapping__intro">
-      <i class="bi bi-intersect"></i>
+      <i class="bi bi-intersect" aria-hidden="true"></i>
       {{ t('admin.import.conflictReviewIntro', { count: conflicts.length }) }}
     </p>
 
@@ -53,7 +53,7 @@
     <template #footer>
       <BaseButton variant="secondary" @click="cancel">{{ t('common.cancel') }}</BaseButton>
       <BaseButton variant="primary" @click="confirmDecisions">
-        <i class="bi bi-check-lg"></i>
+        <i class="bi bi-check-lg" aria-hidden="true"></i>
         {{ t('admin.import.conflictContinue') }}
       </BaseButton>
     </template>

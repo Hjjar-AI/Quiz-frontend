@@ -20,7 +20,7 @@
 <template>
   <div class="case-stem-panel">
     <div class="case-stem-panel__header">
-      <i class="bi bi-journal-medical"></i>
+      <i class="bi bi-journal-medical" aria-hidden="true"></i>
       <span>{{ t('tests.caseStemTitle') }}</span>
     </div>
     <div class="case-stem-panel__body">

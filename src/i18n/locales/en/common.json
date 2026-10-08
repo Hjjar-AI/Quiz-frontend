@@ -7,7 +7,6 @@
     "online": "Connection restored",
     "version": "Version {version}"
   },
-
   "language": {
     "label": "Language",
     "switch": "Change language",
@@ -15,7 +14,6 @@
     "en": "English",
     "changed": "Language changed to {language}"
   },
-
   "theme": {
     "label": "Theme",
     "auto": "System",
@@ -41,7 +39,6 @@
     },
     "changed": "Theme changed to {theme}"
   },
-
   "time": {
     "justNow": "Just now",
     "secondsAgo": "{n} seconds ago",
@@ -51,7 +48,6 @@
     "monthsAgo": "{n} months ago",
     "yearsAgo": "{n} years ago"
   },
-
   "common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -103,7 +99,6 @@
     "areYouSure": "Are you sure?",
     "discard": "Discard"
   },
-
   "emptyStates": {
     "firstUse": "Nothing here yet",
     "noResults": "No results",
@@ -111,7 +106,6 @@
     "unavailable": "Content unavailable",
     "generic": "No content"
   },
-
   "nav": {
     "home": "Home",
     "content": "Content",
@@ -159,7 +153,6 @@
     "closeMenu": "Close menu",
     "permissions": "Permissions"
   },
-
   "errors": {
     "404Title": "404",
     "404Heading": "Page not found",
@@ -179,7 +172,6 @@
     "serverError": "Server error",
     "requestCancelled": "Request cancelled"
   },
-
   "validation": {
     "required": "This field is required",
     "usernameMin": "Username must be at least 3 characters",
@@ -194,7 +186,6 @@
     "correctAnswerRange": "Correct answer must be between 1 and {max}",
     "correctAnswerEmpty": "Please choose a correct answer among the filled choices"
   },
-
   "notifications": {
     "saved": "Saved",
     "created": "Created",
@@ -208,7 +199,6 @@
     "chartExported": "Chart exported",
     "exportingAs": "Exporting data as {format}",
     "fileTypeNotAllowed": "File type not allowed: {name}",
-
     "questionCreated": "Question added",
     "questionUpdated": "Question updated",
     "questionDeleted": "Question deleted",
@@ -229,7 +219,6 @@
     "questionBulkTagsFailed": "Failed to update tags",
     "questionsLoadFailed": "Failed to load questions",
     "unverifiedQuestionsLoadFailed": "Failed to load unverified questions",
-
     "userCreated": "User added",
     "userUpdated": "User updated",
     "userDeleted": "User deleted",
@@ -243,7 +232,6 @@
     "userToggleFailed": "Failed to toggle user status",
     "userResetPasswordFailed": "Failed to reset the password",
     "activeUsersLoadFailed": "Failed to load active users",
-
     "categoryCreated": "Category added",
     "categoryUpdated": "Category updated",
     "categoryDeleted": "Category deleted",
@@ -251,16 +239,13 @@
     "categoryCreateFailed": "Failed to add the category",
     "categoryUpdateFailed": "Failed to update the category",
     "categoryDeleteFailed": "Failed to delete the category",
-
     "flagResolved": "Report resolved",
     "flagCreated": "Question reported for review",
     "flagsLoadFailed": "Failed to load reports",
     "flagResolveFailed": "Failed to resolve the report",
     "flagCreateFailed": "Failed to report the question",
-
     "bookmarksLoadFailed": "Failed to load bookmarks",
     "bookmarkToggleFailed": "Failed to update the bookmark",
-
     "authLoginSuccess": "Signed in successfully",
     "authLogoutSuccess": "Signed out",
     "authPasswordChanged": "Password changed successfully",
@@ -274,7 +259,6 @@
     "pauseFailed": "Pause failed",
     "resumeFailed": "Resume failed",
     "progressDeleteFailed": "Failed to delete progress",
-
     "backupCreated": "Backup created",
     "backupRestored": "Database restored",
     "databaseCleared": "Database cleared",
@@ -283,7 +267,6 @@
     "backupRestoreFailed": "Failed to restore the database",
     "databaseClearFailed": "Failed to clear the database",
     "dbInfoLoadFailed": "Failed to load database information",
-
     "settingsUpdated": "Settings updated",
     "settingsLoadFailed": "Failed to load settings",
     "settingsUpdateFailed": "Failed to update settings",
@@ -294,7 +277,6 @@
     "seedFailed": "Failed to seed sample questions",
     "verificationStatsLoadFailed": "Failed to load verification statistics",
     "analyticsLoadFailed": "Failed to load analytics",
-
     "blueprintCreated": "Blueprint created",
     "blueprintUpdated": "Blueprint updated",
     "blueprintDeleted": "Blueprint deleted",
@@ -303,7 +285,6 @@
     "blueprintCreateFailed": "Failed to create the blueprint",
     "blueprintUpdateFailed": "Failed to update the blueprint",
     "blueprintDeleteFailed": "Failed to delete the blueprint",
-
     "groupCreated": "Group created",
     "groupUpdated": "Group updated",
     "groupDeleted": "Group deleted",
@@ -320,7 +301,6 @@
     "groupMemberAddFailed": "Failed to add members",
     "groupMemberRemoveFailed": "Failed to remove the member",
     "groupStreakLoadFailed": "Failed to load the study streak",
-
     "masterExamCreated": "Master exam created",
     "masterExamUpdated": "Exam updated",
     "masterExamDeleted": "Exam deleted",
@@ -333,44 +313,37 @@
     "masterExamDraftUpdated": "Draft updated",
     "masterExamDraftDeleted": "Draft deleted",
     "masterExamFlagged": "Reported — will reach the supervisor immediately",
-
     "plannerUpdated": "Plan updated",
     "plannerDeleted": "Plan deleted",
     "plannerLoadFailed": "Failed to load the study plan",
     "plannerUpdateFailed": "Failed to update the plan",
     "plannerProgressFailed": "Failed to record progress",
     "plannerDeleteFailed": "Failed to delete the plan",
-
     "testHistoryMyLoadFailed": "Failed to load your test history",
     "testHistoryAllLoadFailed": "Failed to load user history",
-
     "mistakesLoadFailed": "Failed to load the mistake notebook",
     "fragileLoadFailed": "Failed to load fragile questions",
     "summaryLoadFailed": "Failed to load the attempt summary",
     "dueCountLoadFailed": "Failed to load the due-review count",
     "studyNowLoadFailed": "Failed to assemble the study session"
   },
-
   "difficulty": {
     "label": "Difficulty",
     "easy": "Easy",
     "medium": "Medium",
     "hard": "Hard"
   },
-
   "roles": {
     "admin": "Administrator",
     "moderator": "Moderator",
     "member": "Member"
   },
-
   "timer": {
     "stopwatch": "Stopwatch",
     "remaining": "Time remaining",
     "overtime": "Overtime",
     "paused": "Paused"
   },
-
   "a11y": {
     "footerNav": "Footer links",
     "bottomNav": "Bottom navigation",
@@ -380,9 +353,22 @@
     "notifications": "Notifications",
     "closeNotification": "Close notification",
     "adminMode": "Admin mode",
-    "streakTooltip": "Study streak: {current} days — longest: {longest} days"
+    "streakTooltip": "Study streak: {current} days — longest: {longest} days",
+    "chartData": "View chart data",
+    "chartLabel": "Label",
+    "chartSeries": "Series {number}",
+    "chartValue": "Value",
+    "heatmapData": "View daily activity",
+    "halfTime": "Half of the allotted time remains.",
+    "fiveMinutes": "Five minutes remain.",
+    "oneMinute": "One minute remains.",
+    "timeLimitReached": "Time limit reached.",
+    "timerWarning": "Time running low",
+    "timerCritical": "Very little time remains",
+    "timerOvertime": "Overtime",
+    "timerRemaining": "Time remaining",
+    "timerElapsed": "Elapsed time"
   },
-
   "ui": {
     "confirmTitle": "Confirm",
     "warningTitle": "Warning",
@@ -414,7 +400,6 @@
     "dragDropDefaultLabel": "Drag and drop file here",
     "browseDefaultLabel": "Or click to browse"
   },
-
   "markdown": {
     "helpLink": "Markdown guide",
     "helpLinkAria": "Markdown guide",
@@ -447,7 +432,6 @@
       "ol": "Ordered list"
     }
   },
-
   "utility": {
     "telegramGuessedExplanation": "⚠️ The correct answer was auto-guessed from the poll results — please review.",
     "invalidJsonFile": "Invalid JSON file",
@@ -462,5 +446,59 @@
     "chooseJsonFirst": "Choose a JSON file first",
     "importFailed": "Import failed",
     "importSuccess": "Imported successfully"
+  },
+  "routes": {
+    "Login": "Sign in",
+    "ChangePassword": "Change password",
+    "Profile": "Profile",
+    "Dashboard": "Dashboard",
+    "QuestionsList": "Questions",
+    "QuestionAdd": "Add question",
+    "QuestionEdit": "Edit question",
+    "ReviewQueue": "Review queue",
+    "WrongAnswers": "Mistake notebook",
+    "FragileAnswers": "Fragile knowledge",
+    "Bookmarks": "Bookmarks",
+    "KnowledgeMap": "Knowledge map",
+    "ExamSetup": "Exam setup",
+    "TestSetup": "Study setup",
+    "RecallSetup": "Recall setup",
+    "ExamQuestion": "Exam",
+    "StudyQuestion": "Self-study",
+    "RecallQuestion": "Answer before options",
+    "ExamResults": "Exam results",
+    "StudyResults": "Study results",
+    "RecallResults": "Recall results",
+    "About": "About",
+    "PrivacyPolicy": "Privacy policy",
+    "AdminUsers": "Users",
+    "AdminSettings": "Settings",
+    "VerificationStats": "Verification statistics",
+    "DatabaseInfo": "Database",
+    "AdminImport": "Import",
+    "AdminFlags": "Reports",
+    "ActiveUsers": "Active users",
+    "AdminTags": "Tags",
+    "AdminGroups": "Manage groups",
+    "AdminGroupDetail": "Group details",
+    "AdminBlueprints": "Exam blueprints",
+    "AdminHistory": "Session history",
+    "AdminPermissions": "Permissions",
+    "Analytics": "Analytics",
+    "Preferences": "Preferences",
+    "History": "History",
+    "Categories": "Categories",
+    "Manual": "Manual",
+    "StudyPlanner": "Study planner",
+    "MyGroups": "My groups",
+    "MasterExamsList": "Master exams",
+    "MasterExamCreate": "Create master exam",
+    "MasterExamDrafts": "Exam drafts",
+    "MasterExamEdit": "Edit master exam",
+    "MasterExamAttempt": "Master exam",
+    "MasterExamMyResult": "My exam result",
+    "MasterExamResults": "Master exam results",
+    "ComponentShowcase": "Component showcase",
+    "NotFound": "Page not found"
   }
 }

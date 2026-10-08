@@ -31,7 +31,7 @@
     @update:is-open="onModalClose"
   >
     <p class="author-mapping__intro">
-      <i class="bi bi-info-circle"></i>
+      <i class="bi bi-info-circle" aria-hidden="true"></i>
       {{ t('admin.import.mappingIntro', { count: authors.length }) }}
     </p>
 
@@ -39,7 +39,7 @@
       <div v-for="author in authors" :key="author.name" class="author-mapping__row">
         <div class="author-mapping__header">
           <div class="author-mapping__identity">
-            <i class="bi bi-person-circle"></i>
+            <i class="bi bi-person-circle" aria-hidden="true"></i>
             <span class="author-mapping__name">{{ author.name }}</span>
             <span v-if="author.question_count" class="author-mapping__count">
               {{ t('admin.import.mappingQuestionCount', { count: author.question_count }) }}
@@ -110,7 +110,7 @@
     </div>
 
     <p v-if="!usersAvailable" class="author-mapping__warning">
-      <i class="bi bi-exclamation-triangle"></i>
+      <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
       {{ t('admin.import.mappingUsersUnavailable') }}
     </p>
 
@@ -119,7 +119,7 @@
         {{ t('common.cancel') }}
       </BaseButton>
       <BaseButton variant="primary" :disabled="!allDecided" @click="confirmMapping">
-        <i class="bi bi-check-lg"></i>
+        <i class="bi bi-check-lg" aria-hidden="true"></i>
         {{ t('admin.import.mappingConfirm') }}
       </BaseButton>
     </template>

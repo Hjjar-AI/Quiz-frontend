@@ -22,7 +22,7 @@
 
       <BaseCard v-if="group">
         <h3 class="card-title">
-          <i class="card-title__icon bi bi-info-circle"></i>
+          <i class="card-title__icon bi bi-info-circle" aria-hidden="true"></i>
           {{ t('admin.groups.detailTitle') }}
         </h3>
         <FormGrid>
@@ -32,7 +32,7 @@
         </FormGrid>
         <div class="form-actions">
           <BaseButton variant="primary" :loading="groupStore.isLoading" @click="saveGroup">
-            <i class="bi bi-check-lg"></i> {{ t('admin.groups.editSave') }}
+            <i class="bi bi-check-lg" aria-hidden="true"></i> {{ t('admin.groups.editSave') }}
           </BaseButton>
         </div>
 
@@ -40,11 +40,11 @@
 
         <div class="d-flex justify-between align-center flex-wrap gap-2 mb-2">
           <h3 class="card-title group-detail__members-title">
-            <i class="card-title__icon bi bi-person-plus"></i>
+            <i class="card-title__icon bi bi-person-plus" aria-hidden="true"></i>
             {{ t('admin.groups.membersTitle', { count: group.member_count }) }}
           </h3>
           <BaseButton variant="primary" size="small" @click="openAddModal">
-            <i class="bi bi-plus-circle"></i> {{ t('admin.groups.addMembers') }}
+            <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('admin.groups.addMembers') }}
           </BaseButton>
         </div>
 
@@ -61,7 +61,7 @@
               <p class="group-member-row__username">@{{ member.username }}</p>
             </div>
             <span v-if="!member.show_in_leaderboard" class="group-member-row__hidden">
-              <i class="bi bi-eye-slash"></i> {{ t('admin.groups.hiddenFromLeaderboard') }}
+              <i class="bi bi-eye-slash" aria-hidden="true"></i> {{ t('admin.groups.hiddenFromLeaderboard') }}
             </span>
             <span v-if="member.current_streak > 0" class="group-member-row__streak">
               🔥 {{ member.current_streak }}

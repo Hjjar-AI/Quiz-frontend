@@ -5,7 +5,7 @@
     <div class="moderation-card__header">
       <div class="moderation-card__title">
         <div v-if="icon" class="icon-hero icon-hero--sm">
-          <i :class="icon"></i>
+          <i :class="icon" aria-hidden="true"></i>
         </div>
         <div>
           <span class="moderation-card__label">{{ label }}</span>

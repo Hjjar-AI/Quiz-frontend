@@ -23,7 +23,7 @@
 <template>
   <div>
     <div v-if="!rows.length" class="report-empty">
-      <i class="bi bi-speedometer"></i>
+      <i class="bi bi-speedometer" aria-hidden="true"></i>
       {{ t('analytics.difficultyCalibrationEmpty') }}
     </div>
 

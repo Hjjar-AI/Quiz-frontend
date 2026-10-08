@@ -38,7 +38,7 @@
         :class="{ 'role-chip--active': activeRole === role }"
         @click="activeRole = role"
       >
-        <i :class="roleIcon(role)"></i>
+        <i :class="roleIcon(role)" aria-hidden="true"></i>
         {{ roleLabel(role) }}
         <span class="role-chip__count">
           {{ (draftRoleCaps[role] || []).length }}
@@ -53,7 +53,7 @@
         :class="{ 'role-chip--active': activeRole === 'admin' }"
         @click="activeRole = 'admin'"
       >
-        <i class="bi bi-shield-lock-fill"></i>
+        <i class="bi bi-shield-lock-fill" aria-hidden="true"></i>
         {{ roleLabel('admin') }}
         <span class="role-chip__count">{{ capabilityCatalog.length }}</span>
       </BaseChip>
@@ -79,7 +79,7 @@
 
       <div v-if="activeRole !== 'admin'" class="role-header__actions">
         <span v-if="hasRoleChanges" class="role-header__dirty">
-          <i class="bi bi-exclamation-circle"></i>
+          <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
           {{ t('admin.permissions.unsavedChanges') }}
         </span>
         <BaseButton
@@ -97,7 +97,7 @@
           :disabled="!hasRoleChanges || savingRole"
           @click="saveActiveRole"
         >
-          <i class="bi bi-check-lg"></i> {{ t('common.save') }}
+          <i class="bi bi-check-lg" aria-hidden="true"></i> {{ t('common.save') }}
         </BaseButton>
       </div>
     </div>
@@ -105,7 +105,7 @@
     <!-- ── Capability matrix ────────────────────────────────────── -->
     <BaseCard v-for="group in capabilityGroups" :key="group.label" class="capability-group-card">
       <h4 class="capability-group-card__title">
-        <i class="bi bi-folder2-open"></i> {{ group.label }}
+        <i class="bi bi-folder2-open" aria-hidden="true"></i> {{ group.label }}
       </h4>
       <div class="capability-list">
         <label

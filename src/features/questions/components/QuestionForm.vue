@@ -3,7 +3,7 @@
   <BaseCard class="question-form-card">
     <Transition name="splash">
       <div v-if="showSplash" class="question-form__splash">
-        <i class="bi bi-check-circle-fill"></i>
+        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
       </div>
     </Transition>
 
@@ -19,7 +19,7 @@
       -->
       <details class="question-form__case-section">
         <summary class="question-form__case-summary">
-          <i class="bi bi-journal-medical"></i>
+          <i class="bi bi-journal-medical" aria-hidden="true"></i>
           <span>{{ t('questions.caseSection') }}</span>
           <BaseBadge v-if="form.case_key" variant="info" small class="question-form__case-badge">{{ form.case_key }}</BaseBadge>
         </summary>
@@ -51,7 +51,7 @@
           v-if="form.case_key"
           class="text-muted question-form__case-hint"
         >
-          <i class="bi bi-info-circle"></i>
+          <i class="bi bi-info-circle" aria-hidden="true"></i>
           {{ t('questions.caseStemHint') }}
         </p>
       </details>
@@ -66,7 +66,7 @@
 
       <details class="question-form__case-section">
         <summary class="question-form__case-summary">
-          <i class="bi bi-bullseye"></i>
+          <i class="bi bi-bullseye" aria-hidden="true"></i>
           <span>{{ t('questions.knowledgeObjectSection') }}</span>
           <BaseBadge v-if="selectedKnowledgeObject" variant="info" small class="question-form__case-badge">
             {{ selectedKnowledgeObject.title }}
@@ -88,7 +88,7 @@
               variant="secondary"
               @click="showKnowledgeCreator = !showKnowledgeCreator"
             >
-              <i :class="showKnowledgeCreator ? 'bi bi-dash-lg' : 'bi bi-plus-lg'"></i>
+              <i :class="showKnowledgeCreator ? 'bi bi-dash-lg' : 'bi bi-plus-lg'" aria-hidden="true"></i>
               {{
                 showKnowledgeCreator
                   ? t('questions.knowledgeObjectCancelCreate')
@@ -135,7 +135,7 @@
             :loading="creatingKnowledgeObject"
             @click="createKnowledgeObject"
           >
-            <i class="bi bi-check-lg"></i>
+            <i class="bi bi-check-lg" aria-hidden="true"></i>
             {{ t('questions.knowledgeObjectCreateAndSelect') }}
           </BaseButton>
         </div>
@@ -158,7 +158,7 @@
             accept=".jpg,.jpeg,.png,.gif,.webp"
             @change="handleImagePick"
           />
-          <div class="image-dropzone__icon"><i class="bi bi-image"></i></div>
+          <div class="image-dropzone__icon"><i class="bi bi-image" aria-hidden="true"></i></div>
           <p class="image-dropzone__text">{{ t('questions.imageDropHint') }}</p>
           <small class="image-dropzone__hint">{{ t('questions.imageTypeHint') }}</small>
         </div>
@@ -173,7 +173,7 @@
             @click="clearImage"
           />
           <BaseBadge variant="info" class="image-preview__status">
-            <i class="bi bi-info-circle"></i>
+            <i class="bi bi-info-circle" aria-hidden="true"></i>
             {{ imageUploadStatus }}
           </BaseBadge>
         </div>
@@ -206,7 +206,7 @@
 
       <details class="question-form__case-section">
         <summary class="question-form__case-summary">
-          <i class="bi bi-book"></i>
+          <i class="bi bi-book" aria-hidden="true"></i>
           <span>{{ t('questions.provenanceSection') }}</span>
         </summary>
         <FormGrid>
@@ -248,7 +248,7 @@
 
       <details class="question-form__case-section">
         <summary class="question-form__case-summary">
-          <i class="bi bi-translate"></i>
+          <i class="bi bi-translate" aria-hidden="true"></i>
           <span>{{ t('questions.translationsSection') }}</span>
           <BaseBadge v-if="translationCount" variant="info" small class="question-form__case-badge">
             {{ translationCount }}
@@ -269,7 +269,7 @@
             @enter="addTranslation"
           />
           <BaseButton type="button" variant="secondary" @click="addTranslation">
-            <i class="bi bi-plus-lg"></i> {{ t('questions.translationAdd') }}
+            <i class="bi bi-plus-lg" aria-hidden="true"></i> {{ t('questions.translationAdd') }}
           </BaseButton>
         </div>
 
@@ -286,7 +286,7 @@
               size="small"
               @click="removeTranslation(locale)"
             >
-              <i class="bi bi-trash"></i> {{ t('common.delete') }}
+              <i class="bi bi-trash" aria-hidden="true"></i> {{ t('common.delete') }}
             </BaseButton>
           </header>
           <MarkdownEditor
@@ -321,13 +321,13 @@
 
       <div v-if="form.verified_by" class="verification-info">
         <span
-          ><i class="bi bi-patch-check-fill"></i> {{ t('questions.verified') }} —
+          ><i class="bi bi-patch-check-fill" aria-hidden="true"></i> {{ t('questions.verified') }} —
           {{ form.verified_by }}</span
         >
         <span v-if="form.verified_at">{{ formatDate(form.verified_at) }}</span>
       </div>
       <p class="text-muted question-form__verification-hint">
-        <i class="bi bi-info-circle"></i>
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
         {{ t('questions.verifyHint') }}
       </p>
 

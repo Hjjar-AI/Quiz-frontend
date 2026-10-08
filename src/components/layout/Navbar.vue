@@ -3,7 +3,7 @@
   <nav ref="navbarRef" class="navbar no-print">
     <div class="navbar__shell">
       <router-link to="/" class="navbar__brand">
-        <span class="navbar__brand-icon"><i class="bi bi-journal-medical"></i></span>
+        <span class="navbar__brand-icon"><i class="bi bi-journal-medical" aria-hidden="true"></i></span>
         <span class="navbar__brand-text">{{ t('app.name') }}</span>
       </router-link>
 
@@ -24,7 +24,7 @@
           :class="{ 'navbar__core-link--persistent': link.bottomNav }"
           active-class="nav-link--active"
         >
-          <i :class="link.icon"></i> {{ t(link.labelKey) }}
+          <i :class="link.icon" aria-hidden="true"></i> {{ t(link.labelKey) }}
         </router-link>
 
         <NavbarDropdown
@@ -38,7 +38,7 @@
             :to="link.to"
             class="nav-link"
           >
-            <i :class="link.icon"></i> {{ t(link.labelKey) }}
+            <i :class="link.icon" aria-hidden="true"></i> {{ t(link.labelKey) }}
             <BaseBadge
               v-if="navBadge(link.id)"
               variant="danger"
@@ -61,7 +61,7 @@
               :to="link.to"
               class="nav-link"
             >
-              <i :class="link.icon"></i> {{ t(link.labelKey) }}
+              <i :class="link.icon" aria-hidden="true"></i> {{ t(link.labelKey) }}
             </router-link>
           </NavbarDropdown>
         </template>

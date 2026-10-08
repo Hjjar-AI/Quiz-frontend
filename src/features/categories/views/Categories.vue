@@ -12,7 +12,7 @@
             variant="primary"
             @click="openAddModal"
           >
-            <i class="bi bi-plus-circle"></i> {{ t('categories.addButton') }}
+            <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('categories.addButton') }}
           </BaseButton>
         </template>
       <FeedbackRegion
@@ -32,7 +32,7 @@
       >
         <template #emptyActions v-if="authStore.can('categories.manage')">
           <BaseButton variant="primary" @click="openAddModal">
-            <i class="bi bi-plus-circle"></i> {{ t('categories.addButton') }}
+            <i class="bi bi-plus-circle" aria-hidden="true"></i> {{ t('categories.addButton') }}
           </BaseButton>
         </template>
         <template #default="{ items }">

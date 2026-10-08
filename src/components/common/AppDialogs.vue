@@ -10,7 +10,7 @@
   >
     <div class="dialog-content">
       <div class="dialog-icon" :class="confirmVariant">
-        <i :class="confirmIcon"></i>
+        <i :class="confirmIcon" aria-hidden="true"></i>
       </div>
       <p class="dialog-message">{{ dialogState.confirmMessage }}</p>
     </div>

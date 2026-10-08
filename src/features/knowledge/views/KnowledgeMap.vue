@@ -15,7 +15,7 @@
       <template v-if="payload">
         <div class="knowledge-summary">
           <BaseCard v-for="stat in summaryStats" :key="stat.key" class="knowledge-summary__card">
-            <i :class="stat.icon"></i>
+            <i :class="stat.icon" aria-hidden="true"></i>
             <strong>{{ stat.value }}</strong>
             <span>{{ t(stat.labelKey) }}</span>
           </BaseCard>
@@ -94,7 +94,7 @@
                 :loading="startingId === item.id"
                 @click="reviewObject(item)"
               >
-                <i class="bi bi-play-circle"></i> {{ t('knowledge.review') }}
+                <i class="bi bi-play-circle" aria-hidden="true"></i> {{ t('knowledge.review') }}
               </BaseButton>
             </BaseCard>
           </div>

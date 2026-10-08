@@ -7,7 +7,6 @@
     "online": "تم استعادة الاتصال",
     "version": "الإصدار {version}"
   },
-
   "language": {
     "label": "اللغة",
     "switch": "تغيير اللغة",
@@ -15,7 +14,6 @@
     "en": "English",
     "changed": "تم تغيير اللغة إلى {language}"
   },
-
   "theme": {
     "label": "السمة",
     "auto": "النظام",
@@ -41,7 +39,6 @@
     },
     "changed": "تم تغيير السمة إلى {theme}"
   },
-
   "time": {
     "justNow": "الآن",
     "secondsAgo": "منذ {n} ثانية",
@@ -51,7 +48,6 @@
     "monthsAgo": "منذ {n} شهر",
     "yearsAgo": "منذ {n} سنة"
   },
-
   "common": {
     "save": "حفظ",
     "cancel": "إلغاء",
@@ -103,7 +99,6 @@
     "areYouSure": "هل أنت متأكد؟",
     "discard": "تجاهل"
   },
-
   "emptyStates": {
     "firstUse": "لا توجد عناصر بعد",
     "noResults": "لا توجد نتائج",
@@ -111,7 +106,6 @@
     "unavailable": "المحتوى غير متاح",
     "generic": "لا يوجد محتوى"
   },
-
   "nav": {
     "home": "الرئيسية",
     "content": "المحتوى",
@@ -159,7 +153,6 @@
     "closeMenu": "إغلاق القائمة",
     "permissions": "الصلاحيات"
   },
-
   "errors": {
     "404Title": "404",
     "404Heading": "الصفحة غير موجودة",
@@ -179,7 +172,6 @@
     "serverError": "حدث خطأ في الخادم",
     "requestCancelled": "تم إلغاء الطلب"
   },
-
   "validation": {
     "required": "هذا الحقل مطلوب",
     "usernameMin": "اسم المستخدم يجب أن يكون 3 أحرف على الأقل",
@@ -194,7 +186,6 @@
     "correctAnswerRange": "رقم الإجابة الصحيحة يجب أن يكون بين 1 و {max}",
     "correctAnswerEmpty": "الرجاء اختيار إجابة صحيحة من الخيارات المملوءة"
   },
-
   "notifications": {
     "saved": "تم الحفظ",
     "created": "تم الإنشاء",
@@ -208,7 +199,6 @@
     "chartExported": "تم تصدير الرسم البياني",
     "exportingAs": "جارٍ تصدير البيانات كـ {format}",
     "fileTypeNotAllowed": "نوع الملف غير مسموح: {name}",
-
     "questionCreated": "تم إضافة السؤال بنجاح",
     "questionUpdated": "تم تحديث السؤال بنجاح",
     "questionDeleted": "تم حذف السؤال بنجاح",
@@ -229,7 +219,6 @@
     "questionBulkTagsFailed": "فشل تحديث الوسوم",
     "questionsLoadFailed": "فشل جلب الأسئلة",
     "unverifiedQuestionsLoadFailed": "فشل جلب الأسئلة غير المدققة",
-
     "userCreated": "تم إضافة المستخدم بنجاح",
     "userUpdated": "تم تحديث المستخدم",
     "userDeleted": "تم حذف المستخدم",
@@ -243,7 +232,6 @@
     "userToggleFailed": "فشل تغيير حالة المستخدم",
     "userResetPasswordFailed": "فشل إعادة تعيين كلمة المرور",
     "activeUsersLoadFailed": "فشل جلب المستخدمين النشطين",
-
     "categoryCreated": "تم إضافة التصنيف بنجاح",
     "categoryUpdated": "تم تحديث التصنيف بنجاح",
     "categoryDeleted": "تم حذف التصنيف بنجاح",
@@ -251,16 +239,13 @@
     "categoryCreateFailed": "فشل إضافة التصنيف",
     "categoryUpdateFailed": "فشل تحديث التصنيف",
     "categoryDeleteFailed": "فشل حذف التصنيف",
-
     "flagResolved": "تم حل الإبلاغ",
     "flagCreated": "تم الإبلاغ عن السؤال للمراجعة",
     "flagsLoadFailed": "فشل جلب الإبلاغات",
     "flagResolveFailed": "فشل حل الإبلاغ",
     "flagCreateFailed": "فشل الإبلاغ عن السؤال",
-
     "bookmarksLoadFailed": "فشل جلب المفضلة",
     "bookmarkToggleFailed": "فشل تحديث المفضلة",
-
     "authLoginSuccess": "تم تسجيل الدخول بنجاح",
     "authLogoutSuccess": "تم تسجيل الخروج",
     "authPasswordChanged": "تم تغيير كلمة المرور بنجاح",
@@ -274,7 +259,6 @@
     "pauseFailed": "فشل الإيقاف",
     "resumeFailed": "فشل الاستئناف",
     "progressDeleteFailed": "فشل حذف التقدم",
-
     "backupCreated": "تم إنشاء نسخة احتياطية",
     "backupRestored": "تم استعادة قاعدة البيانات",
     "databaseCleared": "تم مسح قاعدة البيانات",
@@ -283,7 +267,6 @@
     "backupRestoreFailed": "فشل استعادة قاعدة البيانات",
     "databaseClearFailed": "فشل مسح قاعدة البيانات",
     "dbInfoLoadFailed": "فشل جلب معلومات قاعدة البيانات",
-
     "settingsUpdated": "تم تحديث الإعدادات",
     "settingsLoadFailed": "فشل جلب الإعدادات",
     "settingsUpdateFailed": "فشل تحديث الإعدادات",
@@ -294,7 +277,6 @@
     "seedFailed": "فشل زرع الأسئلة النموذجية",
     "verificationStatsLoadFailed": "فشل جلب إحصائيات التدقيق",
     "analyticsLoadFailed": "فشل جلب التحليلات",
-
     "blueprintCreated": "تم إنشاء النموذج",
     "blueprintUpdated": "تم تحديث النموذج",
     "blueprintDeleted": "تم حذف النموذج",
@@ -303,7 +285,6 @@
     "blueprintCreateFailed": "فشل إنشاء النموذج",
     "blueprintUpdateFailed": "فشل تحديث النموذج",
     "blueprintDeleteFailed": "فشل حذف النموذج",
-
     "groupCreated": "تم إنشاء المجموعة",
     "groupUpdated": "تم تحديث المجموعة",
     "groupDeleted": "تم حذف المجموعة",
@@ -320,7 +301,6 @@
     "groupMemberAddFailed": "فشل إضافة الأعضاء",
     "groupMemberRemoveFailed": "فشل إزالة العضو",
     "groupStreakLoadFailed": "فشل جلب سلسلة الدراسة",
-
     "masterExamCreated": "تم إنشاء الامتحان الرئيسي",
     "masterExamUpdated": "تم تحديث الامتحان",
     "masterExamDeleted": "تم حذف الامتحان",
@@ -333,44 +313,37 @@
     "masterExamDraftUpdated": "تم تحديث المسودة",
     "masterExamDraftDeleted": "تم حذف المسودة",
     "masterExamFlagged": "تم الإبلاغ — سيصل إلى المشرف فوراً",
-
     "plannerUpdated": "تم تحديث الخطة",
     "plannerDeleted": "تم حذف الخطة",
     "plannerLoadFailed": "فشل جلب خطة الدراسة",
     "plannerUpdateFailed": "فشل تحديث الخطة",
     "plannerProgressFailed": "فشل تسجيل التقدم",
     "plannerDeleteFailed": "فشل حذف الخطة",
-
     "testHistoryMyLoadFailed": "فشل جلب سجل الاختبارات",
     "testHistoryAllLoadFailed": "فشل جلب سجل المستخدمين",
-
     "mistakesLoadFailed": "فشل جلب دفتر الأخطاء",
     "fragileLoadFailed": "فشل جلب الأسئلة الهشة",
     "summaryLoadFailed": "فشل جلب ملخص المحاولات",
     "dueCountLoadFailed": "فشل جلب عدد المراجعات المستحقة",
     "studyNowLoadFailed": "فشل تجميع جلسة الدراسة"
   },
-
   "difficulty": {
     "label": "الصعوبة",
     "easy": "سهل",
     "medium": "متوسط",
     "hard": "صعب"
   },
-
   "roles": {
     "admin": "مدير النظام",
     "moderator": "مشرف",
     "member": "عضو"
   },
-
   "timer": {
     "stopwatch": "ساعة توقيت",
     "remaining": "الوقت المتبقي",
     "overtime": "وقت إضافي",
     "paused": "موقوف مؤقتاً"
   },
-
   "a11y": {
     "footerNav": "روابط التذييل",
     "bottomNav": "تنقل سفلي",
@@ -380,9 +353,22 @@
     "notifications": "الإشعارات",
     "closeNotification": "إغلاق الإشعار",
     "adminMode": "وضع المدير",
-    "streakTooltip": "سلسلة الدراسة: {current} يوم — أطول سلسلة: {longest} يوم"
+    "streakTooltip": "سلسلة الدراسة: {current} يوم — أطول سلسلة: {longest} يوم",
+    "chartData": "عرض بيانات الرسم البياني",
+    "chartLabel": "العنوان",
+    "chartSeries": "السلسلة {number}",
+    "chartValue": "القيمة",
+    "heatmapData": "عرض النشاط اليومي",
+    "halfTime": "تبقى نصف الوقت المخصص.",
+    "fiveMinutes": "تبقت خمس دقائق.",
+    "oneMinute": "تبقت دقيقة واحدة.",
+    "timeLimitReached": "انتهى الوقت المحدد.",
+    "timerWarning": "الوقت المتبقي قليل",
+    "timerCritical": "الوقت المتبقي قليل جداً",
+    "timerOvertime": "وقت إضافي",
+    "timerRemaining": "الوقت المتبقي",
+    "timerElapsed": "الوقت المنقضي"
   },
-
   "ui": {
     "confirmTitle": "تأكيد",
     "warningTitle": "تحذير",
@@ -414,7 +400,6 @@
     "dragDropDefaultLabel": "اسحب وأفلت الملف هنا",
     "browseDefaultLabel": "أو اضغط للتصفح"
   },
-
   "markdown": {
     "helpLink": "دليل Markdown",
     "helpLinkAria": "دليل Markdown",
@@ -447,7 +432,6 @@
       "ol": "قائمة مرتبة"
     }
   },
-
   "utility": {
     "telegramGuessedExplanation": "⚠️ تم تخمين الإجابة الصحيحة آلياً من نتائج التصويت – يرجى مراجعتها.",
     "invalidJsonFile": "ملف JSON غير صالح",
@@ -462,5 +446,59 @@
     "chooseJsonFirst": "اختر ملف JSON أولاً",
     "importFailed": "فشل الاستيراد",
     "importSuccess": "تم الاستيراد بنجاح"
+  },
+  "routes": {
+    "Login": "تسجيل الدخول",
+    "ChangePassword": "تغيير كلمة المرور",
+    "Profile": "الملف الشخصي",
+    "Dashboard": "الرئيسية",
+    "QuestionsList": "الأسئلة",
+    "QuestionAdd": "إضافة سؤال",
+    "QuestionEdit": "تعديل السؤال",
+    "ReviewQueue": "قائمة المراجعة",
+    "WrongAnswers": "دفتر الأخطاء",
+    "FragileAnswers": "المعرفة الهشة",
+    "Bookmarks": "المحفوظات",
+    "KnowledgeMap": "خريطة المعرفة",
+    "ExamSetup": "إعداد الاختبار",
+    "TestSetup": "إعداد الدراسة",
+    "RecallSetup": "إعداد الاستدعاء",
+    "ExamQuestion": "الاختبار",
+    "StudyQuestion": "الدراسة الذاتية",
+    "RecallQuestion": "الإجابة قبل الخيارات",
+    "ExamResults": "نتائج الاختبار",
+    "StudyResults": "نتائج الدراسة",
+    "RecallResults": "نتائج الاستدعاء",
+    "About": "حول التطبيق",
+    "PrivacyPolicy": "سياسة الخصوصية",
+    "AdminUsers": "المستخدمون",
+    "AdminSettings": "الإعدادات",
+    "VerificationStats": "إحصائيات التحقق",
+    "DatabaseInfo": "قاعدة البيانات",
+    "AdminImport": "الاستيراد",
+    "AdminFlags": "البلاغات",
+    "ActiveUsers": "المستخدمون النشطون",
+    "AdminTags": "الوسوم",
+    "AdminGroups": "إدارة المجموعات",
+    "AdminGroupDetail": "تفاصيل المجموعة",
+    "AdminBlueprints": "مخططات الاختبارات",
+    "AdminHistory": "سجل الجلسات",
+    "AdminPermissions": "الصلاحيات",
+    "Analytics": "التحليلات",
+    "Preferences": "التفضيلات",
+    "History": "السجل",
+    "Categories": "التصنيفات",
+    "Manual": "دليل الاستخدام",
+    "StudyPlanner": "مخطط الدراسة",
+    "MyGroups": "مجموعاتي",
+    "MasterExamsList": "الاختبارات الشاملة",
+    "MasterExamCreate": "إنشاء اختبار شامل",
+    "MasterExamDrafts": "مسودات الاختبارات",
+    "MasterExamEdit": "تعديل الاختبار الشامل",
+    "MasterExamAttempt": "الاختبار الشامل",
+    "MasterExamMyResult": "نتيجة اختباري",
+    "MasterExamResults": "نتائج الاختبار الشامل",
+    "ComponentShowcase": "معرض المكونات",
+    "NotFound": "الصفحة غير موجودة"
   }
 }

@@ -7,20 +7,20 @@
       <BaseCard class="about-hero">
         <div class="hero-content">
           <div class="hero-icon">
-            <i class="bi bi-journal-medical"></i>
+            <i class="bi bi-journal-medical" aria-hidden="true"></i>
           </div>
           <div class="hero-text">
             <h1>{{ t('app.name') }}</h1>
             <p class="hero-tagline">{{ t('app.tagline') }}</p>
             <div class="hero-badges">
               <BaseBadge variant="info">
-                <i class="bi bi-tag"></i> {{ t('app.version', { version: APP_VERSION }) }}
+                <i class="bi bi-tag" aria-hidden="true"></i> {{ t('app.version', { version: APP_VERSION }) }}
               </BaseBadge>
               <BaseBadge variant="success">
-                <i class="bi bi-shield-check"></i> {{ t('about.hero.badgeVerified') }}
+                <i class="bi bi-shield-check" aria-hidden="true"></i> {{ t('about.hero.badgeVerified') }}
               </BaseBadge>
               <BaseBadge variant="warning">
-                <i class="bi bi-hospital"></i> {{ t('about.hero.badgeHospital') }}
+                <i class="bi bi-hospital" aria-hidden="true"></i> {{ t('about.hero.badgeHospital') }}
               </BaseBadge>
             </div>
           </div>
@@ -31,13 +31,13 @@
       <div class="section-grid">
         <BaseCard variant="primary" class="section-card">
           <h3 class="card-title">
-            <i class="card-title__icon bi bi-eye"></i> {{ t('about.vision.title') }}
+            <i class="card-title__icon bi bi-eye" aria-hidden="true"></i> {{ t('about.vision.title') }}
           </h3>
           <p class="section-text">{{ t('about.vision.body') }}</p>
         </BaseCard>
         <BaseCard variant="info" class="section-card">
           <h3 class="card-title">
-            <i class="card-title__icon bi bi-bullseye"></i> {{ t('about.mission.title') }}
+            <i class="card-title__icon bi bi-bullseye" aria-hidden="true"></i> {{ t('about.mission.title') }}
           </h3>
           <p class="section-text">{{ t('about.mission.body') }}</p>
         </BaseCard>
@@ -46,12 +46,12 @@
       <!-- Features Overview -->
       <BaseCard class="features-card">
         <h2 class="card-title">
-          <i class="card-title__icon bi bi-stars"></i> {{ t('about.features.title') }}
+          <i class="card-title__icon bi bi-stars" aria-hidden="true"></i> {{ t('about.features.title') }}
         </h2>
         <div class="features-grid">
           <div class="feature-item" v-for="feature in features" :key="feature.key">
             <div class="feature-icon" :style="{ background: feature.color }">
-              <i :class="feature.icon"></i>
+              <i :class="feature.icon" aria-hidden="true"></i>
             </div>
             <div class="feature-content">
               <h4>{{ t(`about.features.${feature.key}.title`) }}</h4>
@@ -64,7 +64,7 @@
       <!-- Development Team -->
       <BaseCard class="team-card">
         <h2 class="card-title">
-          <i class="card-title__icon bi bi-people-fill"></i> {{ t('about.team.title') }}
+          <i class="card-title__icon bi bi-people-fill" aria-hidden="true"></i> {{ t('about.team.title') }}
         </h2>
         <div class="team-grid">
           <div
@@ -74,7 +74,7 @@
             :class="{ 'team-member--lead': member.isLead }"
           >
             <div class="member-avatar" :class="{ 'member-avatar--lead': member.isLead }">
-              <i :class="member.avatarIcon"></i>
+              <i :class="member.avatarIcon" aria-hidden="true"></i>
             </div>
             <div class="member-info">
               <span class="member-role">{{ t(`about.team.${member.key}.role`) }}</span>
@@ -89,12 +89,12 @@
       <!-- AI & Technical Support -->
       <BaseCard class="support-card">
         <h2 class="card-title">
-          <i class="card-title__icon bi bi-robot"></i> {{ t('about.ai.title') }}
+          <i class="card-title__icon bi bi-robot" aria-hidden="true"></i> {{ t('about.ai.title') }}
         </h2>
         <p class="section-text">{{ t('about.ai.intro') }}</p>
         <div class="ai-chips">
           <BaseBadge variant="info" v-for="ai in aiTools" :key="ai">
-            <i class="bi bi-cpu"></i> {{ ai }}
+            <i class="bi bi-cpu" aria-hidden="true"></i> {{ ai }}
           </BaseBadge>
         </div>
       </BaseCard>
@@ -102,7 +102,7 @@
       <!-- Testing Team -->
       <BaseCard variant="success" class="testers-card">
         <h2 class="card-title">
-          <i class="card-title__icon bi bi-clipboard-check"></i>
+          <i class="card-title__icon bi bi-clipboard-check" aria-hidden="true"></i>
           {{ t('about.testers.title') }}
         </h2>
         <p class="section-text">{{ t('about.testers.intro') }}</p>
@@ -120,7 +120,7 @@
               :key="tester"
             >
               <div class="tester-avatar">
-                <i class="bi bi-person-check"></i>
+                <i class="bi bi-person-check" aria-hidden="true"></i>
               </div>
               <span class="tester-name">{{ tester }}</span>
             </div>
@@ -142,7 +142,7 @@
               :key="tester"
             >
               <div class="tester-avatar">
-                <i class="bi bi-person-check"></i>
+                <i class="bi bi-person-check" aria-hidden="true"></i>
               </div>
               <span class="tester-name">{{ tester }}</span>
             </div>
@@ -164,7 +164,7 @@
               :key="tester"
             >
               <div class="tester-avatar">
-                <i class="bi bi-person-check"></i>
+                <i class="bi bi-person-check" aria-hidden="true"></i>
               </div>
               <span class="tester-name">{{ tester }}</span>
             </div>
@@ -175,7 +175,7 @@
       <!-- Technical Stack (upgraded) -->
       <BaseCard class="tech-card">
         <h2 class="card-title">
-          <i class="card-title__icon bi bi-stack"></i> {{ t('about.tech.title') }}
+          <i class="card-title__icon bi bi-stack" aria-hidden="true"></i> {{ t('about.tech.title') }}
         </h2>
         <p class="tech-card__intro">{{ t('about.tech.intro') }}</p>
 
@@ -187,7 +187,7 @@
           >
             <header class="tech-section__header">
               <div class="tech-section__icon" :class="`tech-section__icon--${group.key}`">
-                <i :class="group.icon"></i>
+                <i :class="group.icon" aria-hidden="true"></i>
               </div>
               <div class="tech-section__heading">
                 <h3 class="tech-section__title">{{ t(`about.tech.${group.key}.title`) }}</h3>
@@ -202,7 +202,7 @@
                 class="tech-item"
               >
                 <span class="tech-item__icon">
-                  <i :class="item.icon"></i>
+                  <i :class="item.icon" aria-hidden="true"></i>
                 </span>
                 <div class="tech-item__body">
                   <div class="tech-item__name-row">
@@ -220,12 +220,12 @@
       <!-- Statistics -->
       <BaseCard class="stats-card">
         <h2 class="card-title">
-          <i class="card-title__icon bi bi-graph-up"></i> {{ t('about.stats.title') }}
+          <i class="card-title__icon bi bi-graph-up" aria-hidden="true"></i> {{ t('about.stats.title') }}
         </h2>
         <div class="stats-grid">
           <div class="stat-item" v-for="stat in statItems" :key="stat.key">
             <div class="stat-icon">
-              <i :class="stat.icon"></i>
+              <i :class="stat.icon" aria-hidden="true"></i>
             </div>
             <div class="stat-value">{{ t(`about.stats.${stat.key}.value`) }}</div>
             <div class="stat-label">{{ t(`about.stats.${stat.key}.label`) }}</div>
@@ -236,7 +236,7 @@
       <!-- Accessibility -->
       <BaseCard class="accessibility-card">
         <h2 class="card-title">
-          <i class="card-title__icon bi bi-universal-access"></i> {{ t('about.a11y.title') }}
+          <i class="card-title__icon bi bi-universal-access" aria-hidden="true"></i> {{ t('about.a11y.title') }}
         </h2>
         <p class="section-text">{{ t('about.a11y.intro') }}</p>
         <div class="accessibility-features">
@@ -245,7 +245,7 @@
             v-for="item in a11yItems"
             :key="item.key"
           >
-            <i :class="item.icon"></i>
+            <i :class="item.icon" aria-hidden="true"></i>
             <div>
               <strong>{{ t(`about.a11y.${item.key}.title`) }}</strong>
               <p>{{ t(`about.a11y.${item.key}.description`) }}</p>
@@ -257,7 +257,7 @@
       <!-- Contact -->
       <BaseCard class="contact-card">
         <h2 class="card-title">
-          <i class="card-title__icon bi bi-envelope-paper"></i> {{ t('about.contact.title') }}
+          <i class="card-title__icon bi bi-envelope-paper" aria-hidden="true"></i> {{ t('about.contact.title') }}
         </h2>
         <p class="section-text">{{ t('about.contact.intro') }}</p>
         <div class="contact-info">
@@ -266,7 +266,7 @@
             v-for="item in contactItems"
             :key="item.key"
           >
-            <i :class="item.icon"></i>
+            <i :class="item.icon" aria-hidden="true"></i>
             <div>
               <strong>{{ t(`about.contact.${item.key}.label`) }}</strong>
               <span>{{ t(`about.contact.${item.key}.value`) }}</span>
@@ -278,7 +278,7 @@
       <!-- Disclaimer -->
       <BaseCard variant="warning" class="disclaimer-card">
         <div class="disclaimer-content">
-          <i class="bi bi-exclamation-triangle-fill"></i>
+          <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
           <div>
             <h4>{{ t('about.disclaimer.title') }}</h4>
             <p>{{ t('about.disclaimer.para1') }}</p>
@@ -294,7 +294,7 @@
       <!-- Footer Credit -->
       <div class="about-footer">
         <p>
-          <i class="bi bi-heart-fill"></i>
+          <i class="bi bi-heart-fill" aria-hidden="true"></i>
           {{ t('about.footer.madeWith') }}
         </p>
         <p class="copyright">

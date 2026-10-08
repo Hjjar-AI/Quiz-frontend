@@ -3,20 +3,22 @@
   <Layout>
     <div class="master-exam-runner">
       <div v-if="attemptStore.isPreview" class="master-exam-runner__preview-banner">
-        <i class="bi bi-eye"></i>
+        <i class="bi bi-eye" aria-hidden="true"></i>
         <span>{{ t('masterExams.runnerPreview') }}</span>
       </div>
 
       <div v-if="attemptStore.isMakeup" class="master-exam-runner__makeup-banner">
-        <i class="bi bi-arrow-repeat"></i>
+        <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
         <span>{{ t('masterExams.runnerMakeup') }}</span>
       </div>
 
       <div class="master-exam-runner__header">
-        <div class="master-exam-runner__exam-name">{{ attemptStore.examName }}</div>
+        <h1 class="master-exam-runner__exam-name" tabindex="-1">{{ attemptStore.examName || t('routes.MasterExamAttempt') }}</h1>
         <div v-if="attemptStore.deadlineAt" class="master-exam-runner__timer" :class="timerClass">
-          <i class="bi bi-stopwatch"></i>
-          <span>{{ timerDisplay }}</span>
+          <i class="bi bi-stopwatch" aria-hidden="true"></i>
+          <span class="sr-only">{{ t('a11y.timerRemaining') }}</span>
+          <span aria-live="off">{{ timerDisplay }}</span>
+          <span v-if="timerStatus" class="timer__status">{{ timerStatus }}</span>
         </div>
         <BaseButton
           v-if="!attemptStore.isPreview && attemptStore.currentQuestionId"
@@ -24,12 +26,14 @@
           size="small"
           @click="handleFlag"
         >
-          <i class="bi bi-flag"></i> {{ t('masterExams.runnerFlag') }}
+          <i class="bi bi-flag" aria-hidden="true"></i> {{ t('masterExams.runnerFlag') }}
         </BaseButton>
         <BaseButton variant="primary" size="small" @click="attemptFinish">
-          <i class="bi bi-check-lg"></i> {{ t('masterExams.runnerFinish') }}
+          <i class="bi bi-check-lg" aria-hidden="true"></i> {{ t('masterExams.runnerFinish') }}
         </BaseButton>
       </div>
+
+      <span class="sr-only" role="status" aria-atomic="true">{{ timerAnnouncement }}</span>
 
       <BaseModal
         :is-open="showPreStart"
@@ -60,13 +64,13 @@
 
           <div v-if="attemptStore.examInstructions" class="master-exam-prestart__instructions">
             <h4>
-              <i class="bi bi-info-circle"></i> {{ t('masterExams.runnerPreStartInstructions') }}
+              <i class="bi bi-info-circle" aria-hidden="true"></i> {{ t('masterExams.runnerPreStartInstructions') }}
             </h4>
             <p>{{ attemptStore.examInstructions }}</p>
           </div>
 
           <div class="master-exam-prestart__warning">
-            <i class="bi bi-exclamation-triangle"></i>
+            <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
             <div>
               <strong>{{ t('masterExams.runnerPreStartWarningTitle') }}</strong>
               <ul>
@@ -87,7 +91,7 @@
         <template #footer>
           <BaseButton variant="secondary" @click="exitAttempt">{{ t('common.cancel') }}</BaseButton>
           <BaseButton variant="primary" @click="beginCountdown">
-            <i class="bi bi-play-circle"></i> {{ t('masterExams.runnerPreStartBegin') }}
+            <i class="bi bi-play-circle" aria-hidden="true"></i> {{ t('masterExams.runnerPreStartBegin') }}
           </BaseButton>
         </template>
       </BaseModal>
@@ -115,12 +119,12 @@
       <div
         v-if="attemptStore.inGraceWindow && !attemptStore.isComplete"
         class="master-exam-runner__grace-overlay"
-        aria-live="assertive"
-        role="alert"
       >
-        <i class="bi bi-exclamation-triangle"></i>
-        <h2>{{ t('masterExams.runnerGraceTitle') }}</h2>
-        <p>{{ t('masterExams.runnerGraceBody') }}</p>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+        <div role="alert" aria-atomic="true">
+          <h2>{{ t('masterExams.runnerGraceTitle') }}</h2>
+          <p>{{ t('masterExams.runnerGraceBody') }}</p>
+        </div>
         <div class="master-exam-runner__grace-countdown">
           {{ graceDisplay }}
         </div>
@@ -180,7 +184,7 @@
                       ? 'bi bi-check-circle-fill'
                       : 'bi bi-x-circle-fill'
                   "
-                ></i>
+                 aria-hidden="true"></i>
                 <span v-if="attemptStore.previewFeedback.isCorrect">
                   {{ t('masterExams.runnerPreviewCorrect') }}
                 </span>
@@ -197,7 +201,7 @@
                 class="preview-feedback__explanation"
               >
                 <strong>
-                  <i class="bi bi-lightbulb"></i>
+                  <i class="bi bi-lightbulb" aria-hidden="true"></i>
                   {{ t('tests.reviewExplanation') }}
                 </strong>
                 <BaseMarkdown :text="attemptStore.previewFeedback.explanation" />
@@ -229,7 +233,7 @@
           <DirectionalIcon ltr="bi bi-chevron-right" rtl="bi bi-chevron-left" />
         </BaseButton>
         <BaseButton v-else variant="primary" @click="attemptFinish">
-          <i class="bi bi-check-lg"></i> {{ t('masterExams.runnerFinish') }}
+          <i class="bi bi-check-lg" aria-hidden="true"></i> {{ t('masterExams.runnerFinish') }}
         </BaseButton>
       </div>
     </div>
@@ -257,6 +261,8 @@ const {
   currentSavedAnswer,
   currentConfidence,
   timerDisplay,
+  timerStatus,
+  timerAnnouncement,
   graceDisplay,
   timerClass,
   beginCountdown,

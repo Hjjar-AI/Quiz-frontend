@@ -11,7 +11,7 @@
     />
 
     <div v-if="selectedFile" class="state-import__file">
-      <i class="bi bi-file-earmark-code"></i>
+      <i class="bi bi-file-earmark-code" aria-hidden="true"></i>
       <span class="state-import__filename">{{ selectedFile.name }}</span>
       <span class="state-import__size">{{ humanSize }}</span>
     </div>
@@ -29,7 +29,7 @@
         </span>
       </BaseRadio>
       <p v-if="mode === 'replace'" class="state-import__warning">
-        <i class="bi bi-exclamation-triangle"></i>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
         {{ t('admin.import.stateReplaceWarning') }}
       </p>
     </fieldset>
@@ -54,15 +54,15 @@
         :loading="previewLoading"
         @click="preview"
       >
-        <i class="bi bi-eye"></i> {{ t('admin.import.statePreviewButton') }}
+        <i class="bi bi-eye" aria-hidden="true"></i> {{ t('admin.import.statePreviewButton') }}
       </BaseButton>
       <BaseButton variant="primary" :disabled="!selectedFile" :loading="loading" @click="upload">
-        <i class="bi bi-upload"></i> {{ t('admin.import.stateButton') }}
+        <i class="bi bi-upload" aria-hidden="true"></i> {{ t('admin.import.stateButton') }}
       </BaseButton>
     </div>
 
     <div v-if="previewCounts" class="state-import__preview">
-      <h4><i class="bi bi-clipboard-data"></i> {{ t('admin.import.statePreviewTitle') }}</h4>
+      <h4><i class="bi bi-clipboard-data" aria-hidden="true"></i> {{ t('admin.import.statePreviewTitle') }}</h4>
       <ul class="state-import__counts">
         <li>
           <span>{{ t('admin.import.stateCountCategories') }}</span>
@@ -104,7 +104,7 @@
         </li>
       </ul>
       <p class="state-import__preview-hint">
-        <i class="bi bi-info-circle"></i>
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
         {{ t('admin.import.statePreviewHint') }}
       </p>
     </div>

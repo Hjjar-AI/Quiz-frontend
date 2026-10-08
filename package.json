@@ -8,7 +8,7 @@
     "dev": "vite",
     "pkg install": "pnpm install",
     "preview": "vite preview",
-    "lint": "eslint . --ext .js,.vue --fix",
+    "lint": "eslint . --ext .js,.vue --fix && pnpm run lint:accessibility",
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -16,7 +16,8 @@
     "test:coverage": "vitest run --coverage",
     "bump:patch": "pnpm version patch",
     "bump:minor": "pnpm version minor",
-    "bump:major": "pnpm version major"
+    "bump:major": "pnpm version major",
+    "lint:accessibility": "node scripts/checkAccessibility.mjs"
   },
   "dependencies": {
     "axios": "^1.20.0",

@@ -1,5 +1,15 @@
 # Work Done
 
+## Accessibility corrections — 2026-10-08
+
+- Implemented the corrected 16-item review: safer session shortcuts/explicit study-recall commits and leave guards; named radio groups/focus; localized route titles/rendered focus; timed warnings; chart/heatmap alternatives; motion handling; persistent/paused toasts; decorative-icon semantics/local loading; readable shared text and remaining pointer geometry. Added focused ESLint/CSS guardrails without new dependencies. See [accessibilityReview.md](accessibilityReview.md) for scope and limitations.
+- Source parsing/scoped ESLint passed with no errors; style guardrails passed across 60 production stylesheets. Isolated production-helper diagnostics passed for toast retention/pausing/dedup/cleanup, countdown milestones/resume reset and keyboard scope/modifiers/native controls/modal/RTL behavior. Both locale/title coverage and local glyph compatibility passed; configured versions/lockfile unchanged. Browser/device/screen-reader verification remains pending. No builds/compilation, test-suite work, migrations, backend or Android changes.
+
+## Accessibility recommendation review — 2026-10-08
+
+- Assessed the supplied 16 recommendations against production source and recorded corrections/priorities in [accessibilityReview.md](accessibilityReview.md). Confirmed Escape finish, immediate answer changes, confidence focus gaps, missing route context/chart alternatives and toast timing/semantics. Deeper implementation tracing found existing unanswered-finish confirmation, global reduced-motion CSS and 8-second error notifications.
+- Corrected unsupported grouped-radio arrow behavior (missing names), existing server-backed resume paths, auth dvh/coarse-pointer sizing already present, time-up notifications and incomplete Stylelint wiring. Source/standards review only; browser/screen-reader behavior unverified. No application/dependency/version changes, builds, migrations or test-suite work.
+
 ## Agent guidance refresh — 2026-10-08
 
 - Recorded durable frontend contracts for shared tokens/measured shell geometry, coordinated theme naming/PDF palettes, browser-local lazy fonts, bounded startup/requests, pending writes/latest reads, partial-save recovery, preserved account policies and safe animation/touch sizing. Clarified that production study/exam files are application sources while automated test-suite restrictions remain.

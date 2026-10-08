@@ -13,7 +13,7 @@
     <div v-show="toolbarVisible" class="toolbar-row">
       <MarkdownToolbar @insert="(action) => insertMarkdown(action)" />
       <router-link to="/manual#markdown" class="markdown-help-link" :title="t('markdown.helpLink')">
-        <i class="bi bi-question-circle"></i> {{ t('markdown.instructions') }}
+        <i class="bi bi-question-circle" aria-hidden="true"></i> {{ t('markdown.instructions') }}
       </router-link>
     </div>
     <div class="textarea-wrapper">

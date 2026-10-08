@@ -8,7 +8,7 @@
     >
         <template #actions>
           <BaseButton variant="secondary" size="small" @click="refresh" :loading="isRefreshing">
-            <i class="bi bi-arrow-repeat"></i> {{ t('common.refresh') }}
+            <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ t('common.refresh') }}
           </BaseButton>
         </template>
       <FeedbackRegion
@@ -34,7 +34,7 @@
       <div class="grid-2col">
         <BaseCard>
           <h4 class="card-title">
-            <i class="card-title__icon bi bi-trophy"></i> {{ t('admin.verification.topVerifiers') }}
+            <i class="card-title__icon bi bi-trophy" aria-hidden="true"></i> {{ t('admin.verification.topVerifiers') }}
           </h4>
           <div v-if="stats.by_user && stats.by_user.length">
             <div v-for="(user, idx) in stats.by_user" :key="idx" class="verifier-item">
@@ -50,7 +50,7 @@
 
         <BaseCard>
           <h4 class="card-title">
-            <i class="card-title__icon bi bi-folder2"></i> {{ t('admin.verification.byCategory') }}
+            <i class="card-title__icon bi bi-folder2" aria-hidden="true"></i> {{ t('admin.verification.byCategory') }}
           </h4>
           <div v-if="stats.by_category && stats.by_category.length">
             <div v-for="cat in stats.by_category" :key="cat.name" class="category-progress">
@@ -76,7 +76,7 @@
 
       <BaseCard v-if="stats.by_category && stats.by_category.length">
         <h4 class="card-title">
-          <i class="card-title__icon bi bi-diagram-3"></i>
+          <i class="card-title__icon bi bi-diagram-3" aria-hidden="true"></i>
           {{ t('admin.verification.breakdownTitle') }}
         </h4>
         <BaseTableShell striped mobile-mode="cards">
@@ -120,7 +120,7 @@
 
       <div class="export-section no-print">
         <h4 class="card-title">
-          <i class="card-title__icon bi bi-download"></i> {{ t('admin.verification.exportTitle') }}
+          <i class="card-title__icon bi bi-download" aria-hidden="true"></i> {{ t('admin.verification.exportTitle') }}
         </h4>
 
         <ExportButtons :url-builder="buildVerifiedExportUrl" />

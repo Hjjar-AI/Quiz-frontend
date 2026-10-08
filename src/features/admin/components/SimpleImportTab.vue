@@ -37,7 +37,7 @@
         :disabled="!selectedFile"
         @click="upload"
       >
-        <i :class="buttonIcon"></i> {{ buttonLabel }}
+        <i :class="buttonIcon" aria-hidden="true"></i> {{ buttonLabel }}
       </BaseButton>
     </div>
   </div>

@@ -10,7 +10,7 @@
 <template>
   <div>
     <div v-if="!rows.length" class="report-empty">
-      <i class="bi bi-graph-up-arrow"></i>
+      <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
       {{ t('analytics.weeklyRetentionEmpty') }}
     </div>
 

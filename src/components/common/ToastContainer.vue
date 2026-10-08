@@ -3,8 +3,6 @@
   <div
     class="toast-container no-print"
     :aria-label="t('a11y.notifications')"
-    aria-live="polite"
-    aria-atomic="true"
   >
     <TransitionGroup name="toast">
       <div
@@ -12,9 +10,14 @@
         :key="toast.id"
         class="toast"
         :class="`toast--${toast.type}`"
-        role="alert"
+        :role="toast.type === 'error' ? 'alert' : 'status'"
+        aria-atomic="true"
+        @mouseenter="toastStore.pauseToast(toast.id, 'hover')"
+        @mouseleave="toastStore.resumeToast(toast.id, 'hover')"
+        @focusin="toastStore.pauseToast(toast.id, 'focus')"
+        @focusout="onFocusOut($event, toast.id)"
       >
-        <i class="toast__icon" :class="getToastIcon(toast.type)"></i>
+        <i class="toast__icon" :class="getToastIcon(toast.type)" aria-hidden="true"></i>
         <span class="toast__message">{{ toast.message }}</span>
         <BaseIconButton
           class="toast__close"
@@ -34,6 +37,10 @@ import BaseIconButton from '@/components/base/BaseIconButton.vue'
 
 const { t } = useI18n()
 const toastStore = useToastStore()
+
+function onFocusOut(event, id) {
+  if (!event.currentTarget.contains(event.relatedTarget)) toastStore.resumeToast(id, 'focus')
+}
 
 function getToastIcon(type) {
   const icons = {

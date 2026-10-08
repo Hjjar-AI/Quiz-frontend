@@ -3,7 +3,7 @@
   <footer class="footer no-print">
     <div class="footer__shell">
       <div class="footer__brand">
-        <i class="bi bi-journal-medical footer__brand-icon"></i>
+        <i class="bi bi-journal-medical footer__brand-icon" aria-hidden="true"></i>
         <span class="footer__brand-name">{{ t('app.name') }}</span>
         <span
           class="footer__version"

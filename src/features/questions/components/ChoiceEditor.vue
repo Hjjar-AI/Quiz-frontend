@@ -33,7 +33,7 @@
       size="small"
       @click="addChoice"
     >
-      <i class="bi bi-plus"></i> {{ t('questions.addChoice') }}
+      <i class="bi bi-plus" aria-hidden="true"></i> {{ t('questions.addChoice') }}
     </BaseButton>
   </div>
 </template>

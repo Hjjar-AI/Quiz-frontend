@@ -10,7 +10,7 @@
         class="bottom-nav__item"
         :class="{ 'bottom-nav__item--active': isLinkActive(link) }"
       >
-        <span class="bottom-nav__icon"><i :class="link.icon"></i></span>
+        <span class="bottom-nav__icon"><i :class="link.icon" aria-hidden="true"></i></span>
         <span class="bottom-nav__label">{{ t(link.shortLabelKey || link.labelKey) }}</span>
       </router-link>
     </div>

@@ -8,30 +8,30 @@
     >
       <template #badges>
         <BaseBadge variant="info">
-          <i class="bi bi-calendar-check"></i>
+          <i class="bi bi-calendar-check" aria-hidden="true"></i>
           {{ t('content.privacy.lastUpdateBadge', { date: content?.lastUpdate || '' }) }}
         </BaseBadge>
         <BaseBadge variant="success">
-          <i class="bi bi-shield-check"></i>
+          <i class="bi bi-shield-check" aria-hidden="true"></i>
           {{ t('content.privacy.effectiveBadge') }}
         </BaseBadge>
       </template>
 
       <BaseCard class="privacy-header-card">
         <div v-if="!content" class="privacy-page__loading">
-          <i class="bi bi-hourglass-split"></i>
+          <i class="bi bi-hourglass-split" aria-hidden="true"></i>
           {{ loadError ? t('content.privacy.loadFailed') : t('content.privacy.loading') }}
         </div>
 
         <template v-else>
           <div class="policy-intro">
-            <i class="bi bi-shield-lock"></i>
+            <i class="bi bi-shield-lock" aria-hidden="true"></i>
             <div v-html="sanitizedIntroLead" class="policy-intro-body"></div>
           </div>
 
           <!-- Table of Contents -->
           <div class="toc">
-            <h4><i class="bi bi-list-ol"></i> {{ t('content.privacy.tocTitle') }}</h4>
+            <h4><i class="bi bi-list-ol" aria-hidden="true"></i> {{ t('content.privacy.tocTitle') }}</h4>
             <div class="toc-grid">
               <a
                 v-for="section in sanitizedSections"
@@ -39,7 +39,7 @@
                 :href="`#${section.id}`"
                 class="toc-link"
               >
-                <i class="bi bi-dot"></i> {{ section.num }}. {{ section.title }}
+                <i class="bi bi-dot" aria-hidden="true"></i> {{ section.num }}. {{ section.title }}
               </a>
             </div>
           </div>
@@ -55,7 +55,7 @@
       >
         <BaseCard>
           <h2 class="section-title">
-            <i :class="section.icon"></i>
+            <i :class="section.icon" aria-hidden="true"></i>
             <span>{{ section.num }}. {{ section.title }}</span>
           </h2>
           <div class="section-content prose" v-html="section.content"></div>
@@ -65,12 +65,12 @@
       <!-- Summary Card -->
       <BaseCard v-if="content" variant="success" class="summary-card">
         <div class="summary-content">
-          <i class="bi bi-check-circle-fill"></i>
+          <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
           <div>
             <h3>{{ t('content.privacy.summaryTitle') }}</h3>
             <ul class="summary-list">
               <li v-for="(item, i) in content.summaryItems" :key="i">
-                <i class="bi bi-check2"></i> {{ item }}
+                <i class="bi bi-check2" aria-hidden="true"></i> {{ item }}
               </li>
             </ul>
           </div>
@@ -80,7 +80,7 @@
       <!-- Contact Section -->
       <BaseCard v-if="content" class="contact-section">
         <h2 class="section-title">
-          <i class="bi bi-envelope-paper"></i>
+          <i class="bi bi-envelope-paper" aria-hidden="true"></i>
           <span>{{ t('content.privacy.contactTitle') }}</span>
         </h2>
         <p v-html="sanitizedContactIntro"></p>
@@ -90,7 +90,7 @@
             :key="i"
             class="contact-item"
           >
-            <i :class="item.icon"></i>
+            <i :class="item.icon" aria-hidden="true"></i>
             <span v-html="sanitizeItemText(item.text)"></span>
           </div>
         </div>
@@ -98,11 +98,11 @@
 
       <div v-if="content" class="policy-footer">
         <p>
-          <i class="bi bi-info-circle"></i>
+          <i class="bi bi-info-circle" aria-hidden="true"></i>
           {{ content.footerMain }}
         </p>
         <p class="footer-disclaimer">
-          <i class="bi bi-exclamation-circle"></i>
+          <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
           {{ content.footerDisclaimer }}
         </p>
       </div>

@@ -9,7 +9,7 @@
             :disabled="selectedTags.length < 1"
             :title="selectedTags.length < 1 ? t('admin.tags.mergeRequiresOne') : ''"
           >
-            <i class="bi bi-shuffle"></i> {{ t('admin.tags.mergeButton') }}
+            <i class="bi bi-shuffle" aria-hidden="true"></i> {{ t('admin.tags.mergeButton') }}
           </BaseButton>
         </template>
       <FeedbackRegion :error="tagError" @dismiss="dismissTagError" />
@@ -49,7 +49,7 @@
           </div>
           <div v-if="selectedTags.length > 0" class="selected-tags-summary">
             <span class="text-muted">
-              <i class="bi bi-check-square"></i>
+              <i class="bi bi-check-square" aria-hidden="true"></i>
               {{ t('admin.tags.selectedCount', { count: selectedTags.length }) }}
             </span>
             <BaseButton variant="ghost" size="small" class="clear-all-filters" @click="selectedTags = []">

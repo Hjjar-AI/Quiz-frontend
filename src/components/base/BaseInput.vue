@@ -53,7 +53,7 @@
               :aria-label="t('ui.increment')"
               @click="increment"
             >
-              <i class="bi bi-chevron-up"></i>
+              <i class="bi bi-chevron-up" aria-hidden="true"></i>
             </button>
             <button
               type="button"
@@ -63,7 +63,7 @@
               :aria-label="t('ui.decrement')"
               @click="decrement"
             >
-              <i class="bi bi-chevron-down"></i>
+              <i class="bi bi-chevron-down" aria-hidden="true"></i>
             </button>
           </div>
           <input
@@ -98,7 +98,7 @@
           :aria-label="t('ui.clearField')"
           @click="updateModelValue('')"
         >
-          <i class="bi bi-x-lg"></i>
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
         </button>
       </div>
 
@@ -139,7 +139,7 @@
           :aria-label="t('ui.clearField')"
           @click="updateModelValue('')"
         >
-          <i class="bi bi-x-lg"></i>
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
         </button>
         <button
           v-if="type === 'password'"
@@ -148,7 +148,7 @@
           :aria-label="showPassword ? t('ui.hidePassword') : t('ui.showPassword')"
           @click="showPassword = !showPassword"
         >
-          <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'" aria-hidden="true"></i>
         </button>
       </div>
     </template>

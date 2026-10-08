@@ -12,12 +12,12 @@
       aria-haspopup="true"
       @click.stop="toggle"
     >
-      <i class="bi bi-translate"></i>
+      <i class="bi bi-translate" aria-hidden="true"></i>
       <span class="language-dropdown__code">{{ currentCode }}</span>
       <i
         class="bi bi-chevron-down language-dropdown__arrow"
         :class="{ 'language-dropdown__arrow--open': isOpen }"
-      ></i>
+       aria-hidden="true"></i>
     </BaseButton>
 
     <BasePopoverPanel :open="isOpen" panel-class="language-dropdown__menu">
@@ -38,7 +38,7 @@
           <i
             v-if="locale === currentLocale"
             class="bi bi-check2 language-dropdown__check"
-          ></i>
+           aria-hidden="true"></i>
         </BaseButton>
     </BasePopoverPanel>
   </div>

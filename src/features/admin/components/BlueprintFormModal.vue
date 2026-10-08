@@ -13,7 +13,7 @@
     </FormGrid>
 
     <h4 class="blueprint-form__weights-title">
-      <i class="bi bi-sliders"></i> {{ t('admin.blueprints.weightsTitle') }}
+      <i class="bi bi-sliders" aria-hidden="true"></i> {{ t('admin.blueprints.weightsTitle') }}
     </h4>
     <p class="text-muted blueprint-form__weights-hint">
       {{ t('admin.blueprints.weightsHint') }}
@@ -26,7 +26,7 @@
         class="weight-editor__row"
       >
         <span class="weight-editor__category">
-          <i class="bi bi-folder2" :style="{ color: cat.color }"></i>
+          <i class="bi bi-folder2" :style="{ color: cat.color }" aria-hidden="true"></i>
           {{ cat.name }}
         </span>
         <BaseInput

@@ -10,7 +10,7 @@
 <template>
   <div>
     <div v-if="!rows.length" class="report-empty">
-      <i class="bi bi-shield-check text-success"></i>
+      <i class="bi bi-shield-check text-success" aria-hidden="true"></i>
       {{ t('analytics.authorFlagRateEmpty') }}
     </div>
 

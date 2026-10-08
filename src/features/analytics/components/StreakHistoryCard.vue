@@ -15,7 +15,7 @@
 <template>
   <div>
     <div v-if="!days.length" class="report-empty">
-      <i class="bi bi-calendar-x"></i>
+      <i class="bi bi-calendar-x" aria-hidden="true"></i>
       {{ t('analytics.streakHistoryNoData') }}
     </div>
 

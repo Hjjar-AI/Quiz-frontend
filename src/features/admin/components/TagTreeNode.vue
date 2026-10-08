@@ -14,7 +14,7 @@
         @keydown.enter.prevent="expanded = !expanded"
         @keydown.space.prevent="expanded = !expanded"
       >
-        <i v-if="expanded" class="bi bi-chevron-down"></i>
+        <i v-if="expanded" class="bi bi-chevron-down" aria-hidden="true"></i>
         <DirectionalIcon
           v-else
           ltr="bi bi-chevron-right"

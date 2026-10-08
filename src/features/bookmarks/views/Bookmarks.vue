@@ -8,7 +8,7 @@
     >
       <template #actions>
         <BaseButton variant="primary" size="small" @click="startFromBookmarks">
-          <i class="bi bi-book-half"></i> {{ t('questions.startFromBookmarks') }}
+          <i class="bi bi-book-half" aria-hidden="true"></i> {{ t('questions.startFromBookmarks') }}
         </BaseButton>
       </template>
 

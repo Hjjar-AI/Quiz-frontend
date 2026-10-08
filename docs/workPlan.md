@@ -2,6 +2,8 @@
 
 ## Current priorities
 
+- Browser/screen-reader-verify the implemented [accessibility corrections](accessibilityReview.md): study/recall explicit submission and confidence focus; pending-write/Back/reload/pause/finish guards; rendered route focus/titles and parameter/query behavior; timed warnings/resume/grace; chart/heatmap data alternatives; persistent/paused toasts; reduced motion; typography and 24px/44px targets in Arabic/English across themes/densities. Source parsing, scoped lint, 60-stylesheet guardrails and isolated helper diagnostics passed. Automated-suite work remains subject to explicit authorization.
+
 - Browser/PDF-verify Ruby in both locales/densities: picker/persistence/browser chrome, native controls, charts, selected/focus states, ranks/streaks, print and exported PDF. Palette/source contrast and registration checks passed; actual rendering remains pending.
 
 - Browser-verify count-up output and tile fit with Arabic/English, all font choices, narrow stats grids and enlarged text: integer counts stay whole, decimal targets retain precision, large final values wrap, reduced motion snaps and rapid target changes remain stable. 26 isolated animation/format assertions passed; actual geometry remains pending.

@@ -31,7 +31,7 @@
               :class="{ 'category-form__preset--active': form.color === c }"
               :aria-label="t('categories.colorPresetAria', { color: c })"
             >
-              <span v-if="form.color === c" class="category-form__preset-check"><i class="bi bi-check-lg"></i></span>
+              <span v-if="form.color === c" class="category-form__preset-check"><i class="bi bi-check-lg" aria-hidden="true"></i></span>
             </BaseButton>
             <input
               type="color"
@@ -44,8 +44,8 @@
         <BaseSelect v-model="form.icon" :label="t('categories.iconLabel')" :options="iconOptions" />
       </FormGrid>
       <div class="form-actions">
-        <BaseButton type="button" variant="secondary" @click="close"><i class="bi bi-x-lg"></i> {{ t('common.cancel') }}</BaseButton>
-        <BaseButton type="submit" variant="primary" :loading="categoryStore.isLoading"><i class="bi bi-check-lg"></i> {{ editMode ? t('categories.updateButtonLabel') : t('categories.addButtonLabel') }}</BaseButton>
+        <BaseButton type="button" variant="secondary" @click="close"><i class="bi bi-x-lg" aria-hidden="true"></i> {{ t('common.cancel') }}</BaseButton>
+        <BaseButton type="submit" variant="primary" :loading="categoryStore.isLoading"><i class="bi bi-check-lg" aria-hidden="true"></i> {{ editMode ? t('categories.updateButtonLabel') : t('categories.addButtonLabel') }}</BaseButton>
       </div>
     </form>
   </BaseModal>

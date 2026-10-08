@@ -21,7 +21,7 @@
       :title="t('markdown.helpLink')"
       :aria-label="t('markdown.helpLinkAria')"
     >
-      <i class="bi bi-question-circle"></i>
+      <i class="bi bi-question-circle" aria-hidden="true"></i>
     </router-link>
   </div>
 </template>

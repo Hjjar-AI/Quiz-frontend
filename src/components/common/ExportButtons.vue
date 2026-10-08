@@ -10,7 +10,7 @@
       :aria-label="t('ui.exportAs', { format: fmt.label })"
       @click="exportFile(fmt.value)"
     >
-      <i :class="fmt.icon"></i> {{ fmt.label }}
+      <i :class="fmt.icon" aria-hidden="true"></i> {{ fmt.label }}
     </BaseButton>
   </div>
 </template>

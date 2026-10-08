@@ -10,12 +10,12 @@
       :aria-label="ariaLabel || undefined"
       @click.stop="toggle"
     >
-      <i v-if="icon" :class="icon"></i>
+      <i v-if="icon" :class="icon" aria-hidden="true"></i>
       <span class="base-dropdown__value">{{ selectedLabel }}</span>
       <i
         class="bi bi-chevron-down base-dropdown__arrow"
         :class="{ 'base-dropdown__arrow--open': isOpen }"
-      ></i>
+       aria-hidden="true"></i>
     </button>
 
     <BasePopoverPanel :open="isOpen" panel-class="base-dropdown__menu" role="listbox">
@@ -33,7 +33,7 @@
           <i
             v-if="opt.value === modelValue"
             class="bi bi-check2 base-dropdown__item-check"
-          ></i>
+           aria-hidden="true"></i>
         </button>
     </BasePopoverPanel>
   </div>

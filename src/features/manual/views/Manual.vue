@@ -18,7 +18,7 @@
 
       <BaseCard class="manual-page__card">
         <div v-if="!content" class="manual-page__loading">
-          <i class="bi bi-hourglass-split"></i>
+          <i class="bi bi-hourglass-split" aria-hidden="true"></i>
           {{ loadError ? t('content.manual.loadFailed') : t('content.manual.loading') }}
         </div>
 
@@ -28,7 +28,7 @@
           <!-- Table of Contents -->
           <div class="manual-page__toc">
             <div class="manual-page__toc-header">
-              <i class="bi bi-list-ol"></i>
+              <i class="bi bi-list-ol" aria-hidden="true"></i>
               <h4>{{ t('content.manual.tocTitle') }}</h4>
             </div>
             <div class="manual-page__toc-grid">
@@ -51,14 +51,14 @@
             class="manual-page__section"
           >
             <div class="manual-page__section-header">
-              <span class="manual-page__section-icon"><i :class="s.icon"></i></span>
+              <span class="manual-page__section-icon"><i :class="s.icon" aria-hidden="true"></i></span>
               <h2 class="manual-page__section-title">{{ s.num }}. {{ s.title }}</h2>
             </div>
             <div class="manual-page__section-body prose" v-html="s.content"></div>
           </div>
 
           <div class="manual-page__footer">
-            <i class="bi bi-check-circle-fill"></i>
+            <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
             <span v-html="sanitizedFooterNote"></span>
           </div>
         </template>

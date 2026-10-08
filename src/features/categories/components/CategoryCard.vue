@@ -11,7 +11,7 @@
     <div class="category-card__content">
       <div class="category-card__info">
         <span class="category-card__icon" :style="{ '--category-accent': category.color }"
-          ><i :class="`bi ${category.icon}`"></i
+          ><i :class="`bi ${category.icon}`" aria-hidden="true"></i
         ></span>
         <div>
           <h4 class="category-card__name">{{ category.name }}</h4>

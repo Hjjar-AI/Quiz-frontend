@@ -8,7 +8,7 @@
     >
         <template #actions>
           <BaseButton variant="primary" @click="userFormModalRef?.open()">
-            <i class="bi bi-person-plus"></i> {{ t('admin.users.addButton') }}
+            <i class="bi bi-person-plus" aria-hidden="true"></i> {{ t('admin.users.addButton') }}
           </BaseButton>
         </template>
       <FeedbackRegion
@@ -79,23 +79,23 @@
               </div>
               <div class="user-card__stats">
                 <div class="user-card__stat">
-                  <i class="bi bi-question-circle"></i>
+                  <i class="bi bi-question-circle" aria-hidden="true"></i>
                   <span>{{ t('admin.users.statQuestions', { count: user.questions_count || 0 }) }}</span>
                 </div>
                 <div class="user-card__stat">
-                  <i class="bi bi-trophy"></i>
+                  <i class="bi bi-trophy" aria-hidden="true"></i>
                   <span v-if="user.latest_exam_accuracy != null">{{ user.latest_exam_accuracy }}%</span>
                   <span v-else class="text-muted">—</span>
                 </div>
                 <div class="user-card__stat">
-                  <i class="bi bi-clock"></i>
+                  <i class="bi bi-clock" aria-hidden="true"></i>
                   <span v-if="user.last_login">
                     {{ formatCellValue(user.last_login, { nullValue: t('admin.users.statNeverLoggedIn'), type: 'datetime' }) }}
                   </span>
                   <span v-else class="text-muted">{{ t('admin.users.statNeverLoggedIn') }}</span>
                 </div>
                 <div class="user-card__stat">
-                  <i class="bi bi-calendar-check"></i>
+                  <i class="bi bi-calendar-check" aria-hidden="true"></i>
                   <span
                     v-if="getExpiryDays(user) != null"
                     :class="getExpiryDays(user) <= 0 ? 'text-danger' : ''"

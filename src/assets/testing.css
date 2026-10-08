@@ -151,7 +151,12 @@
 .question-card__choice:hover {
   background: var(--color-bg-alt);
 }
+.question-card__choice:focus-within {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
 .question-card__choice--selected {
+  font-weight: var(--font-weight-semibold);
   border-color: var(--color-primary);
   background: color-mix(in srgb, var(--color-primary) 10%, transparent);
 }

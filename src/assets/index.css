@@ -65,6 +65,7 @@
 @import './states.css';
 @import './transitions.css';
 @import './skeleton.css';
+@import './accessibility.css';
 
 @import './print.css';
 
