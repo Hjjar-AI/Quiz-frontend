@@ -11,6 +11,7 @@ import { useConfigStore } from '@/stores/configStore'
 import { useTestSessionStore } from '@/stores/testSessionStore'
 import { usePreferencesStore } from '@/stores/preferencesStore'
 import { useTheme } from '@/composables/useTheme'
+import { loadSavedFont } from '@/composables/useFont'
 
 const app = createApp(App)
 app.use(pinia)
@@ -48,6 +49,7 @@ loadSavedTheme()
 // i18n: apply the persisted locale to <html lang dir data-locale>.
 // `i18n.global.locale` is a ref in Composition mode.
 applyLocaleToDOM(i18n.global.locale.value)
+loadSavedFont()
 
 function applyDocumentTitle() {
   if (typeof document !== 'undefined') {

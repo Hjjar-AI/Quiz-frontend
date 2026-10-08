@@ -187,7 +187,7 @@ async function handleSubmit() {
     role: form.role,
     expiry_days: form.expiry_days,
     auto_renew_days: form.auto_renew
-      ? (parseInt(adminSettingsStore.settings?.default_renewal_days) || 30)
+      ? parseIntOr(adminSettingsStore.settings?.default_renewal_days, 30)
       : 0,
     is_active: form.is_active,
     admin_password: form.admin_password,

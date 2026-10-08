@@ -34,10 +34,14 @@ export const useAdminSettingsStore = defineStore('adminSettings', {
     },
 
     async updateSettings(data) {
-      return await useCrudActions(this).wrap(() => adminService.updateSettings(data), {
+      if (this.isLoading) return null
+      const payload = { ...data }
+      return await useCrudActions(this).wrap(() => adminService.updateSettings(payload), {
         successMsgKey: 'notifications.settingsUpdated',
         errorMsgFallbackKey: 'notifications.settingsUpdateFailed',
-        onSuccess: () => { this.fetchSettings() },
+        // POST returns updated key names, not the settings object. Keep the
+        // acknowledged snapshot without starting a competing background GET.
+        onSuccess: () => { this.settings = { ...this.settings, ...payload } },
       })
     },
 

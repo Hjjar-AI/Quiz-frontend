@@ -18,6 +18,8 @@ Charts: `--color-chart-1` through `--color-chart-6`, not status colors; use poin
 
 ## Type and shape rules
 
+- Text font choice is browser-local (`pref_font`), handled by `useFont` and the `data-font` root attribute. Preserve the shared body/heading tokens. Register only active project-font styles from Google Fonts; no text-font preload, eager FontFace loading or local-server fallback. Device mode registers no text-font styles. Arabic glyphs missing from Latin fonts use installed device fallbacks.
+
 - Letter spacing is zero by default. Latin tracking is enabled through the `[data-locale="en"]` token overrides in `src/assets/index.css`; never apply tracking directly to Arabic labels.
 - Radius roles are consistent: `sm` for compact controls, `md` for inputs and containers, `lg`/`xl` for cards and panels, `pill` for buttons/badges/chips, and `circle` for avatars and circular icons.
 - Avatar containers use the `--avatar-size-*` scale. Dense user lists may use the deterministic `avatarToneClass()` helper; state such as inactive status still overrides the decorative tone.

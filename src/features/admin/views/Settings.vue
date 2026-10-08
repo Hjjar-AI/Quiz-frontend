@@ -1,116 +1,91 @@
-<!-- frontend/src/features/admin/views/Settings.vue -->
 <template>
   <Layout>
     <PageShell
       :title="t('admin.settings.title')"
+      :subtitle="t('admin.settings.subtitle')"
       icon="bi bi-gear"
-      size="narrow"
-      page-class="admin-settings"
+      size="medium"
+      page-class="settings-page admin-settings"
     >
-      <BaseCard>
-        <FeedbackRegion :error="adminSettingsStore.error" @dismiss="adminSettingsStore.error = null" />
+      <nav class="settings-jump-links" :aria-label="t('admin.settings.sections')">
+        <a href="#settings-general">{{ t('admin.settings.sectionGeneral') }}</a>
+        <a href="#settings-exams">{{ t('admin.settings.sectionTests') }}</a>
+        <a v-if="authStore.can('admin.seed')" href="#settings-maintenance">{{ t('admin.settings.sectionOps') }}</a>
+        <RouterLink to="/preferences">{{ t('preferences.title') }}</RouterLink>
+      </nav>
 
-        <form @submit.prevent="saveSettings" class="settings-form">
-          <fieldset class="settings-section">
-            <legend>{{ t('admin.settings.sectionGeneral') }}</legend>
+      <AsyncContent :loading="isFetching" :error="!hasLoaded ? adminSettingsStore.error : ''" @retry="loadSettings">
+        <form v-if="hasLoaded" id="admin-settings-form" class="settings-form" novalidate @submit.prevent="saveSettings">
+          <FeedbackRegion :error="adminSettingsStore.error" @dismiss="adminSettingsStore.error = null" />
+          <BaseCard as="section" id="settings-general" class="settings-card" :aria-label="t('admin.settings.sectionGeneral')">
+            <SectionHeader :title="t('admin.settings.sectionGeneral')" :description="t('admin.settings.generalHint')" icon="bi bi-person-check" />
             <FormGrid>
-              <BaseInput v-model.number="settings.default_expiry_days" type="number" :label="t('admin.settings.expiryDays')" :hint="t('admin.settings.expiryDaysHint')" min="0" required />
-              <BaseInput v-model.number="settings.default_renewal_days" type="number" :label="t('admin.settings.renewalDays')" :hint="t('admin.settings.renewalDaysHint')" min="0" required />
+              <BaseInput
+                v-for="field in accountFields" :key="field"
+                :model-value="settings[field]"
+                @update:model-value="updateField(field, $event)"
+                @blur="touch(field)"
+                :id="`setting-${field}`"
+                :name="field"
+                type="number" :min="0" :step="1" required
+                :disabled="isSaving"
+                :label="t(`admin.settings.${field === 'default_expiry_days' ? 'expiryDays' : 'renewalDays'}`)"
+                :hint="t(`admin.settings.${field === 'default_expiry_days' ? 'expiryDaysHint' : 'renewalDaysHint'}`)"
+                :error="errors[field]"
+              />
             </FormGrid>
-          </fieldset>
+          </BaseCard>
 
-          <fieldset class="settings-section">
-            <legend>{{ t('admin.settings.sectionTests') }}</legend>
-            <FormGrid>
-              <BaseInput v-model.number="settings.exam_duration_minutes" type="number" :label="t('admin.settings.examDuration')" :hint="t('admin.settings.examDurationHint')" min="1" required />
+          <BaseCard as="section" id="settings-exams" class="settings-card" :aria-label="t('admin.settings.sectionTests')">
+            <SectionHeader :title="t('admin.settings.sectionTests')" :description="t('admin.settings.examsHint')" icon="bi bi-stopwatch" />
+            <FormGrid single-column>
+              <BaseInput
+                :model-value="settings.exam_duration_minutes"
+                @update:model-value="updateField('exam_duration_minutes', $event)"
+                @blur="touch('exam_duration_minutes')"
+                id="setting-exam_duration_minutes" name="exam_duration_minutes"
+                type="number" :min="1" :step="1" required
+                :disabled="isSaving"
+                :label="t('admin.settings.examDuration')"
+                :hint="t('admin.settings.examDurationHint')"
+                :error="errors.exam_duration_minutes"
+              />
             </FormGrid>
-          </fieldset>
+          </BaseCard>
 
-          <div class="form-actions">
-            <BaseButton type="submit" variant="primary" :loading="adminSettingsStore.isLoading">
-              <i class="bi bi-check-lg"></i> {{ t('admin.settings.save') }}
-            </BaseButton>
+          <div class="settings-save-bar">
+            <p class="settings-save-bar__status" role="status">{{ t(isDirty ? 'admin.settings.unsaved' : 'admin.settings.upToDate') }}</p>
+            <div class="settings-save-bar__actions">
+              <BaseButton variant="secondary" :disabled="!isDirty || isSaving" @click="discardChanges">{{ t('common.discard') }}</BaseButton>
+              <BaseButton type="submit" icon="bi bi-check-lg" :loading="isSaving" :disabled="!isDirty || maintenanceBusy">{{ t('admin.settings.save') }}</BaseButton>
+            </div>
           </div>
         </form>
-      </BaseCard>
+      </AsyncContent>
 
-      <!--
-        Maintenance card.
-
-        Both operations below are gated server-side by the
-        'admin.seed' capability (see RefreshAuthorRanksView and
-        SeedSampleQuestionsView in apps/core/views.py). The page
-        itself is reached via the '/admin/settings' route, which
-        requires only 'admin.settings'. A deployment could
-        legitimately grant one capability without the other — e.g.
-        a moderator who can adjust policy numbers but should not be
-        able to trigger bulk recalculations.
-
-        Rendering the card unconditionally used to produce buttons
-        that always 403'd for such a user. The whole card is now
-        gated on 'admin.seed'; the section is present only when at
-        least one of its operations is permitted. If a future
-        operation lands here with a different capability, gate that
-        individual operation rather than opening the whole card.
-      -->
-      <BaseCard v-if="authStore.can('admin.seed')">
-        <h4 class="card-title">
-          <i class="card-title__icon bi bi-tools"></i>
-          {{ t('admin.settings.sectionOps') }}
-        </h4>
-        <p class="text-muted settings-ops__intro">
-          {{ t('admin.settings.opsIntro') }}
-        </p>
-
-        <div class="settings-ops">
-          <div class="settings-op">
-            <div class="settings-op__info">
-              <strong class="settings-op__title">
-                <i class="bi bi-arrow-repeat"></i>
-                {{ t('admin.settings.rankRefreshTitle') }}
-              </strong>
-              <p class="settings-op__desc">
-                {{ t('admin.settings.rankRefreshDesc') }}
-              </p>
-              <div v-if="adminSettingsStore.lastRankRefreshResult" class="settings-op__result">
-                <i class="bi bi-info-circle"></i>
-                {{ t('admin.settings.rankRefreshLast', {
-                  updated: adminSettingsStore.lastRankRefreshResult.updated,
-                  scanned: adminSettingsStore.lastRankRefreshResult.scanned,
-                }) }}
-              </div>
-            </div>
-            <BaseButton
-              variant="secondary"
-              :loading="adminSettingsStore.isRankRefreshLoading"
-              @click="handleRefreshRanks"
-            >
-              <i class="bi bi-arrow-repeat"></i> {{ t('admin.settings.runNow') }}
+      <BaseCard v-if="authStore.can('admin.seed')" as="section" id="settings-maintenance" class="settings-card" :aria-label="t('admin.settings.sectionOps')">
+        <SectionHeader :title="t('admin.settings.sectionOps')" :description="t('admin.settings.opsIntro')" icon="bi bi-tools" />
+        <div class="settings-operations">
+          <article class="settings-operation">
+            <h3>{{ t('admin.settings.rankRefreshTitle') }}</h3>
+            <p>{{ t('admin.settings.rankRefreshDesc') }}</p>
+            <FeedbackRegion scope="section" :error="adminSettingsStore.rankRefreshError" @dismiss="adminSettingsStore.rankRefreshError = null" />
+            <p v-if="adminSettingsStore.lastRankRefreshResult" class="settings-operation__result" role="status">
+              {{ t('admin.settings.rankRefreshLast', { updated: formatNumber(adminSettingsStore.lastRankRefreshResult.updated), scanned: formatNumber(adminSettingsStore.lastRankRefreshResult.scanned) }) }}
+            </p>
+            <BaseButton variant="secondary" icon="bi bi-arrow-repeat" :loading="adminSettingsStore.isRankRefreshLoading" :disabled="isSaving || isFetching || maintenanceBusy" @click="handleRefreshRanks">
+              {{ t('admin.settings.rankRefreshAction') }}
             </BaseButton>
-          </div>
-
-          <div class="settings-op">
-            <div class="settings-op__info">
-              <strong class="settings-op__title">
-                <i class="bi bi-database-add"></i>
-                {{ t('admin.settings.seedTitle') }}
-              </strong>
-              <p class="settings-op__desc">
-                {{ t('admin.settings.seedDesc') }}
-              </p>
-              <div v-if="adminSettingsStore.lastSeedResult?.stdout" class="settings-op__result">
-                <i class="bi bi-info-circle"></i>
-                {{ lastSeedSummary }}
-              </div>
-            </div>
-            <BaseButton
-              variant="secondary"
-              :loading="adminSettingsStore.isSeedQuestionsLoading"
-              @click="handleSeedQuestions"
-            >
-              <i class="bi bi-database-add"></i> {{ t('admin.settings.runNow') }}
+          </article>
+          <article class="settings-operation">
+            <h3>{{ t('admin.settings.seedTitle') }}</h3>
+            <p>{{ t('admin.settings.seedDesc') }}</p>
+            <FeedbackRegion scope="section" :error="adminSettingsStore.seedQuestionsError" @dismiss="adminSettingsStore.seedQuestionsError = null" />
+            <p v-if="adminSettingsStore.lastSeedResult" class="settings-operation__result" role="status">{{ t('admin.settings.seedDone') }}</p>
+            <BaseButton variant="secondary" icon="bi bi-database-add" :loading="adminSettingsStore.isSeedQuestionsLoading" :disabled="isSaving || isFetching || maintenanceBusy" @click="handleSeedQuestions">
+              {{ t('admin.settings.seedAction') }}
             </BaseButton>
-          </div>
+          </article>
         </div>
       </BaseCard>
     </PageShell>
@@ -118,9 +93,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import '@/assets/settings.css'
+import { ref, computed, nextTick, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
+import SectionHeader from '@/components/common/SectionHeader.vue'
+import AsyncContent from '@/components/common/AsyncContent.vue'
 import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
@@ -128,49 +107,108 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import { useAdminSettingsStore } from '@/stores/adminSettingsStore'
 import { useAuthStore } from '@/stores/authStore'
+import { useFormValidation } from '@/composables/useFormValidation'
+import { useUnsavedChanges } from '@/composables/useUnsavedChanges'
+import { useDialog } from '@/composables/useDialog'
+import { useLocaleFormatters } from '@/i18n/helpers/format'
 
-
-const { t } = useI18n()
-
+const { t, locale } = useI18n()
+const { formatNumber } = useLocaleFormatters()
 const adminSettingsStore = useAdminSettingsStore()
 const authStore = useAuthStore()
-const settings = ref({ default_expiry_days: 60, default_renewal_days: 30, exam_duration_minutes: 60 })
+const { confirm } = useDialog()
+const accountFields = ['default_expiry_days', 'default_renewal_days']
+const fields = [...accountFields, 'exam_duration_minutes']
+const settings = ref(Object.fromEntries(fields.map(field => [field, ''])))
+const savedSettings = ref(null)
+const hasLoaded = ref(false)
+const isFetching = ref(true)
+const isSaving = ref(false)
+const seedConfirmPending = ref(false)
+const maintenanceBusy = computed(() => seedConfirmPending.value || adminSettingsStore.isRankRefreshLoading || adminSettingsStore.isSeedQuestionsLoading)
+const { isDirty, markClean } = useUnsavedChanges(settings, { message: () => t('common.unsavedChanges') })
 
-function parseIntOr(raw, fallback) {
-  const n = parseInt(raw, 10)
-  return Number.isNaN(n) ? fallback : n
+function fieldError(field) {
+  const raw = settings.value[field]
+  const value = Number(raw)
+  const min = field === 'exam_duration_minutes' ? 1 : 0
+  if (String(raw).trim() === '' || !Number.isSafeInteger(value) || value < min) {
+    return t('admin.settings.integerRequired', { min: formatNumber(min) })
+  }
+  return ''
+}
+const { errors, touch, revalidate, validateAll, resetValidation } = useFormValidation(
+  Object.fromEntries(fields.map(field => [field, () => fieldError(field)])),
+)
+
+watch(locale, () => fields.forEach(revalidate))
+
+function updateField(field, value) {
+  settings.value[field] = value === '' ? '' : Number(value)
+  revalidate(field)
 }
 
 async function loadSettings() {
-  const data = await adminSettingsStore.fetchSettings()
-  if (data) {
-    settings.value = {
-      default_expiry_days: parseIntOr(data.default_expiry_days, 60),
-      default_renewal_days: parseIntOr(data.default_renewal_days, 30),
-      exam_duration_minutes: parseIntOr(data.exam_duration_minutes, 60),
-    }
+  if (isSaving.value || maintenanceBusy.value) return
+  isFetching.value = true
+  try {
+    const data = await adminSettingsStore.fetchSettings()
+    if (!data) return
+    settings.value = Object.fromEntries(fields.map(field => [field, data[field] === '' || data[field] == null ? '' : Number(data[field])]))
+    savedSettings.value = { ...settings.value }
+    hasLoaded.value = true
+    resetValidation()
+    markClean()
+  } finally {
+    isFetching.value = false
   }
 }
 
 async function saveSettings() {
-
-  await adminSettingsStore.updateSettings(settings.value)
+  if (!hasLoaded.value || !isDirty.value || isSaving.value || maintenanceBusy.value) return
+  if (!validateAll()) {
+    await nextTick()
+    const invalidField = fields.find(field => errors[field])
+    document.getElementById(`setting-${invalidField}`)?.focus()
+    return
+  }
+  isSaving.value = true
+  const payload = { ...settings.value }
+  try {
+    const result = await adminSettingsStore.updateSettings(payload)
+    if (result === null) return
+    savedSettings.value = payload
+    resetValidation()
+    markClean()
+  } finally {
+    isSaving.value = false
+  }
 }
 
-const lastSeedSummary = computed(() => {
-  const stdout = adminSettingsStore.lastSeedResult?.stdout
-  if (!stdout) return ''
-  const lines = stdout.split('\n').map(l => l.trim()).filter(Boolean)
-  return lines[lines.length - 1] || ''
-})
+function discardChanges() {
+  if (isSaving.value || !savedSettings.value) return
+  settings.value = { ...savedSettings.value }
+  adminSettingsStore.error = null
+  resetValidation()
+  markClean()
+}
 
 function handleRefreshRanks() {
+  if (!authStore.can('admin.seed') || isSaving.value || isFetching.value || maintenanceBusy.value) return
   adminSettingsStore.refreshAuthorRanks()
 }
 
-function handleSeedQuestions() {
-  adminSettingsStore.seedSampleQuestions()
+async function handleSeedQuestions() {
+  if (!authStore.can('admin.seed') || isSaving.value || isFetching.value || maintenanceBusy.value) return
+  seedConfirmPending.value = true
+  try {
+    if (await confirm(t('admin.settings.seedConfirm'), 'warning')) {
+      if (authStore.can('admin.seed')) await adminSettingsStore.seedSampleQuestions()
+    }
+  } finally {
+    seedConfirmPending.value = false
+  }
 }
 
-onMounted(() => { loadSettings() })
+onMounted(loadSettings)
 </script>

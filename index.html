@@ -46,6 +46,21 @@
       })()
     </script>
 
+    <!-- Apply only the font choice before paint; font styles load on demand in main.js. -->
+    <script>
+      ;(function () {
+        var font = 'default'
+        try {
+          var supportedFonts = ['default', 'system', 'noto-arabic', 'inter', 'outfit']
+          var savedFont = localStorage.getItem('pref_font')
+          if (supportedFonts.indexOf(savedFont) !== -1) font = savedFont
+        } catch (e) {
+          /* storage unavailable: keep the project default */
+        }
+        document.documentElement.setAttribute('data-font', font)
+      })()
+    </script>
+
     <!-- ============================================================
        Theme bootstrap.
        Reads the persisted theme from localStorage and applies it

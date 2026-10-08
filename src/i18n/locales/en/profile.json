@@ -34,7 +34,7 @@
 
   "preferences": {
     "title": "User preferences",
-    "subtitle": "Customize your experience. These settings are stored locally in your browser.",
+    "subtitle": "Personal options for this browser. System-wide policies are managed separately by administrators.",
     "defaultPerPage": "Default questions per page",
     "defaultDifficulty": "Default difficulty filter",
     "autoAdvance": "Auto-advance to the next question after answering",
@@ -43,7 +43,31 @@
     "densityHint": "Compact reduces spacing while keeping text size and touch targets accessible.",
     "densityComfortable": "Comfortable",
     "densityCompact": "Compact",
-    "allDifficulties": "All"
+    "allDifficulties": "All",
+    "appliesImmediately": "Changes apply immediately. No Save button is needed. Browser storage must be available to remember them after reopening.",
+    "sections": "Preference sections",
+    "appearance": "Appearance & language",
+    "appearanceHint": "Choose how the interface looks and reads. These options affect your browser only.",
+    "themeHint": "Auto follows your device’s light or dark appearance. Contrast provides a high-contrast palette.",
+    "languageHint": "Changes interface language and reading direction immediately.",
+    "browsing": "Question browsing",
+    "browsingHint": "Starting values for the question list. You can still change filters while browsing.",
+    "perPageHint": "Used when opening a question list without a page-size value in its URL.",
+    "difficultyHint": "The initial filter when no difficulty is specified in the question-list URL.",
+    "account": "Account & administration",
+    "accountHint": "View your account and subscription. System settings affect all users and require permission.",
+    "resetOptions": "Reset browsing & density",
+    "optionsReset": "Browsing defaults and density reset. Theme, language and font kept.",
+    "font": "Interface font",
+    "fontHint": "Saved only in this browser. Project fonts load on demand from Google Fonts. Device font avoids text-font downloads; unavailable characters use device fallbacks.",
+    "fontPreview": "Selected font preview",
+    "fontOptions": {
+      "default": "Project default (follows language)",
+      "system": "Device font — no download",
+      "noto-arabic": "Noto Sans Arabic",
+      "inter": "Inter (Latin text)",
+      "outfit": "Outfit (Latin text)"
+    }
   },
 
   "planner": {

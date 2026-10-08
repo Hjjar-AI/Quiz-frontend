@@ -92,10 +92,10 @@
 
     "settings": {
       "title": "System settings",
-      "sectionGeneral": "General",
-      "sectionTests": "Tests",
+      "sectionGeneral": "Account defaults",
+      "sectionTests": "Exam defaults",
       "sectionOps": "Maintenance operations",
-      "opsIntro": "Admin operations performed on demand. Safe to run repeatedly — they do not duplicate existing data. Normally run automatically via cron; these buttons are for manual runs.",
+      "opsIntro": "Run these tasks separately from saving settings. Recalculation updates reputation; sample data adds demonstration questions to the shared bank.",
       "expiryDays": "Default account expiry period (days)",
       "expiryDaysHint": "0 = never expires",
       "renewalDays": "Default auto-renewal days",
@@ -114,7 +114,17 @@
       "seedDesc": "Adds the demo question set to the bank — ten standalone questions and two linked clinical cases (major depression, first psychotic episode) for demonstration and testing. Existing questions are not added again.",
       "seedDone": "Sample questions seeded",
       "seedFailed": "Failed to seed sample questions",
-      "runNow": "Run now"
+      "runNow": "Run now",
+      "subtitle": "Shared account and exam defaults. Edit the values, then save to apply them system-wide.",
+      "sections": "System settings sections",
+      "generalHint": "Starting expiry and auto-renewal values for new accounts in user management. Saving these defaults does not change existing accounts.",
+      "examsHint": "The time limit for new exam sessions. Running sessions keep their current deadline.",
+      "unsaved": "Unsaved changes",
+      "upToDate": "No unsaved changes",
+      "integerRequired": "Enter a whole number of {min} or more.",
+      "rankRefreshAction": "Recalculate reputation",
+      "seedAction": "Add sample questions",
+      "seedConfirm": "Add demonstration questions and clinical cases to the shared question bank? Existing sample questions will not be duplicated."
     },
 
     "database": {

@@ -1,5 +1,18 @@
 # Work Done
 
+## Browser-local font preference and lazy text fonts — 2026-10-08
+
+- Added project-default, device, Noto Sans Arabic, Inter and Outfit choices to Appearance, with Arabic/English preview and localized guidance. Browser-local `pref_font` is independent of account APIs and survives sign-out/browsing-density resets. A pre-paint attribute restores the choice; explicit font selections own shared body/heading tokens in both locales.
+- Registered only the active selection's Google Fonts styles, leaving font-file fetches to rendered glyph demand. Project default follows locale (Noto Sans Arabic/Outfit or Inter/Outfit); device mode registers no text-font styles. Removed local text-font URLs and server fallback; existing bundled files remain unused by screen text. No font preloads or forced FontFace loading. Failed CDN styles fall back to installed fonts and can retry on later selection. Existing icon loading/fallback is unchanged.
+- 74 isolated assertions passed for preference persistence, default/explicit locale behavior, selected-family-only registration, duplicate prevention, failed-style retry, bootstrap allowlist/storage failure, no local/forced loading, localized options and production font-token precedence in jsdom. The 176 updated settings checks passed; all 58 CSS files parsed with resolved token references. JavaScript syntax and whitespace checks passed. These use mocked document/storage and jsdom CSS, not actual network/font rendering. No app/browser/device checks, builds, compilation, test suites, installs, versions, backend or Android changes.
+
+## Admin settings and user preferences enhancement — 2026-10-08
+
+- Reorganized both pages into named sections with jump links, explanatory hints and responsive shared token-based styling. Personal Appearance, Question Browsing and Account sections include existing theme/language handlers, immediate application guidance and a browsing/density reset that preserves theme/language. Removed exposed sound/auto-advance toggles because production study screens do not consume them; stored values remain intact.
+- Admin settings wait for server data and provide load/retry feedback, integer field validation, invalid-input focus, unsaved navigation protection, saved/dirty status and discard. Failed saves preserve drafts; successful saves acknowledge the submitted snapshot without a competing background fetch. Inputs and conflicting actions are guarded while saving.
+- Maintenance remains capability-gated with individual errors/results and named actions. Adding demo data uses the existing confirmation dialog; result text is localized. Fixed the existing user-form consumer so a zero renewal default remains zero. Removed obsolete settings CSS from admin.css.
+- 168 standalone assertions passed: Vue SFC/template/script parsing, 58 production CSS parses/token references, locale keys, and source-extracted Vue state with mocked API/DOM/services covering failed loads, numeric validation, draft retention, duplicate saves, discard, reset persistence, permission/confirmation gates and store snapshots. JavaScript syntax/whitespace checks passed. No full app rendering, browser/device/RTL layout, live API checks, builds, compilation, test suites, installs or version changes; backend/Android unchanged.
+
 ## Tokenization corrections — 2026-10-08
 
 - Theme transitions and cleanup timing share the motion token; explicit reduced-motion precedence disables theme animation. Repeated changes cancel stale cleanup timers.

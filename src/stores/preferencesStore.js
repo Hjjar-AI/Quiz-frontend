@@ -9,6 +9,8 @@ const VALID_PER_PAGE = [10, 20, 50, 100]
 const VALID_DIFFICULTY = ['', 'easy', 'medium', 'hard']
 const VALID_DENSITY = ['comfortable', 'compact']
 
+const DISPLAY_DEFAULTS = { defaultPerPage: 20, defaultDifficulty: '', density: 'comfortable' }
+
 const KEY = {
   perPage: 'pref_perPage',
   difficulty: 'pref_difficulty',
@@ -23,11 +25,9 @@ const KEY = {
 
 export const usePreferencesStore = defineStore('preferences', {
   state: () => standardState({
-    defaultPerPage: 20,
-    defaultDifficulty: '',
+    ...DISPLAY_DEFAULTS,
     autoAdvance: false,
     soundEffects: true,
-    density: 'comfortable',
     locale: DEFAULT_LOCALE,
   }),
 
@@ -38,15 +38,15 @@ export const usePreferencesStore = defineStore('preferences', {
   actions: {
     load() {
       const rawPerPage = Number(storageService.getItem(KEY.perPage))
-      this.defaultPerPage = VALID_PER_PAGE.includes(rawPerPage) ? rawPerPage : 20
+      this.defaultPerPage = VALID_PER_PAGE.includes(rawPerPage) ? rawPerPage : DISPLAY_DEFAULTS.defaultPerPage
 
       const rawDifficulty = storageService.getItem(KEY.difficulty)
-      this.defaultDifficulty = VALID_DIFFICULTY.includes(rawDifficulty) ? rawDifficulty : ''
+      this.defaultDifficulty = VALID_DIFFICULTY.includes(rawDifficulty) ? rawDifficulty : DISPLAY_DEFAULTS.defaultDifficulty
 
       this.autoAdvance = storageService.getItem(KEY.autoAdvance) === 'true'
       this.soundEffects = storageService.getItem(KEY.sound) !== 'false'
       const rawDensity = storageService.getItem(KEY.density)
-      this.density = VALID_DENSITY.includes(rawDensity) ? rawDensity : 'comfortable'
+      this.density = VALID_DENSITY.includes(rawDensity) ? rawDensity : DISPLAY_DEFAULTS.density
       document.documentElement.setAttribute('data-density', this.density)
 
       // Read the ACTIVE locale from the i18n singleton rather than
@@ -65,11 +65,11 @@ export const usePreferencesStore = defineStore('preferences', {
       switch (key) {
         case 'defaultPerPage': {
           const n = Number(value)
-          value = VALID_PER_PAGE.includes(n) ? n : 20
+          value = VALID_PER_PAGE.includes(n) ? n : DISPLAY_DEFAULTS.defaultPerPage
           break
         }
         case 'defaultDifficulty': {
-          value = VALID_DIFFICULTY.includes(value) ? value : ''
+          value = VALID_DIFFICULTY.includes(value) ? value : DISPLAY_DEFAULTS.defaultDifficulty
           break
         }
         case 'autoAdvance':
@@ -78,7 +78,7 @@ export const usePreferencesStore = defineStore('preferences', {
           break
         }
         case 'density': {
-          value = VALID_DENSITY.includes(value) ? value : 'comfortable'
+          value = VALID_DENSITY.includes(value) ? value : DISPLAY_DEFAULTS.density
           document.documentElement.setAttribute('data-density', value)
           break
         }
@@ -107,12 +107,15 @@ export const usePreferencesStore = defineStore('preferences', {
       }
     },
 
+    resetDisplayOptions() {
+      // Keep theme, language and legacy study preferences unchanged.
+      for (const [key, value] of Object.entries(DISPLAY_DEFAULTS)) this.update(key, value)
+    },
+
     reset() {
-      this.defaultPerPage = 20
-      this.defaultDifficulty = ''
+      Object.assign(this, DISPLAY_DEFAULTS)
       this.autoAdvance = false
       this.soundEffects = true
-      this.density = 'comfortable'
       this.locale = DEFAULT_LOCALE
       document.documentElement.setAttribute('data-density', this.density)
 

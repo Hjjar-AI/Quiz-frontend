@@ -31,9 +31,6 @@
 .backup-list { margin-top: var(--space-md); }
 .backup-item { display: flex; justify-content: space-between; align-items: center; padding: var(--space-xs) 0; border-bottom: var(--border-width) solid var(--color-border); font-size: var(--font-size-sm); flex-wrap: wrap; gap: var(--space-xs); }
 .danger-description { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: var(--space-md); }
-.settings-form { display: flex; flex-direction: column; gap: var(--space-md); }
-.settings-section { border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg); }
-.settings-section legend { font-weight: var(--font-weight-bold); font-size: var(--font-size-lg); padding: 0 var(--space-sm); color: var(--color-primary-soft-text); }
 .tag-tree-root { list-style: none; padding: 0; margin: 0; }
 .verifier-item { display: flex; justify-content: space-between; padding: var(--space-sm) 0; border-bottom: var(--border-width) solid var(--color-border); }
 .rank { font-weight: var(--font-weight-bold); width: 30px; }
@@ -71,47 +68,3 @@
 .text-warning { color: var(--color-warning-soft-text); font-weight: var(--font-weight-bold); }
 .text-danger { color: var(--color-danger-soft-text); font-weight: var(--font-weight-bold); }
 .export-section { margin-top: var(--space-xl); }
-
-/* ── Admin maintenance operations (Settings.vue) ──────────────── */
-.settings-ops__intro {
-  font-size: var(--font-size-sm);
-  margin-bottom: var(--space-md);
-}
-.settings-ops {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-.settings-op {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-md);
-  padding: var(--space-md);
-  background: var(--color-bg-alt);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-}
-.settings-op__info {
-  flex: 1;
-  min-width: 0;
-}
-.settings-op__title {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  font-size: var(--font-size-base);
-}
-.settings-op__desc {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-  margin: var(--space-xs) 0 0;
-  line-height: var(--line-height-body);
-}
-.settings-op__result {
-  margin-top: var(--space-xs);
-  font-size: var(--font-size-xs);
-  color: var(--color-success-soft-text);
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-}
