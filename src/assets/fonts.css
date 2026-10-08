@@ -21,3 +21,23 @@ html[data-font='outfit'] {
   --font-family-base: 'Outfit', Tahoma, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-family-heading: var(--font-family-base);
 }
+
+html[data-font='tajawal'] {
+  --font-family-base: 'Tajawal', Tahoma, system-ui, sans-serif;
+  --font-family-heading: var(--font-family-base);
+}
+
+html[data-font='cairo'] {
+  --font-family-base: 'Cairo', Tahoma, system-ui, sans-serif;
+  --font-family-heading: var(--font-family-base);
+}
+
+html[data-font='ibm-plex-arabic'] {
+  --font-family-base: 'IBM Plex Sans Arabic', Tahoma, system-ui, sans-serif;
+  --font-family-heading: var(--font-family-base);
+}
+
+html[data-font='amiri'] {
+  --font-family-base: 'Amiri', Tahoma, system-ui, sans-serif;
+  --font-family-heading: var(--font-family-base);
+}

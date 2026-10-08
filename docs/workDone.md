@@ -1,5 +1,11 @@
 # Work Done
 
+## Four additional Arabic font choices — 2026-10-08
+
+- Added Tajawal, Cairo, IBM Plex Sans Arabic and Amiri to the existing selector, pre-paint allowlist, localized labels and body/heading token rules. Preferences remain browser-local; only selected families register CDN styles, with no local text-font fallback or preload.
+- Used the actual supported weight queries instead of the universal variable range: Tajawal and IBM Plex Sans Arabic use discrete weights, Cairo uses 200–1000, and Amiri uses 400/700. Verified against official Google Fonts metadata: [Tajawal](https://github.com/google/fonts/blob/main/ofl/tajawal/METADATA.pb), [Cairo](https://github.com/google/fonts/blob/main/ofl/cairo/METADATA.pb), [IBM Plex Sans Arabic](https://github.com/google/fonts/blob/main/ofl/ibmplexsansarabic/METADATA.pb), [Amiri](https://github.com/google/fonts/blob/main/ofl/amiri/METADATA.pb).
+- 134 isolated font assertions and 176 settings/source assertions passed, covering supported request parameters, single-family registration, saved-choice restoration, locale persistence, CSS token precedence in both locales, bootstrap/localization and unchanged device-font behavior. JavaScript syntax, 58 CSS parses/token references and whitespace checks passed. No actual font download/rendering, app/device/browser verification, builds, compilation, test suites, installs, version changes, backend or Android edits.
+
 ## Browser-local font preference and lazy text fonts — 2026-10-08
 
 - Added project-default, device, Noto Sans Arabic, Inter and Outfit choices to Appearance, with Arabic/English preview and localized guidance. Browser-local `pref_font` is independent of account APIs and survives sign-out/browsing-density resets. A pre-paint attribute restores the choice; explicit font selections own shared body/heading tokens in both locales.

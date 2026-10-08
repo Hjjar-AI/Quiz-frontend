@@ -112,7 +112,7 @@ Output: `dist/`; Django history fallback or separate static host. Separate origi
 - **CSRF failure:** align frontend/backend hosts, trusted origins, cookies, and HTTPS.
 - **Repeated expiry:** do not combine secure cookies with plain HTTP development.
 - **Route 404 after deployment:** route unknown non-API paths to `index.html`.
-- **Text fonts:** Preferences offers project-default, Noto Sans Arabic, Inter, Outfit and device fonts. Selected text fonts load on demand from Google Fonts with no local-server fallback; device fonts need no text-font download. The choice stays in this browser and survives sign-out.
+- **Text fonts:** Preferences offers project-default, Noto Sans Arabic, Tajawal, Cairo, IBM Plex Sans Arabic, Amiri, Inter, Outfit and device fonts. Selected text fonts load on demand from Google Fonts with no local-server fallback; device fonts need no text-font download. The choice stays in this browser and survives sign-out.
 - **Offline icon failure:** retain the local Bootstrap Icons assets under `public/`. Text remains readable using device fonts when the font CDN is unavailable.
 - **Install failure:** verify registry access and the declared pnpm version.
 

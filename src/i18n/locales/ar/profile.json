@@ -65,6 +65,10 @@
       "default": "خط المشروع الافتراضي (حسب اللغة)",
       "system": "خط الجهاز — دون تنزيل",
       "noto-arabic": "Noto Sans Arabic (العربية)",
+      "tajawal": "تجوّل (Tajawal)",
+      "cairo": "القاهرة (Cairo)",
+      "ibm-plex-arabic": "IBM Plex Sans Arabic (العربية)",
+      "amiri": "أميري (Amiri)",
       "inter": "Inter (النص اللاتيني)",
       "outfit": "Outfit (النص اللاتيني)"
     }

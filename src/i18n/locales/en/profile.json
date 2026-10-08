@@ -65,6 +65,10 @@
       "default": "Project default (follows language)",
       "system": "Device font — no download",
       "noto-arabic": "Noto Sans Arabic",
+      "tajawal": "Tajawal",
+      "cairo": "Cairo",
+      "ibm-plex-arabic": "IBM Plex Sans Arabic",
+      "amiri": "Amiri",
       "inter": "Inter (Latin text)",
       "outfit": "Outfit (Latin text)"
     }

@@ -2,7 +2,7 @@
 
 ## Current priorities
 
-- Browser-verify lazy font choices with network logs: fresh device-font mode requests no text fonts, active project fonts come only from Google Fonts (no local-server fallback), unselected fonts stay unfetched, CDN failure remains readable, reload/sign-out preserve font, and Arabic/English glyphs, headings, density and print remain usable. 74 isolated font assertions passed; actual bandwidth/glyph rendering remains unverified. Icon fallback remains independent.
+- Browser-verify lazy font choices with network logs: fresh device-font mode requests no text fonts, active project fonts come only from Google Fonts (no local-server fallback), unselected fonts stay unfetched, CDN failure remains readable, reload/sign-out preserve font, and Arabic/English glyphs, headings, density and print remain usable. 134 isolated font assertions passed, including Tajawal, Cairo, IBM Plex Sans Arabic and Amiri; actual bandwidth/glyph rendering remains unverified. Icon fallback remains independent.
 
 - Browser-verify the enhanced admin Settings and user Preferences pages in both locales/themes/densities at 320/360/640/768px and desktop: section jumps below sticky chrome, labels/controls, reset persistence, load retry, saved/dirty/discard states, navigation protection, maintenance confirmation/errors, capability visibility and live settings updates. 168 isolated source/runtime assertions passed; actual app/API/device behavior remains pending.
 

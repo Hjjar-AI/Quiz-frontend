@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { storageService } from '@/services/storageService'
-import { DEFAULT_FONT, FONT_OPTIONS, normalizeFontPreference, fontFamiliesFor } from '@/constants/fonts'
+import { DEFAULT_FONT, FONT_OPTIONS, normalizeFontPreference, fontFamiliesFor, fontQueryFor } from '@/constants/fonts'
 
 const STORAGE_KEY = 'pref_font'
 const fontPreference = ref(DEFAULT_FONT)
@@ -14,7 +14,7 @@ function registerFont(family) {
   const link = document.createElement('link')
   link.rel = 'stylesheet'
   link.dataset.appFont = family
-  const query = new URLSearchParams({ family: `${family}:wght@100..900`, display: 'swap' })
+  const query = new URLSearchParams({ family: fontQueryFor(family), display: 'swap' })
   link.href = `https://fonts.googleapis.com/css2?${query}`
   link.onerror = () => {
     // Keep readable device fallbacks, with no request to /fonts/. Allow
