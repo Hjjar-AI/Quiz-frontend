@@ -40,9 +40,6 @@
 .table-shared th {
   background: var(--color-bg-alt);
   font-weight: var(--font-weight-semibold);
-  position: sticky;
-  top: var(--navbar-height, 48px);
-  z-index: 1;
 }
 
 .table-shared tbody tr:nth-child(even) { background: color-mix(in srgb, var(--color-bg-alt) 30%, transparent); }

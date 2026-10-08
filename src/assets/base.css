@@ -28,7 +28,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-heading);
   letter-spacing: var(--letter-spacing-heading);
-  scroll-margin-top: calc(var(--navbar-height, 48px) + var(--space-md));
+  scroll-margin-top: calc(var(--shell-sticky-offset) + var(--space-md));
 }
 
 h1 { font-size: var(--font-size-3xl); }

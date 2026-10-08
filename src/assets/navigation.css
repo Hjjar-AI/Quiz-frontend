@@ -12,7 +12,7 @@
    sibling content with a higher implicit z. */
 .navbar {
   position: sticky;
-  top: 0;
+  top: var(--offline-banner-height);
   z-index: var(--z-nav);
   padding: 0;
 }
@@ -24,20 +24,9 @@
   max-width: var(--content-wide);
   margin: 0 auto;
   padding: 0.35rem var(--space-md);
-  /* `min-height` pins the shell to the same value every sticky
-     consumer of `--navbar-height` reads (see tokens.css and the
-     `top: var(--navbar-height, 48px)` rules in master.css and
-     tables.css, plus the scroll-margin-top on section anchors in
-     base.css and privacy.css). Without it the token was an
-     assumption: the shell computes to roughly 44–45px from
-     `.notification-bell` (32px) plus 2 × 0.35rem × 18px = 12.6px
-     of vertical padding — a 3–4px shortfall that shows up as a
-     thin gap under the sticky exam-runner sub-header and the
-     sticky table headers. Any future taller child (a longer
-     label, a wider badge, the admin-mode chip) would push past
-     48px and start clipping. Pinning the minimum here makes the
-     constant true at every viewport width. */
-  min-height: var(--navbar-height);
+  /* Keep minimum geometry independent of the measured height, so the
+     shell can shrink again after a viewport, density or locale change. */
+  min-height: var(--navbar-min-height);
   background: var(--color-bg-card);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-xl);
@@ -74,7 +63,7 @@
 .navbar__brand-text {
   line-height: 1;
 }
-.navbar__toggle {
+.navbar .navbar__toggle {
   display: none;
   background: none;
   border: none;
@@ -293,7 +282,7 @@
     margin-inline-start: auto;
   }
 
-  .navbar__toggle {
+  .navbar .navbar__toggle {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -343,9 +332,9 @@
     border-radius: var(--radius-md);
   }
 
-  /* Core routes remain one tap away in the bottom bar. The hamburger is
-     reserved for destinations that are not already persistent. */
-  .navbar__links > .navbar__core-link {
+  /* Hide only destinations actually present in the bottom bar. Analytics
+     stays reachable in the top menu without duplicating persistent links. */
+  .navbar__links > .navbar__core-link--persistent {
     display: none;
   }
 
@@ -489,7 +478,7 @@
 .theme-dropdown__item:hover {
   background: var(--color-bg-alt);
 }
-.theme-dropdown__item--active {
+.theme-dropdown .theme-dropdown__item--active {
   background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-card));
   font-weight: var(--font-weight-semibold);
 }
@@ -611,7 +600,7 @@
 .language-dropdown__item:hover {
   background: var(--color-bg-alt);
 }
-.language-dropdown__item--active {
+.language-dropdown .language-dropdown__item--active {
   background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-card));
   font-weight: var(--font-weight-semibold);
 }

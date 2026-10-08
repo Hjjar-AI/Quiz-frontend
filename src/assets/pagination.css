@@ -7,4 +7,11 @@
 .base-pagination__jump-input { width: 60px; text-align: center; }
 .base-pagination__per-page { display: flex; align-items: center; gap: var(--space-xs); margin-inline-start: var(--space-md); }
 .base-pagination__per-page-label { font-size: var(--font-size-sm); color: var(--color-text-muted); white-space: nowrap; }
-.base-pagination__per-page-select { width: 70px; min-height: var(--control-height-compact); padding: 0.25rem 0.5rem; font-size: var(--font-size-sm); }
+.base-pagination__per-page-select { width: 5rem; min-height: var(--control-height-compact); padding: 0.25rem 0.5rem; font-size: var(--font-size-sm); }
+
+@media (pointer: coarse) {
+  .base-pagination__btn {
+    min-block-size: var(--control-height);
+    min-inline-size: var(--control-height);
+  }
+}

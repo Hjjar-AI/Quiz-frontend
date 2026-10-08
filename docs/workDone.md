@@ -1,5 +1,23 @@
 # Work Done
 
+## Visual corrections and theme-aware print enhancement — 2026-10-08
+
+- Fixed theme/language selected-row precedence, native select arrow direction and pagination coarse-pointer sizing; widened the per-page select for its value/arrow.
+- Honored the user's intentional theme-aware print colors. Added independent palette seed aliases and explicit paper derivation inputs while retaining all 55 screen semantic seeds across 11 themes. Dark-theme paper accents deepen without losing hue; white neutral surfaces, strong borders and full printable table containers improve output.
+- Source-color calculations passed for all 55 print accent/white combinations (minimum 5.54:1). Production CSS/jsdom direction checks, selected selector/touch/print contracts, token-reference checks and whitespace checks passed. Actual browser/device/print output remains unverified. No builds, test suites, installs, configured versions, backend or Android changes.
+
+## Additional visual review — 2026-10-08
+
+- Identified four additional inconsistencies: theme/language active backgrounds overwritten by ghost styles, reversed native-select arrow placement, compact pagination buttons without a coarse-pointer minimum, and print derivations losing to themed-root specificity. Recorded follow-up work; existing application edits preserved.
+- Production CSS/jsdom confirmed transparent selected rows and reversed select backgrounds. Touch sizing/print precedence were source-traced; no actual device/print rendering. Narrow-navbar and long-dialog fit remain browser checks. Application code unchanged; no builds, test suites, installs or versions changed.
+
+## Frontend shell/layout corrections — 2026-10-08
+
+- Corrected all eight review findings: mobile Analytics reachability, hamburger cascade precedence, measured navbar/banner offsets, explicit container-sticky tables, visible/topmost modal focus handling, knowledge font token and ordered spacing tiers. Capability, service and localization contracts retained.
+- Added shared height measurement with resize/removal cleanup and focus candidate filtering. Nested dialogs make covered surfaces inert/aria-hidden and restore focus safely; hidden/disabled controls and invalid explicit targets fall back to visible controls or the dialog container.
+- Forty isolated Vue/jsdom assertions, changed SFC/script parsing, JavaScript helper lint, all 57 non-test-named CSS token references and diff whitespace checks passed. Modal setup was source-extracted, native elements rendered, and rectangles supplied for jsdom's absent layout engine. These are not full application browser/real-device checks.
+- Vue lint is blocked by installed parser metadata (`Invalid Version: main`); independent source parsing passed. Full breakpoint/locale/density/theme/print/browser verification remains pending. No builds, compilation tasks, test suites, installs, configured versions, backend or Android changes.
+
 ## Frontend shell/layout review — 2026-10-08
 
 - Reviewed shared shell/navigation, responsive layout/container rules, theme/locale/density wiring, controls/dialogs/tables and token usage. Recorded eight findings and remaining browser checks in `frontendShellReview.md`; application code unchanged.

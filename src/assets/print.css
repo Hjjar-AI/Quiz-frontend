@@ -21,77 +21,43 @@
   `direction: ltr` on its own container without touching this file.
 */
 @media print {
-  /* ── Theme-token reset ───────────────────────────────────────────
-     Force light-theme values for the print medium.
+  /* Theme hues are intentional in print. Separate palette seeds let us
+     adapt bright dark-theme accents to white paper without changing the
+     screen palette or creating self-referencing custom properties.
+     Match the themed-root specificity used by the shared derivation rule. */
+  :root,
+  :root[data-theme] {
+    color-scheme: light;
+    --color-primary: color-mix(in srgb, var(--color-palette-primary) var(--print-accent-weight), black);
+    --color-success: color-mix(in srgb, var(--color-palette-success) var(--print-accent-weight), black);
+    --color-danger: color-mix(in srgb, var(--color-palette-danger) var(--print-accent-weight), black);
+    --color-warning: color-mix(in srgb, var(--color-palette-warning) var(--print-accent-weight), black);
+    --color-info: color-mix(in srgb, var(--color-palette-info) var(--print-accent-weight), black);
+    --color-tint-base: #ffffff;
+    --color-strong-weight: 85%;
+    --color-glow-weight: 0%;
+    --color-border-weight: 72%;
 
-     WHY THIS IS NEEDED
-     ------------------
-     This stylesheet forces `body { background: white; color: black }`
-     but does NOT reset the `data-theme` attribute, so every
-     `var(--color-*)` in the cascade still resolves against the
-     active on-screen theme. In dark mode that means:
-
-       • `--color-border` is a translucent tone derived from muted
-         text and tuned to the dark surface. On white paper it
-         renders as a barely-visible hairline.
-       • The dark theme's primary is a light amber meant to pop on
-         a dark card. On white paper it washes out against the page.
-
-     Net effect: printed question sheets and result breakdowns from
-     a dark-theme session are effectively unreadable.
-
-     SPECIFICITY
-     -----------
-     `html[data-theme]` has specificity (0, 1, 1) — an element plus an
-     attribute selector — which is strictly greater than the (0, 1, 0)
-     of every theme block in tokens.css. The bare `html` selector
-     covers the case where the attribute is missing entirely.
-
-     The semantic print colors below reference immutable
-     `--color-print-*` tokens from tokens.css. Screen themes never
-     override those tokens, so print stays stable without maintaining
-     a second hand-copied palette. */
-  html,
-  html[data-theme] {
-    --color-primary: var(--color-print-primary);
-    --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
-    --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
-    --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
-
-    --color-success: var(--color-print-success);
-    --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
-    --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
-
-    --color-danger: var(--color-print-danger);
-    --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
-    --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
-
-    --color-warning: var(--color-print-warning);
-    --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
-    --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
-
-    --color-info: var(--color-print-info);
-    --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
-    --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
+    --color-primary-soft-text: var(--color-primary);
+    --color-success-soft-text: var(--color-success);
+    --color-danger-soft-text: var(--color-danger);
+    --color-warning-soft-text: var(--color-warning);
+    --color-info-soft-text: var(--color-info);
 
     --color-bg-body: #ffffff;
     --color-bg-card: #ffffff;
     --color-bg-alt: #f5f5f5;
-
     --color-text-primary: #000000;
     --color-text-secondary: #333333;
     --color-text-muted: #666666;
-
-    --color-border: rgba(0, 0, 0, 0.18);
-    --color-overlay: rgba(0, 0, 0, 0.5);
-
-    /* Reassert light "on-*" foregrounds for print so the dark theme's
-       near-black variants do not carry onto remaining accent surfaces. */
+    --color-text-inverse: #ffffff;
     --color-on-primary: #ffffff;
     --color-on-success: #ffffff;
     --color-on-danger: #ffffff;
     --color-on-warning: #ffffff;
     --color-on-info: #ffffff;
+    --color-on-primary-light: #000000;
+    --color-overlay: rgba(0, 0, 0, 0.5);
   }
 
   /* ── Chrome hidden in the printed output ────────────────────── */
@@ -239,6 +205,43 @@
     break-after: avoid;
     page-break-after: avoid;
   }
+
+  .table-shell,
+  .base-data-table,
+  .history-table-wrap,
+  .master-exam-results__table--scrollable,
+  .report-table-wrap {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+  .table-shell--sticky thead th,
+  .master-exam-results__table thead th,
+  .sticky-col {
+    position: static !important;
+  }
+  .table-shell table {
+    display: table !important;
+    min-width: 0 !important;
+    break-inside: auto;
+  }
+  .table-shell thead {
+    display: table-header-group !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+  }
+  .table-shell tbody { display: table-row-group !important; }
+  .table-shell tbody tr { display: table-row !important; }
+  .table-shell th,
+  .table-shell td {
+    display: table-cell !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+  .table-shell td::before { display: none !important; }
 
   .table-shared {
     width: 100%;

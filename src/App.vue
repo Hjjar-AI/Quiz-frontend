@@ -4,7 +4,7 @@
     
     <a href="#main-content" class="skip-link">{{ t('a11y.skipLink') }}</a>
     <Transition name="banner">
-      <div v-if="!isOnline" class="offline-banner">
+      <div v-if="!isOnline" ref="offlineBannerRef" class="offline-banner" role="status">
         <i class="bi bi-wifi-off"></i>
         <span>{{ t('app.offline') }}</span>
       </div>
@@ -27,6 +27,7 @@
 
 import { ref, onErrorCaptured } from 'vue'
 import { useOnline } from '@/composables/useOnline'
+import { useElementHeightToken } from '@/composables/useElementHeightToken'
 import { setNavigatingRef } from '@/router/guards'
 import AppDialogs from '@/components/common/AppDialogs.vue'
 import ScrollToTop from '@/components/common/ScrollToTop.vue'
@@ -35,6 +36,8 @@ import ErrorBoundary from '@/components/common/ErrorBoundary.vue'
 
 const { t } = useI18n()
 const { isOnline } = useOnline()
+const offlineBannerRef = ref(null)
+useElementHeightToken(offlineBannerRef, '--offline-banner-height')
 const isNavigating = ref(false)
 setNavigatingRef(isNavigating)
 

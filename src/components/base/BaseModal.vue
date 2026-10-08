@@ -35,6 +35,8 @@ let savedHtmlPaddingRight = null
         class="base-modal-overlay"
         :class="{ 'base-modal-overlay--static': staticBackdrop }"
         :style="{ zIndex: zIndex }"
+        :inert="isTopmost ? undefined : ''"
+        :aria-hidden="!isTopmost || undefined"
         @click.self="handleBackdrop"
       >
         <div
@@ -43,7 +45,7 @@ let savedHtmlPaddingRight = null
           :class="[`base-modal--${size}`]"
           :role="role"
           tabindex="-1"
-          :aria-modal="true"
+          :aria-modal="isTopmost || undefined"
           :aria-labelledby="titleId"
           @keydown="handleKeydown"
         >
@@ -73,8 +75,9 @@ let savedHtmlPaddingRight = null
 </template>
 
 <script setup>
-import { ref, watch, onUnmounted, nextTick } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount, onUnmounted, nextTick } from 'vue'
 import { useModalStack } from '@/composables/useModalStack'
+import { getFocusableElements, isFocusableElement } from '@/utils/focus'
 import BaseIconButton from './BaseIconButton.vue'
 
 const { t } = useI18n()
@@ -98,7 +101,7 @@ let previousActiveElement = null
 
 // Per-instance z-index for nested modals. See the module comment
 // in useModalStack.js for the failure mode this replaces.
-const { zIndex, register, unregister } = useModalStack()
+const { zIndex, isTopmost, register, unregister } = useModalStack()
 
 let contributedToLock = false
 
@@ -146,16 +149,7 @@ function close() {
 }
 
 function handleBackdrop() {
-  if (!props.staticBackdrop) close()
-}
-
-function getFocusableElements() {
-  if (!modalRef.value) return []
-  return Array.from(
-    modalRef.value.querySelectorAll(
-      'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
-    ),
-  ).filter((element) => element.getAttribute('aria-hidden') !== 'true')
+  if (isTopmost.value && !props.staticBackdrop) close()
 }
 
 function resolveInitialFocus() {
@@ -163,52 +157,72 @@ function resolveInitialFocus() {
 
   if (typeof props.initialFocus === 'function') {
     const target = props.initialFocus()
-    return target?.$el || target || null
+    const element = target?.$el || target
+    if (isFocusableElement(element, true) && modalRef.value.contains(element)) return element
   }
 
-  if (props.initialFocus) {
+  if (typeof props.initialFocus === 'string' && props.initialFocus) {
     try {
       const target = modalRef.value.querySelector(props.initialFocus)
-      if (target) return target
+      if (target && isFocusableElement(target, true)) return target
     } catch {
       // An invalid consumer selector falls back to the safe defaults below.
     }
   }
 
-  return (
-    modalRef.value.querySelector('[autofocus], [data-modal-initial-focus]') ||
-    modalRef.value.querySelector(
-      'input:not(:disabled), select:not(:disabled), textarea:not(:disabled)',
-    ) ||
-    getFocusableElements()[0] ||
-    modalRef.value
-  )
+  const targets = getFocusableElements(modalRef.value)
+  return targets.find(element => element.matches('[autofocus], [data-modal-initial-focus]'))
+    || targets.find(element => element.matches('input, select, textarea'))
+    || targets[0]
+    || modalRef.value
 }
 
 function handleKeydown(e) {
+  if (!props.isOpen || !isTopmost.value || e.defaultPrevented) return
   if (e.key === 'Escape' && props.dismissable) {
+    e.preventDefault()
+    e.stopPropagation()
     close()
     return
   }
 
   if (e.key === 'Tab' && modalRef.value) {
-    const focusable = getFocusableElements()
-    if (focusable.length === 0) return
+    const focusable = getFocusableElements(modalRef.value)
+    if (focusable.length === 0) {
+      e.preventDefault()
+      modalRef.value.focus()
+      return
+    }
     const first = focusable[0]
     const last = focusable[focusable.length - 1]
-    if (e.shiftKey) {
-      if (document.activeElement === first) {
-        e.preventDefault()
-        last.focus()
-      }
-    } else {
-      if (document.activeElement === last) {
-        e.preventDefault()
-        first.focus()
-      }
+    const active = document.activeElement
+    if (!focusable.includes(active) || (e.shiftKey ? active === first : active === last)) {
+      e.preventDefault()
+      const destination = e.shiftKey ? last : first
+      destination.focus()
     }
   }
 }
+
+function containFocus(event) {
+  if (props.isOpen && isTopmost.value && modalRef.value && !modalRef.value.contains(event.target)) {
+    resolveInitialFocus()?.focus()
+  }
+}
+
+function restorePreviousFocus() {
+  const target = previousActiveElement
+  previousActiveElement = null
+  nextTick(() => {
+    if (isFocusableElement(target, true)) target.focus()
+  })
+}
+
+onMounted(() => document.addEventListener('focusin', containFocus))
+onBeforeUnmount(() => {
+  document.removeEventListener('focusin', containFocus)
+  if (modalRef.value?.contains(document.activeElement)) restorePreviousFocus()
+})
 
 watch(
   () => props.isOpen,
@@ -220,17 +234,16 @@ watch(
 
       try {
         await nextTick()
-        resolveInitialFocus()?.focus()
+        if (props.isOpen && isTopmost.value) resolveInitialFocus()?.focus()
       } catch (e) {
         // Focus failed; the lock stays held until close.
       }
     } else {
+      const shouldRestoreFocus = isTopmost.value
       unregister()
       releaseLock()
-      if (previousActiveElement) {
-        previousActiveElement.focus()
-        previousActiveElement = null
-      }
+      if (shouldRestoreFocus) restorePreviousFocus()
+      else previousActiveElement = null
     }
   },
   { immediate: true }

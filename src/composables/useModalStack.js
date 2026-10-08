@@ -61,6 +61,7 @@ let nextId = 0
 
 export function useModalStack() {
   const id = ++nextId
+  const isTopmost = computed(() => openStack.value.at(-1) === id)
 
   const zIndex = computed(() => {
     const idx = openStack.value.indexOf(id)
@@ -94,5 +95,5 @@ export function useModalStack() {
     unregister()
   })
 
-  return { zIndex, register, unregister }
+  return { zIndex, isTopmost, register, unregister }
 }

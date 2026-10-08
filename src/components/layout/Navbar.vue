@@ -1,6 +1,6 @@
 <!-- frontend/src/components/layout/Navbar.vue -->
 <template>
-  <nav class="navbar no-print">
+  <nav ref="navbarRef" class="navbar no-print">
     <div class="navbar__shell">
       <router-link to="/" class="navbar__brand">
         <span class="navbar__brand-icon"><i class="bi bi-journal-medical"></i></span>
@@ -21,6 +21,7 @@
           :key="link.id"
           :to="link.to"
           class="nav-link navbar__core-link"
+          :class="{ 'navbar__core-link--persistent': link.bottomNav }"
           active-class="nav-link--active"
         >
           <i :class="link.icon"></i> {{ t(link.labelKey) }}
@@ -98,6 +99,7 @@ import NavbarDropdown from './NavbarDropdown.vue'
 import NavbarUserMenu from './NavbarUserMenu.vue'
 import { ADMIN_LINKS } from '@/constants/adminLinks'
 import { NAVIGATION_LINKS, isNavigationLinkActive } from '@/constants/navigationLinks'
+import { useElementHeightToken } from '@/composables/useElementHeightToken'
 
 const { t } = useI18n()
 
@@ -123,6 +125,8 @@ const moreLinks = computed(() =>
 )
 
 const menuOpen = ref(false)
+const navbarRef = ref(null)
+useElementHeightToken(navbarRef, '--navbar-height')
 const pendingFlagCount = computed(() => flagStore.pendingCount)
 
 // `/analytics` is intentionally NOT included here — it is a

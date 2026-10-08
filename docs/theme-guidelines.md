@@ -35,4 +35,4 @@ Charts: `--color-chart-1` through `--color-chart-6`, not status colors; use poin
 
 Use the repeatable [visual QA checklist](./visual-qa-checklist.md) for every theme and density before release.
 
-Print: fixed `--color-print-*`, never screen-theme overrides; avoids duplicate palette snapshots.
+Print intentionally preserves the selected theme's semantic hues on a white canvas. `--color-palette-*` stores each theme's original seeds independently of screen/print derivations, avoiding duplicated palettes and variable cycles. Light-theme accents retain their seeds; dark-theme accents use `--print-accent-weight` to deepen them for paper. Print resets neutral surfaces, foregrounds and derivation inputs at themed-root specificity. Check accent/white contrast, table pagination and actual browser print output; `--color-print-*` remains the default Stone seed source.

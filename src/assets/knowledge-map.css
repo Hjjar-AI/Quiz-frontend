@@ -16,7 +16,7 @@
 .knowledge-object-card--developing { border-inline-start-color: var(--color-info); }
 .knowledge-object-card--needs_work { border-inline-start-color: var(--color-warning); }
 .knowledge-object-card__header { display: flex; justify-content: space-between; gap: var(--space-sm); }
-.knowledge-object-card__header h3 { margin: 0 0 var(--space-xs); font-size: var(--font-size-md); }
+.knowledge-object-card__header h3 { margin: 0 0 var(--space-xs); font-size: var(--font-size-base); }
 .knowledge-object-card__header p { margin: 0; color: var(--color-text-secondary); }
 .knowledge-status { align-self: flex-start; white-space: nowrap; border-radius: var(--radius-pill); padding: var(--space-2xs) var(--space-sm); font-size: var(--font-size-xs); background: var(--color-bg-alt); }
 .knowledge-meter { height: 8px; overflow: hidden; border-radius: var(--radius-pill); background: var(--color-bg-alt); margin-top: var(--space-md); }

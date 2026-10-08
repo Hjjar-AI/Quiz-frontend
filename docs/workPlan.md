@@ -2,7 +2,9 @@
 
 ## Current priorities
 
-- Address the eight findings in [frontendShellReview.md](frontendShellReview.md): mobile Analytics access, desktop toggle cascade, actual navbar height, offline banner stacking, table-container sticky offsets, modal focus visibility, undefined knowledge font token and reversed spacing tiers. Application corrections remain pending.
+- Browser-verify the completed additional visual corrections and intentional theme-aware print enhancement in `frontendShellReview.md`: selected theme/language rows, LTR/RTL select arrows, pagination touch sizing, paper accents/borders and full table printing. All 55 semantic screen seeds are preserved; source print contrast calculations passed. Actual print pagination/background retention remains pending.
+
+- Browser-verify the eight completed corrections in [frontendShellReview.md](frontendShellReview.md): mobile Analytics access, desktop toggle cascade, measured navbar/banner offsets, table-container sticky behavior, modal focus/nesting and normalized tokens. Forty isolated assertions passed; Vue lint needs recovery from the installed parser's `Invalid Version: main` error without changing configured versions.
 - Browser-verify shell/container behavior at 320/360/480/640/768/769/900px and desktop, both locales/densities, touch pointers, long content, dialogs/keyboard/safe areas, every theme and print. Standalone source/jsdom checks do not establish rendering.
 
 1. Keep frontend export options aligned with the backend request serializer.

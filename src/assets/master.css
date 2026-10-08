@@ -500,7 +500,7 @@
 }
 
 /* `top` was `0` in the original. It is bumped to
-   `var(--navbar-height, 48px)` so this sticky sub-header parks
+   the measured shell offset so this sticky sub-header parks
    BELOW the now-sticky desktop navbar instead of sliding under it.
    The navbar draws at `--z-nav` (1030); this header draws at
    `--z-sticky` (1020), so without the bump it would disappear
@@ -516,7 +516,7 @@
   border-radius: var(--radius-lg);
   margin-bottom: var(--space-lg);
   position: sticky;
-  top: var(--navbar-height, 48px);
+  top: var(--shell-sticky-offset);
   z-index: var(--z-sticky);
   box-shadow: var(--shadow-sm);
 }

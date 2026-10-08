@@ -1,8 +1,25 @@
 # Frontend shell, layout and token review — 2026-10-08
 
-Reviewed App/Layout/PageShell, navbar and mobile navigation, theme/locale/density wiring, shared controls/popovers/modals, table containers, CSS import ordering and feature layout consumers. Findings below concern current source. Application code is unchanged.
+## Additional visual follow-up — addressed (2026-10-08)
 
-## Findings
+- Medium: selected theme/language rows lose their tinted background. `navigation.css:481` and `:603` use one-class active selectors; the later `buttons.css:27` ghost background has equal specificity and wins. The row components render both class sets. Use the shared active-button API or scoped active selectors with explicit precedence. Production CSS in jsdom confirmed both selected backgrounds resolve to transparent.
+- Medium: native `select.form-control` arrows are reversed. `forms.css:43` puts the arrow on the left in LTR, while `:48` puts it on the right in RTL, although padding is reserved at inline-end. BasePagination's per-page select uses these styles. Arrow placement should follow the padded inline-end side. Production CSS/jsdom confirmed the two physical positions.
+- Medium: pagination buttons retain the 36px compact minimum on coarse pointers. `pagination.css:2` has no equivalent to the BaseButton coarse-pointer rule, so previous/next/jump controls are inconsistent with the 44px shared touch policy. Native pagination buttons do not carry BaseButton classes. Add an appropriate shared coarse-pointer rule.
+- Print behavior clarification: the user confirmed that theme-aware print colors are intentional. The review identified accidental specificity dependencies, not a reason to replace the selected theme with a fixed palette. Preserve theme hues while making their paper derivations explicit and readable.
+
+These are additional findings, separate from the eight corrected below. No application code changed during this follow-up. Narrow navbar fit, long dialog title/footer wrapping and mobile safe-area/keyboard clearance remain browser-verification risks rather than confirmed measurements. No builds, test suites or dependency/version changes were performed.
+
+### Corrections and print enhancement
+
+- Scoped selected theme/language row selectors now outrank ghost button backgrounds. Native select arrows follow inline-end (right in LTR, left in RTL), matching reserved padding. Pagination buttons gain 44px block/inline minimums on coarse pointers; the per-page select widens to 5rem for its value and arrow.
+- Theme definitions keep original semantic seeds in `--color-palette-*` and alias screen colors to those seeds. All 55 semantic seed values across 11 themes remain identical to the previous screen palettes. Print preserves these hues, retaining light-theme seeds and deepening bright dark-theme seeds at 45% against black. Neutral paper surfaces/foregrounds and derivation inputs are explicit at shared themed-root specificity, eliminating accidental precedence and variable cycles.
+- Print scroll containers expand fully, sticky cells become static, mobile card tables return to tables with repeated headers, all priority columns display, and long cell values can wrap. Paper borders use a stronger neutral weight. Existing RTL direction and printer color-adjust settings are retained.
+- All 55 computed printed accent/white contrast ratios exceed 4.5:1 (minimum 5.54:1); this is a source-color calculation, not a printer/PDF measurement. Production CSS/jsdom verified both select directions; source checks verified selected-row precedence, touch sizing, print containers and token references. Whitespace checks passed. No builds, test suites, installs, configured versions, backend or Android edits were made.
+- Actual print pagination/background retention and browser/device rendering remain pending verification.
+
+Reviewed App/Layout/PageShell, navbar and mobile navigation, theme/locale/density wiring, shared controls/popovers/modals, table containers, CSS import ordering and feature layout consumers. The findings below describe the review-time source; all eight have now been corrected.
+
+## Findings from the review
 
 1. **High — Analytics disappears from mobile shell navigation.** `Navbar.vue:112–122` classifies analytics as a core link and excludes it from More. `navigation.css:348` hides all core links at widths up to 768px. `navigationLinks.js:17` does not include analytics in the bottom bar. Keep mobile secondary destinations in More unless they actually appear in the bottom bar.
 
@@ -27,3 +44,20 @@ Reviewed App/Layout/PageShell, navbar and mobile navigation, theme/locale/densit
 - Source-reviewed responsive table labels, shared content-width tiers, coarse-pointer controls, Arabic/English direction, theme seeds/derived tokens, density overrides, scroll lock and reduced-motion rules. Responsive card tables supply data-label values; broad reduced-motion rules are present.
 - Dialog title/footer wrapping, safe-area/virtual-keyboard clearance, dropdown collision at narrow widths, long mixed-script content, and navbar fit near 768px need browser measurements. These are remaining verification areas, not additional confirmed rendering defects.
 - No builds, compilation tasks, test suites, dependency installation, versions, backend code or Android code were changed. No complete application browser rendering, theme contrast measurement, print rendering, or real-device verification was performed.
+
+## Corrections — 2026-10-08
+
+- Mobile navigation hides only core destinations actually present in the bottom bar. Analytics remains a direct item in the hamburger menu. Existing capability filters and desktop placement remain in use.
+- Desktop/mobile hamburger selectors include the navbar scope, giving them precedence over the later BaseButton display rule.
+- `useElementHeightToken` observes navbar and offline-banner heights, responds to viewport changes, and removes measurements on disappearance/unmount. Navbar minimum geometry has its own token to permit shrinking; the measured navbar height plus banner height supplies runner/anchor offsets. The navbar parks below the offline banner.
+- Ordinary shared table headers no longer inherit viewport-sticky behavior. Explicit sticky BaseTableShell headers continue to stick at zero inside their scrolling container.
+- Modal candidates exclude hidden, inert, disconnected, disabled and untabbable controls. Explicit initial targets are checked before use, with safe fallbacks. Tab handling includes container focus/empty lists; outside focus is contained. Only the topmost dialog handles focus and keyboard wrapping; covered dialogs become inert/aria-hidden and focus returns after close. Initial focus waits for the DOM and checks that the dialog is still open/topmost.
+- Knowledge headings consume `--font-size-base`. `--space-2xs` is now 0.125rem, below the unchanged 0.25rem xs tier. Consumers keep control/touch minimum heights independently of spacing.
+
+### Verification of corrections
+
+- Forty isolated assertions passed for navigation membership/selectors, sticky-container and token contracts, measured-height growth/shrink/removal/reappearance/cleanup, hidden/disabled/inert focus candidates, explicit target rejection, empty focus lists, forward/backward wrapping, outside containment, nested modal ownership/inertness and focus restoration.
+- Executed actual height/focus/modal-stack logic with Vue lifecycle hooks and jsdom. Modal setup code was source-extracted and rendered with a small native-element harness; supplied rectangles replace jsdom's absent layout engine. These checks establish state/DOM behavior under the harness, not actual browser rendering or touch-device behavior.
+- Vue SFC structure and JavaScript syntax parsing passed for changed scripts/components. JavaScript lint passed for the three shared helper/composable modules. Normal Vue lint remains blocked by the installed parser's `Invalid Version: main` error; no dependency/version files were altered to bypass it.
+- All 57 non-test-named CSS files now have no undefined no-fallback token references. Diff whitespace checks passed.
+- Full browser/real-device layout, breakpoint/locale/density/contrast/print checks remain pending. No builds, compilation tasks, test-suite files, installations, versions, backend or Android changes were made.
