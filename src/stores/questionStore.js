@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 import { questionService } from '@/services/questionService'
+import { createOperationId } from '@/utils/operationId'
 import { storageService } from '@/services/storageService'
 import { useCrudActions } from '@/composables/useCrudActions'
 import { useNotify } from '@/composables/useNotify'
@@ -159,7 +160,7 @@ export const useQuestionStore = defineStore('questions', {
       const { wrap } = useCrudActions(this)
       return await wrap(async () => {
         if (this.pendingCreate && !retry) return questionService.createReceipt(this.pendingCreate)
-        this.pendingCreate ??= crypto.randomUUID()
+        this.pendingCreate ??= createOperationId()
         this.createReceiptMissing = false
         return questionService.create({ ...data, operation_id: this.pendingCreate })
       }, {
@@ -310,7 +311,7 @@ export const useQuestionStore = defineStore('questions', {
       return await wrap(async () => {
         const pending = this.pendingDuplicates[id]
         if (pending && !retry) return questionService.duplicateReceipt(id, pending)
-        const identity = pending || crypto.randomUUID()
+        const identity = pending || createOperationId()
         this.pendingDuplicates[id] = identity
         return questionService.duplicate(id, identity)
       }, {
