@@ -7,6 +7,7 @@ Updated 2026-10-09. Detailed previous checks/priorities: [archive](archive/2026-
 - Verify Arabic/English, all themes (including Ruby), fonts/lazy loading/CDN failures, density, narrow/large text, count-up precision, study/master navigation and Settings/Preferences dirty/save/discard behavior.
 - Verify startup/timeouts/stale reads/repeated writes, editor/image recovery, expiry refresh and API errors against running backend.
 - Verify custom PDF/Excel/CSV/JSON selections, reorder/order retention, filters/verified-only/errors/downloads; fresh PDF links/answer placement/quiz/front matter and print pagination on matching backend.
+- Verify web System settings connection-file download/import on Android, custom phone addresses/deployment prefixes, permission revocation and bilingual/RTL validation; export must preserve runtime-settings drafts.
 - Verify Vite/API/media proxy ports, occupied ports and CSRF origins in the real development environment. Historical parser/dependency limitations need rechecking before lint; no dependency/version change is authorized.
 
 This source comparison found Android gaps, not a new Vue implementation defect. Browser/HTTP/print checks remain separate from source checks. No suites/builds/compilation/packaging or migrations without explicit request; preserve user edits.

@@ -91,6 +91,14 @@
     },
 
     "settings": {
+      "connectionTitle": "Android connection file",
+      "connectionHint": "Export an unencrypted JSON file so users can select their server without typing its address. Nested decorative metadata is not encryption. No accounts or credentials are included.",
+      "connectionAddress": "Phone-accessible server address",
+      "connectionAddressHint": "Enter the HTTP/HTTPS origin or full API URL ending in /api/v1/, including any deployment prefix. Use an address recipients can reach. Exporting does not change server settings.",
+      "connectionInvalid": "Enter a valid http:// or https:// origin or /api/v1/ URL without credentials, query parameters or a fragment.",
+      "connectionExport": "Download connection file",
+      "connectionDownloadStarted": "Download requested. Share the file with users; they can import it at first launch or through Change server.",
+      "connectionExportFailed": "Could not start the connection file download. The address has been kept.",
       "title": "System settings",
       "sectionGeneral": "Account defaults",
       "sectionTests": "Exam defaults",

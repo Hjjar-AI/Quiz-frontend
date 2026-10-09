@@ -10,6 +10,7 @@
       <nav class="settings-jump-links" :aria-label="t('admin.settings.sections')">
         <a href="#settings-general">{{ t('admin.settings.sectionGeneral') }}</a>
         <a href="#settings-exams">{{ t('admin.settings.sectionTests') }}</a>
+        <a v-if="authStore.can('admin.settings')" href="#settings-connection">{{ t('admin.settings.connectionTitle') }}</a>
         <a v-if="authStore.can('admin.seed')" href="#settings-maintenance">{{ t('admin.settings.sectionOps') }}</a>
         <RouterLink to="/preferences">{{ t('preferences.title') }}</RouterLink>
       </nav>
@@ -63,6 +64,21 @@
         </form>
       </AsyncContent>
 
+      <BaseCard v-if="authStore.can('admin.settings')" as="section" id="settings-connection" class="settings-card" :aria-label="t('admin.settings.connectionTitle')">
+        <SectionHeader :title="t('admin.settings.connectionTitle')" :description="t('admin.settings.connectionHint')" icon="bi bi-phone" />
+        <form class="settings-form" novalidate @submit.prevent="exportConnection">
+          <BaseInput :model-value="connectionAddress" @update:model-value="updateConnectionAddress" @blur="touchConnection('address')"
+            id="connection-address" name="connection-address" type="url" dir="auto" autocomplete="off" required
+            :label="t('admin.settings.connectionAddress')" :hint="t('admin.settings.connectionAddressHint')"
+            :error="connectionErrors.address" :disabled="connectionExportBusy" />
+          <FeedbackRegion :error="connectionExportError" @dismiss="connectionExportError = ''" />
+          <BaseButton type="submit" variant="secondary" icon="bi bi-download" :loading="connectionExportBusy">
+            {{ t('admin.settings.connectionExport') }}
+          </BaseButton>
+          <p v-if="connectionDownloadStarted" role="status">{{ t('admin.settings.connectionDownloadStarted') }}</p>
+        </form>
+      </BaseCard>
+
       <BaseCard v-if="authStore.can('admin.seed')" as="section" id="settings-maintenance" class="settings-card" :aria-label="t('admin.settings.sectionOps')">
         <SectionHeader :title="t('admin.settings.sectionOps')" :description="t('admin.settings.opsIntro')" icon="bi bi-tools" />
         <div class="settings-operations">
@@ -111,12 +127,52 @@ import { useFormValidation } from '@/composables/useFormValidation'
 import { useUnsavedChanges } from '@/composables/useUnsavedChanges'
 import { useDialog } from '@/composables/useDialog'
 import { useLocaleFormatters } from '@/i18n/helpers/format'
+import { downloadBlob } from '@/utils/downloadFile'
+import { normalizeServerAddress, exportServerConnection } from '@/utils/serverConnectionFile'
 
 const { t, locale } = useI18n()
 const { formatNumber } = useLocaleFormatters()
 const adminSettingsStore = useAdminSettingsStore()
 const authStore = useAuthStore()
 const { confirm } = useDialog()
+// Export address is independent of runtime settings and stays memory-only.
+const connectionAddress = ref('')
+const connectionExportBusy = ref(false)
+const connectionExportError = ref('')
+const connectionDownloadStarted = ref(false)
+const { errors: connectionErrors, touch: touchConnection, revalidate: revalidateConnection, validateAll: validateConnection } = useFormValidation({
+  address: () => normalizeServerAddress(connectionAddress.value) ? '' : t('admin.settings.connectionInvalid'),
+})
+watch(locale, () => revalidateConnection('address'))
+
+function updateConnectionAddress(value) {
+  connectionAddress.value = value
+  connectionExportError.value = ''
+  connectionDownloadStarted.value = false
+  revalidateConnection('address')
+}
+
+function exportConnection() {
+  if (!authStore.can('admin.settings') || connectionExportBusy.value) return
+  if (!validateConnection()) {
+    document.getElementById('connection-address')?.focus()
+    return
+  }
+  connectionExportBusy.value = true
+  connectionExportError.value = ''
+  connectionDownloadStarted.value = false
+  try {
+    const content = exportServerConnection(connectionAddress.value)
+    downloadBlob(new Blob([content], { type: 'application/json;charset=utf-8' }), 'mukhtabir-connection.json')
+    // Browser download completion/cancellation cannot be observed by this helper.
+    connectionDownloadStarted.value = true
+  } catch {
+    connectionExportError.value = t('admin.settings.connectionExportFailed')
+  } finally {
+    connectionExportBusy.value = false
+  }
+}
+
 const accountFields = ['default_expiry_days', 'default_renewal_days']
 const fields = [...accountFields, 'exam_duration_minutes']
 const settings = ref(Object.fromEntries(fields.map(field => [field, ''])))

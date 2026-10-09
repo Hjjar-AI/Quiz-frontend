@@ -18,3 +18,9 @@ Read current production routes/endpoints, analytics UI/store, question cards and
 ## 2026-10-09 agent guidance maintenance
 
 Compacted shared working rules without relaxing explicit build/suite/migration/version restrictions; added source-evidenced cross-client review and bounded-completion guidance. Captured uncertain toggle/create recovery, structured errors and dependent/profile freshness; Android also records compiler-signature/opt-in/cancellation/visibility checks. Frontend AGENTS now links its detailed instructions. Documentation links and whitespace checked; no production or runtime work.
+
+## 2026-10-09 Android connection-file export
+
+Added `admin.settings`-gated **Android connection file** to web System settings. The handler independently checks the capability; a memory-only phone-address field uses existing form validation timing, bilingual labels/errors and a separate download status. Public unencrypted v1 nested JSON matches Android first-launch/Change-server import; decorative randomized identities grant no server/account authority. Existing browser download helper handles Blob/object-URL cleanup. Export does not save runtime settings, reset their draft or call the backend. URL validation rejects credentials/query/fragment/non-HTTP schemes and preserves explicit deployment-prefix API paths.
+
+JavaScript helper/extracted setup-script syntax checks, JSON parsing/bilingual key references and whitespace checks passed. `@vue/compiler-sfc` is unavailable here, so Vue template parsing, browser downloads/accessibility and Android interoperability remain unverified. No dependencies, builds, suites, migrations, backend changes, deployment or versions. See [Android file contract and retained profiles](../../Android/docs/serverConfiguration.md).
