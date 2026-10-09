@@ -8,7 +8,7 @@ import { standardState, standardGetters, makeReset } from '@/stores/storeHelpers
 const _pendingToggles = new Map()
 
 export const useBookmarkStore = defineStore('bookmarks', {
-  state: () => standardState({ bookmarkedIds: [], count: 0 }),
+  state: () => standardState({ bookmarkedIds: [], count: 0, pendingDesired: {} }),
   getters: {
     ...standardGetters,
     isBookmarked: (state) => (id) => state.bookmarkedIds.includes(id),
@@ -46,6 +46,8 @@ export const useBookmarkStore = defineStore('bookmarks', {
       // --- Optimistic Update ---
       const idx = this.bookmarkedIds.indexOf(questionId)
       const wasBookmarked = idx !== -1
+      const desired = this.pendingDesired[questionId] ?? !wasBookmarked
+      this.pendingDesired[questionId] = desired
 
       if (wasBookmarked) {
         this.bookmarkedIds.splice(idx, 1)
@@ -55,10 +57,11 @@ export const useBookmarkStore = defineStore('bookmarks', {
         this.count += 1
       }
 
-      return await wrap(() => bookmarkService.toggle(questionId), {
+      return await wrap(() => bookmarkService.set(questionId, desired), {
         successMsg: null,
         errorMsgFallbackKey: 'notifications.bookmarkToggleFailed',
         onSuccess: (res) => {
+          delete this.pendingDesired[questionId]
           const isNowBookmarked = res.added
           const currentIdx = this.bookmarkedIds.indexOf(questionId)
           const currentlyBookmarked = currentIdx !== -1
@@ -90,6 +93,6 @@ export const useBookmarkStore = defineStore('bookmarks', {
         },
       })
     },
-    reset: makeReset({ bookmarkedIds: [], count: 0, status: 'idle', error: null }),
+    reset: makeReset({ bookmarkedIds: [], count: 0, pendingDesired: {}, status: 'idle', error: null }),
   },
 })

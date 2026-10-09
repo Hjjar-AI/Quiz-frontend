@@ -146,7 +146,9 @@ export const useGroupStore = defineStore('groups', {
 
     async updateGroup(id, data) {
       const { wrap } = useCrudActions(this)
-      return await wrap(() => groupService.adminUpdate(id, data), {
+      const baseline = this.adminCurrent?.id === id ? this.adminCurrent : this.adminGroups.find(group => group.id === id)
+      const versioned = { ...data, expected_version: data.expected_version ?? baseline?.version }
+      return await wrap(() => groupService.adminUpdate(id, versioned), {
         successMsgKey: 'notifications.groupUpdated',
         errorMsgFallbackKey: 'notifications.groupUpdateFailed',
         onSuccess: (group) => {

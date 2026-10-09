@@ -81,6 +81,9 @@
                     <span :class="accuracyClass(item.accuracy)">
                       {{ item.accuracy.toFixed(1) }}%
                     </span>
+                  <div v-if="item.master_metadata?.weighted_score != null">
+                      {{ t('masterExams.resultsColWeighted') }}: {{ Number(item.master_metadata.weighted_score).toFixed(1) }}%
+                    </div>
                   </td>
                   <td :data-label="t('history.colTime')">{{ formatTime(item.time_spent) }}</td>
                 </tr>

@@ -28,6 +28,7 @@ export function useTestSetupState(props, emit, t) {
 
   const mode = ref(props.initialMode)
   const source = ref('')
+  const selectionStrategy = ref('coverage')
   const selectedTags = ref([])
   const selectedCategories = ref([])
   const selectedBlueprintId = ref(null)
@@ -232,6 +233,7 @@ export function useTestSetupState(props, emit, t) {
     return {
       ...buildSelectionPayload(false),
       limit: numQuestions.value,
+      selection_strategy: selectionStrategy.value,
       session_label: activeSourceBehavior.value?.label() || t('tests.genericTag'),
     }
   }
@@ -327,6 +329,7 @@ export function useTestSetupState(props, emit, t) {
     selectedTags,
     selectedCategories,
     selectedBlueprintId,
+    selectionStrategy,
     filters,
     numQuestions,
     tagItems,

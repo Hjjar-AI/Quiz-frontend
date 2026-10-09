@@ -47,6 +47,12 @@
         </div>
       </div>
 
+      <div class="report-stats">
+        <div v-for="key in ['unique_questions', 'unique_concepts', 'due_reviews', 'mastery_gain']" :key="key" class="report-stat">
+          <span class="report-stat__value">{{ Number(data?.[key] || 0).toLocaleString(locale, { maximumFractionDigits: 1 }) }}</span>
+          <span class="report-stat__label">{{ t('analytics.' + key) }}</span>
+        </div>
+      </div>
       <div class="streak-chart">
         <div
           v-for="day in days"
@@ -57,6 +63,10 @@
           :title="dayTitle(day)"
         ></div>
       </div>
+      <details>
+        <summary>{{ t('analytics.dailyValues') }}</summary>
+        <ul><li v-for="day in days" :key="day.date">{{ dayTitle(day) }}</li></ul>
+      </details>
       <div class="streak-chart__baseline">
         <span>{{ days[0]?.date }}</span>
         <span>{{ days[days.length - 1]?.date }}</span>
@@ -68,7 +78,7 @@
 <script setup>
 import { computed } from 'vue'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const props = defineProps({
   data: { type: Object, default: null },

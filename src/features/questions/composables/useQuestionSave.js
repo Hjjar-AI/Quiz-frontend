@@ -82,11 +82,13 @@ export function useQuestionSave() {
   return { extractSentinels, finishSave }
 }
 /** Freeze the draft through text/image work, and retry only a failed image. */
-export function useQuestionSaveFlow({ persist, formRef, afterSave, uploadFailureKey }) {
+export function useQuestionSaveFlow({ persist, formRef, afterSave, uploadFailureKey, isUncertain = () => false }) {
   const { extractSentinels, finishSave } = useQuestionSave()
   const saving = ref(false)
   const imageError = ref('')
   const recovery = ref(null)
+  const pendingWrite = ref(null)
+  const uncertainSave = computed(() => pendingWrite.value !== null)
   const hasPendingImage = computed(() => recovery.value !== null)
 
   async function completeImage() {
@@ -98,12 +100,15 @@ export function useQuestionSaveFlow({ persist, formRef, afterSave, uploadFailure
   }
 
   async function save(payload) {
-    if (saving.value || recovery.value) return
+    if (saving.value || recovery.value || pendingWrite.value) return
     saving.value = true
     try {
       const sentinels = extractSentinels(payload)
       const result = await persist(payload)
-      if (!result) return
+      if (!result) {
+        if (isUncertain()) pendingWrite.value = { sentinels, payload: { ...payload } }
+        return
+      }
       recovery.value = { questionId: result.id, sentinels, payload, uploadFailureKey }
       await completeImage()
     } finally { saving.value = false }
@@ -116,5 +121,20 @@ export function useQuestionSaveFlow({ persist, formRef, afterSave, uploadFailure
     finally { saving.value = false }
   }
 
-  return { saving, imageError, hasPendingImage, save, retryImage }
+  async function resolveWrite(retry) {
+    if (saving.value || !pendingWrite.value) return
+    saving.value = true
+    try {
+      const original = pendingWrite.value
+      const result = await persist(original.payload, retry)
+      if (!result) return
+      recovery.value = { questionId: result.id, sentinels: original.sentinels, payload: original.payload, uploadFailureKey }
+      pendingWrite.value = null
+      await completeImage()
+    } finally { saving.value = false }
+  }
+
+  const reviewWrite = () => resolveWrite(false)
+  const retryWrite = () => resolveWrite(true)
+  return { saving, imageError, hasPendingImage, uncertainSave, reviewWrite, retryWrite, save, retryImage }
 }

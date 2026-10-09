@@ -102,6 +102,12 @@
               <span>{{ t('questions.duplicate') }}</span>
             </BaseButton>
 
+            <BaseButton v-if="authStore.can('questions.duplicate') && questionStore.pendingDuplicates[question.id]"
+              variant="ghost" size="small" raw-content class="question-card-actions__item" role="menuitem"
+              :disabled="questionStore.isLoading" @click="run('retry-duplicate')">
+              <span>{{ t('questions.retrySameRequest') }}</span>
+            </BaseButton>
+
             <BaseButton
               variant="ghost"
               size="small"
@@ -217,6 +223,7 @@ function run(action) {
     exportQuestion()
     return
   }
+  if (action === 'retry-duplicate') { questionStore.duplicate(props.question.id, true); return }
   emit(action)
 }
 

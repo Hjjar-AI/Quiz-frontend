@@ -152,6 +152,13 @@
             <label>{{ t('difficulty.label') }}</label>
             <DifficultySelector v-model="filters.difficulty" />
           </div>
+          <BaseSelect
+            v-if="source !== 'srs'"
+            v-model="selectionStrategy"
+            :label="t('tests.selectionStrategy')"
+            :disabled="loading"
+            :options="['coverage', 'balanced', 'review'].map(value => ({ value, label: t('tests.selection_' + value) }))"
+          />
           <BaseInput
             v-model="filters.tags"
             :label="t('tests.additionalTags')"
@@ -230,6 +237,7 @@ const {
   selectedTags,
   selectedCategories,
   selectedBlueprintId,
+  selectionStrategy,
   filters,
   numQuestions,
   tagItems,

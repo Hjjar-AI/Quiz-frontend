@@ -61,7 +61,7 @@ const _pendingVerifications = reactive(new Map())
 
 export const useQuestionStore = defineStore('questions', {
   state: () =>
-    standardState({
+    standardState({ pendingDuplicates: {}, pendingCreate: null, createReceiptMissing: false,
       byId: {},
       ids: [],
       currentItem: null,
@@ -153,12 +153,21 @@ export const useQuestionStore = defineStore('questions', {
       return response
     },
 
-    async create(data) {
+    async create(data, retry = false) {
+      if (this.isLoading) return null
+      const reconciling = Boolean(this.pendingCreate)
       const { wrap } = useCrudActions(this)
-      return await wrap(() => questionService.create(data), {
+      return await wrap(async () => {
+        if (this.pendingCreate && !retry) return questionService.createReceipt(this.pendingCreate)
+        this.pendingCreate ??= crypto.randomUUID()
+        this.createReceiptMissing = false
+        return questionService.create({ ...data, operation_id: this.pendingCreate })
+      }, {
         invalidateOnSuccess: 'questions_',
         successMsgKey: 'notifications.questionCreated',
+        onError: (error) => { this.createReceiptMissing = reconciling && !retry && Number(error?.code) === 404; if (!reconciling && [400, 403, 404, 409, 429].includes(Number(error?.code))) this.pendingCreate = null },
         onSuccess: (item) => {
+          this.pendingCreate = null
           this.$patch((state) => {
             state.byId[item.id] = item
             state.ids = [item.id, ...state.ids]
@@ -294,13 +303,23 @@ export const useQuestionStore = defineStore('questions', {
       })
     },
 
-    async duplicate(id) {
+    async duplicate(id, retry = false) {
+      if (this.isLoading) return null
+      const reconciling = Boolean(this.pendingDuplicates[id])
       const { wrap } = useCrudActions(this)
-      return await wrap(() => questionService.duplicate(id), {
+      return await wrap(async () => {
+        const pending = this.pendingDuplicates[id]
+        if (pending && !retry) return questionService.duplicateReceipt(id, pending)
+        const identity = pending || crypto.randomUUID()
+        this.pendingDuplicates[id] = identity
+        return questionService.duplicate(id, identity)
+      }, {
         invalidateOnSuccess: 'questions_',
         successMsgKey: 'notifications.questionDuplicated',
         errorMsgFallbackKey: 'notifications.questionDuplicateFailed',
+        onError: (error) => { if (!reconciling && [400, 403, 404, 409, 429].includes(Number(error?.code))) delete this.pendingDuplicates[id] },
         onSuccess: (newQ) => {
+          delete this.pendingDuplicates[id]
           this.$patch((state) => {
             state.byId[newQ.id] = newQ
             state.ids = [newQ.id, ...state.ids]
@@ -358,7 +377,7 @@ export const useQuestionStore = defineStore('questions', {
 
     reset() {
       listRequests.delete(this)
-      return makeReset({
+      return makeReset({ pendingDuplicates: {}, pendingCreate: null, createReceiptMissing: false,
         byId: {},
         ids: [],
         currentItem: null,

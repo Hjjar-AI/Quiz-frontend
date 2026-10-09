@@ -17,10 +17,8 @@
     "seriesQuestionCount": "عدد الأسئلة",
     "seriesActiveUsers": "المستخدمون النشطون",
     "seriesNewUsers": "المستخدمون الجدد",
-
     "sectionMember": "تحليلاتك",
     "sectionAdmin": "تحليلات الفصل",
-
     "categoryMasteryTitle": "إتقان التصنيفات",
     "categoryMasteryDesc": "دليل إتقانك الحالي حسب التصنيف، مع احتساب التغطية والثقة والتكرار والأخطاء الحالية.",
     "categoryMasteryEmpty": "ابدأ بالتدرب على بعض الأسئلة لرؤية إتقانك للتصنيفات.",
@@ -30,16 +28,14 @@
     "categoryMasteryAttempts": "محاولة",
     "categoryMasteryAccuracy": "دقة",
     "categoryMasteryQuestions": "سؤال",
-
     "streakHistoryTitle": "نشاط الدراسة",
-    "streakHistoryDesc": "نشاطك اليومي خلال النافذة المحددة. الفجوات تشير إلى أيام بلا جلسة مكتملة.",
+    "streakHistoryDesc": "التعلم بالإجابات حسب اليوم، بما فيه الدراسة المتوقفة والتدريب دون اتصال بعد مزامنته.",
     "streakHistoryCurrentStreak": "السلسلة الحالية",
     "streakHistoryLongestStreak": "أطول سلسلة",
     "streakHistoryActiveDays": "الأيام النشطة",
     "streakHistorySessions": "الجلسات",
     "streakHistoryQuestions": "الأسئلة",
     "streakHistoryNoData": "لا توجد جلسات دراسة في هذه النافذة.",
-
     "difficultyCalibrationTitle": "معايرة الصعوبة",
     "difficultyCalibrationDesc": "تقارن تسمية الصعوبة على كل سؤال مع أداء الممتحنين الفعلي. البنك المعاير جيداً يظهر ثلاثة أشرطة تنازلية من السهل إلى الصعب.",
     "difficultyCalibrationEasy": "سهل",
@@ -51,7 +47,6 @@
     "difficultyCalibrationAnswered": "الإجابات",
     "difficultyCalibrationEmpty": "لا توجد أسئلة للمعايرة بعد.",
     "difficultyCalibrationMismatch": "عدم تطابق",
-
     "authorFlagRateTitle": "معدل الإبلاغ حسب المؤلف",
     "authorFlagRateDesc": "نسبة الأسئلة المنشورة لكل مؤلف التي تلقّت إبلاغاً واحداً على الأقل. المؤلفون بلا إبلاغات مخفيون.",
     "authorFlagRateAuthor": "المؤلف",
@@ -59,7 +54,6 @@
     "authorFlagRateFlagged": "مُبلَّغ عنها",
     "authorFlagRateRate": "المعدل",
     "authorFlagRateEmpty": "لا توجد أسئلة مُبلَّغ عنها — علامة جيدة.",
-
     "examDurationTitle": "مدة الجلسة",
     "examDurationDesc": "كم يقضي المستخدمون فعلياً في الجلسة، مقسمة إلى خمس فئات. المتوسط معروض أعلى الرسم.",
     "examDurationBucket": "المدة",
@@ -68,7 +62,6 @@
     "examDurationAvg": "متوسط المدة",
     "examDurationTotal": "إجمالي الجلسات",
     "examDurationEmpty": "لا توجد جلسات في هذه النافذة.",
-
     "cohortComparisonTitle": "مقارنة المجموعات",
     "cohortComparisonDesc": "مجاميع لكل مجموعة خلال النافذة الأخيرة. المجموعات بلا نشاط مخفية. قارن الدقة والحجم جنباً إلى جنب.",
     "cohortComparisonGroup": "المجموعة",
@@ -78,7 +71,6 @@
     "cohortComparisonQuestions": "الأسئلة",
     "cohortComparisonAccuracy": "متوسط الدقة",
     "cohortComparisonEmpty": "لا توجد مجموعات بنشاط في هذه النافذة.",
-
     "weeklyRetentionTitle": "الاحتفاظ الأسبوعي",
     "weeklyRetentionDesc": "من المستخدمين الذين درسوا في أسبوع، كم منهم عاد الأسبوع التالي. الخط الصاعد يعني أن التطبيق يحافظ على الانتباه.",
     "weeklyRetentionWeek": "أسبوع",
@@ -86,6 +78,11 @@
     "weeklyRetentionThisActive": "نشط حالياً",
     "weeklyRetentionRetained": "عاد",
     "weeklyRetentionRate": "الاحتفاظ",
-    "weeklyRetentionEmpty": "لا توجد أسابيع كافية بعد."
+    "weeklyRetentionEmpty": "لا توجد أسابيع كافية بعد.",
+    "unique_questions": "أسئلة مختلفة",
+    "unique_concepts": "مفاهيم مختلفة",
+    "due_reviews": "مراجعات مستحقة مكتملة",
+    "mastery_gain": "تغير الإتقان",
+    "dailyValues": "القيم اليومية"
   }
 }

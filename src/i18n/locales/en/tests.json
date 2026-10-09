@@ -146,6 +146,10 @@
     "submitAnswer": "Submit answer",
     "shortcutScope": "Shortcuts work while focus is inside the question area. Number keys submit an answer.",
     "leaveConfirm": "Leave this session? Saved answers can be resumed. Unsubmitted answers or text will be lost, and a timed exam may keep counting down.",
-    "waitForSave": "Please wait for the current action to finish before leaving."
+    "waitForSave": "Please wait for the current action to finish before leaving.",
+    "selectionStrategy": "Question selection",
+    "selection_coverage": "New coverage",
+    "selection_balanced": "Balanced",
+    "selection_review": "Review weaknesses"
   }
 }

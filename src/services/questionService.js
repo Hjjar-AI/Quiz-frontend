@@ -22,6 +22,9 @@ export const questionService = {
   get(id) {
     return apiClient.get(Q.ITEM(id))
   },
+  createReceipt(operationId) {
+    return apiClient.get(Q.BASE, { params: { operation_id: operationId } })
+  },
   create(data) {
     return apiClient.post(Q.BASE, data)
   },
@@ -69,8 +72,11 @@ export const questionService = {
   availableCount(params) {
     return apiClient.get(Q.AVAILABLE_COUNT, { params })
   },
-  duplicate(id) {
-    return apiClient.post(Q.DUPLICATE(id))
+  duplicateReceipt(id, operationId) {
+    return apiClient.get(Q.DUPLICATE(id), { params: { operation_id: operationId } })
+  },
+  duplicate(id, operationId) {
+    return apiClient.post(Q.DUPLICATE(id), { operation_id: operationId })
   },
 
   // ── Ratings ──────────────────────────────────────────────────────

@@ -2,7 +2,6 @@
   "questions": {
     "imageRecovery": "The question is saved, but its image change is pending. Retry the image without saving the question again.",
     "retryImage": "Retry image change",
-
     "title": "All questions",
     "addTitle": "Add new question",
     "editTitle": "Edit question",
@@ -65,7 +64,6 @@
     "lastRevisedLabel": "Last revision date",
     "lastRevisedHint": "Content edits update this date automatically; set it manually only when needed.",
     "lastRevised": "Last revised: {date}",
-
     "caseGroupLabel": "Case identifier",
     "caseGroupHint": "Use the same identifier to link questions that share one clinical vignette.",
     "caseGroupPlaceholder": "e.g. case-depression-01",
@@ -80,7 +78,6 @@
     "moreStatusesCompact": "+{count}",
     "caseClinicalTitle": "Clinical case",
     "caseQuestionCount": "({n} questions)",
-
     "imageSection": "Question image (optional)",
     "imageDropHint": "Drag an image here or click to choose",
     "imageTypeHint": "JPG / PNG / GIF / WebP — max 5 MB",
@@ -91,7 +88,6 @@
     "imageBadType": "Unsupported file type. Allowed: JPG, PNG, GIF, WebP",
     "imageTooLarge": "Image exceeds 5 MB",
     "imageUploadFailed": "Question saved but the image upload failed",
-
     "save": "Save question",
     "update": "Update question",
     "addButton": "Add question",
@@ -99,7 +95,6 @@
     "removeChoice": "Remove choice",
     "selectCorrect": "Correct",
     "clearAnswer": "Clear text",
-
     "verified": "Verified",
     "unverified": "Unverified",
     "verify": "Verify",
@@ -117,7 +112,6 @@
     "bulkTagsPlaceholderRemove": "e.g. old, unimportant",
     "bulkTagsCount": "Editing tags for {count} questions",
     "bulkTagsSuccess": "Tags updated",
-
     "duplicate": "Duplicate question",
     "duplicateSuccess": "Question duplicated",
     "exportSingle": "Export question",
@@ -130,7 +124,6 @@
     "deleteSuccess": "Question deleted",
     "createSuccess": "Question added",
     "updateSuccess": "Question updated",
-
     "emptyNoQuestions": "No questions have been added yet",
     "emptyNoFilterMatch": "No questions match the search criteria",
     "emptyAddNow": "Add a question now",
@@ -142,23 +135,18 @@
     "emptyReview": "No questions need review!",
     "emptyReviewDesc": "All questions are verified. Excellent work!",
     "emptyBookmarkDesc": "Save important questions to revisit later.",
-
     "startFromBookmarks": "Study bookmarked questions",
     "startMistakesDrill": "Quiz me on my mistakes",
     "startFragileDrill": "Review these questions",
     "noQuestionsForDrill": "No questions available for drilling",
-
     "fragileCalloutTitle": "What is \"fragile knowledge\"?",
     "fragileCalloutBody": "These are questions you answered correctly but weren't confident about. Research shows these \"fragile\" answers often turn into mistakes later, so we recommend reviewing them to reinforce the knowledge.",
-
     "reviewBadge": "{count} questions need review",
     "mistakeBadge": "{count} questions",
     "fragileBadge": "{count} questions",
-
     "lastViewed": "Last question you viewed:",
     "lastViewedLink": "Question #{id}",
     "lastViewedClear": "Clear history",
-
     "filterSearch": "Search: {term}",
     "filterDifficulty": "Difficulty: {level}",
     "filterVerifiedOnly": "Verified only",
@@ -167,28 +155,22 @@
     "filterVerifiedLabel": "Verified only",
     "filterShow": "Show filters",
     "filterHide": "Hide",
-
     "showingOf": "Showing {count} of {total} questions",
     "pageOf": "Page {page} of {pages}",
-
     "rating": "Rating:",
     "advancedInfo": "Rating and question details",
     "ratingSuccess": "Rating saved",
     "ratingFailed": "Rating failed, please try again",
     "ratingAvg": "{avg} ({count})",
-
     "author": "Author",
     "unknownAuthor": "Unknown",
     "timesAnswered": "{count} attempts",
     "timesCorrect": "{count} correct",
     "lastUpdated": "Last updated: {date}",
-
     "explainShow": "Show",
     "explainHide": "Hide",
-
     "batchLoadFailed": "Failed to load the selected questions",
     "flagFailed": "Failed to report the question",
-
     "itemLabelDefault": "item",
     "bulkSelectedCount": "{count} {label} selected",
     "bulkClear": "Clear selection",
@@ -200,7 +182,6 @@
     "navDotSummary": "{current} of {total}",
     "navDotPrevAria": "Previous question",
     "navDotNextAria": "Next question",
-
     "recentSuffix": "(recent)",
     "recentLabel": "Recent:",
     "filterShowShort": "Filters",
@@ -214,6 +195,8 @@
     "invalidId": "Invalid question ID",
     "notFound": "Question not found",
     "bulkTagsShort": "Tags",
-    "bulkVerifyWithCount": "Verify selected ({count})"
+    "bulkVerifyWithCount": "Verify selected ({count})",
+    "reviewSave": "Check saved question",
+    "retrySameRequest": "Retry the same request"
   }
 }

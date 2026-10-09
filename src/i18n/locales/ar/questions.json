@@ -2,7 +2,6 @@
   "questions": {
     "imageRecovery": "حُفظ السؤال، لكن تغيير الصورة ما زال معلقاً. أعد محاولة تغيير الصورة دون حفظ السؤال مجدداً.",
     "retryImage": "إعادة محاولة تغيير الصورة",
-
     "title": "جميع الأسئلة",
     "addTitle": "إضافة سؤال جديد",
     "editTitle": "تعديل السؤال",
@@ -65,7 +64,6 @@
     "lastRevisedLabel": "تاريخ آخر مراجعة",
     "lastRevisedHint": "تحدّث تعديلات المحتوى هذا التاريخ تلقائياً؛ غيّره يدوياً عند الحاجة فقط.",
     "lastRevised": "آخر مراجعة: {date}",
-
     "caseGroupLabel": "معرّف الحالة",
     "caseGroupHint": "استخدم نفس المعرّف لربط الأسئلة التي تشترك في نص سريري واحد.",
     "caseGroupPlaceholder": "مثال: case-depression-01",
@@ -80,7 +78,6 @@
     "moreStatusesCompact": "+{count}",
     "caseClinicalTitle": "حالة سريرية",
     "caseQuestionCount": "({n} أسئلة)",
-
     "imageSection": "صورة السؤال (اختياري)",
     "imageDropHint": "اسحب صورة هنا أو اضغط للاختيار",
     "imageTypeHint": "JPG / PNG / GIF / WebP — الحد 5 ميجابايت",
@@ -91,7 +88,6 @@
     "imageBadType": "نوع الملف غير مدعوم. المسموح: JPG, PNG, GIF, WebP",
     "imageTooLarge": "حجم الصورة يتجاوز 5 ميجابايت",
     "imageUploadFailed": "تم حفظ السؤال لكن تعذر رفع الصورة",
-
     "save": "حفظ السؤال",
     "update": "تحديث السؤال",
     "addButton": "إضافة سؤال",
@@ -99,7 +95,6 @@
     "removeChoice": "حذف الخيار",
     "selectCorrect": "صحيح",
     "clearAnswer": "مسح النص",
-
     "verified": "مدقق",
     "unverified": "غير مدقق",
     "verify": "تدقيق",
@@ -117,7 +112,6 @@
     "bulkTagsPlaceholderRemove": "مثال: قديم، غير مهم",
     "bulkTagsCount": "تعديل الوسوم لـ {count} سؤال",
     "bulkTagsSuccess": "تم تحديث الوسوم",
-
     "duplicate": "نسخ السؤال",
     "duplicateSuccess": "تم نسخ السؤال",
     "exportSingle": "تصدير السؤال",
@@ -130,7 +124,6 @@
     "deleteSuccess": "تم حذف السؤال بنجاح",
     "createSuccess": "تم إضافة السؤال بنجاح",
     "updateSuccess": "تم تحديث السؤال بنجاح",
-
     "emptyNoQuestions": "لم يتم إضافة أي سؤال بعد",
     "emptyNoFilterMatch": "لا توجد أسئلة تطابق معايير البحث",
     "emptyAddNow": "أضف سؤالاً الآن",
@@ -142,23 +135,18 @@
     "emptyReview": "لا توجد أسئلة بحاجة للمراجعة!",
     "emptyReviewDesc": "جميع الأسئلة مدققة. عمل رائع!",
     "emptyBookmarkDesc": "احفظ الأسئلة المهمة للرجوع إليها لاحقاً.",
-
     "startFromBookmarks": "مذاكرة ذاتية المفضلة",
     "startMistakesDrill": "اختبرني في أخطائي",
     "startFragileDrill": "راجع هذه الأسئلة",
     "noQuestionsForDrill": "لا توجد أسئلة للتدريب عليها",
-
     "fragileCalloutTitle": "ما هي \"المعرفة الهشة\"؟",
     "fragileCalloutBody": "هذه أسئلة أجبت عنها بشكل صحيح لكنك لم تكن واثقاً من إجابتك. الدراسات تشير إلى أن هذه الإجابات \"الهشة\" غالباً ما تتحول إلى أخطاء لاحقاً، لذا ننصح بمراجعتها للتأكد من ترسيخ المعرفة.",
-
     "reviewBadge": "{count} سؤال بحاجة للتدقيق",
     "mistakeBadge": "{count} سؤال",
     "fragileBadge": "{count} سؤال",
-
     "lastViewed": "آخر سؤال شاهدته:",
     "lastViewedLink": "سؤال #{id}",
     "lastViewedClear": "مسح السجل",
-
     "filterSearch": "بحث: {term}",
     "filterDifficulty": "صعوبة: {level}",
     "filterVerifiedOnly": "مدقق فقط",
@@ -167,28 +155,22 @@
     "filterVerifiedLabel": "مدقق فقط",
     "filterShow": "إظهار الفلاتر",
     "filterHide": "إخفاء",
-
     "showingOf": "عرض {count} من أصل {total} سؤال",
     "pageOf": "الصفحة {page} من {pages}",
-
     "rating": "تقييم:",
     "advancedInfo": "التقييم وتفاصيل السؤال",
     "ratingSuccess": "تم التقييم",
     "ratingFailed": "فشل التقييم، حاول مرة أخرى",
     "ratingAvg": "{avg} ({count})",
-
     "author": "المؤلف",
     "unknownAuthor": "غير معروف",
     "timesAnswered": "{count} محاولة",
     "timesCorrect": "{count} صحيحة",
     "lastUpdated": "آخر تحديث: {date}",
-
     "explainShow": "عرض",
     "explainHide": "إخفاء",
-
     "batchLoadFailed": "فشل تحميل الأسئلة المحددة",
     "flagFailed": "فشل الإبلاغ عن السؤال",
-
     "itemLabelDefault": "عنصر",
     "bulkSelectedCount": "تم اختيار {count} {label}",
     "bulkClear": "إلغاء التحديد",
@@ -200,7 +182,6 @@
     "navDotSummary": "{current} من {total}",
     "navDotPrevAria": "السؤال السابق",
     "navDotNextAria": "السؤال التالي",
-
     "recentSuffix": "(مؤخراً)",
     "recentLabel": "مؤخراً:",
     "filterShowShort": "فلاتر",
@@ -214,6 +195,8 @@
     "invalidId": "معرف السؤال غير صالح",
     "notFound": "السؤال غير موجود",
     "bulkTagsShort": "وسوم",
-    "bulkVerifyWithCount": "تدقيق المحدد ({count})"
+    "bulkVerifyWithCount": "تدقيق المحدد ({count})",
+    "reviewSave": "التحقق من السؤال المحفوظ",
+    "retrySameRequest": "إعادة إرسال الطلب نفسه"
   }
 }
