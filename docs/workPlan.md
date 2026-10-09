@@ -1,42 +1,12 @@
-# Work Plan
+# Frontend remaining work
 
-## Current priorities
+Updated 2026-10-09. Detailed previous checks/priorities: [archive](archive/2026-10-09-workPlan.md). Current native comparison: [Android source review](../../Android/docs/functionalityReview.md).
 
-- Browser/screen-reader-verify the implemented [accessibility corrections](accessibilityReview.md): study/recall explicit submission and confidence focus; pending-write/Back/reload/pause/finish guards; rendered route focus/titles and parameter/query behavior; timed warnings/resume/grace; chart/heatmap data alternatives; persistent/paused toasts; reduced motion; typography and 24px/44px targets in Arabic/English across themes/densities. Source parsing, scoped lint, 60-stylesheet guardrails and isolated helper diagnostics passed. Automated-suite work remains subject to explicit authorization.
+- Browser/screen-reader verify [accessibility corrections](accessibilityReview.md): explicit answer submission/confidence focus, pending-write/navigation guards, route context, timed warnings, chart alternatives/toasts/reduced motion and targets.
+- Verify [shell/control corrections](frontendShellReview.md): measured chrome/safe areas, sticky tables/modal focus, RTL arrows, selected states, long content and reduced-motion theme switching.
+- Verify Arabic/English, all themes (including Ruby), fonts/lazy loading/CDN failures, density, narrow/large text, count-up precision, study/master navigation and Settings/Preferences dirty/save/discard behavior.
+- Verify startup/timeouts/stale reads/repeated writes, editor/image recovery, expiry refresh and API errors against running backend.
+- Verify custom PDF/Excel/CSV/JSON selections, reorder/order retention, filters/verified-only/errors/downloads; fresh PDF links/answer placement/quiz/front matter and print pagination on matching backend.
+- Verify Vite/API/media proxy ports, occupied ports and CSRF origins in the real development environment. Historical parser/dependency limitations need rechecking before lint; no dependency/version change is authorized.
 
-- Browser/PDF-verify Ruby in both locales/densities: picker/persistence/browser chrome, native controls, charts, selected/focus states, ranks/streaks, print and exported PDF. Palette/source contrast and registration checks passed; actual rendering remains pending.
-
-- Browser-verify count-up output and tile fit with Arabic/English, all font choices, narrow stats grids and enlarged text: integer counts stay whole, decimal targets retain precision, large final values wrap, reduced motion snaps and rapid target changes remain stable. 26 isolated animation/format assertions passed; actual geometry remains pending.
-
-- Browser-verify the adjusted study/exam controls: reduced question-strip footprint, Pause prominence, keyboard-help placement/popover bounds, long Arabic/English labels, enlarged fonts and 44px touch targets at 320/480/640/769px and desktop. Check study/recall/timed modes and the master-exam shared navigation consumer. 143 isolated source/CSS assertions passed; actual geometry remains pending.
-
-- Browser-verify the completed global/page reliability changes against a running frontend/backend: slow/failed startup, request timeouts (including long exports), rapid filter changes, repeated saves/errors, unchanged expired-user edits, image upload/delete recovery, editor retry/404, inline validation/focus and tab-resumed expiry. 64 isolated reliability assertions passed. No preview is responding at configured localhost:5173; full browser/device/RTL/theme/font/print checks remain pending.
-
-- Browser-verify lazy font choices with network logs: fresh device-font mode requests no text fonts, active project fonts come only from Google Fonts (no local-server fallback), unselected fonts stay unfetched, CDN failure remains readable, reload/sign-out preserve font, and Arabic/English glyphs, headings, density and print remain usable. 134 isolated font assertions passed, including Tajawal, Cairo, IBM Plex Sans Arabic and Amiri; actual bandwidth/glyph rendering remains unverified. Icon fallback remains independent.
-
-- Browser-verify the enhanced admin Settings and user Preferences pages in both locales/themes/densities at 320/360/640/768px and desktop: section jumps below sticky chrome, labels/controls, reset persistence, load retry, saved/dirty/discard states, navigation protection, maintenance confirmation/errors, capability visibility and live settings updates. 168 isolated source/runtime assertions passed; actual app/API/device behavior remains pending.
-
-- Browser-verify the completed tokenization corrections in `frontendShellReview.md`: reduced-motion theme switching, live modal-tier token overrides, and measured bottom-nav clearance under larger typography/safe areas. Source contracts and Python calculations passed; Node/JavaScript runtime and actual browser/device verification remain unavailable in this shell.
-
-- Browser-verify the completed shared-control corrections in `frontendShellReview.md`: single disabled dimming, enlarged numeric/markdown touch targets, narrow number-field wrapping and unified modal-close sizing. Forty-eight isolated CSS/jsdom assertions passed; actual device/layout verification remains pending.
-
-- Browser-verify the completed additional visual corrections and intentional theme-aware print enhancement in `frontendShellReview.md`: selected theme/language rows, LTR/RTL select arrows, pagination touch sizing, paper accents/borders and full table printing. All 55 semantic screen seeds are preserved; source print contrast calculations passed. Actual print pagination/background retention remains pending.
-
-- Browser-verify the eight completed corrections in [frontendShellReview.md](frontendShellReview.md): mobile Analytics access, desktop toggle cascade, measured navbar/banner offsets, table-container sticky behavior, modal focus/nesting and normalized tokens. Forty isolated assertions passed; Vue lint needs recovery from the installed parser's `Invalid Version: main` error without changing configured versions.
-- Browser-verify shell/container behavior at 320/360/480/640/768/769/900px and desktop, both locales/densities, touch pointers, long content, dialogs/keyboard/safe areas, every theme and print. Standalone source/jsdom checks do not establish rendering.
-
-1. Keep frontend export options aligned with the backend request serializer.
-2. Surface backend PDF limit errors clearly without replacing their localized messages.
-3. Perform a browser download smoke check after the backend PDF runtime is available.
-4. Keep theme and locale parameters synchronized with new visual themes or supported languages.
-5. Verify PDF mode/answer-placement controls and downloads in both locales: default inline, linked end/after-25, quiz forced no-answers, clear/reset, verified-only API, limits/errors. Check actual PDF links/page breaks and print density on the matching backend; source/HTML checks do not establish viewer behavior.
-6. Browser-check manual PDF/Excel/CSV/JSON search/pagination, case/image previews, retained selections, reordering, empty-selection disabling across formats, source switching, unavailable-ID errors and file ordering/PDF numbering in both locales. Script/service checks passed; matching frontend/backend required.
-
-## Verification
-
-- Lint needs installed dependencies; builds additionally require explicit user permission under [Agents.md](../Agents.md).
-- Do not inspect or run test suites unless explicitly requested.
-
-## Development startup verification
-
-- With Node and dependencies installed, load the Vite config and verify API/media proxying to ports 5004/5005, occupied-port errors, and matching CSRF browser origins.
+This source comparison found Android gaps, not a new Vue implementation defect. Browser/HTTP/print checks remain separate from source checks. No suites/builds/compilation/packaging or migrations without explicit request; preserve user edits.
