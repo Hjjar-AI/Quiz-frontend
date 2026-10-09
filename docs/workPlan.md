@@ -2,6 +2,7 @@
 
 Updated 2026-10-09. Detailed previous checks/priorities: [archive](archive/2026-10-09-workPlan.md). Current native comparison: [Android source review](../../Android/docs/functionalityReview.md).
 
+- Verify Permissions role/user controls for tests.download_full_bank: localized description, individual Allow/Deny/Inherit and saved grant/revocation applied by Android permission refresh.
 - Browser/screen-reader verify [accessibility corrections](accessibilityReview.md): explicit answer submission/confidence focus, pending-write/navigation guards, route context, timed warnings, chart alternatives/toasts/reduced motion and targets.
 - Verify [shell/control corrections](frontendShellReview.md): measured chrome/safe areas, sticky tables/modal focus, RTL arrows, selected states, long content and reduced-motion theme switching.
 - Verify Arabic/English, all themes (including Ruby), fonts/lazy loading/CDN failures, density, narrow/large text, count-up precision, study/master navigation and Settings/Preferences dirty/save/discard behavior.

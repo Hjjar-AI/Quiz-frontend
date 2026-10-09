@@ -29,6 +29,7 @@
       "grantedByRole": "Granted by role",
       "notGrantedByRole": "Not granted by role",
       "capability": {
+        "tests.download_full_bank": "tests.download_full_bank — allows downloading the full accessible question bank. Requires study access; denying it stops new bulk downloads and resume without deleting existing packs.",
         "system.bypass_expiry": "Exempts the account from expiry. Administrators always hold this capability."
       }
     },
