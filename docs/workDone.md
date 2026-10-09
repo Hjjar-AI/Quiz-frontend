@@ -28,3 +28,9 @@ JavaScript helper/extracted setup-script syntax checks, JSON parsing/bilingual k
 ## 2026-10-09 full-bank capability description
 
 Added English/Arabic permission descriptions for `tests.download_full_bank`. Existing server-driven role matrix and user override editor resolve the new capability through their current catalogue/description/Allow-Deny-Inherit flow; no new client permission endpoint or write behavior. Backend and Android independently gate full-bank download; member/moderator defaults omit the capability. Locale JSON/lookup and whitespace source checks only; browser/HTTP/device/build verification remains pending. No suites, dependencies, migrations, builds, deployment or versions.
+
+## 2026-10-09 learning review integration
+
+Updated study setup with coverage/balanced/review choices; event-based activity descriptions and distinct/due/mastery metrics; explicit bookmark intent and caller-scoped create/duplicate receipts with read reconciliation and explicit identical retries; archived master weighted scores; retained revision payloads. Unknown create text/image intent stays frozen until reconciliation, with account-reset pending identities in memory. See [backend policies and fresh-schema requirements](../../backend/docs/learningConsistency.md).
+
+JS/extracted Vue script syntax, locale JSON and CRLF-aware whitespace source checks only; no Vue compilation/browser/HTTP/accessibility verification, builds, suites, migrations, database actions, deployment or versions. Verify response loss, pending resets/account switches, revision conflicts, strategy payloads, activity dates/metrics, archived results and bilingual/RTL controls after coordinated rollout.

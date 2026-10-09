@@ -12,3 +12,9 @@ Updated 2026-10-09. Detailed previous checks/priorities: [archive](archive/2026-
 - Verify Vite/API/media proxy ports, occupied ports and CSRF origins in the real development environment. Historical parser/dependency limitations need rechecking before lint; no dependency/version change is authorized.
 
 This source comparison found Android gaps, not a new Vue implementation defect. Browser/HTTP/print checks remain separate from source checks. No suites/builds/compilation/packaging or migrations without explicit request; preserve user edits.
+
+## 2026-10-09 learning review integration
+
+Updated study setup with coverage/balanced/review choices; event-based activity descriptions and distinct/due/mastery metrics; explicit bookmark intent and caller-scoped create/duplicate receipts with read reconciliation and explicit identical retries; archived master weighted scores; retained revision payloads. Unknown create text/image intent stays frozen until reconciliation, with account-reset pending identities in memory. See [backend policies and fresh-schema requirements](../../backend/docs/learningConsistency.md).
+
+JS/extracted Vue script syntax, locale JSON and CRLF-aware whitespace source checks only; no Vue compilation/browser/HTTP/accessibility verification, builds, suites, migrations, database actions, deployment or versions. Verify response loss, pending resets/account switches, revision conflicts, strategy payloads, activity dates/metrics, archived results and bilingual/RTL controls after coordinated rollout.
