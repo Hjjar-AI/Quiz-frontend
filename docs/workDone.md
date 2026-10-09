@@ -14,3 +14,7 @@ Prior isolated source/helper checks are recorded in the archive; they do not est
 ## 2026-10-09 Android comparison
 
 Read current production routes/endpoints, analytics UI/store, question cards and custom export controls against Android/Django. Recorded remaining native parity in [Android review](../../Android/docs/functionalityReview.md). Compacted work records with full historical snapshots retained. Documentation only; no source changes, build, suites, migrations or versions.
+
+## 2026-10-09 agent guidance maintenance
+
+Compacted shared working rules without relaxing explicit build/suite/migration/version restrictions; added source-evidenced cross-client review and bounded-completion guidance. Captured uncertain toggle/create recovery, structured errors and dependent/profile freshness; Android also records compiler-signature/opt-in/cancellation/visibility checks. Frontend AGENTS now links its detailed instructions. Documentation links and whitespace checked; no production or runtime work.
