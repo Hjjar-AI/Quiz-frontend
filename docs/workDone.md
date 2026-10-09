@@ -34,3 +34,11 @@ Added English/Arabic permission descriptions for `tests.download_full_bank`. Exi
 Updated study setup with coverage/balanced/review choices; event-based activity descriptions and distinct/due/mastery metrics; explicit bookmark intent and caller-scoped create/duplicate receipts with read reconciliation and explicit identical retries; archived master weighted scores; retained revision payloads. Unknown create text/image intent stays frozen until reconciliation, with account-reset pending identities in memory. See [backend policies and fresh-schema requirements](../../backend/docs/learningConsistency.md).
 
 JS/extracted Vue script syntax, locale JSON and CRLF-aware whitespace source checks only; no Vue compilation/browser/HTTP/accessibility verification, builds, suites, migrations, database actions, deployment or versions. Verify response loss, pending resets/account switches, revision conflicts, strategy payloads, activity dates/metrics, archived results and bilingual/RTL controls after coordinated rollout.
+
+## 2026-10-09 matching revisions and restart operation identities
+
+Category editing/deletion captures the displayed revision; tag rename/delete/merge captures the tree revision (fallback trees cannot provide a valid write version); runtime Settings and case service methods send matching expected_version. Successful Settings writes retain the returned revision. Failed/conflicting writes retain their current drafts/selections.
+
+Question create/duplicate checkpoints persist only operation IDs in browser storage scoped to account UUID and API origin/base path. Logout/account switches clear the active scope and reset memory. Creates restored after restart have a dedicated check/open/explicit missing-receipt acknowledgement flow; fresh form text/images cannot be applied to the old operation. Duplicate retry uses the same identity, remains explicit and checks supported receipts first. Storage failure prevents dispatch; no sensitive question draft/images are stored.
+
+Production JavaScript/extracted Vue script syntax, locale JSON and whitespace source checks only. No Vue compilation/browser/HTTP/accessibility verification, suites, builds, migrations/setup/database actions, dependencies or versions. Verify restart/response loss, storage failure, account switches and stale revisions against matching backend schema.

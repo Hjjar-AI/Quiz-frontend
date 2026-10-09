@@ -1,3 +1,4 @@
+import { readPendingQuestionWrites, persistPendingQuestionWrites } from '@/utils/pendingQuestionWrites'
 // frontend/src/stores/questionStore.js
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
@@ -62,7 +63,7 @@ const _pendingVerifications = reactive(new Map())
 
 export const useQuestionStore = defineStore('questions', {
   state: () =>
-    standardState({ pendingDuplicates: {}, pendingCreate: null, createReceiptMissing: false,
+    standardState({ pendingDuplicates: {}, pendingCreate: null, createReceiptMissing: false, restoredCreate: false, recoveryLoaded: false,
       byId: {},
       ids: [],
       currentItem: null,
@@ -90,6 +91,22 @@ export const useQuestionStore = defineStore('questions', {
     isVerifying: () => (id) => _pendingVerifications.has(id),
   },
   actions: {
+    hydrateWriteRecovery() {
+      if (this.recoveryLoaded) return
+      try {
+        const pending = readPendingQuestionWrites()
+        this.pendingCreate = pending.create
+        this.pendingDuplicates = pending.duplicates
+        this.restoredCreate = Boolean(pending.create)
+        this.recoveryLoaded = true
+      } catch { this.error = i18n.global.t('questions.recoveryStorageFailed') }
+    },
+    checkpointWrites() { persistPendingQuestionWrites(this.pendingCreate, this.pendingDuplicates) },
+    acknowledgeRestoredCreate() {
+      if (!this.restoredCreate || !this.createReceiptMissing || this.isLoading) return
+      this.pendingCreate = null; this.restoredCreate = false; this.createReceiptMissing = false
+      try { this.checkpointWrites() } catch (e) { this.error = e.message; this.recoveryLoaded = false }
+    },
     setPagination(pagination) {
       this.pagination = { ...this.pagination, ...pagination }
     },
@@ -155,6 +172,8 @@ export const useQuestionStore = defineStore('questions', {
     },
 
     async create(data, retry = false) {
+      this.hydrateWriteRecovery()
+      if(!this.recoveryLoaded || this.restoredCreate) return null
       if (this.isLoading) return null
       const reconciling = Boolean(this.pendingCreate)
       const { wrap } = useCrudActions(this)
@@ -162,13 +181,15 @@ export const useQuestionStore = defineStore('questions', {
         if (this.pendingCreate && !retry) return questionService.createReceipt(this.pendingCreate)
         this.pendingCreate ??= createOperationId()
         this.createReceiptMissing = false
+        this.checkpointWrites()
         return questionService.create({ ...data, operation_id: this.pendingCreate })
       }, {
         invalidateOnSuccess: 'questions_',
         successMsgKey: 'notifications.questionCreated',
-        onError: (error) => { this.createReceiptMissing = reconciling && !retry && Number(error?.code) === 404; if (!reconciling && [400, 403, 404, 409, 429].includes(Number(error?.code))) this.pendingCreate = null },
+        onError: (error) => { this.createReceiptMissing = reconciling && !retry && Number(error?.code) === 404; if (!reconciling && [400, 403, 404, 409, 429].includes(Number(error?.code))) this.pendingCreate = null; try { this.checkpointWrites() } catch { this.recoveryLoaded = false } },
         onSuccess: (item) => {
           this.pendingCreate = null
+          try { this.checkpointWrites() } catch (e) { this.error = e.message; this.recoveryLoaded = false }
           this.$patch((state) => {
             state.byId[item.id] = item
             state.ids = [item.id, ...state.ids]
@@ -305,6 +326,8 @@ export const useQuestionStore = defineStore('questions', {
     },
 
     async duplicate(id, retry = false) {
+      this.hydrateWriteRecovery()
+      if(!this.recoveryLoaded) return null
       if (this.isLoading) return null
       const reconciling = Boolean(this.pendingDuplicates[id])
       const { wrap } = useCrudActions(this)
@@ -313,14 +336,16 @@ export const useQuestionStore = defineStore('questions', {
         if (pending && !retry) return questionService.duplicateReceipt(id, pending)
         const identity = pending || createOperationId()
         this.pendingDuplicates[id] = identity
+        this.checkpointWrites()
         return questionService.duplicate(id, identity)
       }, {
         invalidateOnSuccess: 'questions_',
         successMsgKey: 'notifications.questionDuplicated',
         errorMsgFallbackKey: 'notifications.questionDuplicateFailed',
-        onError: (error) => { if (!reconciling && [400, 403, 404, 409, 429].includes(Number(error?.code))) delete this.pendingDuplicates[id] },
+        onError: (error) => { if (!reconciling && [400, 403, 404, 409, 429].includes(Number(error?.code))) delete this.pendingDuplicates[id]; try { this.checkpointWrites() } catch { this.recoveryLoaded = false } },
         onSuccess: (newQ) => {
           delete this.pendingDuplicates[id]
+          try { this.checkpointWrites() } catch (e) { this.error = e.message; this.recoveryLoaded = false }
           this.$patch((state) => {
             state.byId[newQ.id] = newQ
             state.ids = [newQ.id, ...state.ids]
@@ -378,7 +403,7 @@ export const useQuestionStore = defineStore('questions', {
 
     reset() {
       listRequests.delete(this)
-      return makeReset({ pendingDuplicates: {}, pendingCreate: null, createReceiptMissing: false,
+      return makeReset({ pendingDuplicates: {}, pendingCreate: null, createReceiptMissing: false, restoredCreate: false, recoveryLoaded: false,
         byId: {},
         ids: [],
         currentItem: null,

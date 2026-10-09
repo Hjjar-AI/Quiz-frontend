@@ -132,10 +132,10 @@ export const questionService = {
 
   // ── Case stems ───────────────────────────────────────────────────
 
-  updateCaseStem(caseGroup, caseStem) {
+  updateCaseStem(caseGroup, caseStem, version) {
     return apiClient.post(
       Q.CASES_STEM(caseGroup),
-      { case_stem: caseStem },
+      { expected_version: version, case_stem: caseStem },
     )
   },
 }

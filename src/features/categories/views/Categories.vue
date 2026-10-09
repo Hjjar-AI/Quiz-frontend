@@ -82,7 +82,7 @@ const handleDelete = async (id) => {
   const name = category?.name || t('categories.title')
   await confirmAction({
     message: t('categories.deleteConfirm', { name }),
-    action: () => categoryStore.remove(id),
+    action: () => categoryStore.remove(id, category.version),
   })
   await fetchCategories()
 }

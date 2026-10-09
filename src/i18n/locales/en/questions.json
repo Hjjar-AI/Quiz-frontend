@@ -197,6 +197,11 @@
     "bulkTagsShort": "Tags",
     "bulkVerifyWithCount": "Verify selected ({count})",
     "reviewSave": "Check saved question",
-    "retrySameRequest": "Retry the same request"
+    "retrySameRequest": "Retry the same request",
+    "recoveryStorageFailed": "Could not access pending save recovery. Check browser storage and retry.",
+    "restoredPendingSave": "A previous save is pending review. Check it before creating another question. Draft text and images are not retained after restart.",
+    "acknowledgePendingSave": "Acknowledge missing receipt",
+    "openRecoveredSave": "Open recovered question",
+    "acknowledgePendingConfirm": "No receipt was found. A request may still be in progress. Discard local recovery and allow a new question?"
   }
 }

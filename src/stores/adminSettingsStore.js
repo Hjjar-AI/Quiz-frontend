@@ -41,7 +41,7 @@ export const useAdminSettingsStore = defineStore('adminSettings', {
         errorMsgFallbackKey: 'notifications.settingsUpdateFailed',
         // POST returns updated key names, not the settings object. Keep the
         // acknowledged snapshot without starting a competing background GET.
-        onSuccess: () => { this.settings = { ...this.settings, ...payload } },
+        onSuccess: (result) => { const { expected_version, ...values } = payload; this.settings = { ...this.settings, ...values, version: result.version } },
       })
     },
 

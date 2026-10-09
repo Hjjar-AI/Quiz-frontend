@@ -1,3 +1,4 @@
+import { bindPendingQuestionWrites } from '@/utils/pendingQuestionWrites'
 // frontend/src/stores/authStore.js
 import { defineStore } from 'pinia'
 import { authService } from '@/services/authService'
@@ -89,6 +90,8 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     setUser(user) {
+      if(this.user && user && this.user.uuid !== user.uuid) resetAllStores()
+      try { bindPendingQuestionWrites(user) } catch { /* Storage recovery must not prevent authentication. */ }
       this.user = user
     },
 

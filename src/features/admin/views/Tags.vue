@@ -147,6 +147,8 @@ const tagTree = computed(() => tagStore.tree)
 const loading = computed(() => tagStore.isLoading || tagStore.isTreeLoading)
 const tagError = computed(() => tagStore.error || '')
 const selectedTags = ref([])
+const selectedVersion = ref(null)
+const renameVersion = ref(null)
 const renameModalOpen = ref(false)
 const renameTagName = ref('')
 const newTagName = ref('')
@@ -166,12 +168,14 @@ async function loadTags() {
 }
 
 function toggleTag(name) {
+  if (!selectedTags.value.length) selectedVersion.value = tagStore.treeVersion
   const idx = selectedTags.value.indexOf(name)
   if (idx === -1) selectedTags.value.push(name)
   else selectedTags.value.splice(idx, 1)
 }
 
 function openRename(node) {
+  renameVersion.value = tagStore.treeVersion
   renameTagName.value = node.name
   newTagName.value = node.name
   renameModalOpen.value = true
@@ -179,7 +183,7 @@ function openRename(node) {
 
 async function submitRename() {
   try {
-    const result = await tagStore.rename(renameTagName.value, newTagName.value)
+    const result = await tagStore.rename(renameTagName.value, newTagName.value, renameVersion.value)
     if (!result) return
     notify(t('admin.tags.renameSuccess'), 'success')
     renameModalOpen.value = false
@@ -191,9 +195,10 @@ async function submitRename() {
 }
 
 async function confirmDelete(node) {
+  const version = tagStore.treeVersion
   if (!(await confirm(t('admin.tags.deleteConfirm', { name: node.name })))) return
   try {
-    const result = await tagStore.remove(node.name)
+    const result = await tagStore.remove(node.name, version)
     if (!result) return
     notify(t('admin.tags.deleteSuccess'), 'success')
     const idx = selectedTags.value.indexOf(node.name)
@@ -213,7 +218,7 @@ async function mergeTags() {
     return
   }
   try {
-    const result = await tagStore.merge(selectedTags.value, mergeTarget.value)
+    const result = await tagStore.merge(selectedTags.value, mergeTarget.value, selectedVersion.value)
     if (!result) return
     notify(t('admin.tags.mergeSuccess'), 'success')
     showMergeModal.value = false

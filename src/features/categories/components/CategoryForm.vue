@@ -68,6 +68,7 @@ const categoryStore = useCategoryStore()
 
 const isOpen = ref(false)
 const editMode = ref(false)
+const editingVersion = ref(null)
 const editingId = ref(null)
 
 const DEFAULT_CATEGORY_COLOR = '#6a3f24'
@@ -112,6 +113,7 @@ function open(category = null) {
   resetValidation()
   if (category) {
     editMode.value = true
+    editingVersion.value = category.version
     editingId.value = category.id
     form.name = category.name
     form.description = category.description || ''
@@ -119,6 +121,7 @@ function open(category = null) {
     form.icon = category.icon || 'bi-folder'
   } else {
     editMode.value = false
+    editingVersion.value = null
     editingId.value = null
     form.name = ''
     form.description = ''
@@ -135,7 +138,7 @@ async function handleSubmit() {
   const data = { name: form.name.trim(), description: form.description.trim() || '', color: form.color, icon: form.icon }
   let result
   if (editMode.value) {
-    result = await categoryStore.update(editingId.value, data)
+    result = await categoryStore.update(editingId.value, { ...data, expected_version: editingVersion.value })
   } else {
     result = await categoryStore.create(data)
   }

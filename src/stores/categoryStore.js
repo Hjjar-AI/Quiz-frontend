@@ -70,9 +70,9 @@ export const useCategoryStore = defineStore('categories', {
         errorMsgFallbackKey: 'notifications.categoryUpdateFailed',
       })
     },
-    async remove(id) {
+    async remove(id, version) {
       const { wrap } = useCrudActions(this)
-      return await wrap(() => categoryService.delete(id), {
+      return await wrap(() => categoryService.delete(id, version), {
         successMsgKey: 'notifications.categoryDeleted',
         onSuccess: () => {
           const newById = { ...this.byId }

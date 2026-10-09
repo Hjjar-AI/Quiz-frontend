@@ -29,13 +29,13 @@ export const tagService = {
     return apiClient.get(ENDPOINTS.ADMIN.TAGS_TREE)
   },
 
-  renameTag(oldName, newName) {
-    return apiClient.post(ENDPOINTS.ADMIN.TAG_RENAME(oldName), { new_name: newName })
+  renameTag(oldName, newName, version) {
+    return apiClient.post(ENDPOINTS.ADMIN.TAG_RENAME(oldName), { new_name: newName, expected_version: version })
   },
-  deleteTag(name) {
-    return apiClient.delete(ENDPOINTS.ADMIN.TAG_DELETE(name))
+  deleteTag(name, version) {
+    return apiClient.delete(ENDPOINTS.ADMIN.TAG_DELETE(name), { params: { expected_version: version } })
   },
-  mergeTags(sourceTags, targetTag) {
-    return apiClient.post(ENDPOINTS.ADMIN.TAG_MERGE, { source_tags: sourceTags, target_tag: targetTag })
+  mergeTags(sourceTags, targetTag, version) {
+    return apiClient.post(ENDPOINTS.ADMIN.TAG_MERGE, { source_tags: sourceTags, target_tag: targetTag, expected_version: version })
   },
 }

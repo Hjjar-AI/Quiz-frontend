@@ -11,7 +11,7 @@ export const categoryService = {
   update(id, data) {
     return apiClient.put(ENDPOINTS.CATEGORIES.UPDATE(id), data)
   },
-  delete(id) {
-    return apiClient.delete(ENDPOINTS.CATEGORIES.DELETE(id))
+  delete(id, version) {
+    return apiClient.delete(ENDPOINTS.CATEGORIES.DELETE(id), { params: { expected_version: version } })
   },
 }

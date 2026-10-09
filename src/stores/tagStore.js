@@ -14,6 +14,7 @@ export const useTagStore = defineStore('tags', {
     standardState({
       items: [],
       tree: [],
+      treeVersion: null,
       ...subResourceState('tree'),
     }),
 
@@ -44,12 +45,13 @@ export const useTagStore = defineStore('tags', {
         suppressErrorToast: true,
         onSuccess: (res) => {
           this.tree = res?.tree || []
+          this.treeVersion = res?.version ?? null
         },
       })
     },
 
-    async rename(oldName, newName) {
-      const result = await useCrudActions(this).wrap(() => tagService.renameTag(oldName, newName), {
+    async rename(oldName, newName, version) {
+      const result = await useCrudActions(this).wrap(() => tagService.renameTag(oldName, newName, version), {
         errorMsgFallbackKey: 'admin.tags.renameFailed',
       })
       if (this.status !== 'success') return null
@@ -57,8 +59,8 @@ export const useTagStore = defineStore('tags', {
       return result ?? true
     },
 
-    async remove(name) {
-      const result = await useCrudActions(this).wrap(() => tagService.deleteTag(name), {
+    async remove(name, version) {
+      const result = await useCrudActions(this).wrap(() => tagService.deleteTag(name, version), {
         errorMsgFallbackKey: 'admin.tags.deleteFailed',
       })
       if (this.status !== 'success') return null
@@ -66,9 +68,9 @@ export const useTagStore = defineStore('tags', {
       return result ?? true
     },
 
-    async merge(sourceTags, targetTag) {
+    async merge(sourceTags, targetTag, version) {
       const result = await useCrudActions(this).wrap(
-        () => tagService.mergeTags(sourceTags, targetTag),
+        () => tagService.mergeTags(sourceTags, targetTag, version),
         { errorMsgFallbackKey: 'admin.tags.mergeFailed' },
       )
       if (this.status !== 'success') return null
@@ -80,6 +82,7 @@ export const useTagStore = defineStore('tags', {
       await this.fetchList()
       const treeResult = await this.fetchTree()
       if (!treeResult) {
+        this.treeVersion = null
         this.tree = this.items.map((tag) => ({
           name: typeof tag === 'string' ? tag : tag.name,
           children: [],
@@ -90,6 +93,7 @@ export const useTagStore = defineStore('tags', {
     reset: makeReset({
       items: [],
       tree: [],
+      treeVersion: null,
       status: 'idle',
       error: null,
       treeStatus: 'idle',

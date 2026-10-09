@@ -41,8 +41,8 @@ export const caseService = {
    * @param {string} key
    * @param {string|null} title
    */
-  updateTitle(key, title) {
-    return apiClient.put(ENDPOINTS.QUESTIONS.CASES_DETAIL(key), { title })
+  updateTitle(key, title, version) {
+    return apiClient.put(ENDPOINTS.QUESTIONS.CASES_DETAIL(key), { title, expected_version: version })
   },
 
   /**
@@ -53,9 +53,9 @@ export const caseService = {
    * @param {string} key
    * @param {string|null} stem
    */
-  updateStem(key, stem) {
+  updateStem(key, stem, version) {
     return apiClient.post(ENDPOINTS.QUESTIONS.CASES_STEM(key), {
-      case_stem: stem,
+      case_stem: stem, expected_version: version,
     })
   },
 
@@ -65,7 +65,7 @@ export const caseService = {
    *
    * @param {string} key
    */
-  delete(key) {
-    return apiClient.delete(ENDPOINTS.QUESTIONS.CASES_DETAIL(key))
+  delete(key, version) {
+    return apiClient.delete(ENDPOINTS.QUESTIONS.CASES_DETAIL(key), { params: { expected_version: version } })
   },
 }

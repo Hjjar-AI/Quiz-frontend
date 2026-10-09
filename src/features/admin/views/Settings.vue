@@ -177,6 +177,7 @@ const accountFields = ['default_expiry_days', 'default_renewal_days']
 const fields = [...accountFields, 'exam_duration_minutes']
 const settings = ref(Object.fromEntries(fields.map(field => [field, ''])))
 const savedSettings = ref(null)
+const settingsVersion = ref(null)
 const hasLoaded = ref(false)
 const isFetching = ref(true)
 const isSaving = ref(false)
@@ -212,6 +213,7 @@ async function loadSettings() {
     if (!data) return
     settings.value = Object.fromEntries(fields.map(field => [field, data[field] === '' || data[field] == null ? '' : Number(data[field])]))
     savedSettings.value = { ...settings.value }
+    settingsVersion.value = data.version
     hasLoaded.value = true
     resetValidation()
     markClean()
@@ -229,11 +231,12 @@ async function saveSettings() {
     return
   }
   isSaving.value = true
-  const payload = { ...settings.value }
+  const payload = { ...settings.value, expected_version: settingsVersion.value }
   try {
     const result = await adminSettingsStore.updateSettings(payload)
     if (result === null) return
-    savedSettings.value = payload
+    settingsVersion.value = result.version
+    savedSettings.value = { ...settings.value }
     resetValidation()
     markClean()
   } finally {

@@ -15,6 +15,8 @@ This source comparison found Android gaps, not a new Vue implementation defect. 
 
 ## 2026-10-09 learning review integration
 
-Updated study setup with coverage/balanced/review choices; event-based activity descriptions and distinct/due/mastery metrics; explicit bookmark intent and caller-scoped create/duplicate receipts with read reconciliation and explicit identical retries; archived master weighted scores; retained revision payloads. Unknown create text/image intent stays frozen until reconciliation, with account-reset pending identities in memory. See [backend policies and fresh-schema requirements](../../backend/docs/learningConsistency.md).
+Updated study setup with coverage/balanced/review choices; event-based activity descriptions and distinct/due/mastery metrics; explicit bookmark intent and caller-scoped create/duplicate receipts with read reconciliation and explicit identical retries; archived master weighted scores; retained revision payloads. Unknown create text/image intent stays frozen until reconciliation, with account/server-scoped pending identities persisted separately from sensitive draft text/images. See [backend policies and fresh-schema requirements](../../backend/docs/learningConsistency.md).
 
 JS/extracted Vue script syntax, locale JSON and CRLF-aware whitespace source checks only; no Vue compilation/browser/HTTP/accessibility verification, builds, suites, migrations, database actions, deployment or versions. Verify response loss, pending resets/account switches, revision conflicts, strategy payloads, activity dates/metrics, archived results and bilingual/RTL controls after coordinated rollout.
+
+Verify the matching category/case/tag/settings revisions and browser operation-identity restart recovery; see [work log](workDone.md). Restored create checks must never apply fresh text/images to the earlier result.
