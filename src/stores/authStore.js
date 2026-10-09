@@ -1,3 +1,4 @@
+import { advanceSessionScope } from '@/services/api/sessionScope'
 import { bindPendingQuestionWrites } from '@/utils/pendingQuestionWrites'
 // frontend/src/stores/authStore.js
 import { defineStore } from 'pinia'
@@ -90,12 +91,16 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     setUser(user) {
-      if(this.user && user && this.user.uuid !== user.uuid) resetAllStores()
+      const previous=this.user?.uuid ?? this.user?.id ?? null
+      const next=user?.uuid ?? user?.id ?? null
+      if(previous!==next) advanceSessionScope()
+      if(this.user && user && previous!==next) resetAllStores()
       try { bindPendingQuestionWrites(user) } catch { /* Storage recovery must not prevent authentication. */ }
       this.user = user
     },
 
     clearSession() {
+      if(!this.user) advanceSessionScope()
       this.setUser(null)
       resetAllStores()
       clearCsrfToken()

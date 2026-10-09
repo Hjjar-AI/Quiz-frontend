@@ -337,8 +337,10 @@ export function useQuestionListController(modeRef, t) {
   }
 
   async function handleDelete(id) {
+    const version=items.value.find(item=>item.id===id)?.version
     if (!(await confirm(t('questions.deleteConfirm')))) return
-    await questionStore.remove(id)
+    const result=await questionStore.remove(id, version)
+    if(!result) return
     if (readMode() === 'all' && lastViewedId.value === id) clearLastViewed()
     await fetchPage(currentPage.value)
   }

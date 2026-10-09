@@ -188,7 +188,7 @@ export const useQuestionStore = defineStore('questions', {
         successMsgKey: 'notifications.questionCreated',
         onError: (error) => { this.createReceiptMissing = reconciling && !retry && Number(error?.code) === 404; if (!reconciling && [400, 403, 404, 409, 429].includes(Number(error?.code))) this.pendingCreate = null; try { this.checkpointWrites() } catch { this.recoveryLoaded = false } },
         onSuccess: (item) => {
-          this.pendingCreate = null
+          if(!this.restoredCreate) this.pendingCreate = null
           try { this.checkpointWrites() } catch (e) { this.error = e.message; this.recoveryLoaded = false }
           this.$patch((state) => {
             state.byId[item.id] = item
@@ -234,9 +234,9 @@ export const useQuestionStore = defineStore('questions', {
     // updated directly by `bookmarkStore.toggle` and by the removal
     // path in `Bookmarks.vue`; this store only needs to invalidate
     // caches that actually exist.
-    async remove(id) {
+    async remove(id, version) {
       const { wrap } = useCrudActions(this)
-      return await wrap(() => questionService.delete(id), {
+      return await wrap(() => questionService.delete(id, { params: { expected_version: version } }), {
         invalidateOnSuccess: 'questions_',
         successMsgKey: 'notifications.questionDeleted',
         onSuccess: () => {

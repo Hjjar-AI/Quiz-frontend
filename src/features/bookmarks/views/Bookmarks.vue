@@ -106,8 +106,10 @@ async function handleBookmark(id) {
 }
 
 async function handleDelete(id) {
+    const version=questions.value.find(item=>item.id===id)?.version
   if (!(await confirm(t('questions.deleteConfirm')))) return
-  await questionStore.remove(id)
+  const result=await questionStore.remove(id, version)
+    if(!result) return
   questions.value = questions.value.filter((q) => q.id !== id)
 }
 

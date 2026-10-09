@@ -6,6 +6,7 @@
     size="md"
     @update:is-open="close"
   >
+    <RevisionReview v-if="review.conflict.value" :latest="latestText" :missing="Boolean(review.latest.value && !review.latest.value.item)" :busy="review.busy.value" :error="review.error.value" :can-keep="Boolean(review.latest.value?.item) && authStore.can('categories.manage')" @refresh="review.refresh" @keep="review.resolve(true)" @use-server="review.resolve(false)" />
     <form @submit.prevent="handleSubmit" class="category-form">
       <FormGrid>
         <BaseInput
@@ -45,13 +46,17 @@
       </FormGrid>
       <div class="form-actions">
         <BaseButton type="button" variant="secondary" @click="close"><i class="bi bi-x-lg" aria-hidden="true"></i> {{ t('common.cancel') }}</BaseButton>
-        <BaseButton type="submit" variant="primary" :loading="categoryStore.isLoading"><i class="bi bi-check-lg" aria-hidden="true"></i> {{ editMode ? t('categories.updateButtonLabel') : t('categories.addButtonLabel') }}</BaseButton>
+        <BaseButton type="submit" variant="primary" :loading="categoryStore.isLoading" :disabled="review.conflict.value"><i class="bi bi-check-lg" aria-hidden="true"></i> {{ editMode ? t('categories.updateButtonLabel') : t('categories.addButtonLabel') }}</BaseButton>
       </div>
     </form>
   </BaseModal>
 </template>
 
 <script setup>
+import RevisionReview from '@/components/common/RevisionReview.vue'
+import { useRevisionReview } from '@/composables/useRevisionReview'
+import { categoryService } from '@/services/categoryService'
+import { useAuthStore } from '@/stores/authStore'
 import { ref, reactive, computed } from 'vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseField from '@/components/base/BaseField.vue'
@@ -65,6 +70,7 @@ import { useFormValidation } from '@/composables/useFormValidation'
 const { t } = useI18n()
 
 const categoryStore = useCategoryStore()
+const authStore=useAuthStore()
 
 const isOpen = ref(false)
 const editMode = ref(false)
@@ -105,11 +111,18 @@ const iconOptions = computed(() => [
 ])
 
 const form = reactive({ name: '', description: '', color: DEFAULT_CATEGORY_COLOR, icon: 'bi-folder' })
+const review=useRevisionReview({
+  allow:()=>authStore.can('categories.manage'),
+  load:async()=>{const result=await categoryService.list();return {item:result.items.find(item=>item.id===editingId.value) ?? null}},
+  apply:(keep,current)=>{if(!current.item) {editMode.value=false;editingId.value=null;editingVersion.value=null;categoryStore.error=null;return;}editingVersion.value=current.item.version;if(!keep) Object.assign(form,{name:current.item.name,description:current.item.description||'',color:current.item.color,icon:current.item.icon});categoryStore.error=null},
+})
+const latestText=computed(()=>review.latest.value?.item ? [review.latest.value.item.name,review.latest.value.item.description,review.latest.value.item.color,review.latest.value.item.icon].filter(Boolean).join(' · ') : review.latest.value ? t('common.revisionTargetMissing') : '')
 const { errors, touch, revalidate, validateAll, resetValidation } = useFormValidation({
   name: () => form.name.trim() ? '' : t('categories.nameRequired'),
 })
 
 function open(category = null) {
+  review.reset()
   resetValidation()
   if (category) {
     editMode.value = true
@@ -134,7 +147,7 @@ function open(category = null) {
 function close() { isOpen.value = false }
 
 async function handleSubmit() {
-  if (!validateAll()) return
+  if (review.conflict.value || categoryStore.isLoading || !authStore.can('categories.manage') || !validateAll()) return
   const data = { name: form.name.trim(), description: form.description.trim() || '', color: form.color, icon: form.icon }
   let result
   if (editMode.value) {
@@ -142,6 +155,7 @@ async function handleSubmit() {
   } else {
     result = await categoryStore.create(data)
   }
+  if(!result && Number(categoryStore.lastErrorCode)===409) await review.refresh()
   if (result) {
     close()
     emit('saved')

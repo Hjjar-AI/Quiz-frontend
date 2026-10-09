@@ -10,7 +10,7 @@ import { standardState, standardGetters, makeReset } from '@/stores/storeHelpers
 const MAX_PER_PAGE = 500
 
 export const useCategoryStore = defineStore('categories', {
-  state: () => standardState({
+  state: () => standardState({lastErrorCode:null,
     byId: {},
     ids: [],
     currentItem: null,
@@ -84,7 +84,7 @@ export const useCategoryStore = defineStore('categories', {
         errorMsgFallbackKey: 'notifications.categoryDeleteFailed',
       })
     },
-    reset: makeReset({
+    reset: makeReset({lastErrorCode:null,
       byId: {},
       ids: [],
       currentItem: null,

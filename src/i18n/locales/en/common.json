@@ -97,7 +97,13 @@
     "required": "Required",
     "yesDelete": "Yes, delete",
     "areYouSure": "Are you sure?",
-    "discard": "Discard"
+    "discard": "Discard",
+    "revisionConflict": "The server data changed. Compare the latest values before saving your draft.",
+    "keepDraft": "Keep my draft",
+    "useServer": "Use server values",
+    "revisionTargetMissing": "This item no longer exists. Your draft is retained.",
+    "revisionEmpty": "No current items",
+    "prepareNewCreation": "Prepare a new item from this draft"
   },
   "emptyStates": {
     "firstUse": "Nothing here yet",

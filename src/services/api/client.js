@@ -1,3 +1,4 @@
+import { sessionGeneration, onSessionScopeChange, sessionCancelled } from './sessionScope'
 // frontend/src/services/api/client.js
 import axios from 'axios'
 import { API_BASE, ENDPOINTS } from './endpoints'
@@ -19,7 +20,11 @@ const client = axios.create({
 })
 
 const pendingRequests = new Map()
+const activeControllers = new Set()
+onSessionScopeChange(() => { for (const controller of activeControllers) controller.abort(); activeControllers.clear(); pendingRequests.clear() })
+const staleSession = config => config?.sessionGeneration != null && config.sessionGeneration !== sessionGeneration()
 let sessionExpiryPromise = null
+let sessionExpiryGeneration = null
 
 async function fetchCsrfToken() {
   try {
@@ -106,7 +111,9 @@ function isLoginRequest(config) {
 }
 
 function expireSessionAndRedirect() {
-  if (sessionExpiryPromise) return sessionExpiryPromise
+  const generation=sessionGeneration()
+  let ownerGeneration=generation
+  if (sessionExpiryPromise && sessionExpiryGeneration===generation) return sessionExpiryPromise
 
   // Drop the token immediately. Loading the auth store and router is
   // intentionally dynamic to keep client -> authStore -> authService
@@ -115,13 +122,15 @@ function expireSessionAndRedirect() {
 
   const redirect = `${window.location.pathname}${window.location.search}${window.location.hash}`
 
-  sessionExpiryPromise = Promise.all([
+  const pending = Promise.all([
     import('@/stores/authStore'),
     import('@/router'),
   ])
     .then(async ([{ useAuthStore }, { default: router }]) => {
+      if(generation!==sessionGeneration()) return
       const authStore = useAuthStore()
       authStore.clearSession()
+      ownerGeneration=sessionGeneration()
 
       if (router.currentRoute.value.name !== 'Login') {
         await router.replace({
@@ -131,15 +140,18 @@ function expireSessionAndRedirect() {
       }
     })
     .catch(() => {
+      if(ownerGeneration!==sessionGeneration()) return
       const loginUrl = new URL('/login', window.location.origin)
       loginUrl.searchParams.set('redirect', redirect)
       window.location.replace(loginUrl.toString())
     })
     .finally(() => {
-      sessionExpiryPromise = null
+      if(sessionExpiryPromise===pending) {sessionExpiryPromise = null;sessionExpiryGeneration=null}
     })
 
-  return sessionExpiryPromise
+  sessionExpiryPromise=pending
+  sessionExpiryGeneration=generation
+  return pending
 }
 
 client.interceptors.request.use(async (config) => {
@@ -162,11 +174,13 @@ client.interceptors.request.use(async (config) => {
     }
   }
 
+  if(staleSession(config)) throw sessionCancelled()
   return config
 }, (error) => Promise.reject(error))
 
 client.interceptors.response.use(
   (response) => {
+    if(staleSession(response.config)) return Promise.reject(sessionCancelled())
 
     // Binary downloads need headers (not just response.data) so callers can
     // honor Content-Disposition. Opt in explicitly to keep the normal API
@@ -188,6 +202,7 @@ client.interceptors.response.use(
     return body
   },
   async (error) => {
+    if(staleSession(error.config)) return Promise.reject(sessionCancelled())
 
     if (axios.isCancel(error)) {
       return Promise.reject({
@@ -264,10 +279,18 @@ async function requestOnce(config, retryOptions = {}) {
 
 function request(config, retryOptions = {}) {
   // Explicit cancellation belongs to its caller and cannot be shared safely.
-  const key = isMutationMethod(config.method) && !config.signal && !config.cancelToken
-    ? getRequestKey(config) : null
+  const requestKey=isMutationMethod(config.method) && !config.signal && !config.cancelToken ? getRequestKey(config) : null
+  const key=requestKey===null ? null : `${sessionGeneration()}:${requestKey}`
   if (key && pendingRequests.has(key)) return pendingRequests.get(key)
-  const promise = requestOnce(config, retryOptions)
+  const generation = sessionGeneration()
+  const controller = new AbortController()
+  activeControllers.add(controller)
+  const abort = () => controller.abort()
+  if(config.signal?.aborted) abort()
+  else config.signal?.addEventListener('abort', abort, { once: true })
+  const promise = requestOnce({ ...config, sessionGeneration: generation, signal: controller.signal }, retryOptions)
+    .then(result => { if(generation !== sessionGeneration()) throw sessionCancelled(); return result })
+    .finally(() => { activeControllers.delete(controller); config.signal?.removeEventListener('abort', abort) })
   if (!key) return promise
   const shared = promise.finally(() => {
     if (pendingRequests.get(key) === shared) pendingRequests.delete(key)

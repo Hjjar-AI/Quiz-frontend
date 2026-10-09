@@ -20,3 +20,9 @@ Updated study setup with coverage/balanced/review choices; event-based activity 
 JS/extracted Vue script syntax, locale JSON and CRLF-aware whitespace source checks only; no Vue compilation/browser/HTTP/accessibility verification, builds, suites, migrations, database actions, deployment or versions. Verify response loss, pending resets/account switches, revision conflicts, strategy payloads, activity dates/metrics, archived results and bilingual/RTL controls after coordinated rollout.
 
 Verify the matching category/case/tag/settings revisions and browser operation-identity restart recovery; see [work log](workDone.md). Restored create checks must never apply fresh text/images to the earlier result.
+
+## 2026-10-09 project rescan follow-up
+
+The [new source review](../../Android/docs/projectRescan.md) identifies seven additional bounded gaps: web account-generation guards; orphan pending-create/form association; transactional question ownership checks; knowledge-delete revisions; terminal/deleted receipt recovery; web conflict resolution; learner case pagination/read retention. All seven are now addressed in source; remaining checks are runtime release gates.
+
+The seven rescan findings are source-complete. Validate coordinated DELETE/receipt contracts, account-switch cancellation, conflict review, orphan-save recovery and learner paging; see the latest [work log](workDone.md).

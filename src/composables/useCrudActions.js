@@ -1,3 +1,4 @@
+import { sessionGeneration } from '@/services/api/sessionScope'
 // frontend/src/composables/useCrudActions.js
 import { useNotify } from './useNotify'
 import { i18n } from '@/i18n'
@@ -85,11 +86,13 @@ export function useCrudActions(store, options = {}) {
       onError = null,
       cacheKey = null,
       cacheTtlMs = DEFAULT_CACHE_TTL,
-      isCurrent = () => true,
+      isCurrent: callerCurrent = () => true,
       suppressErrorToast = false,
       invalidateOnSuccess = null,
     } = opts
 
+    const generation = sessionGeneration()
+    const isCurrent = () => generation === sessionGeneration() && callerCurrent()
     if (!isCurrent()) return null
     if (cacheKey && cache.has(cacheKey)) {
       const { data, timestamp, ttl } = cache.get(cacheKey)
@@ -112,6 +115,7 @@ export function useCrudActions(store, options = {}) {
       cache.delete(cacheKey)
     }
 
+    if('lastErrorCode' in store) store.lastErrorCode=null
     _patchState(store, statusKey, 'loading')
     _patchState(store, errorKey, null)
 
@@ -162,7 +166,12 @@ export function useCrudActions(store, options = {}) {
         await runOnSuccessSafely(onSuccess, result)
       }
 
-      return isCurrent() ? result : null
+      // Login/initial restore may publish its own one-step session transition.
+      // A response from any other generation must never reauthenticate/reset stores.
+      const owner=result?.user ?? result
+      const authenticatedHere=store.$id==='auth' && generation+1===sessionGeneration() &&
+        store.user != null && (store.user.uuid ?? store.user.id)===(owner?.uuid ?? owner?.id) && callerCurrent()
+      return isCurrent() || authenticatedHere ? result : null
     } catch (err) {
       if (!isCurrent()) return null
       if (err?.code === 'CANCEL') {
@@ -171,6 +180,7 @@ export function useCrudActions(store, options = {}) {
         return null
       }
 
+      if('lastErrorCode' in store) store.lastErrorCode=err?.code ?? null
       const msg = err?.message
         || (errorMsgFallbackKey
           ? i18n.global.t(errorMsgFallbackKey)

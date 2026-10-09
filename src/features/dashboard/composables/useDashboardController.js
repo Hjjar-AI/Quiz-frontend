@@ -230,8 +230,10 @@ export function useDashboardController() {
   }
 
   async function handleDelete(id) {
+    const version=questionStore.byId[id]?.version
     if (!(await confirm(t('questions.deleteConfirm')))) return
-    await questionStore.remove(id)
+    const result=await questionStore.remove(id, version)
+    if(!result) return
   }
 
   async function handleVerify(id) {

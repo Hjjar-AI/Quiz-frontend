@@ -17,6 +17,7 @@
 
       <AsyncContent :loading="isFetching" :error="!hasLoaded ? adminSettingsStore.error : ''" @retry="loadSettings">
         <form v-if="hasLoaded" id="admin-settings-form" class="settings-form" novalidate @submit.prevent="saveSettings">
+          <RevisionReview v-if="review.conflict.value" :latest="latestText" :busy="review.busy.value" :error="review.error.value" :can-keep="authStore.can('admin.settings')" @refresh="review.refresh" @keep="review.resolve(true)" @use-server="review.resolve(false)" />
           <FeedbackRegion :error="adminSettingsStore.error" @dismiss="adminSettingsStore.error = null" />
           <BaseCard as="section" id="settings-general" class="settings-card" :aria-label="t('admin.settings.sectionGeneral')">
             <SectionHeader :title="t('admin.settings.sectionGeneral')" :description="t('admin.settings.generalHint')" icon="bi bi-person-check" />
@@ -57,8 +58,8 @@
           <div class="settings-save-bar">
             <p class="settings-save-bar__status" role="status">{{ t(isDirty ? 'admin.settings.unsaved' : 'admin.settings.upToDate') }}</p>
             <div class="settings-save-bar__actions">
-              <BaseButton variant="secondary" :disabled="!isDirty || isSaving" @click="discardChanges">{{ t('common.discard') }}</BaseButton>
-              <BaseButton type="submit" icon="bi bi-check-lg" :loading="isSaving" :disabled="!isDirty || maintenanceBusy">{{ t('admin.settings.save') }}</BaseButton>
+              <BaseButton variant="secondary" :disabled="!isDirty || isSaving || review.conflict.value" @click="discardChanges">{{ t('common.discard') }}</BaseButton>
+              <BaseButton type="submit" icon="bi bi-check-lg" :loading="isSaving" :disabled="!isDirty || maintenanceBusy || review.conflict.value">{{ t('admin.settings.save') }}</BaseButton>
             </div>
           </div>
         </form>
@@ -109,6 +110,10 @@
 </template>
 
 <script setup>
+import RevisionReview from '@/components/common/RevisionReview.vue'
+import { useRevisionReview } from '@/composables/useRevisionReview'
+import { adminService } from '@/services/adminService'
+
 import '@/assets/settings.css'
 import { ref, computed, nextTick, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -178,12 +183,18 @@ const fields = [...accountFields, 'exam_duration_minutes']
 const settings = ref(Object.fromEntries(fields.map(field => [field, ''])))
 const savedSettings = ref(null)
 const settingsVersion = ref(null)
+const review=useRevisionReview({
+  allow:()=>authStore.can('admin.settings'),load:()=>adminService.getSettings(),
+  apply:(keep,current)=>{settingsVersion.value=current.version;savedSettings.value=Object.fromEntries(fields.map(field=>[field,Number(current[field])]));if(keep) markBaseline(savedSettings.value);else {settings.value={...savedSettings.value};resetValidation();markClean()}adminSettingsStore.error=null},
+})
+const latestText=computed(()=>review.latest.value ? fields.map(field=>`${field==='exam_duration_minutes' ? t('admin.settings.examDuration') : t(field==='default_expiry_days' ? 'admin.settings.expiryDays' : 'admin.settings.renewalDays')}: ${review.latest.value[field]}`).join('\n') : '')
+
 const hasLoaded = ref(false)
 const isFetching = ref(true)
 const isSaving = ref(false)
 const seedConfirmPending = ref(false)
 const maintenanceBusy = computed(() => seedConfirmPending.value || adminSettingsStore.isRankRefreshLoading || adminSettingsStore.isSeedQuestionsLoading)
-const { isDirty, markClean } = useUnsavedChanges(settings, { message: () => t('common.unsavedChanges') })
+const { isDirty, markClean, markBaseline } = useUnsavedChanges(settings, { message: () => t('common.unsavedChanges') })
 
 function fieldError(field) {
   const raw = settings.value[field]
@@ -207,6 +218,7 @@ function updateField(field, value) {
 
 async function loadSettings() {
   if (isSaving.value || maintenanceBusy.value) return
+  if(hasLoaded.value && isDirty.value) {await review.refresh();return}
   isFetching.value = true
   try {
     const data = await adminSettingsStore.fetchSettings()
@@ -223,7 +235,7 @@ async function loadSettings() {
 }
 
 async function saveSettings() {
-  if (!hasLoaded.value || !isDirty.value || isSaving.value || maintenanceBusy.value) return
+  if (!authStore.can('admin.settings') || review.conflict.value || !hasLoaded.value || !isDirty.value || isSaving.value || maintenanceBusy.value) return
   if (!validateAll()) {
     await nextTick()
     const invalidField = fields.find(field => errors[field])
@@ -234,7 +246,7 @@ async function saveSettings() {
   const payload = { ...settings.value, expected_version: settingsVersion.value }
   try {
     const result = await adminSettingsStore.updateSettings(payload)
-    if (result === null) return
+    if (result === null) {if(Number(adminSettingsStore.lastErrorCode)===409) await review.refresh();return}
     settingsVersion.value = result.version
     savedSettings.value = { ...settings.value }
     resetValidation()

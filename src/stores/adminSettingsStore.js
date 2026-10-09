@@ -13,7 +13,7 @@ import {
 } from '@/stores/storeHelpers'
 
 export const useAdminSettingsStore = defineStore('adminSettings', {
-  state: () => standardState({
+  state: () => standardState({lastErrorCode:null,
     settings: {},
     ...subResourceState('rankRefresh'),
     ...subResourceState('seedQuestions'),
@@ -86,7 +86,7 @@ export const useAdminSettingsStore = defineStore('adminSettings', {
       })
     },
 
-    reset: makeReset({
+    reset: makeReset({lastErrorCode:null,
       settings: {},
       rankRefreshStatus: 'idle',
       rankRefreshError: null,

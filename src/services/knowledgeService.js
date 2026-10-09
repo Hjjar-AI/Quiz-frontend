@@ -14,7 +14,7 @@ export const knowledgeService = {
   update(id, data) {
     return apiClient.put(ENDPOINTS.QUESTIONS.KNOWLEDGE_OBJECT(id), data)
   },
-  delete(id) {
-    return apiClient.delete(ENDPOINTS.QUESTIONS.KNOWLEDGE_OBJECT(id))
+  delete(id, version) {
+    return apiClient.delete(ENDPOINTS.QUESTIONS.KNOWLEDGE_OBJECT(id), { params: { expected_version: version } })
   },
 }

@@ -16,7 +16,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { sessionGeneration } from '@/services/api/sessionScope'
 import { questionService } from '@/services/questionService'
 import { useDialog } from '@/composables/useDialog'
 import { useRouter } from 'vue-router'
@@ -33,25 +34,29 @@ const { t } = useI18n()
 const router = useRouter()
 const questionFormRef = ref(null)
 const questionStore = useQuestionStore()
+const formGeneration=sessionGeneration()
 const recoveredId = ref(null)
 const { confirm } = useDialog()
-onMounted(() => questionStore.hydrateWriteRecovery())
+onMounted(() => { questionStore.hydrateWriteRecovery(); if(questionStore.pendingCreate) questionStore.restoredCreate=true })
+onBeforeUnmount(() => { if(formGeneration===sessionGeneration() && questionStore.pendingCreate) questionStore.restoredCreate=true })
 async function checkRestoredSave() {
-  if (saving.value || !questionStore.restoredCreate) return
+  if (formGeneration!==sessionGeneration() || saving.value || !questionStore.restoredCreate) return
   saving.value = true
   try {
     const result = await questionService.createReceipt(questionStore.pendingCreate)
+    if(formGeneration!==sessionGeneration()) return
     // Only expose the saved result; never apply a new form/image to an old save.
     recoveredId.value = result.id
     questionStore.pendingCreate = null; questionStore.restoredCreate = false
     questionStore.checkpointWrites()
   } catch(e) {
+    if(formGeneration!==sessionGeneration()) return
     questionStore.createReceiptMissing = Number(e?.code) === 404
     questionStore.error = e.message
   } finally { saving.value = false }
 }
 async function discardRestoredSave() {
-  if(await confirm(t('questions.acknowledgePendingConfirm'))) questionStore.acknowledgeRestoredCreate()
+  if(await confirm(t('questions.acknowledgePendingConfirm')) && formGeneration===sessionGeneration()) questionStore.acknowledgeRestoredCreate()
 }
 const { saving, imageError, hasPendingImage, uncertainSave, reviewWrite, retryWrite, save, retryImage } = useQuestionSaveFlow({
   persist: (payload, retry = false) => questionStore.create(payload, retry),

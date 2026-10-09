@@ -97,7 +97,13 @@
     "required": "مطلوب",
     "yesDelete": "نعم، احذف",
     "areYouSure": "هل أنت متأكد؟",
-    "discard": "تجاهل"
+    "discard": "تجاهل",
+    "revisionConflict": "تغيرت البيانات على الخادم. قارن القيم الحالية قبل حفظ مسودتك.",
+    "keepDraft": "الاحتفاظ بمسودتي",
+    "useServer": "استخدام قيم الخادم",
+    "revisionTargetMissing": "هذا العنصر لم يعد موجوداً. تم الاحتفاظ بمسودتك.",
+    "revisionEmpty": "لا توجد عناصر حالية",
+    "prepareNewCreation": "تحضير عنصر جديد من هذه المسودة"
   },
   "emptyStates": {
     "firstUse": "لا توجد عناصر بعد",

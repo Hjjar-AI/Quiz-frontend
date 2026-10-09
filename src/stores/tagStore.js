@@ -11,7 +11,7 @@ import {
 
 export const useTagStore = defineStore('tags', {
   state: () =>
-    standardState({
+    standardState({lastErrorCode:null,
       items: [],
       tree: [],
       treeVersion: null,
@@ -54,7 +54,7 @@ export const useTagStore = defineStore('tags', {
       const result = await useCrudActions(this).wrap(() => tagService.renameTag(oldName, newName, version), {
         errorMsgFallbackKey: 'admin.tags.renameFailed',
       })
-      if (this.status !== 'success') return null
+      if (result == null || this.status !== 'success') return null
       await this.refresh()
       return result ?? true
     },
@@ -63,7 +63,7 @@ export const useTagStore = defineStore('tags', {
       const result = await useCrudActions(this).wrap(() => tagService.deleteTag(name, version), {
         errorMsgFallbackKey: 'admin.tags.deleteFailed',
       })
-      if (this.status !== 'success') return null
+      if (result == null || this.status !== 'success') return null
       await this.refresh()
       return result ?? true
     },
@@ -73,7 +73,7 @@ export const useTagStore = defineStore('tags', {
         () => tagService.mergeTags(sourceTags, targetTag, version),
         { errorMsgFallbackKey: 'admin.tags.mergeFailed' },
       )
-      if (this.status !== 'success') return null
+      if (result == null || this.status !== 'success') return null
       await this.refresh()
       return result ?? true
     },
@@ -90,7 +90,7 @@ export const useTagStore = defineStore('tags', {
       }
     },
 
-    reset: makeReset({
+    reset: makeReset({lastErrorCode:null,
       items: [],
       tree: [],
       treeVersion: null,

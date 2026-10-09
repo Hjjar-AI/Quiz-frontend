@@ -1,8 +1,9 @@
+import { sessionGeneration } from '@/services/api/sessionScope'
 // frontend/src/features/questions/composables/useQuestionSave.js
 //
 // Post-save image handling and recovery for question create/edit.
 
-import { ref, computed } from 'vue'
+import { ref, computed, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRecentItems } from '@/composables/useRecentItems'
 import { questionService } from '@/services/questionService'
@@ -48,6 +49,7 @@ export function useQuestionSave() {
    * @returns {Promise<string>} Image failure message, or an empty string.
    */
   async function finishSave({ questionId, sentinels, payload, uploadFailureKey }) {
+    const generation=sessionGeneration()
     const { pendingImage, clearImage } = sentinels
     let imageError = ''
 
@@ -69,6 +71,7 @@ export function useQuestionSave() {
     // Category and tag lists are stored per-user; see
     // `useRecentItems`. Both calls are idempotent — re-adding an
     // existing value just moves it to the front of the list.
+    if(generation!==sessionGeneration()) return imageError
     if (payload.category) addRecentCategory(payload.category)
     if (payload.tags) {
       payload.tags.split(',').forEach(tag => {
@@ -83,6 +86,9 @@ export function useQuestionSave() {
 }
 /** Freeze the draft through text/image work, and retry only a failed image. */
 export function useQuestionSaveFlow({ persist, formRef, afterSave, uploadFailureKey, isUncertain = () => false }) {
+  let alive=true
+  onBeforeUnmount(()=>{alive=false})
+  const scope=sessionGeneration()
   const { extractSentinels, finishSave } = useQuestionSave()
   const saving = ref(false)
   const imageError = ref('')
@@ -92,7 +98,10 @@ export function useQuestionSaveFlow({ persist, formRef, afterSave, uploadFailure
   const hasPendingImage = computed(() => recovery.value !== null)
 
   async function completeImage() {
+    if(!alive || scope!==sessionGeneration()) return
+    const generation=sessionGeneration()
     imageError.value = await finishSave(recovery.value)
+    if(!alive || generation !== sessionGeneration()) return
     if (imageError.value) return
     formRef.value?.markClean()
     await afterSave()
@@ -100,11 +109,13 @@ export function useQuestionSaveFlow({ persist, formRef, afterSave, uploadFailure
   }
 
   async function save(payload) {
-    if (saving.value || recovery.value || pendingWrite.value) return
+    if (!alive || scope!==sessionGeneration() || saving.value || recovery.value || pendingWrite.value) return
     saving.value = true
+    const generation=sessionGeneration()
     try {
       const sentinels = extractSentinels(payload)
       const result = await persist(payload)
+      if(!alive || generation !== sessionGeneration()) return
       if (!result) {
         if (isUncertain()) pendingWrite.value = { sentinels, payload: { ...payload } }
         return
@@ -115,18 +126,20 @@ export function useQuestionSaveFlow({ persist, formRef, afterSave, uploadFailure
   }
 
   async function retryImage() {
-    if (saving.value || !recovery.value) return
+    if (!alive || scope!==sessionGeneration() || saving.value || !recovery.value) return
     saving.value = true
     try { await completeImage() }
     finally { saving.value = false }
   }
 
   async function resolveWrite(retry) {
-    if (saving.value || !pendingWrite.value) return
+    if (!alive || scope!==sessionGeneration() || saving.value || !pendingWrite.value) return
     saving.value = true
     try {
       const original = pendingWrite.value
+      const generation=sessionGeneration()
       const result = await persist(original.payload, retry)
+      if(!alive || generation !== sessionGeneration()) return
       if (!result) return
       recovery.value = { questionId: result.id, sentinels: original.sentinels, payload: original.payload, uploadFailureKey }
       pendingWrite.value = null

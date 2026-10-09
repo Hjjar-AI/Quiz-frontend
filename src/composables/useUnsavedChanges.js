@@ -42,6 +42,8 @@ export function useUnsavedChanges(source, options = {}) {
     ready.value = true
   }
 
+  function markBaseline(value) { baseline.value=fingerprint(value);ready.value=true }
+
   function allowNextNavigation() {
     bypassOnce.value = true
   }
@@ -68,5 +70,5 @@ export function useUnsavedChanges(source, options = {}) {
   onMounted(() => window.addEventListener('beforeunload', handleBeforeUnload))
   onBeforeUnmount(() => window.removeEventListener('beforeunload', handleBeforeUnload))
 
-  return { isDirty, markClean, allowNextNavigation }
+  return { isDirty, markClean, markBaseline, allowNextNavigation }
 }

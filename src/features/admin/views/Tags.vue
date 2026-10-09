@@ -59,6 +59,7 @@
         </template>
       </BaseListContainer>
 
+      <RevisionReview v-if="review.conflict.value" :latest="latestText" :busy="review.busy.value" :error="review.error.value" :can-keep="canKeep" @refresh="review.refresh" @keep="review.resolve(true)" @use-server="review.resolve(false)" />
       <BaseModal
         :is-open="renameModalOpen"
         :title="t('admin.tags.renameTitle')"
@@ -66,7 +67,8 @@
         @update:is-open="renameModalOpen = false"
       >
         <form @submit.prevent="submitRename">
-          <FormGrid>
+          <RevisionReview v-if="review.conflict.value" :latest="latestText" :busy="review.busy.value" :error="review.error.value" :can-keep="canKeep" @refresh="review.refresh" @keep="review.resolve(true)" @use-server="review.resolve(false)" />
+        <FormGrid>
             <BaseField :label="t('admin.tags.renameCurrent')">
               <BaseInput :model-value="renameTagName" disabled />
             </BaseField>
@@ -93,6 +95,7 @@
         <div class="merge-source-list">
           <BaseBadge v-for="tag in selectedTags" :key="tag" variant="secondary">{{ tag }}</BaseBadge>
         </div>
+        <RevisionReview v-if="review.conflict.value" :latest="latestText" :busy="review.busy.value" :error="review.error.value" :can-keep="canKeep" @refresh="review.refresh" @keep="review.resolve(true)" @use-server="review.resolve(false)" />
         <FormGrid>
           <BaseField :label="t('admin.tags.mergeTarget')" required>
             <BaseInput v-model="mergeTarget" required />
@@ -123,6 +126,11 @@
 </template>
 
 <script setup>
+import RevisionReview from '@/components/common/RevisionReview.vue'
+import { useRevisionReview } from '@/composables/useRevisionReview'
+import { tagService } from '@/services/tagService'
+import { useAuthStore } from '@/stores/authStore'
+
 import { ref, computed, onMounted } from 'vue'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
@@ -142,6 +150,7 @@ import { useDialog } from '@/composables/useDialog'
 const { t } = useI18n()
 
 const tagStore = useTagStore()
+const authStore=useAuthStore()
 const tags = computed(() => tagStore.items)
 const tagTree = computed(() => tagStore.tree)
 const loading = computed(() => tagStore.isLoading || tagStore.isTreeLoading)
@@ -154,6 +163,24 @@ const renameTagName = ref('')
 const newTagName = ref('')
 const showMergeModal = ref(false)
 const mergeTarget = ref('')
+const renameSourceId=ref(null), selectionIds=ref([]), reviewAction=ref(null), mergeTargetId=ref(null)
+function flatten(tree) {return tree.flatMap(node=>[node,...flatten(node.children||[])])}
+const review=useRevisionReview({allow:()=>authStore.can('questions.manage_tags'),load:()=>tagService.getTree(),
+  apply:(keep,current)=>{
+    const nodes=flatten(current.tree);tagStore.tree=current.tree;tagStore.treeVersion=current.version
+    const source=nodes.find(node=>node.id===renameSourceId.value)
+    if(reviewAction.value==='rename' && source) {renameTagName.value=source.name;renameVersion.value=current.version;if(!keep) newTagName.value=source.name}
+    selectedTags.value=nodes.filter(node=>selectionIds.value.includes(node.id)).map(node=>node.name);selectedVersion.value=current.version
+    if(reviewAction.value==='rename' && !source) renameModalOpen.value=false
+    if(!keep) mergeTarget.value=''
+    else if(mergeTargetId.value!=null) mergeTarget.value=nodes.find(node=>node.id===mergeTargetId.value)?.name || mergeTarget.value
+    tagStore.error=null
+  },
+})
+const latestText=computed(()=>review.latest.value ? flatten(review.latest.value.tree).map(node=>node.name).join(' · ') || t('common.revisionEmpty') : '')
+const canKeep=computed(()=>{if(!review.latest.value || !authStore.can('questions.manage_tags')) return false;const nodes=flatten(review.latest.value.tree);return reviewAction.value==='rename' ? nodes.some(node=>node.id===renameSourceId.value) : reviewAction.value==='merge' && (mergeTargetId.value==null || nodes.some(node=>node.id===mergeTargetId.value)) && selectionIds.value.every(id=>nodes.some(node=>node.id===id))})
+async function checkConflict() {if(Number(tagStore.lastErrorCode)===409) await review.refresh()}
+
 
 const { notify } = useNotify()
 const { confirm } = useDialog()
@@ -168,13 +195,17 @@ async function loadTags() {
 }
 
 function toggleTag(name) {
+  if(review.conflict.value) return
   if (!selectedTags.value.length) selectedVersion.value = tagStore.treeVersion
   const idx = selectedTags.value.indexOf(name)
   if (idx === -1) selectedTags.value.push(name)
   else selectedTags.value.splice(idx, 1)
+  selectionIds.value=flatten(tagStore.tree).filter(node=>selectedTags.value.includes(node.name)).map(node=>node.id)
 }
 
 function openRename(node) {
+  if(review.conflict.value) return
+  renameSourceId.value=node.id
   renameVersion.value = tagStore.treeVersion
   renameTagName.value = node.name
   newTagName.value = node.name
@@ -182,9 +213,11 @@ function openRename(node) {
 }
 
 async function submitRename() {
+  if(review.conflict.value || loading.value || !authStore.can('questions.manage_tags')) return
+  reviewAction.value='rename'
   try {
     const result = await tagStore.rename(renameTagName.value, newTagName.value, renameVersion.value)
-    if (!result) return
+    if (!result) {await checkConflict();return}
     notify(t('admin.tags.renameSuccess'), 'success')
     renameModalOpen.value = false
     const idx = selectedTags.value.indexOf(renameTagName.value)
@@ -195,11 +228,13 @@ async function submitRename() {
 }
 
 async function confirmDelete(node) {
+  if(review.conflict.value || loading.value || !authStore.can('questions.manage_tags')) return
+  reviewAction.value='delete'
   const version = tagStore.treeVersion
   if (!(await confirm(t('admin.tags.deleteConfirm', { name: node.name })))) return
   try {
     const result = await tagStore.remove(node.name, version)
-    if (!result) return
+    if (!result) {await checkConflict();return}
     notify(t('admin.tags.deleteSuccess'), 'success')
     const idx = selectedTags.value.indexOf(node.name)
     if (idx !== -1) selectedTags.value.splice(idx, 1)
@@ -209,6 +244,9 @@ async function confirmDelete(node) {
 }
 
 async function mergeTags() {
+  if(review.conflict.value || loading.value || !authStore.can('questions.manage_tags')) return
+  reviewAction.value='merge'
+  mergeTargetId.value=flatten(tagStore.tree).find(node=>node.name===mergeTarget.value)?.id ?? null
   if (!mergeTarget.value) {
     notify(t('admin.tags.mergeTargetRequired'), 'error')
     return
@@ -219,7 +257,7 @@ async function mergeTags() {
   }
   try {
     const result = await tagStore.merge(selectedTags.value, mergeTarget.value, selectedVersion.value)
-    if (!result) return
+    if (!result) {await checkConflict();return}
     notify(t('admin.tags.mergeSuccess'), 'success')
     showMergeModal.value = false
     selectedTags.value = []
