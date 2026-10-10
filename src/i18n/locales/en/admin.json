@@ -35,6 +35,10 @@
     },
 
     "users": {
+      "activationUnknown": "The activation request for user #{id} may have succeeded. Read the current status before another action.",
+      "activationState": "Current account status: {state}",
+      "activationReviewed": "I reviewed the current status",
+
       "title": "User management",
       "addButton": "Add user",
       "empty": "No users",

@@ -95,7 +95,7 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
     previewQuestions: {},
     previewFeedback: null,
 
-    serverOffsetMs: 0,
+    serverOffsetMs: 0, clockStatus:'idle',clockError:null,
     startedAt: null,
     deadlineAt: null,
     finishedAt: null,
@@ -219,14 +219,18 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
     },
 
     async _syncServerOffset() {
-      try {
-        const status = await masterExamService.attemptStatus(this.examId,{signal})
-        if (status.server_now) {
+      const examId=this.examId,sessionId=this.sessionId,epoch=this.contextEpoch
+      const { wrap }=useCrudActions(this,{statusKey:'clockStatus',errorKey:'clockError'})
+      return await wrap(() => masterExamService.attemptStatus(examId), {
+        suppressErrorToast:true,
+        isCurrent:()=>epoch===this.contextEpoch && examId===this.examId && sessionId===this.sessionId,
+        onSuccess:status=>{
+        if (status.session_id===sessionId && status.server_now) {
           const serverNow = new Date(status.server_now).getTime()
           this.serverOffsetMs = serverNow - Date.now()
         }
-      } catch {
-      }
+        }
+      })
     },
 
     async fetchCurrentQuestion() {
@@ -452,7 +456,7 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
       answers: {},
       previewQuestions: {},
       previewFeedback: null,
-      serverOffsetMs: 0,
+      serverOffsetMs: 0, clockStatus:'idle',clockError:null,
       startedAt: null,
       deadlineAt: null,
       finishedAt: null,

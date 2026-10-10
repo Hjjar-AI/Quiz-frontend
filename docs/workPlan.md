@@ -11,3 +11,7 @@ The seven rescan and eight deeper-review findings are source-complete. Do not re
 - Check browser lifecycle/polling, conflict controls, Arabic/English/RTL, themes/fonts/density/reduced motion, responsive keyboard/screen-reader behavior, file exports and proxy/CSRF startup. Use the visual checklist.
 
 Builds, suites, migrations/setup, destructive operator actions and versions follow [explicit-request policies](../Agents.md). Current source checks do not establish compilation, HTTP, schema or runtime concurrency.
+
+## 2026-10-10 parity-review follow-up
+
+All seven native gaps, smaller workflow differences and shared web defects from the [latest parity review](../../Android/docs/archive/reviews/2026-10-10-androidParityReview.md) are source-complete. Verify the dedicated account set-state route, partial/unknown batch outcomes, clock-read ownership and the shared manual matrix after matching rollout. Old servers reject the new route without changing account state. Earlier completed fixes remain complete.

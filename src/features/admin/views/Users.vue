@@ -18,6 +18,13 @@
         @retry="fetchUsers"
       />
 
+      <BaseCard v-for="(pending,id) in userStore.activationUnknown" :key="id">
+        <p>{{ t('admin.users.activationUnknown',{id}) }}</p>
+        <p v-if="pending.reviewed">{{ t('admin.users.activationState',{state:pending.missing ? t('common.noData') : pending.current ? t('admin.users.statusActive') : t('admin.users.statusInactive')}) }}</p>
+        <BaseButton variant="secondary" :disabled="batchBusy || userStore.isLoading" @click="userStore.reviewActivation(id)">{{ t('common.refresh') }}</BaseButton>
+        <BaseButton variant="secondary" :disabled="batchBusy || userStore.isLoading || !pending.reviewed" @click="userStore.acknowledgeActivation(id)">{{ t('admin.users.activationReviewed') }}</BaseButton>
+      </BaseCard>
+      <fieldset :disabled="batchBusy || userStore.isLoading || Object.keys(userStore.activationUnknown).length>0" class="form-lock-group">
       <BulkActions
         v-if="selectedIds.length > 0"
         :count="selectedIds.length"
@@ -29,6 +36,7 @@
         @unverify="bulkToggle(false)"
         @clear="clearSelection"
       />
+      </fieldset>
 
       <BaseListContainer
         :loading="userStore.isLoading"
@@ -200,7 +208,7 @@
 
 <script setup>
 import { ref, onMounted, reactive, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import Pagination from '@/components/base/BasePagination.vue'
@@ -223,6 +231,7 @@ import { useSelection } from '@/composables/useSelection'
 import { useConfigStore } from '@/stores/configStore'
 import { roleLabelFor, roleBadgeVariantFor } from '@/utils/roleDisplay'
 import { formatCellValue } from '@/utils/formatCellValue'
+import { sessionGeneration } from '@/services/api/sessionScope'
 import { daysUntilExpiry } from '@/utils/formatters'
 import { avatarToneClass } from '@/utils/avatar'
 
@@ -237,6 +246,8 @@ const { notify } = useNotify()
 const { confirm, prompt: promptDialog } = useDialog()
 const { selectedIds, toggle: toggleSelection, clear: clearSelection, isSelected } = useSelection()
 const userFormModalRef = ref(null)
+const batchBusy=ref(false)
+onBeforeRouteLeave(()=>!batchBusy.value)
 const configStore = useConfigStore()
 
 // `fetchUsers` fills `pagination.total` (the item count, for the
@@ -341,38 +352,29 @@ async function confirmDelete(user) {
 }
 
 async function bulkToggle(active) {
-  if (selectedIds.value.length === 0) return
-  const action = active ? t('admin.users.bulkActivate') : t('admin.users.bulkDeactivate')
-  const message = t('admin.users.bulkConfirm', { action, count: selectedIds.value.length })
-  const ok = await confirm(message)
-  if (!ok) return
-
-  const adminPassword = await promptDialog(
-    t('admin.users.formAdminPasswordPlaceholder'),
-    ''
-  )
-  if (!adminPassword) return
-
-  let successCount = 0
-  let failCount = 0
-  for (const id of selectedIds.value) {
-    const result = await userStore.toggleActive(id, adminPassword, { silent: true })
-    if (result) successCount++
-    else failCount++
-  }
-  if (failCount > 0) {
-    notify(
-      t('admin.users.bulkSummaryPartial', {
-        action,
-        success: successCount,
-        fail: failCount,
-      }),
-      'warning',
-    )
-  } else {
-    notify(t('admin.users.bulkSummaryOk', { action, count: successCount }), 'success')
-  }
-  clearSelection()
+  if(batchBusy.value || userStore.isLoading || Object.keys(userStore.activationUnknown).length || !authStore.can('admin.users') || !selectedIds.value.length) return
+  batchBusy.value=true
+  const generation=sessionGeneration()
+  const current=()=>generation===sessionGeneration() && authStore.can('admin.users')
+  const ids=[...selectedIds.value]
+  try {
+    const action=active ? t('admin.users.bulkActivate') : t('admin.users.bulkDeactivate')
+    if(!await confirm(t('admin.users.bulkConfirm',{action,count:ids.length}))) return
+    const adminPassword=await promptDialog(t('admin.users.formAdminPasswordPlaceholder'),'')
+    if(!adminPassword || !current()) return
+    let successCount=0,failCount=0
+    for(const id of ids) {
+      if(!current()) break
+      const result=await userStore.toggleActive(id,adminPassword,{silent:true,desiredActive:active})
+      if(!current()) return
+      if(result) {successCount++;if(isSelected(id)) toggleSelection(id)}
+      else {failCount++;if(userStore.activationUnknown[id] || [401,403,429].includes(Number(userStore.lastErrorCode))) break}
+    }
+    notify(t(failCount ? 'admin.users.bulkSummaryPartial' : 'admin.users.bulkSummaryOk',
+      {action,success:successCount,fail:failCount,count:successCount}),failCount ? 'warning' : 'success')
+    // Failed IDs remain selected. A subsequent click is an explicit set-state
+    // request, never an automatic replay or a reversal of prior success.
+  } finally {batchBusy.value=false}
 }
 
 onMounted(fetchUsers)

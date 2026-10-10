@@ -191,6 +191,7 @@ export const ENDPOINTS = {
     USERS: '/auth/admin/users/',
     USER: (id) => `/auth/admin/users/${id}/`,
     USER_TOGGLE: (id) => `/auth/admin/users/${id}/toggle/`,
+    USER_SET_ACTIVE: (id) => `/auth/admin/users/${id}/active/`,
     USER_RESET_PASSWORD: (id) => `/auth/admin/users/${id}/reset-password/`,
     SETTINGS: '/admin/settings/',
     VERIFICATION_STATS: '/analytics/verification-stats/',

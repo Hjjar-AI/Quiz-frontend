@@ -17,9 +17,10 @@ export const adminService = {
     return apiClient.put(ENDPOINTS.ADMIN.USER(id), data)
   },
 
-  async toggleUser(id, adminPassword) {
-    return apiClient.post(ENDPOINTS.ADMIN.USER_TOGGLE(id), {
+  async toggleUser(id, adminPassword, desiredActive) {
+    return apiClient.post(typeof desiredActive==='boolean' ? ENDPOINTS.ADMIN.USER_SET_ACTIVE(id) : ENDPOINTS.ADMIN.USER_TOGGLE(id), {
       admin_password: adminPassword,
+      ...(typeof desiredActive === 'boolean' ? {is_active:desiredActive} : {}),
     })
   },
   async resetPasswordWithAdmin(id, adminPassword, newPassword) {

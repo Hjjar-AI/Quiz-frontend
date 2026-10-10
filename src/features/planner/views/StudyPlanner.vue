@@ -123,7 +123,7 @@ const progressPercent = computed(() => {
 
 const weekDays = computed(() => {
   if (!store.planner) return []
-  const today = new Date()
+  const today = new Date(`${store.planner.today}T12:00:00`)
   const start = new Date(today)
   start.setDate(today.getDate() - 6)
   const days = []

@@ -1,6 +1,7 @@
 // frontend/src/stores/userStore.js
 import { defineStore } from 'pinia'
 import { adminService } from '@/services/adminService'
+import { sessionGeneration } from '@/services/api/sessionScope'
 import { useCrudActions } from '@/composables/useCrudActions'
 import { useDialog } from '@/composables/useDialog'
 import { useNotify } from '@/composables/useNotify'
@@ -13,6 +14,8 @@ export const useUserStore = defineStore('adminUsers', {
       byId: {},
       ids: [],
       currentItem: null,
+      activationUnknown: {},
+      lastErrorCode:null,
       pagination: { page: 1, per_page: 20, total: 0, total_pages: 1 },
     }),
   getters: {
@@ -112,9 +115,15 @@ export const useUserStore = defineStore('adminUsers', {
     // one failed, not just see a count at the end.
     // ────────────────────────────────────────────────────────────────
     async toggleActive(id, adminPassword, options = {}) {
-      const { silent = false } = options
+      const { silent = false, desiredActive } = options
+      if(this.activationUnknown[id]) return null
       const { wrap } = useCrudActions(this)
-      return await wrap(() => adminService.toggleUser(id, adminPassword), {
+      return await wrap(async () => {
+        const res=await adminService.toggleUser(id,adminPassword,desiredActive)
+        if(typeof desiredActive==='boolean' && (Number(res?.id)!==Number(id) || res?.is_active!==desiredActive))
+          throw new Error(i18n.global.t('admin.users.activationUnknown',{id}))
+        return res
+      }, {
         onSuccess: (res) => {
           const user = this.byId[id]
           const nowActive =
@@ -125,10 +134,30 @@ export const useUserStore = defineStore('adminUsers', {
             useNotify().notify(i18n.global.t(key), 'success')
           }
         },
+        onError: err => {
+          if(typeof desiredActive==='boolean' && ![400,401,403,404,405,409,422,429].includes(Number(err?.code)))
+            this.activationUnknown={...this.activationUnknown,[id]:{active:desiredActive,reviewed:false}}
+        },
         errorMsgFallbackKey: 'notifications.userToggleFailed',
       })
     },
 
+    async reviewActivation(id) {
+      if(!this.activationUnknown[id] || this.isLoading) return null
+      const { wrap }=useCrudActions(this)
+      return await wrap(()=>adminService.getUser(id),{
+        onSuccess:user=>{
+          this.byId={...this.byId,[id]:user}
+          this.activationUnknown={...this.activationUnknown,[id]:{...this.activationUnknown[id],reviewed:true,current:user.is_active}}
+        },
+        onError:err=>{if(Number(err?.code)===404) this.activationUnknown={...this.activationUnknown,[id]:{...this.activationUnknown[id],reviewed:true,missing:true}}},
+        errorMsgFallbackKey:'notifications.userToggleFailed',
+      })
+    },
+    acknowledgeActivation(id) {
+      if(this.isLoading || !this.activationUnknown[id]?.reviewed) return
+      const pending={...this.activationUnknown};delete pending[id];this.activationUnknown=pending
+    },
     async resetPassword(id, adminPassword, newPassword) {
       const { wrap } = useCrudActions(this)
       return await wrap(() => adminService.resetPasswordWithAdmin(id, adminPassword, newPassword), {
@@ -159,6 +188,9 @@ export const useUserStore = defineStore('adminUsers', {
     },
 
     async confirmToggle(user) {
+      if(this.activationUnknown[user.id] || this.isLoading) return false
+      const generation=sessionGeneration()
+      const desiredActive=!user.is_active
       const { confirm, prompt } = useDialog()
       const key = user.is_active ? 'admin.users.confirmToggleOff' : 'admin.users.confirmToggleOn'
       const ok = await confirm(i18n.global.t(key, { username: user.username }))
@@ -168,11 +200,11 @@ export const useUserStore = defineStore('adminUsers', {
         i18n.global.t('admin.users.formAdminPasswordPlaceholder'),
         '',
       )
-      if (!adminPassword) return false
+      if (!adminPassword || generation!==sessionGeneration()) return false
 
       // Single-user path: the per-user toast fires (silent defaults
       // to false), matching the previous behaviour exactly.
-      const result = await this.toggleActive(user.id, adminPassword)
+      const result = await this.toggleActive(user.id, adminPassword, {desiredActive})
       return result !== false && result !== null
     },
 
@@ -180,6 +212,8 @@ export const useUserStore = defineStore('adminUsers', {
       byId: {},
       ids: [],
       currentItem: null,
+      activationUnknown: {},
+      lastErrorCode:null,
       pagination: { page: 1, per_page: 20, total: 0, total_pages: 1 },
       status: 'idle',
       error: null,
