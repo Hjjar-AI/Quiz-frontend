@@ -72,6 +72,7 @@ declare module 'vue' {
     ProgressBar: typeof import('./components/common/ProgressBar.vue')['default']
     QuestionNavDots: typeof import('./components/base/QuestionNavDots.vue')['default']
     ReviewItem: typeof import('./components/common/ReviewItem.vue')['default']
+    RevisionReview: typeof import('./components/common/RevisionReview.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollToTop: typeof import('./components/common/ScrollToTop.vue')['default']

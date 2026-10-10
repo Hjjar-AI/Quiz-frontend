@@ -30,6 +30,7 @@ declare global {
   const h: typeof import('vue').h
   const inject: typeof import('vue').inject
   const invalidateCacheByPrefix: typeof import('./composables/useCrudActions.js').invalidateCacheByPrefix
+  const isModalOpen: typeof import('./composables/useModalStack.js').isModalOpen
   const isProxy: typeof import('vue').isProxy
   const isReactive: typeof import('vue').isReactive
   const isReadonly: typeof import('vue').isReadonly
@@ -86,6 +87,7 @@ declare global {
   const useClickOutside: typeof import('./composables/useClickOutside.js').useClickOutside
   const useContentLoader: typeof import('./composables/useContentLoader.js').useContentLoader
   const useCountUp: typeof import('./composables/useCountUp.js').useCountUp
+  const useCountdownAnnouncements: typeof import('./composables/useCountdownAnnouncements.js').useCountdownAnnouncements
   const useCrudActions: typeof import('./composables/useCrudActions.js').useCrudActions
   const useCssModule: typeof import('vue').useCssModule
   const useCssVars: typeof import('vue').useCssVars
@@ -107,11 +109,13 @@ declare global {
   const useOnline: typeof import('./composables/useOnline.js').useOnline
   const usePagination: typeof import('./composables/usePagination.js').usePagination
   const useRecentItems: typeof import('./composables/useRecentItems.js').useRecentItems
+  const useRevisionReview: typeof import('./composables/useRevisionReview.js').useRevisionReview
   const useRotatingContent: typeof import('./composables/useRotatingContent.js').useRotatingContent
   const useRoute: typeof import('vue-router').useRoute
   const useRouter: typeof import('vue-router').useRouter
   const useSafeI18n: typeof import('./composables/useSafeI18n.js').useSafeI18n
   const useSelection: typeof import('./composables/useSelection.js').useSelection
+  const useSessionLeaveGuard: typeof import('./composables/useSessionLeaveGuard.js').useSessionLeaveGuard
   const useSlots: typeof import('vue').useSlots
   const useSound: typeof import('./composables/useSound.js').useSound
   const useSubmitGuard: typeof import('./composables/useSubmitGuard.js').useSubmitGuard
