@@ -15,9 +15,9 @@
           :aria-label="t('admin.import.title')"
         />
 
-        <FileImport v-if="activeTab === 'file'" />
-        <TelegramImport v-else-if="activeTab === 'telegram'" />
-        <StateImport v-else @imported="handleStateImported" />
+        <FileImport v-show="activeTab === 'file'" />
+        <TelegramImport v-if="activeTab === 'telegram'" />
+        <StateImport v-else-if="activeTab === 'state'" @imported="handleStateImported" />
       </BaseCard>
     </PageShell>
   </Layout>

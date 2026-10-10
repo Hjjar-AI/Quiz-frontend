@@ -1,42 +1,31 @@
-<!-- frontend/src/features/admin/components/SimpleImportTab.vue -->
-<!--
-  Shared "upload a file" tab.
-
-  Renders a DropZone plus a single submit button.
-
-  INVALID-TYPE MESSAGE
-  --------------------
-  The caller owns the wording for a wrong-type rejection via the
-  `invalidTypeMessageFn` prop. DropZone receives the same factory
-  and calls it in place of its generic message, so a user who picks
-  a wrong-type file sees the caller's wording.
-
-  VALIDATION (first-review item 10)
-  ---------------------------------
-  Validation runs entirely inside DropZone. This component no longer
-  re-checks the file in its own handler — the file that arrives at
-  `handleFileSelect` has already passed the same validator the drop
-  path uses.
--->
 <template>
-  <div class="simple-import-tab">
+  <div class="simple-import-tab" :aria-busy="loading || undefined">
     <DropZone
       :accept="accept"
+      :multiple="multiple"
       :label="label"
       :hint="hint"
       :disabled="loading"
       :max-size-mb="maxSizeMb"
       :invalid-type-message-fn="invalidTypeMessageFn"
       @file-selected="handleFileSelect"
+      @files-selected="handleFilesSelect"
     />
 
+    <div v-if="files.length" class="simple-import-tab__queue" aria-live="polite">
+      <EntityRow v-for="entry in files" :key="entry.id" :title="entry.file.name" :description="entry.message">
+        <template #status>{{ statusLabels[entry.status] }}</template>
+        <template #actions>
+          <BaseButton variant="ghost" size="small" :disabled="loading" :aria-label="t('admin.import.queue.removeFile', { name: entry.file.name })" @click="removeFile(entry)">
+            {{ t('admin.import.queue.remove') }}
+          </BaseButton>
+        </template>
+      </EntityRow>
+    </div>
+    <FeedbackRegion v-if="hasFailure" scope="section" :warning="t('admin.import.queue.reviewFailure')" />
+
     <div class="simple-import-tab__actions">
-      <BaseButton
-        variant="primary"
-        :loading="loading"
-        :disabled="!selectedFile"
-        @click="upload"
-      >
+      <BaseButton variant="primary" :loading="loading" :disabled="!hasPending" @click="upload">
         <i :class="buttonIcon" aria-hidden="true"></i> {{ buttonLabel }}
       </BaseButton>
     </div>
@@ -44,61 +33,111 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import DropZone from '@/components/common/DropZone.vue'
+import EntityRow from '@/components/common/EntityRow.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useNotify } from '@/composables/useNotify'
+import { useUnsavedChanges } from '@/composables/useUnsavedChanges'
+import { sessionGeneration } from '@/services/api/sessionScope'
 
 const { t } = useI18n()
-
 const props = defineProps({
-  // Comma-separated accept attribute for the input, e.g. ".json".
   accept: { type: String, required: true },
-  // Pre-translated copy.
+  multiple: { type: Boolean, default: false },
   label: { type: String, required: true },
   hint: { type: String, default: '' },
   buttonIcon: { type: String, default: 'bi bi-upload' },
   buttonLabel: { type: String, required: true },
-  // Retained for the caller's own reference and future use. DropZone
-  // receives the same list via the accept prop's parsing.
   allowedExtensions: { type: Array, required: true },
-  // Message factory for a wrong-type rejection. Forwarded to DropZone.
   invalidTypeMessageFn: { type: Function, required: true },
-  // Maximum size in megabytes. Forwarded to DropZone, which enforces
-  // it and fires the shared `admin.import.tooLarge` message on
-  // violation.
   maxSizeMb: { type: Number, default: 50 },
-  // Async function (File) => response.
   uploadFn: { type: Function, required: true },
 })
-
 const emit = defineEmits(['imported'])
-
 const { notify } = useNotify()
-
-const selectedFile = ref(null)
+const files = ref([])
 const loading = ref(false)
+const hasPending = computed(() => files.value.some(entry => entry.status === 'pending'))
+const hasFailure = computed(() => files.value.some(entry => entry.status === 'failed'))
+const statusLabels = computed(() => ({
+  pending: t('admin.import.queue.pending'),
+  uploading: t('admin.import.queue.uploading'),
+  success: t('admin.import.queue.success'),
+  failed: t('admin.import.queue.failed'),
+}))
+let nextId = 0
+let selectionGeneration = sessionGeneration()
+let disposed = false
+onBeforeUnmount(() => { disposed = true })
+const { markBaseline } = useUnsavedChanges(
+  () => files.value.filter(entry => entry.status !== 'success').map(entry => entry.file),
+  { message: () => t('common.unsavedChanges') },
+)
+markBaseline([])
 
-// The file arrives already validated by DropZone. No re-check here.
+function resetChangedSession() {
+  if (selectionGeneration === sessionGeneration()) return false
+  files.value = []
+  selectionGeneration = sessionGeneration()
+  return true
+}
+
+// DropZone validates each file before it reaches the queue.
 function handleFileSelect(file) {
-  selectedFile.value = file
+  handleFilesSelect([file])
+}
+function handleFilesSelect(selected) {
+  if (loading.value || disposed) return
+  resetChangedSession()
+  if (!props.multiple) files.value = []
+  for (const file of selected) {
+    if (files.value.some(entry => entry.file.name === file.name && entry.file.size === file.size && entry.file.lastModified === file.lastModified)) continue
+    files.value.push({ id: nextId++, file, status: 'pending', message: '' })
+    if (!props.multiple) break
+  }
+}
+function removeFile(entry) {
+  if (loading.value) return
+  files.value = files.value.filter(item => item.id !== entry.id)
 }
 
 async function upload() {
-  if (!selectedFile.value) {
+  if (loading.value || disposed || resetChangedSession()) return
+  const pending = files.value.filter(entry => entry.status === 'pending')
+  if (!pending.length) {
     notify(t('admin.import.noFile'), 'warning')
     return
   }
+  const generation = sessionGeneration()
+  const isCurrent = () => !disposed && generation === sessionGeneration()
   loading.value = true
   try {
-    const data = await props.uploadFn(selectedFile.value)
-    notify(data?.message || t('admin.import.success'), 'success')
-    selectedFile.value = null
-    emit('imported')
-  } catch (err) {
-    notify(err?.message || t('admin.import.failed'), 'error')
+    for (const entry of pending) {
+      if (!isCurrent()) break
+      entry.status = 'uploading'
+      try {
+        const data = await props.uploadFn(entry.file)
+        if (!isCurrent()) break
+        entry.status = 'success'
+        entry.message = data?.message || t('admin.import.success')
+        notify(entry.message, 'success')
+        if (!props.multiple) files.value = []
+        emit('imported')
+      } catch (err) {
+        if (!isCurrent()) break
+        entry.status = 'failed'
+        entry.message = err?.message || t('admin.import.failed')
+        notify(`${entry.file.name}: ${entry.message}`, 'error')
+        // A lost response can hide a committed import. Never replay this file;
+        // keep remaining files pending for a deliberate separate submission.
+        break
+      }
+    }
   } finally {
     loading.value = false
+    if (!disposed) resetChangedSession()
   }
 }
 </script>

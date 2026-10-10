@@ -190,3 +190,47 @@ describe('DropZone — empty drop', () => {
     wrapper.unmount()
   })
 })
+
+describe('DropZone — multiple files', () => {
+  it('validates every dropped file and emits the valid CSV/JSON files in order', () => {
+    const wrapper = mountZone({ accept: '.csv,.json', multiple: true })
+    const csv = makeFile('chapter1.csv')
+    const json = makeFile('chapter2.json')
+    simulateDrop(wrapper, [csv, makeFile('notes.pdf'), json])
+    expect(wrapper.emitted('files-selected')).toEqual([[[csv, json]]])
+    expect(wrapper.emitted('file-selected')).toBeUndefined()
+    expect(notifyMock).toHaveBeenCalledTimes(1)
+    wrapper.unmount()
+  })
+
+  it('supports multiple files from the native picker and resets the input', async () => {
+    const wrapper = mountZone({ accept: '.csv,.json', multiple: true })
+    const files = [makeFile('chapter1.csv'), makeFile('chapter2.json')]
+    const input = wrapper.find('input')
+    expect(input.attributes('multiple')).toBeDefined()
+    Object.defineProperty(input.element, 'files', { configurable: true, value: files })
+    await input.trigger('change')
+    expect(wrapper.emitted('files-selected')).toEqual([[files]])
+    expect(input.element.value).toBe('')
+    wrapper.unmount()
+  })
+
+  it('applies the size limit to each file without discarding valid siblings', () => {
+    const wrapper = mountZone({ accept: '.csv', multiple: true, maxSizeMb: 1 })
+    const large = new File([new Uint8Array(2 * 1024 * 1024)], 'large.csv')
+    const small = makeFile('small.csv')
+    simulateDrop(wrapper, [large, small])
+    expect(wrapper.emitted('files-selected')).toEqual([[[small]]])
+    expect(notifyMock).toHaveBeenCalledTimes(1)
+    wrapper.unmount()
+  })
+
+  it('preserves single-file behavior for existing callers', () => {
+    const wrapper = mountZone({ accept: '.json' })
+    const first = makeFile('first.json')
+    simulateDrop(wrapper, [first, makeFile('second.json')])
+    expect(wrapper.emitted('file-selected')).toEqual([[first]])
+    expect(wrapper.emitted('files-selected')).toBeUndefined()
+    wrapper.unmount()
+  })
+})

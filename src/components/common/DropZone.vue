@@ -17,6 +17,7 @@
       type="file"
       ref="fileInput"
       :accept="accept"
+      :multiple="multiple"
       :disabled="disabled"
       class="drop-zone__input"
       @change="handleFileSelect"
@@ -54,6 +55,7 @@ const props = defineProps({
   hint: { type: String, default: '' },
   browseLabel: { type: String },
   disabled: { type: Boolean, default: false },
+  multiple: { type: Boolean, default: false },
   // Size limit in megabytes. Optional; when unset, no size check is
   // performed.
   maxSizeMb: { type: Number, default: null },
@@ -71,7 +73,7 @@ const props = defineProps({
   invalidTypeMessageFn: { type: Function, default: null },
 })
 
-const emit = defineEmits(['file-selected'])
+const emit = defineEmits(['file-selected', 'files-selected'])
 const { notify } = useNotify()
 
 const resolvedLabel = computed(() => props.label ?? t('ui.dragDropDefaultLabel'))
@@ -130,26 +132,27 @@ function openFileDialog() {
   fileInput.value?.click()
 }
 
+function selectFiles(files) {
+  const candidates = Array.from(files || [])
+  if (props.multiple) {
+    const valid = candidates.filter(runValidation)
+    if (valid.length) emit('files-selected', valid)
+  } else {
+    const file = candidates[0]
+    if (file && runValidation(file)) emit('file-selected', file)
+  }
+}
+
 function handleFileSelect(e) {
   if (props.disabled) return
-  const file = e.target.files[0]
-  if (file && runValidation(file)) {
-    emit('file-selected', file)
-  }
+  selectFiles(e.target.files)
   if (fileInput.value) fileInput.value.value = ''
 }
 
 function handleDrop(e) {
-  // Reset the drag counter regardless of `disabled` — a drop is a
-  // terminal event for the current drag.
   dragCounter = 0
   isDragging.value = false
   if (props.disabled) return
-
-  const file = e.dataTransfer.files[0]
-  if (!file) return
-  if (!runValidation(file)) return
-
-  emit('file-selected', file)
+  selectFiles(e.dataTransfer?.files)
 }
 </script>

@@ -1,6 +1,7 @@
 <!-- frontend/src/features/admin/components/FileImport.vue -->
 <template>
   <SimpleImportTab
+    multiple
     accept=".xlsx,.xls,.csv,.json"
     :label="t('admin.import.fileLabel')"
     :hint="t('admin.import.fileHint')"

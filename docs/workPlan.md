@@ -6,6 +6,8 @@ The seven rescan and eight deeper-review findings are source-complete. Do not re
 
 ## Pending verification
 
+- Verify multiple-file import in the browser against the running backend: DSM-5 CSV/JSON chapters, Arabic/RTL, picker/drop, retained queue on tab changes, partial/lost responses and the configured 10-import-requests/hour throttle. Source and focused component checks do not establish live import behavior.
+
 - Expand behavioral coverage beyond the [passing 931-test frontend suite](verification/frontendTests.md), particularly question authoring, ordinary/master session controllers and administration workflows. Current measured line/branch coverage is 43.01%/23.73%; the requested suite update and full run are complete.
 - Prepare/verify matching [schema and coordinated clients](../../backend/docs/contracts/schemaReadiness.md); no readiness is inferred from source or database deletion.
 - Execute the [shared functional matrix](../../Android/docs/verification/manualVerification.md), especially lost responses, account/attempt switches, receipts, permissions, revisions, imports/parent locking and planner late/midnight evidence.

@@ -435,8 +435,8 @@
       "mappingUsersUnavailable": "Could not fetch the user list (you may lack the user-management capability). \"Assign to existing user\" is disabled.",
       "mappingConfirm": "Apply and import",
       "fileTitle": "Import from file",
-      "fileLabel": "Drag and drop an Excel / CSV / JSON file here",
-      "fileHint": "Max: 50 MB. Required columns: question, choice_1, choice_2, correct_answer",
+      "fileLabel": "Drag and drop Excel / CSV / JSON files here",
+      "fileHint": "Select multiple files from a folder (for example, DSM-5 chapters), or drop them here. Max: 50 MB per file. CSV columns: question, choice_1, choice_2, correct_answer; JSON: question, choices, correct_answer.",
       "telegramTitle": "Import from Telegram",
       "telegramLabel": "Drag and drop result.json from Telegram here",
       "telegramHint": "The file must be exported from Telegram's data export",
@@ -449,6 +449,15 @@
       "tooLarge": "File too large. Max: {max} MB",
       "success": "Imported successfully",
       "failed": "Import failed",
+      "queue": {
+        "pending": "Queued",
+        "uploading": "Importing…",
+        "success": "Imported",
+        "failed": "Failed — review required",
+        "remove": "Remove",
+        "removeFile": "Remove {name} from the list",
+        "reviewFailure": "Import stopped. Check the question bank before submitting a failed file again: a lost response may hide a successful import. Imported and failed files will not be resent; click Import to continue with the remaining queued files."
+      },
 
       "stateTitle": "Import a question bank package",
       "stateLabel": "Drag and drop a question bank package (.json or .xlsx) here",
