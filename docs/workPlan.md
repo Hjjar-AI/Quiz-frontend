@@ -4,6 +4,9 @@ Updated 2026-10-10. [Current source status](workDone.md) · [Project map](../../
 
 The seven rescan and eight deeper-review findings are source-complete. Do not reopen historical unchecked items without tracing current production source. Add new defects with reproduction, affected clients/contracts and priority.
 
+
+Pending verification: co-attending choices include moderators/admins and members granted `master_exams.create`, omit users without that capability, and preserve selections through save/read failure on the current server.
+
 ## Pending verification
 
 - Verify multiple-file import in the browser against the running backend: DSM-5 CSV/JSON chapters, Arabic/RTL, picker/drop, retained queue on tab changes, partial/lost responses and the normal hourly throttle/password-authorized ten-minute bypass. Source and focused component checks do not establish live import behavior.

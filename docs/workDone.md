@@ -11,6 +11,11 @@ Updated 2026-10-10. [Remaining gates](workPlan.md) · [Historical evidence](arch
 
 Backend API policy is canonical in [write recovery](../../backend/docs/contracts/writeRecovery.md) and [learning](../../backend/docs/contracts/learningConsistency.md).
 
+
+## 2026-10-10 co-attending permission eligibility
+
+Removed the member-role filter from the exam editor co-attending picker; effective `master_exams.create` now determines eligibility across member/moderator/admin roles. Backend relation handling already accepts these roles. JavaScript syntax and diff whitespace checks passed; no builds or suites. Browser/API verification remains pending.
+
 ## Evidence and documentation
 
 On 2026-10-10 updated and ran the complete frontend suite at the user's request: 931/931 tests in 70 files passed, zero failures/skips/TODOs, reported duration 56.63s. Fixed Vitest's callback-config merge and an undiscovered admin-link test filename; reconciled all 48 baseline failures with current production contracts and added ten focused regressions. The suite exposed two production master-exam transport defects: removed undefined navigation variables from question removal and forwarded the existing session/current-question arguments for attempt navigation. Backend DTO/serializer/routes were checked without modifying backend/Android. Measured 292 production files: lines 43.01%, statements 40.37%, functions 27.70%, branches 23.73%. [Report, limits and rerun commands](verification/frontendTests.md); JSON/per-file and temporary HTML coverage retained. No production build, database/migration work, dependency/version changes or live browser/backend verification. Router/shallow-mount warnings and browser/accessibility/print gates remain.

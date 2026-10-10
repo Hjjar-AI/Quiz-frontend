@@ -151,7 +151,7 @@ export function useMasterExamEditor(t) {
     const users = usersResult.status === 'fulfilled' ? usersResult.value.items || [] : []
     availableUsers.value = users.filter((user) => user.role === 'member')
     availableAttendings.value = users.filter(
-      (user) => user.role === 'member' && user.capabilities?.includes('master_exams.create'),
+      (user) => user.capabilities?.includes('master_exams.create'),
     )
     availableCases.value = casesResult.status === 'fulfilled' ? casesResult.value.items || [] : []
   }
