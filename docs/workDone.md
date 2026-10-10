@@ -26,3 +26,10 @@ The dedicated admin/users/<id>/active/ route requires boolean is_active and sets
 Matching backend-first rollout required; this batch adds no schema. Source AST/JS/native lexical/XML/locale/whitespace checks only; builds/suites/migrations/setup/database/runtime/deployment/version work unperformed.
 
 On 2026-10-10 fixed recall navigation so choices must be revealed and an answer selected before moving questions/finishing. The existing same-question reveal remains the only reveal control; keyboard answers work after reveal and pause retains its separate busy/confidence guard. Both clients receive bounded display labels from Django without shortening selected-tag filters. JavaScript/extracted Vue-script syntax and whitespace checks passed; browser/device behavior remains pending. [Focused backend regression results](../../backend/docs/verification/pythonTests.md).
+
+
+## 2026-10-10 source-book exam selection
+
+Added a dedicated Source book / الكتاب المصدر selection to ordinary exam, study and recall setup in Vue and Android. Authenticated `GET /questions/source-books/` lists exact nonempty source-document titles and question counts from the public practice bank; `source_document` restricts available counts and session selection by exact title, combined with existing tag/difficulty/verification refinements. Explicit question-ID starts also enforce a supplied book restriction. Both clients forward the title unchanged, preserve book selection on read failure and provide retry; Android stores the lightweight selection in account-scoped setup recovery. Books appear after questions with source metadata are imported; existing DSM/Kaplan exports already include it. No new models or schema changes.
+
+Verification: production Python AST, JavaScript/extracted Vue-script syntax, bilingual JSON/XML/resources, Kotlin lexical delimiters and diff whitespace. No builds, suites, migrations/setup, database writes or runtime/device verification; deploy the matching backend first and verify book counts, selected-book-only sessions, refinements, retry, account isolation and Arabic/RTL on current clients.

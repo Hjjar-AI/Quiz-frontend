@@ -192,6 +192,7 @@ export const useTestSessionStore = defineStore('testSession', {
       if (config.category_ids && config.category_ids.length) {
         requestPayload.category_ids = config.category_ids
       }
+      if (config.source_document) requestPayload.source_document = config.source_document
       if (config.difficulty) requestPayload.difficulty = config.difficulty
       if (config.tags_filter) requestPayload.tags_filter = config.tags_filter
       if (config.verified_only) requestPayload.verified_only = true

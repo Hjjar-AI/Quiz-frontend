@@ -30,6 +30,10 @@ export function useTestSetupState(props, emit, t) {
   const source = ref('')
   const selectionStrategy = ref('coverage')
   const selectedTags = ref([])
+  const selectedBook = ref(null)
+  const books = ref([])
+  const booksLoading = ref(false)
+  const booksError = ref(false)
   const selectedCategories = ref([])
   const selectedBlueprintId = ref(null)
   const numQuestions = ref(10)
@@ -70,7 +74,17 @@ export function useTestSetupState(props, emit, t) {
     })),
   )
 
+  const bookItems = computed(() => books.value.map(book => ({
+    value: book.name, label: book.name, count: book.count,
+  })))
+
   const sourceBehaviors = {
+    book: {
+      isReady: () => books.value.some(book => book.name === selectedBook.value),
+      hint: () => t('tests.pickBook'),
+      apply(payload) { payload.source_document = selectedBook.value },
+      label: () => selectedBook.value || t('tests.sourceBookShort'),
+    },
     tag: {
       isReady: () => selectedTags.value.length > 0,
       hint: () => t('tests.pickTag'),
@@ -141,6 +155,11 @@ export function useTestSetupState(props, emit, t) {
   const availableSources = computed(() => {
     const definitions = [
       {
+        value: 'book', icon: 'bi bi-book', labelKey: 'tests.sourceBookShort',
+        badge: books.value.length || null, disabled: books.value.length === 0,
+        disabledReason: t('tests.noBooksAvailable'),
+      },
+      {
         value: 'tag',
         icon: 'bi bi-tag',
         labelKey: 'tests.sourceTagShort',
@@ -208,6 +227,7 @@ export function useTestSetupState(props, emit, t) {
   function setSource(next) {
     if (next === source.value) return
     source.value = next
+    if (next !== 'book') selectedBook.value = null
     if (next !== 'tag') selectedTags.value = []
     if (next !== 'category') selectedCategories.value = []
     if (next !== 'blueprint') selectedBlueprintId.value = null
@@ -240,7 +260,7 @@ export function useTestSetupState(props, emit, t) {
 
   async function fetchAvailableCount() {
     const requestId = countRequestId
-    if (!activeSourceBehavior.value) {
+    if (!activeSourceBehavior.value?.isReady()) {
       if (requestId === countRequestId) emit('max-update', 0)
       return
     }
@@ -276,16 +296,34 @@ export function useTestSetupState(props, emit, t) {
   )
 
   watch(
-    [source, selectedTags, selectedCategories, selectedBlueprintId, filters],
+    [source, selectedBook, selectedTags, selectedCategories, selectedBlueprintId, filters],
     queueAvailableCount,
     { deep: true },
   )
 
+  async function fetchBooks() {
+    if (booksLoading.value) return
+    booksLoading.value = true
+    booksError.value = false
+    try {
+      const data = await questionService.sourceBooks()
+      books.value = data?.items || []
+      if (!books.value.some(book => book.name === selectedBook.value)) selectedBook.value = null
+      queueAvailableCount()
+    } catch {
+      booksError.value = true
+    } finally {
+      booksLoading.value = false
+    }
+  }
+
   onMounted(async () => {
+    const bookRead = fetchBooks()
     tagsLoading.value = true
     try {
       const [tagData] = await Promise.all([
         tagService.list(),
+        bookRead,
         categoryStore.fetchAll(),
         bookmarkStore.fetchBookmarks(),
         wrongAnswerStore.fetchSrsDueCount(),
@@ -326,6 +364,11 @@ export function useTestSetupState(props, emit, t) {
     ],
     mode,
     source,
+    selectedBook,
+    bookItems,
+    booksLoading,
+    booksError,
+    fetchBooks,
     selectedTags,
     selectedCategories,
     selectedBlueprintId,

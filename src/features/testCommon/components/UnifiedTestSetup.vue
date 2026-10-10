@@ -91,8 +91,24 @@
            single-select dropdown because the backend samples from one
            blueprint at a time. -->
       <div class="source-body">
+        <div v-if="booksError" role="alert">
+          <p>{{ t('tests.booksLoadFailed') }}</p>
+          <BaseButton variant="ghost" :disabled="booksLoading" @click="fetchBooks">
+            {{ t('common.retry') }}
+          </BaseButton>
+        </div>
         <SourceGridPicker
-          v-if="source === 'tag'"
+          v-if="source === 'book'"
+          v-model="selectedBook"
+          :items="bookItems"
+          :loading="booksLoading"
+          :multiple="false"
+          :label="t('tests.sourceBookShort')"
+          icon="bi bi-book"
+          :empty-text="t('tests.noBooksAvailable')"
+        />
+        <SourceGridPicker
+          v-else-if="source === 'tag'"
           v-model="selectedTags"
           :items="tagItems"
           :loading="tagsLoading"
@@ -234,6 +250,11 @@ const {
   MODE_OPTIONS,
   mode,
   source,
+  selectedBook,
+  bookItems,
+  booksLoading,
+  booksError,
+  fetchBooks,
   selectedTags,
   selectedCategories,
   selectedBlueprintId,

@@ -2,6 +2,10 @@
   "tests": {
     "modeLabel": "Mode",
     "refinements": "Refinements",
+    "sourceBookShort": "Source book",
+    "booksLoadFailed": "Could not load source books. Please retry.",
+    "pickBook": "Choose a source book",
+    "noBooksAvailable": "No source books available",
     "pickTag": "Pick a tag",
     "sourceTagShort": "Tag",
     "sourceCategoryShort": "Category",

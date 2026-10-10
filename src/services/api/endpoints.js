@@ -85,6 +85,7 @@ export const ENDPOINTS = {
     BASE: '/questions/',
     BATCH: '/questions/batch/',
     TAGS: '/questions/tags/',
+    SOURCE_BOOKS: '/questions/source-books/',
     AVAILABLE_COUNT: '/questions/available-count/',
     UNVERIFIED: '/questions/unverified/',
     BULK_VERIFY: '/questions/bulk-verify/',

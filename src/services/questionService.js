@@ -14,6 +14,9 @@ import { ENDPOINTS } from '@/services/api/endpoints'
 const Q = ENDPOINTS.QUESTIONS
 
 export const questionService = {
+  sourceBooks() {
+    return apiClient.get(Q.SOURCE_BOOKS)
+  },
   // ── CRUD ─────────────────────────────────────────────────────────
 
   list(params = {}) {

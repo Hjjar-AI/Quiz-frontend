@@ -2,6 +2,10 @@
   "tests": {
     "modeLabel": "الوضع",
     "refinements": "تصفية إضافية",
+    "sourceBookShort": "الكتاب المصدر",
+    "booksLoadFailed": "تعذّر تحميل الكتب المصدر. أعد المحاولة.",
+    "pickBook": "اختر الكتاب المصدر",
+    "noBooksAvailable": "لا توجد كتب مصدر متاحة",
     "pickTag": "اختر وسماً",
     "sourceTagShort": "وسم",
     "sourceCategoryShort": "تصنيف",
