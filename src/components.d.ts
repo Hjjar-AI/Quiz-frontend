@@ -40,6 +40,7 @@ declare module 'vue' {
     BulkTagEditor: typeof import('./components/common/BulkTagEditor.vue')['default']
     CardHeader: typeof import('./components/common/CardHeader.vue')['default']
     CaseStemPanel: typeof import('./components/cases/CaseStemPanel.vue')['default']
+    CaseTranslationEditor: typeof import('./components/cases/CaseTranslationEditor.vue')['default']
     ChartCard: typeof import('./components/charts/ChartCard.vue')['default']
     DifficultyBadge: typeof import('./components/base/DifficultyBadge.vue')['default']
     DirectionalIcon: typeof import('./components/base/DirectionalIcon.vue')['default']
