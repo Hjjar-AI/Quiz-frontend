@@ -60,7 +60,7 @@ describe('configStore — fetchConfig (success)', () => {
     apiClient.get.mockResolvedValueOnce({})
     const store = useConfigStore()
     await store.fetchConfig()
-    expect(apiClient.get).toHaveBeenCalledWith('/config/')
+    expect(apiClient.get).toHaveBeenCalledWith('/config/', { timeout: 5000 }, { maxRetries: 0 })
   })
 })
 

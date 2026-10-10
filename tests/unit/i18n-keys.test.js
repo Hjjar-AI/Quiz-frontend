@@ -66,7 +66,9 @@ function* walkSourceFiles(dir) {
 
 // ── Key extraction ────────────────────────────────────────────────
 
-const LITERAL_KEY_RE = /\b(?:t|safeT)\s*\(\s*(['"`])([^'"`$\\]+)\1/g
+const LITERAL_KEY_RE = /\b(?:t|safeT)\s*\(\s*(['"`])([^'"`$\\]+)\1\s*(?=[,)])/g
+
+const CONCAT_PREFIX_RE = /\b(?:t|safeT)\s*\(\s*(['"])([^'"]+)\1\s*\+/g
 
 const DYNAMIC_PREFIX_RE = /\b(?:t|safeT)\s*\(\s*`([^`]*)\$\{/g
 
@@ -79,6 +81,10 @@ const EXPECTED_DYNAMIC_PREFIXES = new Set([
   'about.a11y.',
   'about.contact.',
   'admin.permissions.capability.',
+  'admin.settings.',
+  'preferences.fontOptions.',
+  'analytics.',
+  'tests.selection_',
   'knowledge.status.',
   'theme.',
   'theme.group.',
@@ -108,6 +114,12 @@ function extractKeysAndPrefixes() {
         if (!key) continue
         if (!literals.has(key)) literals.set(key, new Set())
         literals.get(key).add(where)
+      }
+
+      for (const m of line.matchAll(CONCAT_PREFIX_RE)) {
+        const prefix = m[2]
+        if (!dynamic.has(prefix)) dynamic.set(prefix, new Set())
+        dynamic.get(prefix).add(where)
       }
 
       for (const m of line.matchAll(DYNAMIC_PREFIX_RE)) {
@@ -174,6 +186,15 @@ describe('i18n catalog coverage', () => {
       `\n  only in ar: ${onlyInAr.join(', ') || '(none)'}\n` +
         `  only in en: ${onlyInEn.join(', ') || '(none)'}\n`,
     ).toEqual({ onlyInAr: [], onlyInEn: [] })
+  })
+
+  it('every discovered dynamic prefix has matching keys in both catalogs', () => {
+    for (const prefix of dynamic.keys()) {
+      const ar = [...arKeys].filter(key => key.startsWith(prefix)).sort()
+      const en = [...enKeys].filter(key => key.startsWith(prefix)).sort()
+      expect(ar.length, prefix).toBeGreaterThan(0)
+      expect(en, prefix).toEqual(ar)
+    }
   })
 
   it('every dynamic t() prefix is on the expected list', () => {

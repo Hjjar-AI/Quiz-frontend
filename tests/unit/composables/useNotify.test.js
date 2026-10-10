@@ -1,5 +1,5 @@
 // frontend/tests/unit/composables/useNotify.test.js
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
 
 import { useNotify } from '@/composables/useNotify'
@@ -8,6 +8,11 @@ import { useToastStore } from '@/stores/toastStore'
 beforeEach(() => {
   setActivePinia(createPinia())
   vi.useFakeTimers()
+})
+
+afterEach(() => {
+  useToastStore().reset()
+  vi.useRealTimers()
 })
 
 describe('useNotify', () => {
@@ -27,24 +32,26 @@ describe('useNotify', () => {
     expect(store.toasts[0].type).toBe('info')
   })
 
-  it('uses the default 4000 ms duration for non-error toasts', () => {
+  it('uses the default 8000 ms duration for non-error toasts', () => {
     const { notify } = useNotify()
     const store = useToastStore()
     notify('Hello', 'info')
-    vi.advanceTimersByTime(3999)
+    vi.advanceTimersByTime(7999)
     expect(store.toasts).toHaveLength(1)
     vi.advanceTimersByTime(1)
     expect(store.toasts).toHaveLength(0)
   })
 
-  it('extends the duration to 8000 ms for error toasts', () => {
+  it('keeps error toasts until explicitly dismissed', () => {
     const { notify } = useNotify()
     const store = useToastStore()
     notify('Boom', 'error')
     vi.advanceTimersByTime(4000)
-    // Still visible — error toasts are shown longer.
+    // Errors stay available for review until the user dismisses them.
     expect(store.toasts).toHaveLength(1)
-    vi.advanceTimersByTime(4000)
+    vi.advanceTimersByTime(60_000)
+    expect(store.toasts).toHaveLength(1)
+    store.removeToast(store.toasts[0].id)
     expect(store.toasts).toHaveLength(0)
   })
 

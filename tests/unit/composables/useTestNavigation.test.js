@@ -2,15 +2,8 @@
 //
 // Tests for the keyboard and swipe handlers in the exam runner.
 //
-// DISPATCH TARGET
-// ---------------
-// The composable registers its keydown listener on `window`
-// (`window.addEventListener('keydown', handleKeydown)`). Dispatching
-// a KeyboardEvent on `document` in happy-dom does not propagate up
-// to `window`, so every keyboard test below dispatches on `window`
-// directly. The touch handlers are registered per-element by the
-// composable's `setup()` method, so the swipe tests continue to
-// dispatch on the wrapper element.
+// Dispatch bubbling events from the configured runner container. Global,
+// input and button targets are intentionally ignored by the current handler.
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
@@ -41,14 +34,34 @@ function makeWrapper(handlers = {}) {
     },
   }), { attachTo: document.body })
   nav.setup(wrapper.element)
+  wrapper.element.tabIndex = 0
+  wrapper.element.focus()
   return { wrapper, nav }
 }
 
 function keydown(key) {
-  window.dispatchEvent(new KeyboardEvent('keydown', { key }))
+  document.activeElement.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }))
 }
 
 describe('useTestNavigation — keyboard number keys', () => {
+  it('ignores keyboard events outside the runner', () => {
+    const onAnswer = vi.fn()
+    const { wrapper } = makeWrapper({ onAnswer })
+    document.body.dispatchEvent(new KeyboardEvent('keydown', { key: '1', bubbles: true }))
+    expect(onAnswer).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('preserves focused buttons and modified browser shortcuts', () => {
+    const onAnswer = vi.fn()
+    const { wrapper } = makeWrapper({ onAnswer })
+    const button = document.createElement('button')
+    wrapper.element.appendChild(button)
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: '1', bubbles: true }))
+    wrapper.element.dispatchEvent(new KeyboardEvent('keydown', { key: '1', ctrlKey: true, bubbles: true }))
+    expect(onAnswer).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
   it('calls onAnswer with the parsed number for keys 1-8', () => {
     const onAnswer = vi.fn()
     const { wrapper } = makeWrapper({ onAnswer })
@@ -73,7 +86,7 @@ describe('useTestNavigation — keyboard number keys', () => {
     const onAnswer = vi.fn()
     const { wrapper } = makeWrapper({ onAnswer })
     const input = document.createElement('input')
-    document.body.appendChild(input)
+    wrapper.element.appendChild(input)
     input.focus()
     input.dispatchEvent(new KeyboardEvent('keydown', { key: '1', bubbles: true }))
     expect(onAnswer).not.toHaveBeenCalled()
@@ -135,11 +148,11 @@ describe('useTestNavigation — RTL arrow semantics (inverted)', () => {
 })
 
 describe('useTestNavigation — Escape', () => {
-  it('calls onFinish when Escape is pressed', () => {
+  it('does not finish when Escape is pressed', () => {
     const onFinish = vi.fn()
     const { wrapper } = makeWrapper({ onFinish })
     keydown('Escape')
-    expect(onFinish).toHaveBeenCalledTimes(1)
+    expect(onFinish).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 
@@ -207,10 +220,7 @@ describe('useTestNavigation — enabled gate', () => {
   it('does not fire handlers when enabled is false', () => {
     const onAnswer = vi.fn()
     const onNext = vi.fn()
-    const wrapper = mount(defineComponent({
-      setup() { useTestNavigation({ onAnswer, onNext, enabled: () => false }); return {} },
-      render() { return h('div') },
-    }))
+    const { wrapper } = makeWrapper({ onAnswer, onNext, enabled: () => false })
     keydown('1')
     keydown('ArrowRight')
     expect(onAnswer).not.toHaveBeenCalled()
@@ -222,12 +232,11 @@ describe('useTestNavigation — enabled gate', () => {
 describe('useTestNavigation — cleanup', () => {
   it('removes listeners on unmount so a later keypress does not fire', () => {
     const onAnswer = vi.fn()
-    const wrapper = mount(defineComponent({
-      setup() { useTestNavigation({ onAnswer }); return {} },
-      render() { return h('div') },
-    }))
+    const { wrapper } = makeWrapper({ onAnswer })
+    keydown('1')
+    expect(onAnswer).toHaveBeenCalledTimes(1)
     wrapper.unmount()
     keydown('1')
-    expect(onAnswer).not.toHaveBeenCalled()
+    expect(onAnswer).toHaveBeenCalledTimes(1)
   })
 })

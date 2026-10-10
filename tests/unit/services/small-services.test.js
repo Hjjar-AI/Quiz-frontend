@@ -64,9 +64,10 @@ describe('tagService', () => {
   })
 
   it('deleteTag DELETEs the encoded name URL', async () => {
-    await tagService.deleteTag('old tag')
+    await tagService.deleteTag('old tag', 5)
     expect(apiClient.delete).toHaveBeenCalledWith(
       '/questions/admin/tags/old%20tag/delete/',
+      { params: { expected_version: 5 } },
     )
   })
 
@@ -103,9 +104,10 @@ describe('categoryService', () => {
   })
 
   it('delete DELETEs the delete URL', async () => {
-    await categoryService.delete(4)
+    await categoryService.delete(4, 8)
     expect(apiClient.delete).toHaveBeenCalledWith(
       '/questions/categories/4/delete/',
+      { params: { expected_version: 8 } },
     )
   })
 })

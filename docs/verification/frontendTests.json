@@ -1,0 +1,7853 @@
+{
+  "date": "2026-10-10",
+  "revision": "18729dc plus the documented suite and master-exam service corrections",
+  "node": "24.21.0",
+  "vitest": "5.0.1",
+  "environment": "happy-dom",
+  "workers": 2,
+  "baseline": {
+    "files": 70,
+    "tests": 921,
+    "passed": 873,
+    "failed": 48,
+    "failures": [
+      {
+        "file": "tests/unit/exportUrl.test.js",
+        "test": "buildExportUrl normalizes unknown PDF themes to Stone"
+      },
+      {
+        "file": "tests/unit/i18n-keys.test.js",
+        "test": "i18n catalog coverage every literal t() key exists in the ar catalog"
+      },
+      {
+        "file": "tests/unit/i18n-keys.test.js",
+        "test": "i18n catalog coverage every literal t() key exists in the en catalog"
+      },
+      {
+        "file": "tests/unit/i18n-keys.test.js",
+        "test": "i18n catalog coverage every dynamic t() prefix is on the expected list"
+      },
+      {
+        "file": "tests/unit/composables/useNotify.test.js",
+        "test": "useNotify uses the default 4000 ms duration for non-error toasts"
+      },
+      {
+        "file": "tests/unit/composables/useNotify.test.js",
+        "test": "useNotify extends the duration to 8000 ms for error toasts"
+      },
+      {
+        "file": "tests/unit/composables/useTestNavigation.test.js",
+        "test": "useTestNavigation — keyboard number keys calls onAnswer with the parsed number for keys 1-8"
+      },
+      {
+        "file": "tests/unit/composables/useTestNavigation.test.js",
+        "test": "useTestNavigation — LTR arrow semantics ArrowRight calls onNext in LTR"
+      },
+      {
+        "file": "tests/unit/composables/useTestNavigation.test.js",
+        "test": "useTestNavigation — LTR arrow semantics ArrowLeft calls onPrevious in LTR"
+      },
+      {
+        "file": "tests/unit/composables/useTestNavigation.test.js",
+        "test": "useTestNavigation — RTL arrow semantics (inverted) ArrowRight calls onPrevious in RTL"
+      },
+      {
+        "file": "tests/unit/composables/useTestNavigation.test.js",
+        "test": "useTestNavigation — RTL arrow semantics (inverted) ArrowLeft calls onNext in RTL"
+      },
+      {
+        "file": "tests/unit/composables/useTestNavigation.test.js",
+        "test": "useTestNavigation — Escape calls onFinish when Escape is pressed"
+      },
+      {
+        "file": "tests/unit/composables/useTheme.test.js",
+        "test": "useTheme — applyTheme falls back to Stone for an unknown theme"
+      },
+      {
+        "file": "tests/unit/composables/useTheme.test.js",
+        "test": "useTheme — applyTheme adds then removes the theme-transition class"
+      },
+      {
+        "file": "tests/unit/composables/useTheme.test.js",
+        "test": "useTheme — loadSavedTheme falls back to Stone when the stored value is not a known theme"
+      },
+      {
+        "file": "tests/unit/composables/useTheme.test.js",
+        "test": "useTheme — loadSavedTheme falls back to Stone when storage is empty"
+      },
+      {
+        "file": "tests/unit/composables/useTheme.test.js",
+        "test": "useTheme — getters THEMES exposes every supported theme"
+      },
+      {
+        "file": "tests/unit/router/chunkLoadError.test.js",
+        "test": "createChunkLoadErrorComponent — rendering renders the icon, heading, and body text"
+      },
+      {
+        "file": "tests/unit/services/adminService.test.js",
+        "test": "adminService — database exportPdf posts structured options and preserves the binary response"
+      },
+      {
+        "file": "tests/unit/services/adminService.test.js",
+        "test": "adminService — state envelope exportState requests a binary response with explicit flags"
+      },
+      {
+        "file": "tests/unit/services/adminService.test.js",
+        "test": "adminService — state envelope exportState requests the full XLSX container when selected"
+      },
+      {
+        "file": "tests/unit/services/adminService.test.js",
+        "test": "adminService — state envelope exportState forwards selection filters to portable packages"
+      },
+      {
+        "file": "tests/unit/services/caseService.test.js",
+        "test": "caseService contract delete DELETEs the case detail URL"
+      },
+      {
+        "file": "tests/unit/services/endpoints-snapshot.test.js",
+        "test": "ENDPOINTS snapshot every endpoint in the registry"
+      },
+      {
+        "file": "tests/unit/services/masterExamService.test.js",
+        "test": "masterExamService — composition removeQuestion POSTs question_id"
+      },
+      {
+        "file": "tests/unit/services/masterExamService.test.js",
+        "test": "masterExamService — attempt lifecycle attemptStatus GETs the status URL"
+      },
+      {
+        "file": "tests/unit/services/questionService.test.js",
+        "test": "questionService contract duplicate POSTs to the duplicate URL"
+      },
+      {
+        "file": "tests/unit/services/small-services.test.js",
+        "test": "tagService deleteTag DELETEs the encoded name URL"
+      },
+      {
+        "file": "tests/unit/services/small-services.test.js",
+        "test": "categoryService delete DELETEs the delete URL"
+      },
+      {
+        "file": "tests/unit/stores/bookmarkStore.test.js",
+        "test": "bookmarkStore — toggle (optimistic) adds optimistically and keeps the entry on success"
+      },
+      {
+        "file": "tests/unit/stores/bookmarkStore.test.js",
+        "test": "bookmarkStore — toggle (optimistic) removes optimistically and stays removed on success"
+      },
+      {
+        "file": "tests/unit/stores/bookmarkStore.test.js",
+        "test": "bookmarkStore — toggle (optimistic) collapses concurrent toggles of the same id into one request"
+      },
+      {
+        "file": "tests/unit/stores/configStore.test.js",
+        "test": "configStore — fetchConfig (success) hits the /config/ endpoint"
+      },
+      {
+        "file": "tests/unit/stores/masterExamAttemptStore.test.js",
+        "test": "masterExamAttemptStore — submitAnswer (happy path) stores the answer and advances the current question"
+      },
+      {
+        "file": "tests/unit/stores/masterExamAttemptStore.test.js",
+        "test": "masterExamAttemptStore — submitAnswer (happy path) sends the answer under the question_id key the backend expects"
+      },
+      {
+        "file": "tests/unit/stores/masterExamAttemptStore.test.js",
+        "test": "masterExamAttemptStore — goto updates currentQuestionId from the server response"
+      },
+      {
+        "file": "tests/unit/stores/masterExamAttemptStore.test.js",
+        "test": "masterExamAttemptStore — pollStatus updates serverOffsetMs from the response"
+      },
+      {
+        "file": "tests/unit/stores/masterExamAttemptStore.test.js",
+        "test": "masterExamAttemptStore — pollStatus marks the attempt complete when the server reports is_complete"
+      },
+      {
+        "file": "tests/unit/stores/masterExamAttemptStore.test.js",
+        "test": "masterExamAttemptStore — pollStatus syncs the question list when the server sends one"
+      },
+      {
+        "file": "tests/unit/stores/questionStore.test.js",
+        "test": "questionStore — create prepends the new question and increments the total"
+      },
+      {
+        "file": "tests/unit/stores/questionStore.test.js",
+        "test": "questionStore — duplicate prepends the duplicated question"
+      },
+      {
+        "file": "tests/unit/stores/toastStore.test.js",
+        "test": "toastStore — reset clears all toasts and resets the counter"
+      },
+      {
+        "file": "tests/unit/stores/userStore.test.js",
+        "test": "userStore — confirmToggle toggles when both the confirm and prompt succeed"
+      },
+      {
+        "file": "tests/unit/utils/formatters.test.js",
+        "test": "formatNumber returns 0 for null, undefined, and NaN"
+      },
+      {
+        "file": "tests/unit/utils/formatters.test.js",
+        "test": "formatDate returns an empty string for a falsy input"
+      },
+      {
+        "file": "tests/unit/utils/formatters.test.js",
+        "test": "formatDate returns an empty string for an invalid date"
+      },
+      {
+        "file": "tests/unit/utils/localizedQuestion.test.js",
+        "test": "localizedQuestion falls back to base choices and explanation when translations omit them"
+      },
+      {
+        "file": "tests/unit/i18n/helpers/format.test.js",
+        "test": "useLocaleFormatters — locale propagation formatDate returns an empty string for invalid input"
+      }
+    ]
+  },
+  "final": {
+    "files": 70,
+    "tests": 931,
+    "passed": 931,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0,
+    "success": true
+  },
+  "coverage": {
+    "totals": {
+      "lines": {
+        "total": 10236,
+        "covered": 4403,
+        "skipped": 0,
+        "pct": 43.01
+      },
+      "statements": {
+        "total": 12116,
+        "covered": 4892,
+        "skipped": 0,
+        "pct": 40.37
+      },
+      "functions": {
+        "total": 3960,
+        "covered": 1097,
+        "skipped": 0,
+        "pct": 27.7
+      },
+      "branches": {
+        "total": 8895,
+        "covered": 2111,
+        "skipped": 0,
+        "pct": 23.73
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "files": {
+      "src/App.vue": {
+        "lines": {
+          "total": 28,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.57
+        },
+        "functions": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 33,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.03
+        },
+        "branches": {
+          "total": 29,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/base/BaseBadge.vue": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/base/BaseButton.vue": {
+        "lines": {
+          "total": 28,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 28.57
+        },
+        "functions": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "statements": {
+          "total": 31,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 29.03
+        },
+        "branches": {
+          "total": 28,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 53.57
+        }
+      },
+      "src/components/base/BaseCard.vue": {
+        "lines": {
+          "total": 10,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 40
+        },
+        "functions": {
+          "total": 4,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 25
+        },
+        "statements": {
+          "total": 12,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "branches": {
+          "total": 20,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 35
+        }
+      },
+      "src/components/base/BaseCheckbox.vue": {
+        "lines": {
+          "total": 11,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 72.72
+        },
+        "functions": {
+          "total": 4,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 50
+        },
+        "statements": {
+          "total": 11,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 72.72
+        },
+        "branches": {
+          "total": 10,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 60
+        }
+      },
+      "src/components/base/BaseChip.vue": {
+        "lines": {
+          "total": 7,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 71.42
+        },
+        "functions": {
+          "total": 3,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "statements": {
+          "total": 8,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 62.5
+        },
+        "branches": {
+          "total": 24,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 33.33
+        }
+      },
+      "src/components/base/BaseDropdown.vue": {
+        "lines": {
+          "total": 16,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 56.25
+        },
+        "functions": {
+          "total": 8,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 12.5
+        },
+        "statements": {
+          "total": 17,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 52.94
+        },
+        "branches": {
+          "total": 10,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/components/base/BaseEmptyState.vue": {
+        "lines": {
+          "total": 21,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 95.23
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 31,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 77.41
+        },
+        "branches": {
+          "total": 29,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 58.62
+        }
+      },
+      "src/components/base/BaseErrorState.vue": {
+        "lines": {
+          "total": 5,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 60
+        },
+        "functions": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 6,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 11,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 54.54
+        }
+      },
+      "src/components/base/BaseField.vue": {
+        "lines": {
+          "total": 15,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 93.33
+        },
+        "functions": {
+          "total": 7,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 71.42
+        },
+        "statements": {
+          "total": 22,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 81.81
+        },
+        "branches": {
+          "total": 24,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 41.66
+        }
+      },
+      "src/components/base/BaseIconButton.vue": {
+        "lines": {
+          "total": 3,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "functions": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 3,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/base/BaseInput.vue": {
+        "lines": {
+          "total": 60,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 35
+        },
+        "functions": {
+          "total": 26,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 11.53
+        },
+        "statements": {
+          "total": 71,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 32.39
+        },
+        "branches": {
+          "total": 101,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 4.95
+        }
+      },
+      "src/components/base/BaseListContainer.vue": {
+        "lines": {
+          "total": 7,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 42.85
+        },
+        "functions": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 7,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 42.85
+        },
+        "branches": {
+          "total": 11,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 36.36
+        }
+      },
+      "src/components/base/BaseModal.vue": {
+        "lines": {
+          "total": 96,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 32.29
+        },
+        "functions": {
+          "total": 16,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 37.5
+        },
+        "statements": {
+          "total": 109,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 30.27
+        },
+        "branches": {
+          "total": 91,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 4.39
+        }
+      },
+      "src/components/base/BasePagination.vue": {
+        "lines": {
+          "total": 23,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 30.43
+        },
+        "functions": {
+          "total": 7,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 25,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 28
+        },
+        "branches": {
+          "total": 25,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/base/BasePopoverPanel.vue": {
+        "lines": {
+          "total": 3,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "functions": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        },
+        "statements": {
+          "total": 3,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/base/BaseRadio.vue": {
+        "lines": {
+          "total": 9,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 88.88
+        },
+        "functions": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        },
+        "statements": {
+          "total": 10,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 80
+        },
+        "branches": {
+          "total": 10,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 70
+        }
+      },
+      "src/components/base/BaseSelect.vue": {
+        "lines": {
+          "total": 28,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 32.14
+        },
+        "functions": {
+          "total": 11,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 9.09
+        },
+        "statements": {
+          "total": 31,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 32.25
+        },
+        "branches": {
+          "total": 25,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 8
+        }
+      },
+      "src/components/base/BaseSkeleton.vue": {
+        "lines": {
+          "total": 14,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 71.42
+        },
+        "functions": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "statements": {
+          "total": 15,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 15,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 6.66
+        }
+      },
+      "src/components/base/BaseTextarea.vue": {
+        "lines": {
+          "total": 16,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 56.25
+        },
+        "functions": {
+          "total": 9,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 11.11
+        },
+        "statements": {
+          "total": 19,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 52.63
+        },
+        "branches": {
+          "total": 22,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 27.27
+        }
+      },
+      "src/components/base/DifficultyBadge.vue": {
+        "lines": {
+          "total": 7,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 71.42
+        },
+        "functions": {
+          "total": 3,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "statements": {
+          "total": 8,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 75
+        },
+        "branches": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        }
+      },
+      "src/components/base/DirectionalIcon.vue": {
+        "lines": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 4,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/components/base/QuestionNavDots.vue": {
+        "lines": {
+          "total": 20,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 40
+        },
+        "functions": {
+          "total": 8,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 23,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 34.78
+        },
+        "branches": {
+          "total": 18,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/base/StatTile.vue": {
+        "lines": {
+          "total": 23,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 43.47
+        },
+        "functions": {
+          "total": 6,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 50
+        },
+        "statements": {
+          "total": 29,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 44.82
+        },
+        "branches": {
+          "total": 19,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 10.52
+        }
+      },
+      "src/components/cases/CaseStemPanel.vue": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/cases/CaseTranslationEditor.vue": {
+        "lines": {
+          "total": 98,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 31.63
+        },
+        "functions": {
+          "total": 45,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 6.66
+        },
+        "statements": {
+          "total": 195,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 18.46
+        },
+        "branches": {
+          "total": 167,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 2.39
+        }
+      },
+      "src/components/charts/ChartCard.vue": {
+        "lines": {
+          "total": 114,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 30.7
+        },
+        "functions": {
+          "total": 24,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 12.5
+        },
+        "statements": {
+          "total": 127,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 27.55
+        },
+        "branches": {
+          "total": 104,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 2.88
+        }
+      },
+      "src/components/common/AlertBox.vue": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 70
+        }
+      },
+      "src/components/common/AppDialogs.vue": {
+        "lines": {
+          "total": 33,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 51.51
+        },
+        "functions": {
+          "total": 23,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 21.73
+        },
+        "statements": {
+          "total": 46,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 43.47
+        },
+        "branches": {
+          "total": 28,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 28.57
+        }
+      },
+      "src/components/common/AsyncContent.vue": {
+        "lines": {
+          "total": 7,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 42.85
+        },
+        "functions": {
+          "total": 5,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 8,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 37.5
+        },
+        "branches": {
+          "total": 8,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/components/common/BaseTableShell.vue": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 66.66
+        }
+      },
+      "src/components/common/BidiText.vue": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/common/BulkActions.vue": {
+        "lines": {
+          "total": 15,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 60
+        },
+        "functions": {
+          "total": 10,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 40
+        },
+        "statements": {
+          "total": 20,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 70
+        },
+        "branches": {
+          "total": 22,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 72.72
+        }
+      },
+      "src/components/common/BulkTagEditor.vue": {
+        "lines": {
+          "total": 22,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 50
+        },
+        "functions": {
+          "total": 12,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 16.66
+        },
+        "statements": {
+          "total": 24,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 50
+        },
+        "branches": {
+          "total": 10,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 30
+        }
+      },
+      "src/components/common/CardHeader.vue": {
+        "lines": {
+          "total": 3,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "functions": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 3,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/common/DropZone.vue": {
+        "lines": {
+          "total": 47,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 61.7
+        },
+        "functions": {
+          "total": 14,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 57.14
+        },
+        "statements": {
+          "total": 62,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 61.29
+        },
+        "branches": {
+          "total": 45,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 48.88
+        }
+      },
+      "src/components/common/EntityRow.vue": {
+        "lines": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 5,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/common/ErrorBanner.vue": {
+        "lines": {
+          "total": 25,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 60
+        },
+        "functions": {
+          "total": 11,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 54.54
+        },
+        "statements": {
+          "total": 26,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 61.53
+        },
+        "branches": {
+          "total": 16,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 18.75
+        }
+      },
+      "src/components/common/ErrorBoundary.vue": {
+        "lines": {
+          "total": 21,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 47.61
+        },
+        "functions": {
+          "total": 5,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 21,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 47.61
+        },
+        "branches": {
+          "total": 8,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 12.5
+        }
+      },
+      "src/components/common/ExportButtons.vue": {
+        "lines": {
+          "total": 44,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 15.9
+        },
+        "functions": {
+          "total": 6,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 16.66
+        },
+        "statements": {
+          "total": 47,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 17.02
+        },
+        "branches": {
+          "total": 43,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 9.3
+        }
+      },
+      "src/components/common/FeedbackRegion.vue": {
+        "lines": {
+          "total": 12,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 83.33
+        },
+        "functions": {
+          "total": 5,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 40
+        },
+        "statements": {
+          "total": 18,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 61.11
+        },
+        "branches": {
+          "total": 15,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 26.66
+        }
+      },
+      "src/components/common/FormGrid.vue": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/common/ImportPreviewTable.vue": {
+        "lines": {
+          "total": 11,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 54.54
+        },
+        "functions": {
+          "total": 5,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 12,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 58.33
+        },
+        "branches": {
+          "total": 6,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/components/common/Layout.vue": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/common/ListSearchInput.vue": {
+        "lines": {
+          "total": 12,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 41.66
+        },
+        "functions": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 13,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 38.46
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/common/ListToolbar.vue": {
+        "lines": {
+          "total": 9,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 55.55
+        },
+        "functions": {
+          "total": 5,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 20
+        },
+        "statements": {
+          "total": 9,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 55.55
+        },
+        "branches": {
+          "total": 27,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 18.51
+        }
+      },
+      "src/components/common/MetadataList.vue": {
+        "lines": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        },
+        "functions": {
+          "total": 1,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        },
+        "branches": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/common/ModerationCard.vue": {
+        "lines": {
+          "total": 9,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 77.77
+        },
+        "functions": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 9,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 77.77
+        },
+        "branches": {
+          "total": 10,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/common/PageActions.vue": {
+        "lines": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/common/PageHeader.vue": {
+        "lines": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/common/PageShell.vue": {
+        "lines": {
+          "total": 7,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 14.28
+        },
+        "functions": {
+          "total": 7,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 8,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 12.5
+        },
+        "branches": {
+          "total": 13,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 53.84
+        }
+      },
+      "src/components/common/ProgressBar.vue": {
+        "lines": {
+          "total": 15,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 53.33
+        },
+        "functions": {
+          "total": 4,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 50
+        },
+        "statements": {
+          "total": 18,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 55.55
+        },
+        "branches": {
+          "total": 11,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 18.18
+        }
+      },
+      "src/components/common/ReviewItem.vue": {
+        "lines": {
+          "total": 12,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 50
+        },
+        "functions": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 14,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 42.85
+        },
+        "branches": {
+          "total": 27,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.7
+        }
+      },
+      "src/components/common/RevisionReview.vue": {
+        "lines": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "functions": {
+          "total": 7,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 9,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 22.22
+        },
+        "branches": {
+          "total": 14,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/common/ScrollToTop.vue": {
+        "lines": {
+          "total": 12,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "functions": {
+          "total": 5,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 60
+        },
+        "statements": {
+          "total": 13,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 69.23
+        },
+        "branches": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/common/SectionHeader.vue": {
+        "lines": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/common/ShortcutHint.vue": {
+        "lines": {
+          "total": 15,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 80
+        },
+        "functions": {
+          "total": 5,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 18,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 11,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 9.09
+        }
+      },
+      "src/components/common/SourceGridPicker.vue": {
+        "lines": {
+          "total": 25,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 36
+        },
+        "functions": {
+          "total": 8,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 12.5
+        },
+        "statements": {
+          "total": 27,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 37.03
+        },
+        "branches": {
+          "total": 44,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 15.9
+        }
+      },
+      "src/components/common/TabStrip.vue": {
+        "lines": {
+          "total": 30,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 13.33
+        },
+        "functions": {
+          "total": 5,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 34,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 11.76
+        },
+        "branches": {
+          "total": 30,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 6.66
+        }
+      },
+      "src/components/common/TimeAgo.vue": {
+        "lines": {
+          "total": 35,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 45.71
+        },
+        "functions": {
+          "total": 5,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 80
+        },
+        "statements": {
+          "total": 45,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 40
+        },
+        "branches": {
+          "total": 24,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 16.66
+        }
+      },
+      "src/components/common/Timer.vue": {
+        "lines": {
+          "total": 46,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 58.69
+        },
+        "functions": {
+          "total": 15,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 80
+        },
+        "statements": {
+          "total": 58,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 58.62
+        },
+        "branches": {
+          "total": 42,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 28.57
+        }
+      },
+      "src/components/common/ToastContainer.vue": {
+        "lines": {
+          "total": 14,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 35.71
+        },
+        "functions": {
+          "total": 9,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 11.11
+        },
+        "statements": {
+          "total": 15,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "branches": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/dashboard/StudyActivityHeatmap.vue": {
+        "lines": {
+          "total": 116,
+          "covered": 32,
+          "skipped": 0,
+          "pct": 27.58
+        },
+        "functions": {
+          "total": 36,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 140,
+          "covered": 32,
+          "skipped": 0,
+          "pct": 22.85
+        },
+        "branches": {
+          "total": 72,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/layout/ExpiryWarning.vue": {
+        "lines": {
+          "total": 11,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 45.45
+        },
+        "functions": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 11,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 45.45
+        },
+        "branches": {
+          "total": 9,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/layout/Footer.vue": {
+        "lines": {
+          "total": 10,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 70
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 11,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 72.72
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/layout/LanguageSwitcher.vue": {
+        "lines": {
+          "total": 23,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 34.78
+        },
+        "functions": {
+          "total": 9,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 25,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 32
+        },
+        "branches": {
+          "total": 9,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/layout/MobileBottomNav.vue": {
+        "lines": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 80
+        },
+        "statements": {
+          "total": 17,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 94.11
+        },
+        "branches": {
+          "total": 4,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 25
+        }
+      },
+      "src/components/layout/Navbar.vue": {
+        "lines": {
+          "total": 50,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 68
+        },
+        "functions": {
+          "total": 28,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 46.42
+        },
+        "statements": {
+          "total": 60,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 32,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 37.5
+        }
+      },
+      "src/components/layout/NavbarDropdown.vue": {
+        "lines": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 7,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 28.57
+        },
+        "branches": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/layout/NavbarUserMenu.vue": {
+        "lines": {
+          "total": 22,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 50
+        },
+        "functions": {
+          "total": 10,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 25,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 44
+        },
+        "branches": {
+          "total": 18,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/layout/NotificationBell.vue": {
+        "lines": {
+          "total": 4,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 50
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 5,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 40
+        },
+        "branches": {
+          "total": 5,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 40
+        }
+      },
+      "src/components/layout/ThemeDropdown.vue": {
+        "lines": {
+          "total": 16,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 50
+        },
+        "functions": {
+          "total": 9,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 18,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 44.44
+        },
+        "branches": {
+          "total": 5,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/components/markdown/BaseMarkdown.vue": {
+        "lines": {
+          "total": 4,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 75
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 80
+        },
+        "branches": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        }
+      },
+      "src/components/markdown/MarkdownEditor.vue": {
+        "lines": {
+          "total": 60,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 23.33
+        },
+        "functions": {
+          "total": 12,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 8.33
+        },
+        "statements": {
+          "total": 72,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 20.83
+        },
+        "branches": {
+          "total": 39,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 5.12
+        }
+      },
+      "src/components/markdown/MarkdownToolbar.vue": {
+        "lines": {
+          "total": 7,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 57.14
+        },
+        "functions": {
+          "total": 5,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 40
+        },
+        "statements": {
+          "total": 9,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 5,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 40
+        }
+      },
+      "src/composables/composableHelpers.js": {
+        "lines": {
+          "total": 14,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 85.71
+        },
+        "functions": {
+          "total": 8,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 75
+        },
+        "statements": {
+          "total": 16,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 81.25
+        },
+        "branches": {
+          "total": 3,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 66.66
+        }
+      },
+      "src/composables/confirmAction.js": {
+        "lines": {
+          "total": 9,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 1,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 10,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 8,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/composables/useAnalyticsCharts.js": {
+        "lines": {
+          "total": 39,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 22,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 41,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 16,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/composables/useAnswerSubmission.js": {
+        "lines": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/composables/useAutoRefresh.js": {
+        "lines": {
+          "total": 34,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 88.88
+        },
+        "statements": {
+          "total": 75,
+          "covered": 70,
+          "skipped": 0,
+          "pct": 93.33
+        },
+        "branches": {
+          "total": 43,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 83.72
+        }
+      },
+      "src/composables/useChartPalette.js": {
+        "lines": {
+          "total": 13,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 84.61
+        },
+        "functions": {
+          "total": 5,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 60
+        },
+        "statements": {
+          "total": 15,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 73.33
+        },
+        "branches": {
+          "total": 7,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 57.14
+        }
+      },
+      "src/composables/useClickOutside.js": {
+        "lines": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/composables/useContentLoader.js": {
+        "lines": {
+          "total": 16,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 18,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/composables/useCountUp.js": {
+        "lines": {
+          "total": 52,
+          "covered": 43,
+          "skipped": 0,
+          "pct": 82.69
+        },
+        "functions": {
+          "total": 10,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 90
+        },
+        "statements": {
+          "total": 59,
+          "covered": 47,
+          "skipped": 0,
+          "pct": 79.66
+        },
+        "branches": {
+          "total": 38,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 71.05
+        }
+      },
+      "src/composables/useCountdownAnnouncements.js": {
+        "lines": {
+          "total": 34,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 38.23
+        },
+        "functions": {
+          "total": 9,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 77.77
+        },
+        "statements": {
+          "total": 45,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 42.22
+        },
+        "branches": {
+          "total": 33,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 18.18
+        }
+      },
+      "src/composables/useCrudActions.js": {
+        "lines": {
+          "total": 91,
+          "covered": 75,
+          "skipped": 0,
+          "pct": 82.41
+        },
+        "functions": {
+          "total": 13,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 92.3
+        },
+        "statements": {
+          "total": 107,
+          "covered": 83,
+          "skipped": 0,
+          "pct": 77.57
+        },
+        "branches": {
+          "total": 113,
+          "covered": 85,
+          "skipped": 0,
+          "pct": 75.22
+        }
+      },
+      "src/composables/useDebounceFn.js": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/composables/useDialog.js": {
+        "lines": {
+          "total": 34,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 40,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 14,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 85.71
+        }
+      },
+      "src/composables/useDirection.js": {
+        "lines": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 20,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 85
+        },
+        "branches": {
+          "total": 8,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 62.5
+        }
+      },
+      "src/composables/useDropdown.js": {
+        "lines": {
+          "total": 49,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 71.42
+        },
+        "functions": {
+          "total": 12,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 83.33
+        },
+        "statements": {
+          "total": 62,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 66.12
+        },
+        "branches": {
+          "total": 49,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 51.02
+        }
+      },
+      "src/composables/useElementHeightToken.js": {
+        "lines": {
+          "total": 28,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 53.57
+        },
+        "functions": {
+          "total": 5,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 60
+        },
+        "statements": {
+          "total": 31,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 48.38
+        },
+        "branches": {
+          "total": 12,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 16.66
+        }
+      },
+      "src/composables/useFocusReturn.js": {
+        "lines": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/composables/useFont.js": {
+        "lines": {
+          "total": 31,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 12.9
+        },
+        "functions": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 35,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 11.42
+        },
+        "branches": {
+          "total": 12,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/composables/useFormValidation.js": {
+        "lines": {
+          "total": 26,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 26.92
+        },
+        "functions": {
+          "total": 7,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 14.28
+        },
+        "statements": {
+          "total": 30,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 23.33
+        },
+        "branches": {
+          "total": 12,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/composables/useMediaQuery.js": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/composables/useModalStack.js": {
+        "lines": {
+          "total": 18,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 61.11
+        },
+        "functions": {
+          "total": 7,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 71.42
+        },
+        "statements": {
+          "total": 20,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 65
+        },
+        "branches": {
+          "total": 4,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 25
+        }
+      },
+      "src/composables/useNotify.js": {
+        "lines": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/composables/useOnline.js": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/composables/usePagination.js": {
+        "lines": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 9,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 88.88
+        }
+      },
+      "src/composables/useRecentItems.js": {
+        "lines": {
+          "total": 15,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 60
+        },
+        "functions": {
+          "total": 6,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "statements": {
+          "total": 18,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 61.11
+        },
+        "branches": {
+          "total": 5,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 80
+        }
+      },
+      "src/composables/useRevisionReview.js": {
+        "lines": {
+          "total": 13,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 30.76
+        },
+        "functions": {
+          "total": 5,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 20
+        },
+        "statements": {
+          "total": 29,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 24.13
+        },
+        "branches": {
+          "total": 15,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/composables/useRotatingContent.js": {
+        "lines": {
+          "total": 24,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 70.83
+        },
+        "functions": {
+          "total": 7,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 71.42
+        },
+        "statements": {
+          "total": 28,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 64.28
+        },
+        "branches": {
+          "total": 17,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 29.41
+        }
+      },
+      "src/composables/useSafeI18n.js": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/composables/useSelection.js": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/composables/useSessionLeaveGuard.js": {
+        "lines": {
+          "total": 20,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 35
+        },
+        "functions": {
+          "total": 8,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 37.5
+        },
+        "statements": {
+          "total": 26,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 34.61
+        },
+        "branches": {
+          "total": 17,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/composables/useSound.js": {
+        "lines": {
+          "total": 28,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.57
+        },
+        "functions": {
+          "total": 7,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 30,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.33
+        },
+        "branches": {
+          "total": 13,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/composables/useSubmitGuard.js": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/composables/useTestNavigation.js": {
+        "lines": {
+          "total": 47,
+          "covered": 46,
+          "skipped": 0,
+          "pct": 97.87
+        },
+        "functions": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 59,
+          "covered": 54,
+          "skipped": 0,
+          "pct": 91.52
+        },
+        "branches": {
+          "total": 63,
+          "covered": 57,
+          "skipped": 0,
+          "pct": 90.47
+        }
+      },
+      "src/composables/useTestPage.js": {
+        "lines": {
+          "total": 36,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 5,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 37,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 18,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/composables/useTheme.js": {
+        "lines": {
+          "total": 58,
+          "covered": 53,
+          "skipped": 0,
+          "pct": 91.37
+        },
+        "functions": {
+          "total": 13,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 84.61
+        },
+        "statements": {
+          "total": 69,
+          "covered": 60,
+          "skipped": 0,
+          "pct": 86.95
+        },
+        "branches": {
+          "total": 46,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 78.26
+        }
+      },
+      "src/composables/useTimer.js": {
+        "lines": {
+          "total": 49,
+          "covered": 48,
+          "skipped": 0,
+          "pct": 97.95
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 58,
+          "covered": 54,
+          "skipped": 0,
+          "pct": 93.1
+        },
+        "branches": {
+          "total": 38,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 81.57
+        }
+      },
+      "src/composables/useUnsavedChanges.js": {
+        "lines": {
+          "total": 32,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 62.5
+        },
+        "functions": {
+          "total": 14,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 64.28
+        },
+        "statements": {
+          "total": 40,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 62.5
+        },
+        "branches": {
+          "total": 21,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 52.38
+        }
+      },
+      "src/constants/adminLinks.js": {
+        "lines": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/constants/fonts.js": {
+        "lines": {
+          "total": 11,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 36.36
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 12,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "branches": {
+          "total": 8,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/constants/layout.js": {
+        "lines": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/constants/navigationLinks.js": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/features/about/views/About.vue": {
+        "lines": {
+          "total": 107,
+          "covered": 63,
+          "skipped": 0,
+          "pct": 58.87
+        },
+        "functions": {
+          "total": 32,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 109,
+          "covered": 63,
+          "skipped": 0,
+          "pct": 57.79
+        },
+        "branches": {
+          "total": 55,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/components/AuthorMappingModal.vue": {
+        "lines": {
+          "total": 62,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 35.48
+        },
+        "functions": {
+          "total": 26,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 11.53
+        },
+        "statements": {
+          "total": 70,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 32.85
+        },
+        "branches": {
+          "total": 37,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 2.7
+        }
+      },
+      "src/features/admin/components/BlueprintFormModal.vue": {
+        "lines": {
+          "total": 58,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 32.75
+        },
+        "functions": {
+          "total": 19,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 64,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 29.68
+        },
+        "branches": {
+          "total": 27,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.7
+        }
+      },
+      "src/features/admin/components/ConflictResolutionModal.vue": {
+        "lines": {
+          "total": 30,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 46.66
+        },
+        "functions": {
+          "total": 18,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 16.66
+        },
+        "statements": {
+          "total": 35,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 45.71
+        },
+        "branches": {
+          "total": 9,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 11.11
+        }
+      },
+      "src/features/admin/components/ExportFilters.vue": {
+        "lines": {
+          "total": 81,
+          "covered": 43,
+          "skipped": 0,
+          "pct": 53.08
+        },
+        "functions": {
+          "total": 39,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 20.51
+        },
+        "statements": {
+          "total": 93,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 52.68
+        },
+        "branches": {
+          "total": 104,
+          "covered": 51,
+          "skipped": 0,
+          "pct": 49.03
+        }
+      },
+      "src/features/admin/components/FileImport.vue": {
+        "lines": {
+          "total": 9,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 44.44
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 10,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 40
+        },
+        "branches": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        }
+      },
+      "src/features/admin/components/GroupFormModal.vue": {
+        "lines": {
+          "total": 28,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 32.14
+        },
+        "functions": {
+          "total": 12,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 29,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 31.03
+        },
+        "branches": {
+          "total": 14,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/components/ManualExportQuestions.vue": {
+        "lines": {
+          "total": 58,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 41.37
+        },
+        "functions": {
+          "total": 24,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 12.5
+        },
+        "statements": {
+          "total": 69,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 39.13
+        },
+        "branches": {
+          "total": 37,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 27.02
+        }
+      },
+      "src/features/admin/components/RoleCapabilityMatrix.vue": {
+        "lines": {
+          "total": 74,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 48.64
+        },
+        "functions": {
+          "total": 25,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 20
+        },
+        "statements": {
+          "total": 84,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 46.42
+        },
+        "branches": {
+          "total": 64,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 28.12
+        }
+      },
+      "src/features/admin/components/SimpleImportTab.vue": {
+        "lines": {
+          "total": 21,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 38.09
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 22,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 40.9
+        },
+        "branches": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/components/StateImport.vue": {
+        "lines": {
+          "total": 140,
+          "covered": 32,
+          "skipped": 0,
+          "pct": 22.85
+        },
+        "functions": {
+          "total": 27,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 153,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 21.56
+        },
+        "branches": {
+          "total": 98,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 14.28
+        }
+      },
+      "src/features/admin/components/TagTreeNode.vue": {
+        "lines": {
+          "total": 19,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 47.36
+        },
+        "functions": {
+          "total": 12,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 16.66
+        },
+        "statements": {
+          "total": 20,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 50
+        },
+        "branches": {
+          "total": 29,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 34.48
+        }
+      },
+      "src/features/admin/components/TelegramImport.vue": {
+        "lines": {
+          "total": 9,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 44.44
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 10,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 40
+        },
+        "branches": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        }
+      },
+      "src/features/admin/components/UserFormModal.vue": {
+        "lines": {
+          "total": 88,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 20.45
+        },
+        "functions": {
+          "total": 31,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.22
+        },
+        "statements": {
+          "total": 95,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 18.94
+        },
+        "branches": {
+          "total": 81,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 1.23
+        }
+      },
+      "src/features/admin/components/UserOverrideEditor.vue": {
+        "lines": {
+          "total": 39,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 56.41
+        },
+        "functions": {
+          "total": 17,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 40,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 57.5
+        },
+        "branches": {
+          "total": 45,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 15.55
+        }
+      },
+      "src/features/admin/composables/useUserOverrideEditor.js": {
+        "lines": {
+          "total": 70,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 30
+        },
+        "functions": {
+          "total": 19,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 15.78
+        },
+        "statements": {
+          "total": 83,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 25.3
+        },
+        "branches": {
+          "total": 42,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/ActiveUsers.vue": {
+        "lines": {
+          "total": 29,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.44
+        },
+        "functions": {
+          "total": 16,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 32,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.12
+        },
+        "branches": {
+          "total": 28,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/Blueprints.vue": {
+        "lines": {
+          "total": 36,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 2.77
+        },
+        "functions": {
+          "total": 25,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 39,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 2.56
+        },
+        "branches": {
+          "total": 19,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/DatabaseInfo.vue": {
+        "lines": {
+          "total": 150,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 14
+        },
+        "functions": {
+          "total": 64,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 163,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 12.88
+        },
+        "branches": {
+          "total": 159,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/Flags.vue": {
+        "lines": {
+          "total": 30,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 19,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 38,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 26,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/GroupDetail.vue": {
+        "lines": {
+          "total": 86,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 12.79
+        },
+        "functions": {
+          "total": 41,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 99,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 11.11
+        },
+        "branches": {
+          "total": 79,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/Groups.vue": {
+        "lines": {
+          "total": 30,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.33
+        },
+        "functions": {
+          "total": 20,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 31,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.22
+        },
+        "branches": {
+          "total": 17,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/Import.vue": {
+        "lines": {
+          "total": 10,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 11,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/Permissions.vue": {
+        "lines": {
+          "total": 33,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 17,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 41,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 24,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/Settings.vue": {
+        "lines": {
+          "total": 132,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 5.3
+        },
+        "functions": {
+          "total": 52,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 165,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 4.24
+        },
+        "branches": {
+          "total": 123,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/Tags.vue": {
+        "lines": {
+          "total": 120,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 5
+        },
+        "functions": {
+          "total": 64,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 179,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 3.35
+        },
+        "branches": {
+          "total": 128,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/Users.vue": {
+        "lines": {
+          "total": 124,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 12.9
+        },
+        "functions": {
+          "total": 46,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 143,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 11.18
+        },
+        "branches": {
+          "total": 136,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/admin/views/VerificationStats.vue": {
+        "lines": {
+          "total": 48,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 35.41
+        },
+        "functions": {
+          "total": 19,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 54,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 31.48
+        },
+        "branches": {
+          "total": 46,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/analytics/components/AuthorFlagRateCard.vue": {
+        "lines": {
+          "total": 14,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 57.14
+        },
+        "functions": {
+          "total": 5,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 20
+        },
+        "statements": {
+          "total": 17,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 52.94
+        },
+        "branches": {
+          "total": 10,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/features/analytics/components/CategoryMasteryCard.vue": {
+        "lines": {
+          "total": 27,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 85.18
+        },
+        "functions": {
+          "total": 8,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 12.5
+        },
+        "statements": {
+          "total": 34,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 70.58
+        },
+        "branches": {
+          "total": 14,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 35.71
+        }
+      },
+      "src/features/analytics/components/CohortComparisonCard.vue": {
+        "lines": {
+          "total": 16,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 62.5
+        },
+        "functions": {
+          "total": 5,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 20
+        },
+        "statements": {
+          "total": 19,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 57.89
+        },
+        "branches": {
+          "total": 10,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/features/analytics/components/DifficultyCalibrationCard.vue": {
+        "lines": {
+          "total": 18,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 72.22
+        },
+        "functions": {
+          "total": 6,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 16.66
+        },
+        "statements": {
+          "total": 19,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 73.68
+        },
+        "branches": {
+          "total": 6,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 83.33
+        }
+      },
+      "src/features/analytics/components/ExamDurationCard.vue": {
+        "lines": {
+          "total": 22,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 86.36
+        },
+        "functions": {
+          "total": 4,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 25
+        },
+        "statements": {
+          "total": 24,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 83.33
+        },
+        "branches": {
+          "total": 12,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/features/analytics/components/ReportAccordion.vue": {
+        "lines": {
+          "total": 10,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 50
+        },
+        "functions": {
+          "total": 5,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 10,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 50
+        },
+        "branches": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/analytics/components/StreakHistoryCard.vue": {
+        "lines": {
+          "total": 36,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 75
+        },
+        "functions": {
+          "total": 12,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 8.33
+        },
+        "statements": {
+          "total": 44,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 63.63
+        },
+        "branches": {
+          "total": 20,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 25
+        }
+      },
+      "src/features/analytics/components/WeeklyRetentionCard.vue": {
+        "lines": {
+          "total": 15,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 60
+        },
+        "functions": {
+          "total": 5,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 20
+        },
+        "statements": {
+          "total": 18,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 55.55
+        },
+        "branches": {
+          "total": 10,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/features/analytics/views/Analytics.vue": {
+        "lines": {
+          "total": 93,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 7.52
+        },
+        "functions": {
+          "total": 46,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 106,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 6.6
+        },
+        "branches": {
+          "total": 93,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/auth/views/ChangePassword.vue": {
+        "lines": {
+          "total": 33,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.03
+        },
+        "functions": {
+          "total": 21,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 35,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 2.85
+        },
+        "branches": {
+          "total": 36,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/auth/views/Login.vue": {
+        "lines": {
+          "total": 54,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 9.25
+        },
+        "functions": {
+          "total": 20,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 63,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 7.93
+        },
+        "branches": {
+          "total": 60,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/bookmarks/views/Bookmarks.vue": {
+        "lines": {
+          "total": 52,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 1.92
+        },
+        "functions": {
+          "total": 24,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 60,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 1.66
+        },
+        "branches": {
+          "total": 26,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/categories/components/CategoryCard.vue": {
+        "lines": {
+          "total": 11,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 63.63
+        },
+        "functions": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 11,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 63.63
+        },
+        "branches": {
+          "total": 9,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 22.22
+        }
+      },
+      "src/features/categories/components/CategoryForm.vue": {
+        "lines": {
+          "total": 65,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 29.23
+        },
+        "functions": {
+          "total": 26,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 82,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 23.17
+        },
+        "branches": {
+          "total": 71,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 1.4
+        }
+      },
+      "src/features/categories/views/Categories.vue": {
+        "lines": {
+          "total": 28,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.57
+        },
+        "functions": {
+          "total": 18,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 33,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.03
+        },
+        "branches": {
+          "total": 11,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/dashboard/composables/useDashboardController.js": {
+        "lines": {
+          "total": 119,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 0.84
+        },
+        "functions": {
+          "total": 32,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 146,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 0.68
+        },
+        "branches": {
+          "total": 92,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/dashboard/views/Dashboard.vue": {
+        "lines": {
+          "total": 62,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 53.22
+        },
+        "functions": {
+          "total": 27,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 62,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 53.22
+        },
+        "branches": {
+          "total": 35,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/dev/views/ComponentShowcase.vue": {
+        "lines": {
+          "total": 51,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 17.64
+        },
+        "functions": {
+          "total": 42,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 59,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 15.25
+        },
+        "branches": {
+          "total": 58,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/errors/views/NotFound.vue": {
+        "lines": {
+          "total": 9,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 9,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "branches": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/groups/views/MyGroups.vue": {
+        "lines": {
+          "total": 74,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 12.16
+        },
+        "functions": {
+          "total": 28,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 90,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 10
+        },
+        "branches": {
+          "total": 67,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/history/views/History.vue": {
+        "lines": {
+          "total": 41,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 2.43
+        },
+        "functions": {
+          "total": 18,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 47,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 2.12
+        },
+        "branches": {
+          "total": 40,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/knowledge/views/KnowledgeMap.vue": {
+        "lines": {
+          "total": 65,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 9.23
+        },
+        "functions": {
+          "total": 29,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 75,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 8
+        },
+        "branches": {
+          "total": 45,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/legal/views/PrivacyPolicy.vue": {
+        "lines": {
+          "total": 35,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 25.71
+        },
+        "functions": {
+          "total": 18,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 37,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 24.32
+        },
+        "branches": {
+          "total": 39,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/manual/views/Manual.vue": {
+        "lines": {
+          "total": 37,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 27.02
+        },
+        "functions": {
+          "total": 14,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 42,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 23.8
+        },
+        "branches": {
+          "total": 18,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/masterExams/components/DraftQuestionForm.vue": {
+        "lines": {
+          "total": 31,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 32.25
+        },
+        "functions": {
+          "total": 24,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 4.16
+        },
+        "statements": {
+          "total": 37,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 27.02
+        },
+        "branches": {
+          "total": 29,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 44.82
+        }
+      },
+      "src/features/masterExams/components/MasterExamCard.vue": {
+        "lines": {
+          "total": 81,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 43.2
+        },
+        "functions": {
+          "total": 38,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 34.21
+        },
+        "statements": {
+          "total": 91,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 45.05
+        },
+        "branches": {
+          "total": 112,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 24.1
+        }
+      },
+      "src/features/masterExams/components/ResultStatGrid.vue": {
+        "lines": {
+          "total": 4,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 75
+        },
+        "functions": {
+          "total": 1,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 5,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 80
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/features/masterExams/composables/useMasterExamEditor.js": {
+        "lines": {
+          "total": 148,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 38,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 178,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 115,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/masterExams/composables/useMasterExamRunner.js": {
+        "lines": {
+          "total": 150,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 45,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 204,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 150,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/masterExams/views/MasterExamDrafts.vue": {
+        "lines": {
+          "total": 74,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 6.75
+        },
+        "functions": {
+          "total": 37,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 85,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 5.88
+        },
+        "branches": {
+          "total": 82,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/masterExams/views/MasterExamEditor.vue": {
+        "lines": {
+          "total": 87,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 25.28
+        },
+        "functions": {
+          "total": 65,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 93,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 23.65
+        },
+        "branches": {
+          "total": 121,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/masterExams/views/MasterExamList.vue": {
+        "lines": {
+          "total": 78,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 2.56
+        },
+        "functions": {
+          "total": 38,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 85,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 2.35
+        },
+        "branches": {
+          "total": 58,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/masterExams/views/MasterExamMyResult.vue": {
+        "lines": {
+          "total": 33,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.03
+        },
+        "functions": {
+          "total": 15,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 38,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 2.63
+        },
+        "branches": {
+          "total": 29,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/masterExams/views/MasterExamResults.vue": {
+        "lines": {
+          "total": 86,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 24.41
+        },
+        "functions": {
+          "total": 36,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 96,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 21.87
+        },
+        "branches": {
+          "total": 72,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/masterExams/views/MasterExamRunner.vue": {
+        "lines": {
+          "total": 38,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 55.26
+        },
+        "functions": {
+          "total": 17,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 40,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 52.5
+        },
+        "branches": {
+          "total": 63,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/planner/views/StudyPlanner.vue": {
+        "lines": {
+          "total": 88,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 11.36
+        },
+        "functions": {
+          "total": 37,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 122,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 8.19
+        },
+        "branches": {
+          "total": 105,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/preferences/views/Preferences.vue": {
+        "lines": {
+          "total": 42,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 14.28
+        },
+        "functions": {
+          "total": 26,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 53,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 11.32
+        },
+        "branches": {
+          "total": 21,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/profile/views/Profile.vue": {
+        "lines": {
+          "total": 77,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 31.16
+        },
+        "functions": {
+          "total": 29,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 85,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 28.23
+        },
+        "branches": {
+          "total": 57,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/questions/components/CategorySelect.vue": {
+        "lines": {
+          "total": 17,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 70.58
+        },
+        "functions": {
+          "total": 9,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "statements": {
+          "total": 19,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 68.42
+        },
+        "branches": {
+          "total": 8,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 62.5
+        }
+      },
+      "src/features/questions/components/ChoiceEditor.vue": {
+        "lines": {
+          "total": 30,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 43.33
+        },
+        "functions": {
+          "total": 13,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 30.76
+        },
+        "statements": {
+          "total": 33,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 48.48
+        },
+        "branches": {
+          "total": 14,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 28.57
+        }
+      },
+      "src/features/questions/components/DifficultySelector.vue": {
+        "lines": {
+          "total": 6,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "functions": {
+          "total": 4,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 50
+        },
+        "statements": {
+          "total": 7,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 71.42
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/features/questions/components/FilterBar.vue": {
+        "lines": {
+          "total": 49,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 42.85
+        },
+        "functions": {
+          "total": 23,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 4.34
+        },
+        "statements": {
+          "total": 56,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 37.5
+        },
+        "branches": {
+          "total": 30,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 30
+        }
+      },
+      "src/features/questions/components/QuestionCard.vue": {
+        "lines": {
+          "total": 92,
+          "covered": 43,
+          "skipped": 0,
+          "pct": 46.73
+        },
+        "functions": {
+          "total": 34,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 5.88
+        },
+        "statements": {
+          "total": 100,
+          "covered": 43,
+          "skipped": 0,
+          "pct": 43
+        },
+        "branches": {
+          "total": 121,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 0.82
+        }
+      },
+      "src/features/questions/components/QuestionCardActions.vue": {
+        "lines": {
+          "total": 40,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 32.5
+        },
+        "functions": {
+          "total": 22,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 9.09
+        },
+        "statements": {
+          "total": 47,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 34.04
+        },
+        "branches": {
+          "total": 72,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 9.72
+        }
+      },
+      "src/features/questions/components/QuestionForm.vue": {
+        "lines": {
+          "total": 280,
+          "covered": 73,
+          "skipped": 0,
+          "pct": 26.07
+        },
+        "functions": {
+          "total": 100,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 7
+        },
+        "statements": {
+          "total": 321,
+          "covered": 75,
+          "skipped": 0,
+          "pct": 23.36
+        },
+        "branches": {
+          "total": 320,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 0.31
+        }
+      },
+      "src/features/questions/components/TagInput.vue": {
+        "lines": {
+          "total": 51,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 37.25
+        },
+        "functions": {
+          "total": 23,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 4.34
+        },
+        "statements": {
+          "total": 56,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 35.71
+        },
+        "branches": {
+          "total": 30,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 10
+        }
+      },
+      "src/features/questions/composables/useQuestionFilters.js": {
+        "lines": {
+          "total": 11,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 12,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 13,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/questions/composables/useQuestionListController.js": {
+        "lines": {
+          "total": 199,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 77,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 236,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 148,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/questions/composables/useQuestionSave.js": {
+        "lines": {
+          "total": 74,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 15,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 93,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 62,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/questions/composables/useRatingBatcher.js": {
+        "lines": {
+          "total": 31,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 67.74
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 34,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 67.64
+        },
+        "branches": {
+          "total": 10,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 30
+        }
+      },
+      "src/features/questions/views/AddView.vue": {
+        "lines": {
+          "total": 36,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 19,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 49,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 47,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/questions/views/EditView.vue": {
+        "lines": {
+          "total": 43,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 9,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 48,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 31,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/questions/views/QuestionListPage.vue": {
+        "lines": {
+          "total": 48,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 8.33
+        },
+        "functions": {
+          "total": 41,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 51,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 7.84
+        },
+        "branches": {
+          "total": 69,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/testCommon/modes.js": {
+        "lines": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/features/testCommon/components/ExplanationSection.vue": {
+        "lines": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/testCommon/components/QuestionDisplay.vue": {
+        "lines": {
+          "total": 67,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 43.28
+        },
+        "functions": {
+          "total": 38,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 15.78
+        },
+        "statements": {
+          "total": 77,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 40.25
+        },
+        "branches": {
+          "total": 81,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 6.17
+        }
+      },
+      "src/features/testCommon/components/TestNavigation.vue": {
+        "lines": {
+          "total": 8,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 37.5
+        },
+        "functions": {
+          "total": 8,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 12,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "branches": {
+          "total": 17,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 29.41
+        }
+      },
+      "src/features/testCommon/components/TestResults.vue": {
+        "lines": {
+          "total": 71,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 46.47
+        },
+        "functions": {
+          "total": 33,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 6.06
+        },
+        "statements": {
+          "total": 84,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 41.66
+        },
+        "branches": {
+          "total": 71,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 2.81
+        }
+      },
+      "src/features/testCommon/components/TestSetup.vue": {
+        "lines": {
+          "total": 14,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 35.71
+        },
+        "functions": {
+          "total": 12,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 17,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 29.41
+        },
+        "branches": {
+          "total": 11,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/testCommon/components/UnifiedTestSetup.vue": {
+        "lines": {
+          "total": 40,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 57.5
+        },
+        "functions": {
+          "total": 20,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 10
+        },
+        "statements": {
+          "total": 41,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 56.09
+        },
+        "branches": {
+          "total": 65,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 44.61
+        }
+      },
+      "src/features/testCommon/composables/useTestQuestionController.js": {
+        "lines": {
+          "total": 243,
+          "covered": 78,
+          "skipped": 0,
+          "pct": 32.09
+        },
+        "functions": {
+          "total": 36,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 36.11
+        },
+        "statements": {
+          "total": 277,
+          "covered": 82,
+          "skipped": 0,
+          "pct": 29.6
+        },
+        "branches": {
+          "total": 215,
+          "covered": 45,
+          "skipped": 0,
+          "pct": 20.93
+        }
+      },
+      "src/features/testCommon/composables/useTestSetupState.js": {
+        "lines": {
+          "total": 139,
+          "covered": 54,
+          "skipped": 0,
+          "pct": 38.84
+        },
+        "functions": {
+          "total": 58,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 15.51
+        },
+        "statements": {
+          "total": 168,
+          "covered": 57,
+          "skipped": 0,
+          "pct": 33.92
+        },
+        "branches": {
+          "total": 103,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 18.44
+        }
+      },
+      "src/features/testCommon/views/TestQuestion.vue": {
+        "lines": {
+          "total": 9,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 77.77
+        },
+        "functions": {
+          "total": 5,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 60
+        },
+        "statements": {
+          "total": 12,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 83.33
+        },
+        "branches": {
+          "total": 25,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 72
+        }
+      },
+      "src/features/testCommon/views/TestResultsPage.vue": {
+        "lines": {
+          "total": 23,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 7,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 27,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 20,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/testCommon/views/TestSetupPage.vue": {
+        "lines": {
+          "total": 23,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 9,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 28,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 15,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/i18n/index.js": {
+        "lines": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 93.75
+        },
+        "branches": {
+          "total": 8,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 75
+        }
+      },
+      "src/i18n/helpers/direction.js": {
+        "lines": {
+          "total": 13,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 92.3
+        },
+        "functions": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        },
+        "statements": {
+          "total": 14,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 85.71
+        },
+        "branches": {
+          "total": 10,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/i18n/helpers/format.js": {
+        "lines": {
+          "total": 29,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 75.86
+        },
+        "functions": {
+          "total": 10,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 80
+        },
+        "statements": {
+          "total": 34,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 79.41
+        },
+        "branches": {
+          "total": 36,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 61.11
+        }
+      },
+      "src/router/guards.js": {
+        "lines": {
+          "total": 41,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 87.8
+        },
+        "functions": {
+          "total": 8,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 75
+        },
+        "statements": {
+          "total": 44,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 84.09
+        },
+        "branches": {
+          "total": 36,
+          "covered": 32,
+          "skipped": 0,
+          "pct": 88.88
+        }
+      },
+      "src/services/adminService.js": {
+        "lines": {
+          "total": 58,
+          "covered": 56,
+          "skipped": 0,
+          "pct": 96.55
+        },
+        "functions": {
+          "total": 28,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 96.42
+        },
+        "statements": {
+          "total": 64,
+          "covered": 62,
+          "skipped": 0,
+          "pct": 96.87
+        },
+        "branches": {
+          "total": 62,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 93.54
+        }
+      },
+      "src/services/analyticsService.js": {
+        "lines": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/authService.js": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/blueprintService.js": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/bookmarkService.js": {
+        "lines": {
+          "total": 6,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "functions": {
+          "total": 5,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 60
+        },
+        "statements": {
+          "total": 6,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/caseService.js": {
+        "lines": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/categoryService.js": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/flagService.js": {
+        "lines": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/groupService.js": {
+        "lines": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/knowledgeService.js": {
+        "lines": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "functions": {
+          "total": 5,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 20
+        },
+        "statements": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "branches": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/masterExamService.js": {
+        "lines": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 28,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/permissionService.js": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/questionService.js": {
+        "lines": {
+          "total": 28,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 89.28
+        },
+        "functions": {
+          "total": 21,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 85.71
+        },
+        "statements": {
+          "total": 28,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 89.28
+        },
+        "branches": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/storageService.js": {
+        "lines": {
+          "total": 14,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 92.85
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 17,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 94.11
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/tagService.js": {
+        "lines": {
+          "total": 6,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 83.33
+        },
+        "functions": {
+          "total": 5,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 80
+        },
+        "statements": {
+          "total": 6,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 83.33
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/testHistoryService.js": {
+        "lines": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/testServiceFactory.js": {
+        "lines": {
+          "total": 27,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 9,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 39,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 41,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/services/tipService.js": {
+        "lines": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        },
+        "functions": {
+          "total": 1,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/wrongAnswerService.js": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/api/client.js": {
+        "lines": {
+          "total": 138,
+          "covered": 120,
+          "skipped": 0,
+          "pct": 86.95
+        },
+        "functions": {
+          "total": 30,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 86.66
+        },
+        "statements": {
+          "total": 165,
+          "covered": 135,
+          "skipped": 0,
+          "pct": 81.81
+        },
+        "branches": {
+          "total": 127,
+          "covered": 97,
+          "skipped": 0,
+          "pct": 76.37
+        }
+      },
+      "src/services/api/csrfTokenStore.js": {
+        "lines": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 88.88
+        },
+        "branches": {
+          "total": 8,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 75
+        }
+      },
+      "src/services/api/endpoints.js": {
+        "lines": {
+          "total": 52,
+          "covered": 52,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 49,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 52,
+          "covered": 52,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/services/api/errorHandler.js": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/services/api/sessionScope.js": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 75
+        },
+        "statements": {
+          "total": 10,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 90
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/stores/activeUserStore.js": {
+        "lines": {
+          "total": 8,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 12.5
+        },
+        "functions": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 10,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 10
+        },
+        "branches": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/stores/adminDatabaseStore.js": {
+        "lines": {
+          "total": 22,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 9.09
+        },
+        "functions": {
+          "total": 30,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 3.33
+        },
+        "statements": {
+          "total": 31,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 6.45
+        },
+        "branches": {
+          "total": 17,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/stores/adminSettingsStore.js": {
+        "lines": {
+          "total": 21,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 14.28
+        },
+        "functions": {
+          "total": 13,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 23.07
+        },
+        "statements": {
+          "total": 27,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 14.81
+        },
+        "branches": {
+          "total": 8,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/stores/adminVerificationStatsStore.js": {
+        "lines": {
+          "total": 4,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 25
+        },
+        "functions": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 5,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 20
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/stores/analyticsStore.js": {
+        "lines": {
+          "total": 16,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 81.25
+        },
+        "functions": {
+          "total": 15,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 80
+        },
+        "statements": {
+          "total": 18,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 77.77
+        },
+        "branches": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/stores/authStore.js": {
+        "lines": {
+          "total": 59,
+          "covered": 57,
+          "skipped": 0,
+          "pct": 96.61
+        },
+        "functions": {
+          "total": 26,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 92.3
+        },
+        "statements": {
+          "total": 75,
+          "covered": 70,
+          "skipped": 0,
+          "pct": 93.33
+        },
+        "branches": {
+          "total": 50,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 80
+        }
+      },
+      "src/stores/blueprintStore.js": {
+        "lines": {
+          "total": 21,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 9.52
+        },
+        "functions": {
+          "total": 20,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 5
+        },
+        "statements": {
+          "total": 32,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 6.25
+        },
+        "branches": {
+          "total": 8,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/stores/bookmarkStore.js": {
+        "lines": {
+          "total": 44,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 88.63
+        },
+        "functions": {
+          "total": 12,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 83.33
+        },
+        "statements": {
+          "total": 48,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 87.5
+        },
+        "branches": {
+          "total": 22,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 81.81
+        }
+      },
+      "src/stores/caseStore.js": {
+        "lines": {
+          "total": 5,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 60
+        },
+        "functions": {
+          "total": 4,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 75
+        },
+        "statements": {
+          "total": 6,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 5,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 20
+        }
+      },
+      "src/stores/categoryStore.js": {
+        "lines": {
+          "total": 34,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 44,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 18,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 72.22
+        }
+      },
+      "src/stores/configStore.js": {
+        "lines": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 83.33
+        }
+      },
+      "src/stores/flagStore.js": {
+        "lines": {
+          "total": 25,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 64
+        },
+        "functions": {
+          "total": 13,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 92.3
+        },
+        "statements": {
+          "total": 30,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 70
+        },
+        "branches": {
+          "total": 15,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 93.33
+        }
+      },
+      "src/stores/groupStore.js": {
+        "lines": {
+          "total": 56,
+          "covered": 52,
+          "skipped": 0,
+          "pct": 92.85
+        },
+        "functions": {
+          "total": 46,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 91.3
+        },
+        "statements": {
+          "total": 74,
+          "covered": 69,
+          "skipped": 0,
+          "pct": 93.24
+        },
+        "branches": {
+          "total": 27,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 59.25
+        }
+      },
+      "src/stores/index.js": {
+        "lines": {
+          "total": 1,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/stores/knowledgeStore.js": {
+        "lines": {
+          "total": 11,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 27.27
+        },
+        "functions": {
+          "total": 11,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 27.27
+        },
+        "statements": {
+          "total": 12,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "branches": {
+          "total": 7,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 14.28
+        }
+      },
+      "src/stores/masterExamAttemptStore.js": {
+        "lines": {
+          "total": 173,
+          "covered": 144,
+          "skipped": 0,
+          "pct": 83.23
+        },
+        "functions": {
+          "total": 44,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 84.09
+        },
+        "statements": {
+          "total": 220,
+          "covered": 171,
+          "skipped": 0,
+          "pct": 77.72
+        },
+        "branches": {
+          "total": 200,
+          "covered": 135,
+          "skipped": 0,
+          "pct": 67.5
+        }
+      },
+      "src/stores/masterExamStore.js": {
+        "lines": {
+          "total": 89,
+          "covered": 84,
+          "skipped": 0,
+          "pct": 94.38
+        },
+        "functions": {
+          "total": 81,
+          "covered": 76,
+          "skipped": 0,
+          "pct": 93.82
+        },
+        "statements": {
+          "total": 121,
+          "covered": 115,
+          "skipped": 0,
+          "pct": 95.04
+        },
+        "branches": {
+          "total": 20,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 60
+        }
+      },
+      "src/stores/permissionStore.js": {
+        "lines": {
+          "total": 16,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 12.5
+        },
+        "functions": {
+          "total": 15,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 6.66
+        },
+        "statements": {
+          "total": 18,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 11.11
+        },
+        "branches": {
+          "total": 11,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/stores/preferencesStore.js": {
+        "lines": {
+          "total": 46,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 91.3
+        },
+        "functions": {
+          "total": 5,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 80
+        },
+        "statements": {
+          "total": 47,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 89.36
+        },
+        "branches": {
+          "total": 24,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 70.83
+        }
+      },
+      "src/stores/questionStore.js": {
+        "lines": {
+          "total": 156,
+          "covered": 125,
+          "skipped": 0,
+          "pct": 80.12
+        },
+        "functions": {
+          "total": 66,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 63.63
+        },
+        "statements": {
+          "total": 205,
+          "covered": 139,
+          "skipped": 0,
+          "pct": 67.8
+        },
+        "branches": {
+          "total": 104,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 47.11
+        }
+      },
+      "src/stores/reportFactory.js": {
+        "lines": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/stores/resetAllStores.js": {
+        "lines": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 23,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 95.65
+        },
+        "branches": {
+          "total": 13,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 84.61
+        }
+      },
+      "src/stores/storeHelpers.js": {
+        "lines": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/stores/studyPlannerStore.js": {
+        "lines": {
+          "total": 18,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 5.55
+        },
+        "functions": {
+          "total": 14,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 24,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 4.16
+        },
+        "branches": {
+          "total": 10,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/stores/tagStore.js": {
+        "lines": {
+          "total": 27,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 11.11
+        },
+        "functions": {
+          "total": 17,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 17.64
+        },
+        "statements": {
+          "total": 35,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 11.42
+        },
+        "branches": {
+          "total": 30,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/stores/testHistoryStore.js": {
+        "lines": {
+          "total": 10,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 10
+        },
+        "functions": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 11,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 9.09
+        },
+        "branches": {
+          "total": 16,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/stores/testSessionStore.js": {
+        "lines": {
+          "total": 235,
+          "covered": 165,
+          "skipped": 0,
+          "pct": 70.21
+        },
+        "functions": {
+          "total": 41,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 56.09
+        },
+        "statements": {
+          "total": 267,
+          "covered": 178,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 200,
+          "covered": 109,
+          "skipped": 0,
+          "pct": 54.5
+        }
+      },
+      "src/stores/tipStore.js": {
+        "lines": {
+          "total": 6,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 16.66
+        },
+        "functions": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 8,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 12.5
+        },
+        "branches": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/stores/toastStore.js": {
+        "lines": {
+          "total": 40,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 72.5
+        },
+        "functions": {
+          "total": 11,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 72.72
+        },
+        "statements": {
+          "total": 50,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 68
+        },
+        "branches": {
+          "total": 35,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 45.71
+        }
+      },
+      "src/stores/userStore.js": {
+        "lines": {
+          "total": 77,
+          "covered": 65,
+          "skipped": 0,
+          "pct": 84.41
+        },
+        "functions": {
+          "total": 30,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 73.33
+        },
+        "statements": {
+          "total": 99,
+          "covered": 77,
+          "skipped": 0,
+          "pct": 77.77
+        },
+        "branches": {
+          "total": 72,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 56.94
+        }
+      },
+      "src/stores/wrongAnswerStore.js": {
+        "lines": {
+          "total": 35,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 17.14
+        },
+        "functions": {
+          "total": 22,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 22.72
+        },
+        "statements": {
+          "total": 42,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 19.04
+        },
+        "branches": {
+          "total": 29,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/utils/authorRank.js": {
+        "lines": {
+          "total": 7,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 42.85
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 7,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 42.85
+        },
+        "branches": {
+          "total": 9,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/utils/avatar.js": {
+        "lines": {
+          "total": 5,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 1,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 6,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/utils/chartPalette.js": {
+        "lines": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 21,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 90.47
+        },
+        "branches": {
+          "total": 9,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 55.55
+        }
+      },
+      "src/utils/clipboard.js": {
+        "lines": {
+          "total": 25,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 26,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 14,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/utils/confidence.js": {
+        "lines": {
+          "total": 5,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 80
+        },
+        "functions": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        },
+        "statements": {
+          "total": 7,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 85.71
+        },
+        "branches": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/utils/constants.js": {
+        "lines": {
+          "total": 34,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 91.17
+        },
+        "functions": {
+          "total": 8,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 75
+        },
+        "statements": {
+          "total": 35,
+          "covered": 32,
+          "skipped": 0,
+          "pct": 91.42
+        },
+        "branches": {
+          "total": 17,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 70.58
+        }
+      },
+      "src/utils/dashboardTips.js": {
+        "lines": {
+          "total": 3,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "functions": {
+          "total": 1,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 3,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/utils/downloadFile.js": {
+        "lines": {
+          "total": 25,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 36
+        },
+        "functions": {
+          "total": 4,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 25
+        },
+        "statements": {
+          "total": 28,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 35.71
+        },
+        "branches": {
+          "total": 14,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 71.42
+        }
+      },
+      "src/utils/exportUrl.js": {
+        "lines": {
+          "total": 14,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 92.85
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 19,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 78.94
+        },
+        "branches": {
+          "total": 26,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 76.92
+        }
+      },
+      "src/utils/fileValidation.js": {
+        "lines": {
+          "total": 24,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 83.33
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 24,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 83.33
+        },
+        "branches": {
+          "total": 21,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 76.19
+        }
+      },
+      "src/utils/focus.js": {
+        "lines": {
+          "total": 13,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 7.69
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 21,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 4.76
+        },
+        "branches": {
+          "total": 21,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/utils/formatCellValue.js": {
+        "lines": {
+          "total": 7,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 1,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 11,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 20,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/utils/formatters.js": {
+        "lines": {
+          "total": 31,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 96.77
+        },
+        "functions": {
+          "total": 8,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 87.5
+        },
+        "statements": {
+          "total": 41,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 92.68
+        },
+        "branches": {
+          "total": 31,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 83.87
+        }
+      },
+      "src/utils/importParsers.js": {
+        "lines": {
+          "total": 108,
+          "covered": 106,
+          "skipped": 0,
+          "pct": 98.14
+        },
+        "functions": {
+          "total": 18,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 94.44
+        },
+        "statements": {
+          "total": 127,
+          "covered": 121,
+          "skipped": 0,
+          "pct": 95.27
+        },
+        "branches": {
+          "total": 90,
+          "covered": 80,
+          "skipped": 0,
+          "pct": 88.88
+        }
+      },
+      "src/utils/localizedQuestion.js": {
+        "lines": {
+          "total": 21,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 95.23
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 27,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 85.18
+        },
+        "branches": {
+          "total": 38,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 86.84
+        }
+      },
+      "src/utils/markdown.js": {
+        "lines": {
+          "total": 53,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 73.58
+        },
+        "functions": {
+          "total": 9,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 77.77
+        },
+        "statements": {
+          "total": 58,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 72.41
+        },
+        "branches": {
+          "total": 30,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 60
+        }
+      },
+      "src/utils/operationId.js": {
+        "lines": {
+          "total": 8,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 12.5
+        },
+        "functions": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        },
+        "statements": {
+          "total": 13,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 15.38
+        },
+        "branches": {
+          "total": 4,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 25
+        }
+      },
+      "src/utils/pendingQuestionWrites.js": {
+        "lines": {
+          "total": 15,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 93.33
+        },
+        "functions": {
+          "total": 4,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 75
+        },
+        "statements": {
+          "total": 20,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 75
+        },
+        "branches": {
+          "total": 24,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 75
+        }
+      },
+      "src/utils/questionValidators.js": {
+        "lines": {
+          "total": 31,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 67.74
+        },
+        "functions": {
+          "total": 7,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 71.42
+        },
+        "statements": {
+          "total": 34,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 67.64
+        },
+        "branches": {
+          "total": 29,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 75.86
+        }
+      },
+      "src/utils/richTextSanitizer.js": {
+        "lines": {
+          "total": 9,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 22.22
+        },
+        "functions": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 10,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 20
+        },
+        "branches": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/utils/roleDisplay.js": {
+        "lines": {
+          "total": 6,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "functions": {
+          "total": 3,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "statements": {
+          "total": 6,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "branches": {
+          "total": 8,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 12.5
+        }
+      },
+      "src/utils/serverConnectionFile.js": {
+        "lines": {
+          "total": 15,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 3,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 21,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 24,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/utils/timer.js": {
+        "lines": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 8,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 87.5
+        },
+        "branches": {
+          "total": 6,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 83.33
+        }
+      },
+      "src/utils/validators.js": {
+        "lines": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "exclusions": [
+      "src/main.js",
+      "src/router/index.js",
+      "src/**/*.d.ts",
+      "src/i18n/content/**",
+      "src/i18n/locales/**",
+      "src/**/*.config.js"
+    ]
+  }
+}

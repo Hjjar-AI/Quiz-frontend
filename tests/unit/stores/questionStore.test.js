@@ -19,10 +19,13 @@ vi.mock('@/services/questionService', () => ({
 
 import { questionService } from '@/services/questionService'
 import { useQuestionStore } from '@/stores/questionStore'
+import { bindPendingQuestionWrites } from '@/utils/pendingQuestionWrites'
 
 beforeEach(() => {
   setActivePinia(createPinia())
   vi.clearAllMocks()
+  localStorage.clear()
+  bindPendingQuestionWrites({ uuid: 'suite-user' })
 })
 
 describe('questionStore — fetchList', () => {

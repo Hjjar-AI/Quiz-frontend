@@ -38,23 +38,33 @@ describe('caseService contract', () => {
   })
 
   it('updateTitle PUTs the title', async () => {
-    await caseService.updateTitle('case-x', 'New title')
+    await caseService.updateTitle('case-x', 'New title', 3)
     expect(apiClient.put).toHaveBeenCalledWith('/questions/cases/case-x/', {
       title: 'New title',
+      expected_version: 3,
     })
   })
 
   it('updateStem POSTs to the singular case-stem URL', async () => {
     // The URL is singular `case/.../stem/` — see the note in
     // endpoints.js. This is the backend's registered path.
-    await caseService.updateStem('case-x', 'new vignette')
+    await caseService.updateStem('case-x', 'new vignette', 4)
     expect(apiClient.post).toHaveBeenCalledWith('/questions/case/case-x/stem/', {
       case_stem: 'new vignette',
+      expected_version: 4,
     })
   })
 
   it('delete DELETEs the case detail URL', async () => {
-    await caseService.delete('case-x')
-    expect(apiClient.delete).toHaveBeenCalledWith('/questions/cases/case-x/')
+    await caseService.delete('case-x', 7)
+    expect(apiClient.delete).toHaveBeenCalledWith('/questions/cases/case-x/', { params: { expected_version: 7 } })
+  })
+
+  it('saves optional translations independently with the case revision', async () => {
+    const translations = { ar: { stem: 'نص الحالة' } }
+    await caseService.updateTranslations('case-x', translations, 9)
+    expect(apiClient.put).toHaveBeenCalledWith('/questions/cases/case-x/', {
+      translations, expected_version: 9,
+    })
   })
 })

@@ -95,7 +95,7 @@ describe('userStore — remove', () => {
 
 describe('userStore — toggleActive', () => {
   it('flips the local is_active flag from the response', async () => {
-    adminService.toggleUser.mockResolvedValueOnce({ is_active: false })
+    adminService.toggleUser.mockResolvedValueOnce({ id: 1, is_active: false })
     const store = useUserStore()
     store.byId = { 1: { id: 1, is_active: true } }
     await store.toggleActive(1, 'pw')
@@ -176,12 +176,12 @@ describe('userStore — confirmToggle', () => {
   it('toggles when both the confirm and prompt succeed', async () => {
     confirmMock.mockResolvedValueOnce(true)
     promptMock.mockResolvedValueOnce('adminpw')
-    adminService.toggleUser.mockResolvedValueOnce({ is_active: false })
+    adminService.toggleUser.mockResolvedValueOnce({ id: 1, is_active: false })
     const store = useUserStore()
     store.byId = { 1: { id: 1, is_active: true } }
     const result = await store.confirmToggle({ id: 1, username: 'x', is_active: true })
     expect(result).toBe(true)
-    expect(adminService.toggleUser).toHaveBeenCalledWith(1, 'adminpw')
+    expect(adminService.toggleUser).toHaveBeenCalledWith(1, 'adminpw', false)
   })
 })
 

@@ -146,9 +146,9 @@ describe('questionService contract', () => {
   // ── Duplicate ──────────────────────────────────────────────────
 
   it('duplicate POSTs to the duplicate URL', async () => {
-    await questionService.duplicate(42)
+    await questionService.duplicate(42, 'operation-42')
 
-    expect(apiClient.post).toHaveBeenCalledWith('/questions/42/duplicate/')
+    expect(apiClient.post).toHaveBeenCalledWith('/questions/42/duplicate/', { operation_id: 'operation-42' })
   })
 
   // ── Ratings ────────────────────────────────────────────────────

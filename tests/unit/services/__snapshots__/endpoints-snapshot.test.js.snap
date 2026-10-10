@@ -82,6 +82,12 @@ exports[`ENDPOINTS snapshot > every endpoint in the registry 1`] = `
   {
     "arity": 1,
     "kind": "function",
+    "path": "ENDPOINTS.ADMIN.USER_SET_ACTIVE",
+    "value": "/auth/admin/users/1/active/",
+  },
+  {
+    "arity": 1,
+    "kind": "function",
     "path": "ENDPOINTS.ADMIN.USER_TOGGLE",
     "value": "/auth/admin/users/1/toggle/",
   },
@@ -625,6 +631,11 @@ exports[`ENDPOINTS snapshot > every endpoint in the registry 1`] = `
     "kind": "string",
     "path": "ENDPOINTS.QUESTIONS.RATINGS_BATCH",
     "value": "/questions/ratings/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.QUESTIONS.SOURCE_BOOKS",
+    "value": "/questions/source-books/",
   },
   {
     "kind": "string",

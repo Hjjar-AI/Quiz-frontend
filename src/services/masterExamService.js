@@ -40,7 +40,7 @@ export const masterExamService = {
     return apiClient.post(E.ADD_QUESTIONS(id), { question_ids: questionIds })
   },
   removeQuestion(id, questionId) {
-    return apiClient.post(E.REMOVE_QUESTION(id), { question_id: questionId, session_id:sessionId, expected_current_question_id:currentId })
+    return apiClient.post(E.REMOVE_QUESTION(id), { question_id: questionId })
   },
   reorder(id, questionIds) {
     return apiClient.post(E.REORDER(id), { question_ids: questionIds })
@@ -86,7 +86,7 @@ export const masterExamService = {
     })
   },
   gotoQuestion(id, questionId, sessionId, currentId) {
-    return apiClient.post(E.ATTEMPT_GOTO(id), { question_id: questionId })
+    return apiClient.post(E.ATTEMPT_GOTO(id), { question_id: questionId, session_id: sessionId, expected_current_question_id: currentId })
   },
   finishAttempt(id) {
     return apiClient.post(E.ATTEMPT_FINISH(id))

@@ -5,7 +5,7 @@ import { createPinia, setActivePinia } from 'pinia'
 vi.mock('@/services/bookmarkService', () => ({
   bookmarkService: {
     list: vi.fn(),
-    toggle: vi.fn(),
+    set: vi.fn(),
     count: vi.fn(),
   },
 }))
@@ -40,7 +40,7 @@ describe('bookmarkStore — fetchBookmarks', () => {
 
 describe('bookmarkStore — toggle (optimistic)', () => {
   it('adds optimistically and keeps the entry on success', async () => {
-    bookmarkService.toggle.mockResolvedValueOnce({ added: true })
+    bookmarkService.set.mockResolvedValueOnce({ added: true })
     const store = useBookmarkStore()
     store.bookmarkedIds = []
     store.count = 0
@@ -50,7 +50,7 @@ describe('bookmarkStore — toggle (optimistic)', () => {
   })
 
   it('removes optimistically and stays removed on success', async () => {
-    bookmarkService.toggle.mockResolvedValueOnce({ added: false })
+    bookmarkService.set.mockResolvedValueOnce({ added: false })
     const store = useBookmarkStore()
     store.bookmarkedIds = [42]
     store.count = 1
@@ -60,7 +60,7 @@ describe('bookmarkStore — toggle (optimistic)', () => {
   })
 
   it('reverts the optimistic add when the request fails', async () => {
-    bookmarkService.toggle.mockRejectedValueOnce({ message: 'fail' })
+    bookmarkService.set.mockRejectedValueOnce({ message: 'fail' })
     const store = useBookmarkStore()
     store.bookmarkedIds = []
     store.count = 0
@@ -70,7 +70,7 @@ describe('bookmarkStore — toggle (optimistic)', () => {
   })
 
   it('reverts the optimistic remove when the request fails', async () => {
-    bookmarkService.toggle.mockRejectedValueOnce({ message: 'fail' })
+    bookmarkService.set.mockRejectedValueOnce({ message: 'fail' })
     const store = useBookmarkStore()
     store.bookmarkedIds = [42]
     store.count = 1
@@ -83,7 +83,7 @@ describe('bookmarkStore — toggle (optimistic)', () => {
     // The store keeps a `_pendingToggles` map so two clicks on the
     // same card do not fire two requests.
     let resolve
-    bookmarkService.toggle.mockImplementationOnce(
+    bookmarkService.set.mockImplementationOnce(
       () => new Promise((r) => { resolve = r }),
     )
     const store = useBookmarkStore()
@@ -91,6 +91,6 @@ describe('bookmarkStore — toggle (optimistic)', () => {
     const p2 = store.toggle(42)
     resolve({ added: true })
     await Promise.all([p1, p2])
-    expect(bookmarkService.toggle).toHaveBeenCalledTimes(1)
+    expect(bookmarkService.set).toHaveBeenCalledTimes(1)
   })
 })

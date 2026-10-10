@@ -10,6 +10,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  useToastStore().reset()
   vi.useRealTimers()
 })
 
@@ -80,12 +81,13 @@ describe('toastStore — removeToast', () => {
 })
 
 describe('toastStore — reset', () => {
-  it('clears all toasts and resets the counter', () => {
+  it('clears all toasts while preserving monotonic identities', () => {
     const store = useToastStore()
     store.addToast('X', 'info', 0)
     store.addToast('Y', 'info', 0)
     store.reset()
     expect(store.toasts).toEqual([])
-    expect(store.nextId).toBe(1)
+    expect(store.nextId).toBe(3)
+    expect(store.addToast('New', 'info', 0)).toBe(3)
   })
 })

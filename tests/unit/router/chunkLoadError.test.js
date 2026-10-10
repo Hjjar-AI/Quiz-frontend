@@ -77,7 +77,7 @@ describe('createChunkLoadErrorComponent — rendering', () => {
       global: { plugins: [makeI18n()] },
     })
     expect(wrapper.find('i.bi-wifi-off').exists()).toBe(true)
-    expect(wrapper.find('h2').text().length).toBeGreaterThan(0)
+    expect(wrapper.find('h1').text().length).toBeGreaterThan(0)
     expect(wrapper.find('p').text().length).toBeGreaterThan(0)
     wrapper.unmount()
   })

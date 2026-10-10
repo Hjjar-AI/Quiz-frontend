@@ -44,6 +44,13 @@ describe('adminService — users', () => {
     })
   })
 
+  it.each([true, false])('sets desired account state %s through the dedicated route', async (active) => {
+    await adminService.toggleUser(7, 'pw', active)
+    expect(apiClient.post).toHaveBeenCalledWith('/auth/admin/users/7/active/', {
+      admin_password: 'pw', is_active: active,
+    })
+  })
+
   it('resetPasswordWithAdmin POSTs both passwords', async () => {
     await adminService.resetPasswordWithAdmin(7, 'adminpw', 'newpw')
     expect(apiClient.post).toHaveBeenCalledWith('/auth/admin/users/7/reset-password/', {
@@ -143,6 +150,7 @@ describe('adminService — database', () => {
     await adminService.exportPdf(options)
 
     expect(apiClient.post).toHaveBeenCalledWith(expect.stringContaining('/export/pdf/'), options, {
+      timeout: 120000,
       responseType: 'blob',
       rawResponse: true,
     })
@@ -178,6 +186,7 @@ describe('adminService — state envelope', () => {
 
     expect(apiClient.get).toHaveBeenCalledWith('/database/export/state/', {
       params: { include_images: 'false', verified_only: 'true' },
+      timeout: 120000,
       responseType: 'blob',
       rawResponse: true,
     })
@@ -188,6 +197,7 @@ describe('adminService — state envelope', () => {
 
     expect(apiClient.get).toHaveBeenCalledWith('/database/export/state/', {
       params: { format: 'xlsx' },
+      timeout: 120000,
       responseType: 'blob',
       rawResponse: true,
     })
@@ -205,6 +215,7 @@ describe('adminService — state envelope', () => {
 
     expect(apiClient.get).toHaveBeenCalledWith('/database/export/state/', {
       params: { difficulty: 'hard', category_ids: '4,7' },
+      timeout: 120000,
       responseType: 'blob',
       rawResponse: true,
     })

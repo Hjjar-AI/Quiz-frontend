@@ -116,10 +116,10 @@ describe('useLocaleFormatters — locale propagation', () => {
     w.unmount()
   })
 
-  it('formatDate returns an empty string for invalid input', () => {
+  it('formatDate returns an em dash for invalid input', () => {
     const w = makeWrapper('en')
-    expect(w.vm.formatDate(null)).toBe('')
-    expect(w.vm.formatDate('not-a-date')).toBe('')
+    expect(w.vm.formatDate(null)).toBe('—')
+    expect(w.vm.formatDate('not-a-date')).toBe('—')
     w.unmount()
   })
 

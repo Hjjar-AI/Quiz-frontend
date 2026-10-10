@@ -24,10 +24,12 @@
 import { defineConfig, mergeConfig } from 'vitest/config'
 import viteConfig from './vite.config.js'
 
-export default mergeConfig(
-  viteConfig,
+export default defineConfig((env) => mergeConfig(
+  viteConfig(env),
   defineConfig({
     test: {
+      // Bound concurrent DOM environments; CLI --maxWorkers can override this.
+      maxWorkers: 2,
       // happy-dom is a Node-side DOM implementation. It is faster
       // to boot than jsdom and implements every API this app's
       // components touch during import: `document`, `window`,
@@ -50,7 +52,7 @@ export default mergeConfig(
 
       coverage: {
         provider: 'v8',
-        reporter: ['text', 'html', 'lcov'],
+        reporter: ['text', 'html', 'lcov', 'json-summary'],
         include: ['src/**/*.{js,vue}'],
         exclude: [
           'src/**/*.d.ts',
@@ -68,4 +70,4 @@ export default mergeConfig(
       },
     },
   }),
-)
+))

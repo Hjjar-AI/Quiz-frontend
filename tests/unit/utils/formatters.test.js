@@ -42,10 +42,10 @@ beforeEach(() => {
 })
 
 describe('formatNumber', () => {
-  it('returns 0 for null, undefined, and NaN', () => {
-    expect(formatNumber(null)).toBe('0')
-    expect(formatNumber(undefined)).toBe('0')
-    expect(formatNumber(NaN)).toBe('0')
+  it('returns an em dash for null, undefined and NaN', () => {
+    expect(formatNumber(null)).toBe('—')
+    expect(formatNumber(undefined)).toBe('—')
+    expect(formatNumber(NaN)).toBe('—')
   })
 
   it('formats an integer', () => {
@@ -59,13 +59,13 @@ describe('formatNumber', () => {
 })
 
 describe('formatDate', () => {
-  it('returns an empty string for a falsy input', () => {
-    expect(formatDate('')).toBe('')
-    expect(formatDate(null)).toBe('')
+  it('returns an em dash for a falsy input', () => {
+    expect(formatDate('')).toBe('—')
+    expect(formatDate(null)).toBe('—')
   })
 
-  it('returns an empty string for an invalid date', () => {
-    expect(formatDate('not-a-date')).toBe('')
+  it('returns an em dash for an invalid date', () => {
+    expect(formatDate('not-a-date')).toBe('—')
   })
 
   it('formats a valid date with two-digit month and day', () => {
@@ -117,7 +117,7 @@ describe('formatDateTime', () => {
 })
 
 describe('truncate', () => {
-  it('returns an empty string for falsy input', () => {
+  it('returns an em dash for falsy input', () => {
     expect(truncate('')).toBe('')
     expect(truncate(null)).toBe('')
   })

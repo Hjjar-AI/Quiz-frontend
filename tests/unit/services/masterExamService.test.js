@@ -117,7 +117,7 @@ describe('masterExamService — attempt lifecycle', () => {
 
   it('attemptStatus GETs the status URL', async () => {
     await masterExamService.attemptStatus(3)
-    expect(apiClient.get).toHaveBeenCalledWith('/exam/master/3/attempt/status/')
+    expect(apiClient.get).toHaveBeenCalledWith('/exam/master/3/attempt/status/', {})
   })
 
   it('attemptQuestion GETs the question URL', async () => {
@@ -130,18 +130,24 @@ describe('masterExamService — attempt lifecycle', () => {
       questionId: 42,
       answer: 2,
       confidence: true,
+      expectedSlot: null,
+      sessionId: 'sess-3',
     })
     expect(apiClient.post).toHaveBeenCalledWith('/exam/master/3/attempt/answer/', {
       question_id: 42,
       answer: 2,
       confidence: true,
+      expected_slot: null,
+      session_id: 'sess-3',
     })
   })
 
-  it('gotoQuestion POSTs question_id', async () => {
-    await masterExamService.gotoQuestion(3, 42)
+  it('gotoQuestion POSTs question_id and session/navigation baselines', async () => {
+    await masterExamService.gotoQuestion(3, 42, 'sess-3', 41)
     expect(apiClient.post).toHaveBeenCalledWith('/exam/master/3/attempt/goto/', {
       question_id: 42,
+      session_id: 'sess-3',
+      expected_current_question_id: 41,
     })
   })
 

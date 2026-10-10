@@ -60,6 +60,7 @@ function setupActiveAttempt(store, { currentQuestionId = 42 } = {}) {
   store.isMakeup = false
   store.questionIds = [42, 43, 44]
   store.currentQuestionId = currentQuestionId
+  store.navigationBaseline = currentQuestionId
   store.answers = {}
   store.deadlineAt = null
 }
@@ -151,6 +152,7 @@ describe('masterExamAttemptStore — submitAnswer (happy path)', () => {
   it('stores the answer and advances the current question', async () => {
     masterExamService.submitAnswer.mockResolvedValueOnce({
       success: true,
+      saved_slot: { answer: 2, confidence: 3 },
       current_question_id: 43,
     })
     const store = useMasterExamAttemptStore()
@@ -185,6 +187,8 @@ describe('masterExamAttemptStore — submitAnswer (happy path)', () => {
       questionId: 42,
       answer: 3,
       confidence: 2,
+      expectedSlot: null,
+      sessionId: 'sess-1',
     })
   })
 })
@@ -425,7 +429,7 @@ describe('masterExamAttemptStore — goto', () => {
     await store.goto(44)
 
     expect(store.currentQuestionId).toBe(44)
-    expect(masterExamService.gotoQuestion).toHaveBeenCalledWith(1, 44)
+    expect(masterExamService.gotoQuestion).toHaveBeenCalledWith(1, 44, 'sess-1', 42)
   })
 
   it('switches local state in preview mode without an API call', async () => {
@@ -493,6 +497,8 @@ describe('masterExamAttemptStore — pollStatus', () => {
   it('updates serverOffsetMs from the response', async () => {
     const serverNow = new Date(Date.now() + 5000).toISOString()
     masterExamService.attemptStatus.mockResolvedValueOnce({
+      session_id: 'sess-1',
+      attempt_id: 10,
       server_now: serverNow,
       question_ids: [1, 2, 3],
       current_question_id: 2,
@@ -510,6 +516,8 @@ describe('masterExamAttemptStore — pollStatus', () => {
 
   it('marks the attempt complete when the server reports is_complete', async () => {
     masterExamService.attemptStatus.mockResolvedValueOnce({
+      session_id: 'sess-1',
+      attempt_id: 10,
       server_now: new Date().toISOString(),
       is_complete: true,
     })
@@ -524,6 +532,8 @@ describe('masterExamAttemptStore — pollStatus', () => {
   it('does not overwrite a locally-set finishedAt', async () => {
     const existing = new Date('2026-01-01T00:00:00Z')
     masterExamService.attemptStatus.mockResolvedValueOnce({
+      session_id: 'sess-1',
+      attempt_id: 10,
       server_now: new Date().toISOString(),
       is_complete: true,
     })
@@ -549,6 +559,8 @@ describe('masterExamAttemptStore — pollStatus', () => {
 
   it('syncs the question list when the server sends one', async () => {
     masterExamService.attemptStatus.mockResolvedValueOnce({
+      session_id: 'sess-1',
+      attempt_id: 10,
       server_now: new Date().toISOString(),
       question_ids: [5, 6, 7],
     })

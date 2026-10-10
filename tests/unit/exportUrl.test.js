@@ -36,7 +36,7 @@ describe('buildExportUrl', () => {
     expect(parsed.searchParams.has('locale')).toBe(false)
   })
 
-  it('normalizes unknown PDF themes to Stone', () => {
+  it('normalizes unknown PDF themes to Iris', () => {
     const url = buildExportUrl('/api/export/pdf/?verified=true', {
       format: 'pdf',
       theme: 'unknown',
@@ -44,6 +44,6 @@ describe('buildExportUrl', () => {
 
     const parsed = new URL(url, 'https://example.test')
     expect(parsed.searchParams.get('verified')).toBe('true')
-    expect(parsed.searchParams.get('theme')).toBe('stone')
+    expect(parsed.searchParams.get('theme')).toBe('iris')
   })
 })

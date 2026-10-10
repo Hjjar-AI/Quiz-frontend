@@ -16,14 +16,15 @@ beforeEach(() => {
   vi.useFakeTimers()
   localStorage.clear()
   prefersDark = false
-  window.matchMedia = vi.fn(() => ({
-    matches: prefersDark,
+  document.documentElement.style.setProperty('--motion-theme-duration', '350ms')
+  window.matchMedia = vi.fn((query) => ({
+    matches: query === '(prefers-color-scheme: dark)' && prefersDark,
     addEventListener: vi.fn((_event, listener) => {
       systemThemeListener = listener
     }),
   }))
   // Reset the DOM to a known baseline. `loadSavedTheme` with an
-  // empty storage defaults `currentTheme` to Stone and writes it on
+  // empty storage defaults `currentTheme` to Iris and writes it on
   // the html element.
   loadSavedTheme()
 })
@@ -45,10 +46,10 @@ describe('useTheme — applyTheme', () => {
     expect(storageService.getItem('theme')).toBe('blossom')
   })
 
-  it('falls back to Stone for an unknown theme', () => {
+  it('falls back to Iris for an unknown theme', () => {
     const { currentTheme } = useTheme()
     applyTheme('not-a-real-theme')
-    expect(currentTheme.value).toBe('stone')
+    expect(currentTheme.value).toBe('iris')
   })
 
   it('resolves Auto from the system preference while persisting Auto', () => {
@@ -96,17 +97,17 @@ describe('useTheme — loadSavedTheme', () => {
     expect(storageService.getItem('theme')).toBe('lagoon')
   })
 
-  it('falls back to Stone when the stored value is not a known theme', () => {
+  it('falls back to Iris when the stored value is not a known theme', () => {
     storageService.setItem('theme', 'pink')
     const { currentTheme } = useTheme()
     loadSavedTheme()
-    expect(currentTheme.value).toBe('stone')
+    expect(currentTheme.value).toBe('iris')
   })
 
-  it('falls back to Stone when storage is empty', () => {
+  it('falls back to Iris when storage is empty', () => {
     const { currentTheme } = useTheme()
     loadSavedTheme()
-    expect(currentTheme.value).toBe('stone')
+    expect(currentTheme.value).toBe('iris')
   })
 })
 
@@ -132,6 +133,7 @@ describe('useTheme — getters', () => {
         'amber',
         'blossom',
         'contrast',
+        'ruby',
         'dark',
         'ink',
         'iris',
