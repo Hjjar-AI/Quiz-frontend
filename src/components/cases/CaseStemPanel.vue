@@ -21,7 +21,7 @@
   <div class="case-stem-panel">
     <div class="case-stem-panel__header">
       <i class="bi bi-journal-medical" aria-hidden="true"></i>
-      <span>{{ t('tests.caseStemTitle') }}</span>
+      <span>{{ title || t('tests.caseStemTitle') }}</span>
     </div>
     <div class="case-stem-panel__body">
       <BaseMarkdown :text="stem" />
@@ -38,5 +38,6 @@ defineProps({
   // The shared vignette. Callers should guard on `v-if` before
   // rendering this component, so `stem` is expected non-empty.
   stem: { type: String, required: true },
+  title: { type: String, default: '' },
 })
 </script>

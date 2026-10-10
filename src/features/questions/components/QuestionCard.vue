@@ -13,10 +13,10 @@
       </div>
     </Transition>
 
-    <details v-if="question.case?.stem" class="question-card__case" open>
+    <details v-if="displayQuestion.case?.stem || displayQuestion.case?.title" class="question-card__case" open>
       <summary class="question-card__case-summary">
         <i class="bi bi-journal-medical" aria-hidden="true"></i>
-        <span>{{ t('questions.caseClinicalTitle') }}</span>
+        <span>{{ displayQuestion.case.title || t('questions.caseClinicalTitle') }}</span>
         <span v-if="question.case.key" class="question-card__case-group">
           {{ question.case.key }}
         </span>
@@ -25,7 +25,7 @@
         </span>
       </summary>
       <div class="question-card__case-body">
-        <BaseMarkdown :text="question.case.stem" />
+        <BaseMarkdown :text="displayQuestion.case.stem || ''" />
       </div>
     </details>
 

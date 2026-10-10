@@ -41,6 +41,10 @@ export const caseService = {
    * @param {string} key
    * @param {string|null} title
    */
+  updateTranslations(key, translations, version) {
+    return apiClient.put(ENDPOINTS.QUESTIONS.CASES_DETAIL(key), { translations, expected_version: version })
+  },
+
   updateTitle(key, title, version) {
     return apiClient.put(ENDPOINTS.QUESTIONS.CASES_DETAIL(key), { title, expected_version: version })
   },

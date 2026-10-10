@@ -242,6 +242,7 @@ function exportQuestion() {
     choices: q.choices || [],
     correct_answer: q.correct_answer,
     explanation: q.explanation || '',
+    translations: q.translations || {},
     source: q.source || '',
     tags: Array.isArray(q.tags) ? q.tags.join(',') : (q.tags || ''),
     difficulty: q.difficulty || '',
@@ -252,6 +253,7 @@ function exportQuestion() {
           key: q.case.key,
           title: q.case.title,
           stem: q.case.stem,
+          translations: q.case.translations || {},
         }
       : null,
     case_order: q.case_order ?? null,

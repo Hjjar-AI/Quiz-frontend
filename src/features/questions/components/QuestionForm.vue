@@ -27,6 +27,7 @@
           <div>
             <BaseInput
               v-model.trim="form.case_key"
+              :disabled="caseEditorLocked"
               :label="t('questions.caseKeyLabel')"
               :hint="t('questions.caseKeyHint')"
               list="case-key-suggestions"
@@ -54,6 +55,12 @@
           <i class="bi bi-info-circle" aria-hidden="true"></i>
           {{ t('questions.caseStemHint') }}
         </p>
+        <CaseTranslationEditor
+          v-if="form.case_key && authStore.canAny('questions.edit_case_stem_any', 'questions.edit_case_stem_own')"
+          :case-key="form.case_key"
+          :disabled="isLoading || isSubmitting || saveBlocked"
+          @blocking="caseEditorLocked = $event"
+        />
       </details>
 
       <MarkdownEditor
@@ -332,7 +339,7 @@
       </p>
 
       <div class="form-actions">
-        <BaseButton type="submit" variant="primary" :loading="isLoading || isSubmitting">{{
+        <BaseButton type="submit" variant="primary" :disabled="caseEditorLocked" :loading="isLoading || isSubmitting">{{
           submitLabel
         }}</BaseButton>
         <BaseButton type="button" variant="secondary" @click="router.push('/questions')">{{
@@ -349,6 +356,8 @@ import { reactive, ref, onMounted, computed, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useConfigStore } from '@/stores/configStore'
 import { useCaseStore } from '@/stores/caseStore'
+import CaseTranslationEditor from '@/components/cases/CaseTranslationEditor.vue'
+import { useAuthStore } from '@/stores/authStore'
 import MarkdownEditor from '@/components/markdown/MarkdownEditor.vue'
 import CategorySelect from './CategorySelect.vue'
 import DifficultySelector from './DifficultySelector.vue'
@@ -384,6 +393,8 @@ const { isSubmitting, guard } = useSubmitGuard()
 const { notify } = useNotify()
 const configStore = useConfigStore()
 const caseStore = useCaseStore()
+const authStore = useAuthStore()
+const caseEditorLocked = ref(false)
 const knowledgeStore = useKnowledgeStore()
 
 const isLoading = computed(() => Boolean(props.loading))
@@ -443,7 +454,7 @@ const form = reactive({
   case_stem: '',
 })
 
-const { isDirty, markClean, allowNextNavigation } = useUnsavedChanges(
+const { isDirty: questionDirty, markClean, allowNextNavigation } = useUnsavedChanges(
   () => ({
     form,
     pendingImageFile: pendingImageFile.value,
@@ -452,6 +463,7 @@ const { isDirty, markClean, allowNextNavigation } = useUnsavedChanges(
   { message: () => t('common.unsavedChanges') },
 )
 
+const isDirty = computed(() => questionDirty.value || caseEditorLocked.value)
 defineExpose({ isDirty, markClean, allowNextNavigation })
 
 const selectedKnowledgeObject = computed(() =>
@@ -720,6 +732,7 @@ function clearImage() {
 }
 
 async function handleSubmit() {
+  if (caseEditorLocked.value) return
   touchChoices()
   if (validationErrors.choices || validationErrors.answer) {
     const seen = new Set()

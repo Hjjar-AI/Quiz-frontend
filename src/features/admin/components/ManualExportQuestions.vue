@@ -23,11 +23,11 @@
         :description="questionText(question)"
         :level="5"
       >
-        <details v-if="question.case?.stem || question.image_url || question.choices?.length">
+        <details v-if="displayQuestion(question).case?.stem || question.image_url || question.choices?.length">
           <summary>{{ t('admin.database.pdfQuestionPreview') }}</summary>
-          <BidiText v-if="question.case?.stem" as="p" :text="question.case.stem" />
+          <BidiText v-if="displayQuestion(question).case?.stem" as="p" :text="displayQuestion(question).case.stem" />
           <img v-if="question.image_url" :src="question.image_url" :alt="t('admin.database.pdfQuestionImage')" class="manual-export-questions__image">
-          <ol><li v-for="(choice, index) in question.choices || []" :key="index"><BidiText :text="choice" /></li></ol>
+          <ol><li v-for="(choice, index) in displayQuestion(question).choices || []" :key="index"><BidiText :text="choice" /></li></ol>
         </details>
         <template #actions>
           <BaseCheckbox
@@ -68,6 +68,7 @@ import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import BasePagination from '@/components/base/BasePagination.vue'
 import { questionService } from '@/services/questionService'
+import { localizedQuestion } from '@/utils/localizedQuestion'
 import { useLocaleFormatters } from '@/i18n/helpers/format'
 
 const props = defineProps({ modelValue: { type: Array, default: () => [] } })
@@ -83,8 +84,10 @@ const totalPages = ref(1)
 const selectedIds = computed(() => new Set(props.modelValue.map(question => question.id)))
 let generation = 0
 
+function displayQuestion(question) { return localizedQuestion(question, locale.value) }
+
 function questionText(question) {
-  return question.translations?.[locale.value]?.question || question.question
+  return displayQuestion(question).question
 }
 
 function changeSearch(value) {

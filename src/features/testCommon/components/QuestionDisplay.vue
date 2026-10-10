@@ -1,7 +1,7 @@
 <!-- frontend/src/features/testCommon/components/QuestionDisplay.vue -->
 <template>
   <div>
-    <CaseStemPanel v-if="question.case?.stem" :stem="question.case.stem" />
+    <CaseStemPanel v-if="displayQuestion.case?.stem || displayQuestion.case?.title" :stem="displayQuestion.case.stem || ''" :title="displayQuestion.case.title || ''" />
 
     <BaseCard
       class="question-card"

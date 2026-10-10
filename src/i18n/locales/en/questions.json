@@ -202,6 +202,17 @@
     "restoredPendingSave": "A previous save is pending review. Check it before creating another question. Draft text and images are not retained after restart.",
     "acknowledgePendingSave": "Acknowledge missing receipt",
     "openRecoveredSave": "Open recovered question",
-    "acknowledgePendingConfirm": "No receipt was found. A request may still be in progress. Discard local recovery and allow a new question?"
+    "acknowledgePendingConfirm": "No receipt was found. A request may still be in progress. Discard local recovery and allow a new question?",
+    "caseTranslations": "Case translations (optional)",
+    "caseTranslationsHint": "These translations are saved separately and apply to every question linked to this case. Blank fields show the original text.",
+    "caseTranslationTitle": "Translated case title",
+    "caseTranslationsSave": "Save case translations",
+    "caseTranslationsSaved": "Case translations saved.",
+    "caseTranslationsReview": "Review the saved case before continuing. Refresh, then keep your draft or use the saved translation.",
+    "caseTranslationsServer": "Saved translation",
+    "caseTranslationsDenied": "You do not have permission to edit this shared case.",
+    "caseTranslationsCreateFirst": "Save the question to create this case first, then reopen its translation section.",
+    "caseTranslationTooLong": "The translated title allows 200 characters and the case text allows 3000.",
+    "caseTranslationsNotConfirmed": "The server did not confirm the case translation. Refresh to review the saved case. A matching backend is required."
   }
 }
