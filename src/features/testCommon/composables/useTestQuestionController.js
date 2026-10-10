@@ -10,6 +10,7 @@ import { useNotify } from '@/composables/useNotify'
 import { useDialog } from '@/composables/useDialog'
 import { useSound } from '@/composables/useSound'
 import { i18n } from '@/i18n'
+import { normalizeConfidenceScore } from '@/utils/confidence'
 
 export function useTestQuestionController(modeRef) {
   const router = useRouter()
@@ -27,11 +28,12 @@ export function useTestQuestionController(modeRef) {
   const selectedAnswer = ref(null)
   const startTime = ref(null)
   const swipeContainer = ref(null)
-  const confidence = ref(null)
+  const confidence = ref(3)
+  const reflectionReason = ref('unknown')
+  const reflectionSaved = ref(false)
   const preAnswer = ref('')
   const choicesRevealed = ref(false)
   const showReflectionPrompt = ref(false)
-  const awaitingReflection = ref(false)
   const interactionBusy = ref(false)
   const questionLoadFailed = ref(false)
   const tickedRemaining = ref(null)
@@ -64,8 +66,8 @@ export function useTestQuestionController(modeRef) {
 
   const confidenceForCurrent = computed(() => {
     const stored = store.confidence[store.currentIndex]
-    if (stored !== undefined) return stored
-    return mode() === 'exam' ? 3 : null
+    if (stored !== undefined) return normalizeConfidenceScore(stored)
+    return 3
   })
 
   const needsConfidence = computed(() => (
@@ -75,12 +77,12 @@ export function useTestQuestionController(modeRef) {
     && confidence.value === null
   ))
 
+  const pauseDisabled = computed(() => (
+    submitting.value || interactionBusy.value || finishing.value || needsConfidence.value
+  ))
   const navigationDisabled = computed(() => (
-    submitting.value
-    || interactionBusy.value
-    || finishing.value
-    || awaitingReflection.value
-    || needsConfidence.value
+    pauseDisabled.value
+    || (mode() === 'recall' && (!choicesRevealed.value || selectedAnswer.value == null))
   ))
   const answerControlsBusy = computed(() => (
     submitting.value || interactionBusy.value || finishing.value
@@ -126,7 +128,7 @@ export function useTestQuestionController(modeRef) {
 
   function maybeScheduleAdvance(questionId, delay = 400) {
     if (!preferencesStore.autoAdvance) return
-    if (awaitingReflection.value || needsConfidence.value) return
+    if (needsConfidence.value) return
     scheduleAdvance(questionId, delay)
   }
 
@@ -151,11 +153,12 @@ export function useTestQuestionController(modeRef) {
 
     question.value = response.question
     selectedAnswer.value = store.answers[store.currentIndex] || null
-    confidence.value = response.saved_confidence ?? confidenceForCurrent.value
+    confidence.value = normalizeConfidenceScore(response.saved_confidence ?? confidenceForCurrent.value)
     preAnswer.value = response.saved_pre_answer || ''
     choicesRevealed.value = mode() !== 'recall' || !response.question?.choices_hidden
-    showReflectionPrompt.value = false
-    awaitingReflection.value = false
+    showReflectionPrompt.value = (mode() === 'study' || mode() === 'recall') && response.saved_is_correct === false
+    reflectionReason.value = response.saved_error_reason || 'unknown'
+    reflectionSaved.value = Boolean(response.saved_error_reason)
 
     const baseMs = store.startedAt ? new Date(store.startedAt).getTime() : Date.now()
     const accumulatedMs = (store.accumulatedTime || 0) * 1000
@@ -185,11 +188,12 @@ export function useTestQuestionController(modeRef) {
   }
 
   function handleAnswer(answer) {
-    if (answerControlsBusy.value || awaitingReflection.value) return
+    if (answerControlsBusy.value) return
     if ((mode() === 'study' || mode() === 'recall') && store.hasAnswer(store.currentIndex)) return
     selectedAnswer.value = answer
     showReflectionPrompt.value = false
-    awaitingReflection.value = false
+    reflectionReason.value = 'unknown'
+    reflectionSaved.value = false
     if (preferencesStore.soundEffects) playClick()
     saveAnswer()
   }
@@ -215,7 +219,6 @@ export function useTestQuestionController(modeRef) {
     if (isModalOpen.value) return
     advanceTimer = setTimeout(() => {
       advanceTimer = null
-      if (awaitingReflection.value) return
       if (store.currentQuestionId !== questionId) return
       if (store.currentIndex < store.totalQuestions - 1) goNext()
       else finish()
@@ -223,6 +226,7 @@ export function useTestQuestionController(modeRef) {
   }
 
   async function handleReflection(reason) {
+    if (reflectionSaved.value) return
     if (selectedAnswer.value === null || selectedAnswer.value === undefined) {
       return
     }
@@ -239,8 +243,8 @@ export function useTestQuestionController(modeRef) {
       interactionBusy.value = false
     }
 
-    awaitingReflection.value = false
-    showReflectionPrompt.value = false
+    reflectionReason.value = reason
+    reflectionSaved.value = true
     maybeScheduleAdvance(submittedQuestionId)
   }
 
@@ -268,13 +272,12 @@ export function useTestQuestionController(modeRef) {
       mergeFeedbackTranslations(response.feedback_translations)
       if (response.is_correct === false) {
         showReflectionPrompt.value = true
-        awaitingReflection.value = true
+        reflectionReason.value = 'unknown'
       }
     }
 
     if (
       preferencesStore.autoAdvance &&
-      !awaitingReflection.value &&
       !needsConfidence.value &&
       selectedAnswer.value === submittedValue &&
       store.currentQuestionId === submittedQuestionId
@@ -293,7 +296,7 @@ export function useTestQuestionController(modeRef) {
 
     interactionBusy.value = true
     try {
-      await track(submitAnswer(selectedAnswer.value, 'next', null, confidence.value))
+      await track(submitAnswer(selectedAnswer.value, 'next', null, confidence.value, showReflectionPrompt.value ? reflectionReason.value : null))
       await loadQuestion()
     } catch (error) {
       handleSubmissionFailure(error, 'tests.answerSaveFailed')
@@ -308,7 +311,7 @@ export function useTestQuestionController(modeRef) {
     clearAdvanceTimer()
     interactionBusy.value = true
     try {
-      await track(submitAnswer(null, 'previous'))
+      await track(submitAnswer(showReflectionPrompt.value ? selectedAnswer.value : null, 'previous', null, confidence.value, showReflectionPrompt.value ? reflectionReason.value : null))
       await loadQuestion()
     } catch (error) {
       handleSubmissionFailure(error, 'tests.navigationFailed')
@@ -323,7 +326,7 @@ export function useTestQuestionController(modeRef) {
     clearAdvanceTimer()
     interactionBusy.value = true
     try {
-      await track(submitAnswer(selectedAnswer.value, 'goto', index, confidence.value))
+      await track(submitAnswer(selectedAnswer.value, 'goto', index, confidence.value, showReflectionPrompt.value ? reflectionReason.value : null))
       await loadQuestion()
     } catch (error) {
       handleSubmissionFailure(error, 'tests.navigationFailed')
@@ -334,10 +337,22 @@ export function useTestQuestionController(modeRef) {
   }
 
   async function pauseSession() {
-    if (navigationDisabled.value) return
-    if (!(await confirm(t('tests.pauseConfirm')))) return
-    const result = await store.pause()
-    if (result) router.push(`/${mode()}`)
+    if (pauseDisabled.value) return
+    if (!(await confirm(t('tests.pauseConfirm'))) || pauseDisabled.value) return
+    interactionBusy.value = true
+    clearAdvanceTimer()
+    try {
+      if (showReflectionPrompt.value && !reflectionSaved.value) {
+        await track(submitAnswer(selectedAnswer.value, 'same', null, confidence.value, reflectionReason.value))
+        reflectionSaved.value = true
+      }
+      const result = await store.pause()
+      if (result) router.push(`/${mode()}`)
+    } catch (error) {
+      handleSubmissionFailure(error, 'tests.reflectionSaveFailed')
+    } finally {
+      interactionBusy.value = false
+    }
   }
 
   async function finish({ forced = false } = {}) {
@@ -354,6 +369,10 @@ export function useTestQuestionController(modeRef) {
         pendingSubmission = null
       }
 
+      if (!forced && showReflectionPrompt.value && !reflectionSaved.value) {
+        await track(submitAnswer(selectedAnswer.value, 'same', null, confidence.value, reflectionReason.value))
+        reflectionSaved.value = true
+      }
       const result = await store.finish({ forced })
       if (result) router.push(`/${mode()}/results`)
     } catch (error) {
@@ -367,7 +386,7 @@ export function useTestQuestionController(modeRef) {
     onNext: goNext,
     onPrevious: goPrevious,
     onAnswer: handleAnswer,
-    enabled: () => !navigationDisabled.value,
+    enabled: () => !answerControlsBusy.value && (mode() !== 'recall' || choicesRevealed.value),
   })
 
   watch(tickedRemaining, (remaining) => {
@@ -400,12 +419,15 @@ export function useTestQuestionController(modeRef) {
     question,
     selectedAnswer,
     confidence,
+    reflectionReason,
+    reflectionSaved,
     startTime,
     swipeContainer,
     showReflectionPrompt,
     questionLoadFailed,
     submitting,
     navigationDisabled,
+    pauseDisabled,
     answerControlsBusy,
     examTotalSeconds,
     isCritical,

@@ -2,6 +2,8 @@
 
 Theme definitions: `src/assets/tokens.css`; components consume semantic tokens, never theme-name branches/local hex palettes.
 
+Iris is the default for missing/invalid theme preferences and Auto's light palette. Pre-paint markup/bootstrap and the runtime registry agree. Existing explicit themes and the legacy `light` → Stone alias remain selectable/preserved; PDF palettes are unchanged.
+
 ## Palette rules
 
 - Define the five semantic seeds: primary, success, danger, warning, and info. Their light, dark, glow, border, and selected variants are derived by the shared `:root[data-theme]` rule.

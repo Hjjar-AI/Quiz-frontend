@@ -94,56 +94,35 @@
       >{{ t('tests.submitAnswer') }}</BaseButton>
 
       <div v-if="requireAnswerConfirmation ? initialAnswer : selectedAnswer" class="confidence-row confidence-score">
-        <span :id="`${groupId}-confidence-label`" class="confidence-score__label">{{ t('tests.confidencePrompt') }}</span>
-        <div class="confidence-score__options" role="radiogroup" :aria-labelledby="`${groupId}-confidence-label`">
-          <label
-            v-for="option in confidenceOptions"
-            :key="option.value"
-            class="confidence-score__option"
-            :class="{ 'confidence-score__option--active': confidenceScore === option.value }"
-          >
-          <input
-            v-model.number="confidenceScore"
-            type="radio"
-            :name="`${groupId}-confidence`"
-            :value="option.value"
-            :disabled="disabled"
-            @change="onConfidenceChange"
-          />
-          <span>
-            <i :class="option.icon" aria-hidden="true"></i> {{ t(option.labelKey) }}
-          </span>
+        <BaseButton variant="ghost" raw-content class="answer-options-toggle" :aria-expanded="confidenceExpanded" :aria-controls="`${groupId}-confidence-options`" @click="confidenceExpanded = !confidenceExpanded">
+          <span :id="`${groupId}-confidence-label`" class="confidence-score__label">{{ t('tests.confidencePrompt') }}</span>
+          <span>{{ t(selectedConfidence.labelKey) }}</span>
+          <i :class="confidenceExpanded ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" aria-hidden="true"></i>
+        </BaseButton>
+        <div v-show="confidenceExpanded" :id="`${groupId}-confidence-options`" class="confidence-score__options" role="radiogroup" :aria-labelledby="`${groupId}-confidence-label`">
+          <label v-for="option in confidenceOptions" :key="option.value" class="confidence-score__option" :class="{ 'confidence-score__option--active': confidenceScore === option.value }">
+            <input v-model.number="confidenceScore" type="radio" :name="`${groupId}-confidence`" :value="option.value" :disabled="disabled" @change="onConfidenceChange" />
+            <span><i :class="option.icon" aria-hidden="true"></i> {{ t(option.labelKey) }}</span>
           </label>
         </div>
-        <span v-if="showConfidenceHint" class="confidence-hint">
-          <i class="bi bi-info-circle" aria-hidden="true"></i>
-          {{ t('tests.confidenceHint') }}
+        <span v-if="confidenceExpanded && showConfidenceHint" class="confidence-hint">
+          <i class="bi bi-info-circle" aria-hidden="true"></i> {{ t('tests.confidenceHint') }}
         </span>
       </div>
 
       <div v-if="showReflectionPrompt" class="reflection-prompt">
-        <div class="reflection-prompt__header">
-          <i class="bi bi-question-circle" aria-hidden="true"></i>
+        <BaseButton variant="ghost" raw-content class="answer-options-toggle" :aria-expanded="reflectionExpanded" :aria-controls="`${groupId}-reflection-options`" @click="reflectionExpanded = !reflectionExpanded">
           <strong>{{ t('tests.reflectionTitle') }}</strong>
-          <span class="reflection-prompt__hint">{{ t('tests.reflectionHint') }}</span>
-        </div>
-        <div class="reflection-prompt__buttons">
-          <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('unknown')">
-            <i class="bi bi-x-octagon" aria-hidden="true"></i>
-            {{ t('tests.reflectionUnknown') }}
-          </BaseButton>
-          <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('misread')">
-            <i class="bi bi-eye-slash" aria-hidden="true"></i>
-            {{ t('tests.reflectionMisread') }}
-          </BaseButton>
-          <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('confused')">
-            <i class="bi bi-signpost-split" aria-hidden="true"></i>
-            {{ t('tests.reflectionConfused') }}
-          </BaseButton>
-          <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('guessed')">
-            <i class="bi bi-dice-5" aria-hidden="true"></i>
-            {{ t('tests.reflectionGuessed') }}
-          </BaseButton>
+          <span>{{ t(selectedReflection.labelKey) }}</span>
+          <i :class="reflectionExpanded ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" aria-hidden="true"></i>
+        </BaseButton>
+        <div v-show="reflectionExpanded" :id="`${groupId}-reflection-options`">
+          <p class="reflection-prompt__hint">{{ t('tests.reflectionHint') }}</p>
+          <div class="reflection-prompt__buttons" role="group" :aria-label="t('tests.reflectionTitle')">
+            <BaseButton v-for="option in reflectionOptions" :key="option.value" variant="secondary" size="small" class="reflection-prompt__btn" :aria-pressed="initialErrorReason === option.value" :disabled="disabled || reflectionLocked" @click="pickReason(option.value)">
+              {{ t(option.labelKey) }}
+            </BaseButton>
+          </div>
         </div>
       </div>
       <slot name="feedback"></slot>
@@ -172,6 +151,8 @@ const props = defineProps({
   showVerification: { type: Boolean, default: true },
   showConfidenceHint: { type: Boolean, default: true },
   showReflectionPrompt: { type: Boolean, default: false },
+  initialErrorReason: { type: String, default: 'unknown' },
+  reflectionLocked: { type: Boolean, default: false },
   requireAnswerConfirmation: { type: Boolean, default: false },
   lockAnswerChoices: { type: Boolean, default: false },
   // When true, the answer radios and the confidence checkbox are
@@ -189,7 +170,16 @@ const groupId = useId()
 const submitButton = ref(null)
 let restoreAnswerFocus = false
 const selectedAnswer = ref(props.initialAnswer)
-const confidenceScore = ref(normalizeConfidenceScore(props.initialConfidence, null))
+const confidenceScore = ref(normalizeConfidenceScore(props.initialConfidence))
+const confidenceExpanded = ref(false)
+const reflectionExpanded = ref(false)
+const reflectionOptions = [
+  { value: 'unknown', labelKey: 'tests.reflectionUnknown' },
+  { value: 'misread', labelKey: 'tests.reflectionMisread' },
+  { value: 'confused', labelKey: 'tests.reflectionConfused' },
+  { value: 'guessed', labelKey: 'tests.reflectionGuessed' },
+]
+const selectedReflection = computed(() => reflectionOptions.find(option => option.value === props.initialErrorReason) || reflectionOptions[0])
 const preAnswer = ref(props.initialPreAnswer || '')
 const displayQuestion = computed(() => localizedQuestion(props.question, locale.value))
 const confidenceOptions = [
@@ -197,12 +187,15 @@ const confidenceOptions = [
   { value: 2, icon: 'bi bi-question-circle', labelKey: 'tests.confidenceUncertain' },
   { value: 3, icon: 'bi bi-emoji-smile', labelKey: 'tests.confidenceCertain' },
 ]
+const selectedConfidence = computed(() => confidenceOptions.find(option => option.value === confidenceScore.value) || confidenceOptions[2])
 
 watch(
   () => props.question?.id,
   () => {
+    confidenceExpanded.value = false
+    reflectionExpanded.value = false
     selectedAnswer.value = props.initialAnswer
-    confidenceScore.value = normalizeConfidenceScore(props.initialConfidence, null)
+    confidenceScore.value = normalizeConfidenceScore(props.initialConfidence)
     preAnswer.value = props.initialPreAnswer || ''
   },
 )
@@ -217,7 +210,7 @@ watch(
 watch(
   () => props.initialConfidence,
   (val) => {
-    confidenceScore.value = normalizeConfidenceScore(val, null)
+    confidenceScore.value = normalizeConfidenceScore(val)
   },
 )
 
@@ -237,7 +230,7 @@ watch(() => props.lockAnswerChoices && !props.disabled, async (locked) => {
   if (!locked || !restoreAnswerFocus) return
   restoreAnswerFocus = false
   await nextTick()
-  document.getElementsByName(`${groupId}-confidence`)[0]?.focus()
+  document.getElementById(`${groupId}-confidence-label`)?.closest('button')?.focus()
 })
 
 function onUserSelect(val) {
@@ -246,6 +239,7 @@ function onUserSelect(val) {
 
 function onConfidenceChange() {
   emit('confidence', confidenceScore.value)
+  confidenceExpanded.value = false
 }
 
 function revealChoices() {
@@ -255,5 +249,6 @@ function revealChoices() {
 
 function pickReason(reason) {
   emit('reflection', reason)
+  reflectionExpanded.value = false
 }
 </script>

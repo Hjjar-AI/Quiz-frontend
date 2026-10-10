@@ -9,6 +9,7 @@ These contracts keep feature screens visually and behaviorally consistent.
 - Put page commands in the `PageShell` `actions` slot. Use one primary action per page or section.
 - Primary: commit/create; secondary/ghost: navigation/refresh/export; danger: destructive actions only.
 - Feature, navigation, toolbar, and editor actions use `BaseButton`/`BaseIconButton`; native buttons are reserved for shared primitive internals. Use `raw-content` only when an established compound control needs to preserve its internal layout.
+- Shared question controls start with Certain confidence (3) and Unknown as the wrong-answer reason, preserving saved values. Their headers start collapsed, show the current selection and expose expanded state; opening/closing does not submit. Default reflection travels with navigation, or is saved before deliberate pause/finish, through the existing session flow. Selecting an explicit reason keeps the existing one-reflection evidence policy.
 
 ## Feedback and async states
 

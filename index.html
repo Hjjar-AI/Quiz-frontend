@@ -1,11 +1,11 @@
 <!-- frontend/index.html -->
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="iris">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#e9edf1" />
+    <meta name="theme-color" content="#ecebf4" />
 
     <title>Mukhtabir</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -121,10 +121,10 @@
             saved === 'auto'
               ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
                 ? 'midnight'
-                : 'stone'
+                : 'iris'
               : saved && supported.indexOf(saved) !== -1
                 ? saved
-                : 'stone'
+                : 'iris'
           document.documentElement.setAttribute('data-theme', theme)
           document
             .querySelector('meta[name="theme-color"]')

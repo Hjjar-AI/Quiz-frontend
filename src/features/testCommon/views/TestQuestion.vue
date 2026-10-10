@@ -29,6 +29,8 @@
         :lock-answer-choices="(mode === 'study' || mode === 'recall') && store.hasAnswer(store.currentIndex)"
         :disabled="answerControlsBusy"
         :show-reflection-prompt="showReflectionPrompt"
+        :initial-error-reason="reflectionReason"
+        :reflection-locked="reflectionSaved"
         @answer="handleAnswer"
         @confidence="handleConfidence"
         @reveal="handleReveal"
@@ -45,6 +47,7 @@
         :total="store.totalQuestions"
         :loading="submitting"
         :disabled="navigationDisabled"
+        :pause-disabled="pauseDisabled"
         :show-pause="isPauseSupported && store.isActive"
         @pause="pauseSession"
         @previous="goPrevious"
@@ -105,12 +108,15 @@ const {
   question,
   selectedAnswer,
   confidence,
+  reflectionReason,
+  reflectionSaved,
   startTime,
   swipeContainer,
   showReflectionPrompt,
   questionLoadFailed,
   submitting,
   navigationDisabled,
+  pauseDisabled,
   answerControlsBusy,
   examTotalSeconds,
   isCritical,

@@ -183,3 +183,31 @@
     margin-inline-start: 0;
   }
 }
+
+/* Collapsed answer details retain the chosen value without requiring another step. */
+.answer-options-toggle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  width: 100%;
+  min-height: var(--control-height);
+  padding: var(--space-xs) var(--space-sm);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.answer-options-toggle > :first-child { flex: 1; }
+.answer-options-toggle:focus-visible {
+  outline: var(--border-width-strong) solid var(--color-primary);
+  outline-offset: var(--space-xs);
+}
+.reflection-prompt__btn[aria-pressed='true'] {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary-soft-text);
+}

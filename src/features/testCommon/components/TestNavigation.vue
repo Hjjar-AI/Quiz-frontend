@@ -8,7 +8,7 @@
         variant="warning"
         icon="bi bi-pause-circle-fill"
         :aria-label="t('tests.pauseAria')"
-        :disabled="disabled"
+        :disabled="pauseDisabled ?? disabled"
         @click="$emit('pause')"
       >
         {{ t('tests.pause') }}
@@ -32,6 +32,7 @@ defineProps({
   total: { type: Number, default: 0 },
   loading: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
+  pauseDisabled: { type: Boolean, default: null },
   showPause: { type: Boolean, default: false },
 })
 defineEmits(['previous', 'next', 'finish', 'pause'])

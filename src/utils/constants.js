@@ -8,7 +8,7 @@ export const FALLBACK_MAX_QUIZ_QUESTIONS = 200
 export const FALLBACK_MAX_CHOICES = 8
 export const FALLBACK_ITEMS_PER_PAGE = 20
 
-export const DEFAULT_THEME = 'stone'
+export const DEFAULT_THEME = 'iris'
 export const AUTO_THEME = 'auto'
 export const AUTO_LIGHT_THEME = DEFAULT_THEME
 export const AUTO_DARK_THEME = 'midnight'
@@ -27,7 +27,7 @@ export const THEMES = [
   'contrast',
 ]
 export const DARK_THEMES = ['dark', 'midnight', 'onyx']
-export const THEME_ALIASES = { light: DEFAULT_THEME, sepia: 'amber', fresh: 'lagoon', 'blood-red': 'ruby' }
+export const THEME_ALIASES = { light: 'stone', sepia: 'amber', fresh: 'lagoon', 'blood-red': 'ruby' }
 export const THEME_OPTIONS = [AUTO_THEME, ...THEMES]
 export const THEME_GROUPS = [
   { key: 'automatic', themes: [AUTO_THEME] },
