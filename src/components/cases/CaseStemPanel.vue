@@ -21,7 +21,7 @@
   <div class="case-stem-panel">
     <div class="case-stem-panel__header">
       <i class="bi bi-journal-medical" aria-hidden="true"></i>
-      <span>{{ title || t('tests.caseStemTitle') }}</span>
+      <span dir="auto">{{ title || t('tests.caseStemTitle') }}</span>
     </div>
     <div class="case-stem-panel__body">
       <BaseMarkdown :text="stem" />

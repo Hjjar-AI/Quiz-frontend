@@ -15,3 +15,7 @@ Builds, suites, migrations/setup, destructive operator actions and versions foll
 ## 2026-10-10 parity-review follow-up
 
 All seven native gaps, smaller workflow differences and shared web defects from the [latest parity review](../../Android/docs/archive/reviews/2026-10-10-androidParityReview.md) are source-complete. Verify the dedicated account set-state route, partial/unknown batch outcomes, clock-read ownership and the shared manual matrix after matching rollout. Old servers reject the new route without changing account state. Earlier completed fixes remain complete.
+
+## Optional case translations
+
+Frontend case-translation editor and shared display support are source-complete. Verify the matching backend/schema, independent saves, actual case permissions, stale account/target reads, response-loss review, original fallback and Arabic/English rendering using the [visual checklist](verification/visual-qa-checklist.md). No build/browser verification has been performed. [Shared contract](../../backend/docs/contracts/caseTranslations.md).

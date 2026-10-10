@@ -36,15 +36,14 @@ export const caseService = {
   },
 
   /**
-   * Replace the case's title. Permission is checked server-side.
-   *
-   * @param {string} key
-   * @param {string|null} title
+   * Save optional shared-case translations with an expected revision.
+   * Omitted title/stem remain unchanged. Permission is checked server-side.
    */
   updateTranslations(key, translations, version) {
     return apiClient.put(ENDPOINTS.QUESTIONS.CASES_DETAIL(key), { translations, expected_version: version })
   },
 
+  /** Replace the case title; translations remain unchanged. */
   updateTitle(key, title, version) {
     return apiClient.put(ENDPOINTS.QUESTIONS.CASES_DETAIL(key), { title, expected_version: version })
   },

@@ -16,3 +16,10 @@ Run this once in every theme, at comfortable and compact density. Check both Eng
 - [ ] Mixed content: Arabic shell with English clinical terms and English shell with Arabic question text preserve direction, wrapping, numerals, and icon alignment.
 
 Also enable the operating system’s reduced-motion preference and confirm that welcome, card entrance, hover lift, toast, dialog, progress, and critical-state animations are removed or reduced to an instant state change.
+
+## Optional case translations (pending)
+
+- [ ] QuestionForm's clinical-case section contains a collapsed translation editor; opening loads the case, permission checks use actual case-linked question authorship, and optional title/stem fields save independently with an expected revision. New cases require the question to be saved first. Blank fields retain originals in readers; clearing both fields removes a language translation.
+- [ ] Case-only draft changes protect route and enclosing editor/dialog navigation. Pending drafts lock case-key/question submission; read failures retain drafts. Concurrent changes/unknown saves require Refresh and explicit Keep draft/Use saved, without automatic write replay. Successful saves remain confirmed and case selectors update. Account/server changes do not display or apply stale private responses.
+- [ ] Arabic/English/regional locale matching renders available case fields together with question content in library cards, study/exam/recall, master attempts and previews. Absent case fields retain originals, title-only/translated-only stems display, and no extra reader buttons appear. Check RTL, 320px, keyboard, screen reader, large text and Markdown editing.
+- [ ] Frozen master/ordinary/offline content retains its supplied case translation after live edits. Client JSON downloads retain case translations; export previews use the same resolver. Existing completed-result views retain original content. Confirm hidden choices/answers and exam timing are unchanged.
