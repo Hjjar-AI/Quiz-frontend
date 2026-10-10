@@ -74,7 +74,7 @@ function isTimeExpiredError(err) {
 const _pendingAnswers = new Map()
 
 export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
-  state: () => standardState({
+  state: () => standardState({contextEpoch:0,progressEpoch:0,navigationBaseline:null,pendingAnswer:null,needsReview:false,reviewed:false,latestStatus:null,
     examId: null,
     examName: '',
     examInstructions: '',
@@ -161,7 +161,9 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
             this.examName = res.exam_name || ''
             this.questionIds = res.question_ids || []
             this.answers = res.answers || {}
+            this.finishedAt=res.is_complete ? new Date(res.finished_at || Date.now()) : null
             this.currentQuestionId = res.current_question_id || (this.questionIds[0] ?? null)
+            this.navigationBaseline=res.current_question_id ?? null
             this.durationMinutes = res.duration_minutes || 0
             this.graceSeconds = res.grace_seconds || 180
 
@@ -218,7 +220,7 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
 
     async _syncServerOffset() {
       try {
-        const status = await masterExamService.attemptStatus(this.examId)
+        const status = await masterExamService.attemptStatus(this.examId,{signal})
         if (status.server_now) {
           const serverNow = new Date(status.server_now).getTime()
           this.serverOffsetMs = serverNow - Date.now()
@@ -247,19 +249,19 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
       }
 
       const { wrap } = useCrudActions(this)
+      const progress=this.progressEpoch,session=this.sessionId
       return await wrap(() => masterExamService.attemptQuestion(this.examId), {
+        isCurrent:()=>progress===this.progressEpoch && session===this.sessionId && !this.pendingAnswer,
         suppressErrorToast: true,
         onSuccess: (payload) => {
           this.currentQuestion = payload.question
           this.currentQuestionId = payload.question.id
+          this.navigationBaseline=Object.prototype.hasOwnProperty.call(payload,'current_question_id') ? payload.current_question_id : payload.question.id
 
           if (payload.saved_answer != null) {
             this.answers = {
               ...this.answers,
-              [String(payload.question.id)]: {
-                answer: payload.saved_answer,
-                confidence: normalizeConfidenceScore(payload.saved_confidence),
-              },
+              [String(payload.question.id)]: payload.saved_slot || this.answers[String(payload.question.id)] || {answer:payload.saved_answer,confidence:normalizeConfidenceScore(payload.saved_confidence)},
             }
           }
         },
@@ -272,88 +274,55 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
     // pending returns the first call's promise. See the module-level
     // comment on `_pendingAnswers` for the failure mode this
     // prevents.
-    async submitAnswer(answer, confidence = 3) {
-      if (!this.currentQuestionId) return null
-      const questionId = this.currentQuestionId
-
-      if (_pendingAnswers.has(questionId)) {
-        return _pendingAnswers.get(questionId)
-      }
-
-      const promise = this._executeSubmitAnswer(questionId, answer, confidence)
-      _pendingAnswers.set(questionId, promise)
-      try {
-        return await promise
-      } finally {
-        _pendingAnswers.delete(questionId)
-      }
+    async submitAnswer(answer,confidence=3) {
+      if(!this.currentQuestionId || this.needsReview || this.isAnswerLoading || this.isLoading || this.isComplete) return null
+      const qid=this.currentQuestionId
+      const key=`${this.contextEpoch}:${this.sessionId}:${qid}`
+      if(_pendingAnswers.has(key)) return _pendingAnswers.get(key)
+      const promise=this._executeSubmitAnswer(qid,answer,confidence)
+      _pendingAnswers.set(key,promise)
+      try {return await promise} finally {if(_pendingAnswers.get(key)===promise) _pendingAnswers.delete(key)}
     },
-
-    async _executeSubmitAnswer(questionId, answer, confidence) {
-      const previous = this.answers[String(questionId)]
-
-      confidence = normalizeConfidenceScore(confidence)
-      this.answers = {
-        ...this.answers,
-        [String(questionId)]: { answer, confidence },
+    async _executeSubmitAnswer(questionId,answer,confidence) {
+      confidence=normalizeConfidenceScore(confidence)
+      if(this.isPreview) {
+        this.answers={...this.answers,[String(questionId)]:{answer,confidence}}
+        const q=this.previewQuestions[questionId]
+        if(q) this.previewFeedback={isCorrect:answer===q.correct_answer,correctAnswer:q.correct_answer,explanation:q.explanation||'',selectedAnswer:answer}
+        return {success:true,current_question_id:questionId}
       }
-
-      if (this.isPreview) {
-        const q = this.previewQuestions[questionId]
-        if (q) {
-          this.previewFeedback = {
-            isCorrect: answer === q.correct_answer,
-            correctAnswer: q.correct_answer,
-            explanation: q.explanation || '',
-            selectedAnswer: answer,
-          }
-        }
-        return { success: true, current_question_id: questionId }
-      }
-
-      const { wrap } = useCrudActions(this, {
-        statusKey: 'answerStatus',
-        errorKey: 'answerError',
-      })
-      const result = await wrap(
-        () => masterExamService.submitAnswer(this.examId, {
-          questionId,
-          answer,
-          confidence,
-        }),
-        {
-          successMsg: null,
-          errorMsgFallbackKey: 'masterExams.saveAnswerFailed',
-          onSuccess: (res) => {
-            if (res && res.current_question_id !== undefined) {
-              this.currentQuestionId = res.current_question_id
-            }
+      const intent={questionId,answer,confidence,expectedSlot:this.answers[String(questionId)] || null,sessionId:this.sessionId}
+      return this._sendAnswer(intent)
+    },
+    async _sendAnswer(intent) {
+      this.pendingAnswer=intent;this.reviewed=false
+      return useCrudActions(this,{statusKey:'answerStatus',errorKey:'answerError'}).wrap(
+        ()=>masterExamService.submitAnswer(this.examId,intent),{
+          successMsg:null,errorMsgFallbackKey:'masterExams.saveAnswerFailed',
+          onSuccess:res=>{this.progressEpoch++;this.navigationBaseline=res.current_question_id;this.answers={...this.answers,[String(intent.questionId)]:res.saved_slot};this.currentQuestionId=res.current_question_id;this.pendingAnswer=null;this.needsReview=false;this.reviewed=false},
+          onError:error=>{
+            const rejected=[400,401,403,404,409,422,429].includes(Number(error.code))
+            this.needsReview=!rejected || Number(error.code)===409
+            if(!this.needsReview) this.pendingAnswer=null
+            if(isTimeExpiredError(error)) this.finishedAt=new Date()
           },
-          onError: (err) => {
-            // Revert the optimistic answer.
-            const reverted = { ...this.answers }
-            if (previous === undefined) {
-              delete reverted[String(questionId)]
-            } else {
-              reverted[String(questionId)] = previous
-            }
-            this.answers = reverted
-
-            //
-            // `finishedAt` is the state field; `isComplete` is a
-            // getter derived from it. Setting `finishedAt` alone is
-            // the correct and sufficient action — the runner's
-            // watcher on `isComplete` reads it.
-            if (isTimeExpiredError(err)) {
-              this.finishedAt = new Date()
-            }
-          },
-        },
-      )
-      return result
+        })
+    },
+    async reviewPending() {return this.pollStatus({review:true})},
+    async retryPending() {
+      if(!this.needsReview || !this.reviewed || !this.pendingAnswer || this.isAnswerLoading || this.isComplete || this.latestStatus?.session_id!==this.pendingAnswer.sessionId) return null
+      const intent={...this.pendingAnswer,expectedSlot:this.answers[String(this.pendingAnswer.questionId)] || null}
+      this.needsReview=false
+      return this._sendAnswer(intent)
+    },
+    useSavedAnswer() {
+      if(!this.reviewed || this.isAnswerLoading) return
+      this.pendingAnswer=null;this.needsReview=false;this.reviewed=false
+      if(this.latestStatus) this.currentQuestionId=this.latestStatus.current_question_id
     },
 
     async goto(questionId) {
+      if(this.needsReview || this.isAnswerLoading || this.isLoading || this.isComplete) return null
       if (this.isPreview) {
         if (!this.questionIds.includes(questionId)) {
           return null
@@ -365,12 +334,14 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
 
       const { wrap } = useCrudActions(this)
       return await wrap(
-        () => masterExamService.gotoQuestion(this.examId, questionId),
+        () => masterExamService.gotoQuestion(this.examId, questionId,this.sessionId,this.navigationBaseline),
         {
           successMsg: null,
           errorMsgFallbackKey: 'masterExams.navigateFailed',
+          onError:error=>{if(![400,401,403,404,422,429].includes(Number(error.code))) {this.needsReview=true;this.reviewed=false}},
           onSuccess: (res) => {
             if (res && res.current_question_id !== undefined) {
+              this.progressEpoch++;this.navigationBaseline=res.current_question_id
               this.currentQuestionId = res.current_question_id
             }
           },
@@ -401,6 +372,7 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
     },
 
     async finish() {
+      if(this.needsReview || this.isAnswerLoading || this.isLoading) return null
       if (this.isPreview) {
         this.previewFinished = true
         this.finishedAt = new Date()
@@ -418,16 +390,29 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
       })
     },
 
-    async pollStatus() {
+    async pollStatus({signal,review=false,isCurrent} = {}) {
       if (!this.examId || this.isPreview) return null
       const { wrap } = useCrudActions(this, {
         statusKey: 'pollStatus',
         errorKey: 'pollError',
       })
-      return await wrap(() => masterExamService.attemptStatus(this.examId), {
+      const progress=this.progressEpoch
+      return await wrap(() => masterExamService.attemptStatus(this.examId,{signal}), {
+        isCurrent:()=>progress===this.progressEpoch && (isCurrent?.() ?? true),
         suppressErrorToast: true,
         onSuccess: (status) => {
-          if (!status) return
+          if (!status || (this.sessionId && status.session_id!==this.sessionId)) return
+          this.navigationBaseline=status.current_question_id
+          this.latestStatus=status
+          this.answers=status.answers || {}
+          this.attemptId=status.attempt_id;this.sessionId=status.session_id
+          this.startedAt=status.started_at ? new Date(status.started_at) : this.startedAt
+          this.deadlineAt=status.deadline_at ? new Date(status.deadline_at) : null
+          this.durationMinutes=status.duration_minutes || this.durationMinutes;this.graceSeconds=status.grace_seconds ?? this.graceSeconds
+          if(review) this.reviewed=true
+          const intent=this.pendingAnswer
+          const saved=intent ? this.answers[String(intent.questionId)] : null
+          if(intent && intent.sessionId===status.session_id && saved?.answer===intent.answer && normalizeConfidenceScore(saved.confidence)===intent.confidence) {this.pendingAnswer=null;this.needsReview=false;this.reviewed=false}
 
           if (Array.isArray(status.question_ids)) {
             this.questionIds = status.question_ids
@@ -442,14 +427,16 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
             this.finishedAt = new Date()
           }
 
-          if (status.current_question_id !== undefined) {
+          if (!this.pendingAnswer && status.current_question_id !== undefined) {
             this.currentQuestionId = status.current_question_id
           }
         },
       })
     },
 
-    reset: makeReset({
+    reset() {
+      _pendingAnswers.clear()
+      return makeReset({contextEpoch:this.contextEpoch+1,progressEpoch:0,navigationBaseline:null,pendingAnswer:null,needsReview:false,reviewed:false,latestStatus:null,
       examId: null,
       examName: '',
       examInstructions: '',
@@ -477,6 +464,7 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
       pollError: null,
       status: 'idle',
       error: null,
-    }),
+    }).call(this)
+    },
   },
 })

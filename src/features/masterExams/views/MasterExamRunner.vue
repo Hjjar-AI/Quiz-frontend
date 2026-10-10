@@ -2,6 +2,14 @@
 <template>
   <Layout>
     <div class="master-exam-runner">
+      <div v-if="attemptStore.needsReview" role="status">
+        <p>{{ t('masterExams.answerOutcomeUnknown') }}</p>
+        <p v-if="attemptStore.pendingAnswer">{{ t('masterExams.draftAnswerValue', {n:attemptStore.pendingAnswer.answer}) }}</p>
+        <p v-if="attemptStore.reviewed && attemptStore.pendingAnswer">{{ t('masterExams.serverAnswerValue', {n:attemptStore.answers[String(attemptStore.pendingAnswer.questionId)]?.answer ?? t('masterExams.answerUnset')}) }}</p>
+        <BaseButton :disabled="attemptStore.isAnswerLoading || attemptStore.isLoading" @click="reviewAnswer">{{ t('common.refresh') }}</BaseButton>
+        <BaseButton :disabled="!attemptStore.reviewed || attemptStore.isAnswerLoading || attemptStore.isComplete" @click="keepAnswerDraft">{{ t('common.keepDraft') }}</BaseButton>
+        <BaseButton :disabled="!attemptStore.reviewed || attemptStore.isAnswerLoading" @click="useSavedAnswer">{{ t('common.useServer') }}</BaseButton>
+      </div>
       <div v-if="attemptStore.isPreview" class="master-exam-runner__preview-banner">
         <i class="bi bi-eye" aria-hidden="true"></i>
         <span>{{ t('masterExams.runnerPreview') }}</span>
@@ -220,7 +228,7 @@
       />
 
       <div class="d-flex justify-center gap-2 mt-3">
-        <BaseButton variant="secondary" :disabled="currentIndex <= 0" @click="gotoPrevious">
+        <BaseButton variant="secondary" :disabled="answerSubmitting || currentIndex <= 0" @click="gotoPrevious">
           <DirectionalIcon ltr="bi bi-chevron-left" rtl="bi bi-chevron-right" />
           {{ t('tests.previous') }}
         </BaseButton>
@@ -267,6 +275,7 @@ const {
   timerClass,
   beginCountdown,
   cancelCountdown,
+  reviewAnswer,keepAnswerDraft,useSavedAnswer,
   exitAttempt,
   onSelectAnswer,
   onConfidenceChange,

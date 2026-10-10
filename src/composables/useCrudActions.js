@@ -92,7 +92,8 @@ export function useCrudActions(store, options = {}) {
     } = opts
 
     const generation = sessionGeneration()
-    const isCurrent = () => generation === sessionGeneration() && callerCurrent()
+    const contextEpoch=store.contextEpoch
+    const isCurrent = () => generation === sessionGeneration() && contextEpoch===store.contextEpoch && callerCurrent()
     if (!isCurrent()) return null
     if (cacheKey && cache.has(cacheKey)) {
       const { data, timestamp, ttl } = cache.get(cacheKey)

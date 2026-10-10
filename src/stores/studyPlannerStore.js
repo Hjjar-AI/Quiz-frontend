@@ -6,7 +6,7 @@ import { useCrudActions } from '@/composables/useCrudActions'
 import { standardState, standardGetters, makeReset } from '@/stores/storeHelpers'
 
 export const useStudyPlannerStore = defineStore('studyPlanner', {
-  state: () => standardState({ planner: null }),
+  state: () => standardState({ planner: null,lastErrorCode:null }),
   getters: {
     ...standardGetters,
     todayProgress: (state) => {
@@ -33,7 +33,7 @@ export const useStudyPlannerStore = defineStore('studyPlanner', {
       return await wrap(() => apiClient.post(ENDPOINTS.STUDY_PLANNER.UPDATE, data), {
         successMsgKey: 'notifications.plannerUpdated',
         errorMsgFallbackKey: 'notifications.plannerUpdateFailed',
-        onSuccess: () => this.fetchPlanner(),
+        onSuccess: data => {this.planner=data},
       })
     },
 
@@ -45,9 +45,9 @@ export const useStudyPlannerStore = defineStore('studyPlanner', {
       })
     },
 
-    async deletePlanner() {
+    async deletePlanner(expectedId,expectedVersion) {
       const { wrap } = useCrudActions(this)
-      return await wrap(() => apiClient.delete(ENDPOINTS.STUDY_PLANNER.DELETE), {
+      return await wrap(() => apiClient.delete(ENDPOINTS.STUDY_PLANNER.DELETE,{params:{expected_id:expectedId,expected_version:expectedVersion}}), {
         successMsgKey: 'notifications.plannerDeleted',
         errorMsgFallbackKey: 'notifications.plannerDeleteFailed',
         onSuccess: () => { this.planner = null },
@@ -64,7 +64,7 @@ export const useStudyPlannerStore = defineStore('studyPlanner', {
     // reset payload (rather than relying on Pinia to infer it from
     // the initial state).
     reset: makeReset({
-      planner: null,
+      planner: null,lastErrorCode:null,
       status: 'idle',
       error: null,
     }),

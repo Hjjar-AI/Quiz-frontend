@@ -1,91 +1,50 @@
-// frontend/src/composables/useAutoRefresh.js
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useAsyncState } from './composableHelpers'
 
 const MAX_CONSECUTIVE_ERRORS = 5
-const BASE_BACKOFF_MS = 5000
-
 export function useAutoRefresh(fetchFn, intervalMs = 30000, immediate = true) {
-  const lastUpdated = ref(null)
-  const { status, setLoading, setSuccess, setError } = useAsyncState()
-  const isRefreshing = computed(() => status.value === 'loading')
-  let intervalId = null
-  let consecutiveErrors = 0
-  let currentInterval = intervalMs
-
+  const lastUpdated=ref(null)
+  const { status,setLoading,setSuccess,setError }=useAsyncState()
+  const isRefreshing=ref(false)
+  let intervalId=null, consecutiveErrors=0, currentInterval=intervalMs
+  let generation=0, disposed=false, running=false, controller=null
   async function refresh() {
-    if (status.value === 'loading') return
-    setLoading()
+    if(disposed || isRefreshing.value) return
+    const owner=generation
+    const requestController=new AbortController();controller=requestController
+    isRefreshing.value=true;setLoading()
     try {
-      const result = await fetchFn()
-
-      if (result === null) {
-        throw new Error('fetchFn returned null (useCrudActions.wrap failure)')
-      }
-      lastUpdated.value = new Date()
-      setSuccess()
-      // Reset backoff on success
-      consecutiveErrors = 0
-      if (currentInterval !== intervalMs) {
-        currentInterval = intervalMs
-        restartInterval()
-      }
-    } catch (e) {
-      console.error('Auto-refresh failed:', e)
-      setError(e)
-      consecutiveErrors++
-      if (consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
-        // Stop retrying after max consecutive errors
-        stop()
-        console.warn(`Auto-refresh stopped after ${MAX_CONSECUTIVE_ERRORS} consecutive errors.`)
-        return
-      }
-      // Increase interval with exponential backoff
-      currentInterval = Math.min(intervalMs * Math.pow(2, consecutiveErrors), 300000) // cap at 5 min
-      restartInterval()
+      const result=await fetchFn({signal:requestController.signal,isCurrent:()=>!disposed && owner===generation})
+      if(disposed || owner!==generation) return
+      if(result===null) throw new Error('Refresh failed')
+      lastUpdated.value=new Date();setSuccess();consecutiveErrors=0
+      if(currentInterval!==intervalMs) {currentInterval=intervalMs;restartInterval()}
+    } catch(error) {
+      if(disposed || owner!==generation || error?.code==='CANCEL') return
+      setError(error);consecutiveErrors++
+      if(consecutiveErrors>=MAX_CONSECUTIVE_ERRORS) {stop();return}
+      currentInterval=Math.min(intervalMs*2**consecutiveErrors,300000);restartInterval()
+    } finally {
+      if(owner===generation) {isRefreshing.value=false;controller=null}
     }
   }
-
   function restartInterval() {
-    if (intervalId) {
-      clearInterval(intervalId)
-      intervalId = null
-    }
-    intervalId = setInterval(refresh, currentInterval)
+    if(intervalId) clearInterval(intervalId)
+    intervalId=null
+    if(running && !disposed && !document.hidden) intervalId=setInterval(refresh,currentInterval)
   }
-
   function start() {
-    if (intervalId) return
-    consecutiveErrors = 0
-    currentInterval = intervalMs
-    if (immediate) refresh()
-    intervalId = setInterval(refresh, currentInterval)
+    if(disposed || running || document.hidden) return
+    running=true;consecutiveErrors=0;currentInterval=intervalMs
+    restartInterval();if(immediate) refresh()
   }
-
   function stop() {
-    if (intervalId) {
-      clearInterval(intervalId)
-      intervalId = null
-    }
+    running=false;generation++;controller?.abort();controller=null;isRefreshing.value=false
+    if(intervalId) clearInterval(intervalId)
+    intervalId=null
   }
-
-  function handleVisibilityChange() {
-    if (document.hidden) {
-      stop()
-    } else {
-      start()
-    }
-  }
-
-  onMounted(() => {
-    start()
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-  })
-
-  onUnmounted(() => {
-    stop()
-    document.removeEventListener('visibilitychange', handleVisibilityChange)
-  })
-
-  return { lastUpdated, isRefreshing, refresh, stop, start }
+  function visibility() {if(document.hidden) stop();else start()}
+  onMounted(()=>{start();document.addEventListener('visibilitychange',visibility)})
+  onUnmounted(()=>{disposed=true;stop();document.removeEventListener('visibilitychange',visibility)})
+  return {lastUpdated,isRefreshing,refresh,stop,start}
 }

@@ -40,7 +40,7 @@ export const masterExamService = {
     return apiClient.post(E.ADD_QUESTIONS(id), { question_ids: questionIds })
   },
   removeQuestion(id, questionId) {
-    return apiClient.post(E.REMOVE_QUESTION(id), { question_id: questionId })
+    return apiClient.post(E.REMOVE_QUESTION(id), { question_id: questionId, session_id:sessionId, expected_current_question_id:currentId })
   },
   reorder(id, questionIds) {
     return apiClient.post(E.REORDER(id), { question_ids: questionIds })
@@ -72,20 +72,20 @@ export const masterExamService = {
   startAttempt(id, { preview = false } = {}) {
     return apiClient.post(E.START_ATTEMPT(id), { preview })
   },
-  attemptStatus(id) {
-    return apiClient.get(E.ATTEMPT_STATUS(id))
+  attemptStatus(id, config = {}) {
+    return apiClient.get(E.ATTEMPT_STATUS(id), config)
   },
   attemptQuestion(id) {
     return apiClient.get(E.ATTEMPT_QUESTION(id))
   },
-  submitAnswer(id, { questionId, answer, confidence }) {
+  submitAnswer(id, { questionId, answer, confidence, expectedSlot, sessionId }) {
     return apiClient.post(E.ATTEMPT_ANSWER(id), {
-      question_id: questionId,
+      question_id: questionId, expected_slot: expectedSlot, session_id: sessionId,
       answer,
       confidence,
     })
   },
-  gotoQuestion(id, questionId) {
+  gotoQuestion(id, questionId, sessionId, currentId) {
     return apiClient.post(E.ATTEMPT_GOTO(id), { question_id: questionId })
   },
   finishAttempt(id) {

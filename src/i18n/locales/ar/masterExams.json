@@ -213,6 +213,10 @@
     "preview": "معاينة",
     "runnerPreviewFlagNoop": "الإبلاغ معطّل في وضع المعاينة",
     "runnerPreviewCorrect": "إجابة صحيحة",
-    "runnerPreviewWrong": "إجابة خاطئة — الصحيحة هي {n}"
+    "runnerPreviewWrong": "إجابة خاطئة — الصحيحة هي {n}",
+    "answerOutcomeUnknown": "تحقق من الإجابة المحفوظة قبل المتابعة. تم الاحتفاظ بمسودتك.",
+    "draftAnswerValue": "إجابة مسودتك: {n}",
+    "serverAnswerValue": "الإجابة على الخادم: {n}",
+    "answerUnset": "لم تتم الإجابة"
   }
 }

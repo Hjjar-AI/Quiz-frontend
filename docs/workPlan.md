@@ -26,3 +26,17 @@ Verify the matching category/case/tag/settings revisions and browser operation-i
 The [new source review](../../Android/docs/projectRescan.md) identifies seven additional bounded gaps: web account-generation guards; orphan pending-create/form association; transactional question ownership checks; knowledge-delete revisions; terminal/deleted receipt recovery; web conflict resolution; learner case pagination/read retention. All seven are now addressed in source; remaining checks are runtime release gates.
 
 The seven rescan findings are source-complete. Validate coordinated DELETE/receipt contracts, account-switch cancellation, conflict review, orphan-save recovery and learner paging; see the latest [work log](workDone.md).
+
+## 2026-10-09 deeper transaction/lifecycle findings
+
+The [deeper source review](../../Android/docs/deepTransactionReview.md) records eight new follow-up areas: knowledge/learning lock order, import revision reuse, master attempt resume/makeup and fresh access gates, master answer/navigation concurrency and web uncertainty handling, polling disposal/attempt scope, and planner revision/scope epochs. All eight findings are now source-complete; verify coordinated contracts, fresh planner schema and live interleavings. See the latest work log.
+
+## 2026-10-10 deeper consistency release scenarios
+
+- Lose master answer responses before/after commit; compare full saved slot, keep/rebase/discard draft explicitly, and verify no automatic resend. Change the same answer/confidence on two devices and verify 409 without overwriting either draft. Check legacy native draft recovery.
+- Race answer/goto/current-question/finish and expiry; stale navigation must reject and GET must not change position. Resume normal attempts after closes_at and retry makeup starts: no second attempt or extended timer. Remove audience/co-attending/group membership during new start/preview; verify fresh authorization while existing owned work remains readable.
+- Change exam routes as the same user while reads/writes complete; hide/show/unmount during polling backoff. Old responses must not replace the new attempt or restart orphan timers/navigation.
+- Edit/delete/recreate planners on two clients; verify retained id/revision conflicts and explicit Keep draft/Use server. Lose accepted update responses and fail post-save reads; preserve confirmed configuration and drafts.
+- Record offline answers before/after filter/date resets, then upload late; original scope gets credit, today's reset does not regain old activity. Rename/merge planner tags: preserve today's progress without copying counts. Cross midnight after a reset: historical daily totals include pre-reset activity exactly once. Preserve global heatmap/learning evidence.
+- Import replacements carrying lower/equal source revisions, then save old editors: stale local revisions reject. Exercise parent edits, learning completion, tag merge and import on the deployed server database for lock cycles, rollback and large-import contention.
+- Verify fresh planner schema and coordinated API rollout, bilingual/RTL/large-text/focus/TalkBack controls. These are pending manual checks, not completed runtime evidence.

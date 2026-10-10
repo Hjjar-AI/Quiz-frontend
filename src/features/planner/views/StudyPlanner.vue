@@ -8,6 +8,7 @@
     >
       <FeedbackRegion :error="store.error" @dismiss="store.error = null" />
 
+      <RevisionReview v-if="review.conflict.value" :latest="latestText" :busy="review.busy.value" :error="review.error.value" @refresh="review.refresh" @keep="review.resolve(true)" @use-server="review.resolve(false)" />
       <BaseCard v-if="store.planner" class="planner-card">
         <div class="planner-summary">
           <div class="planner-progress">
@@ -32,7 +33,7 @@
               <BaseInput v-model="editForm.endDate" :label="t('planner.endDate')" type="date" />
             </FormGrid>
             <div class="form-actions">
-              <BaseButton variant="primary" :loading="store.isLoading" @click="savePlan">{{ t('planner.save') }}</BaseButton>
+              <BaseButton variant="primary" :loading="store.isLoading" :disabled="review.conflict.value" @click="savePlan">{{ t('planner.save') }}</BaseButton>
               <BaseButton variant="danger" :loading="store.isLoading" @click="deletePlan">{{ t('planner.delete') }}</BaseButton>
             </div>
           </div>
@@ -57,8 +58,14 @@
 </template>
 
 <script setup>
+import RevisionReview from '@/components/common/RevisionReview.vue'
+import { useRevisionReview } from '@/composables/useRevisionReview'
+import { apiClient } from '@/services/api/client'
+import { ENDPOINTS } from '@/services/api/endpoints'
+import { useAuthStore } from '@/stores/authStore'
+
 import '@/assets/profile.css'
-import { computed, onMounted, reactive } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useStudyPlannerStore } from '@/stores/studyPlannerStore'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useDialog } from '@/composables/useDialog'
@@ -94,6 +101,15 @@ const editForm = reactive({
   endDate: '',
 })
 
+const baselineVersion=ref(null),baselineId=ref(null)
+const auth=useAuthStore()
+function applyPlan(planner,keep=false) {
+  baselineVersion.value=planner.version;baselineId.value=planner.id
+  store.planner=planner
+  if(!keep) Object.assign(editForm,{target:planner.target_questions_per_day,categories:planner.target_categories || [],tags:(planner.target_tags || []).join(', '),startDate:planner.start_date,endDate:planner.end_date || ''})
+}
+const review=useRevisionReview({allow:()=>auth.isAuthenticated,load:()=>apiClient.get(ENDPOINTS.STUDY_PLANNER.BASE),apply:(keep,current)=>{applyPlan(current,keep);store.error=null}})
+const latestText=computed(()=>review.latest.value ? [review.latest.value.target_questions_per_day,(review.latest.value.target_categories || []).map(id=>categoryStore.byId[id]?.name || id).join(', '),(review.latest.value.target_tags || []).join(', '),review.latest.value.start_date,review.latest.value.end_date].filter(value=>value!=null).join(' · ') : '')
 const categoryOptions = computed(() =>
   categoryStore.items.map(c => ({ value: c.id, label: c.name }))
 )
@@ -131,6 +147,7 @@ async function loadPlanner() {
   await store.recordProgress()
   await store.fetchPlanner()
   if (store.planner) {
+    baselineVersion.value=store.planner.version;baselineId.value=store.planner.id
     editForm.target = store.planner.target_questions_per_day
     editForm.categories = store.planner.target_categories || []
     editForm.tags = (store.planner.target_tags || []).join(', ')
@@ -139,29 +156,42 @@ async function loadPlanner() {
   }
 }
 
-function createDefault() {
-  store.updatePlanner({
+async function createDefault() {
+  if(review.conflict.value || store.isLoading || !auth.isAuthenticated) return
+  const planner=await store.fetchPlanner();if(!planner) return
+  applyPlan(planner)
+  const result=await store.updatePlanner({expected_version:baselineVersion.value,expected_id:baselineId.value,
     target_questions_per_day: 10,
     target_categories: [],
     target_tags: [],
     start_date: localIsoDate(new Date()),
   })
+  if(!result && Number(store.lastErrorCode)===409) await review.refresh()
+  else if(result && store.planner) applyPlan(store.planner,true)
 }
 
-function savePlan() {
-  const payload = {
+
+async function savePlan() {
+  if(review.conflict.value || store.isLoading || !auth.isAuthenticated) return
+  const payload = {expected_version:baselineVersion.value,expected_id:baselineId.value,
     target_questions_per_day: editForm.target,
     target_categories: editForm.categories,
     target_tags: editForm.tags ? editForm.tags.split(',').map(t => t.trim()) : [],
     start_date: editForm.startDate || localIsoDate(new Date()),
     end_date: editForm.endDate || null,
   }
-  store.updatePlanner(payload)
+  const result=await store.updatePlanner(payload)
+  if(!result && Number(store.lastErrorCode)===409) await review.refresh()
+  else if(result && store.planner) applyPlan(store.planner,true)
 }
 
 async function deletePlan() {
+  if(review.conflict.value || store.isLoading || !auth.isAuthenticated) return
+  const id=baselineId.value,version=baselineVersion.value
   if (await confirm(t('planner.deleteConfirm'))) {
-    store.deletePlanner()
+    if(review.conflict.value || store.isLoading || !auth.isAuthenticated) return
+    const result=await store.deletePlanner(id,version)
+    if(!result && Number(store.lastErrorCode)===409) await review.refresh()
   }
 }
 

@@ -213,6 +213,10 @@
     "preview": "Preview",
     "runnerPreviewFlagNoop": "Reporting is disabled in preview mode",
     "runnerPreviewCorrect": "Correct",
-    "runnerPreviewWrong": "Wrong — the correct answer is {n}"
+    "runnerPreviewWrong": "Wrong — the correct answer is {n}",
+    "answerOutcomeUnknown": "Check the saved answer before continuing. Your draft is retained.",
+    "draftAnswerValue": "Your draft answer: {n}",
+    "serverAnswerValue": "Server answer: {n}",
+    "answerUnset": "Unanswered"
   }
 }

@@ -11,6 +11,7 @@ import { useAutoRefresh } from '@/composables/useAutoRefresh'
 import { formatTime } from '@/utils/timer'
 
 export function useMasterExamRunner() {
+  let alive=true
   const { t } = useI18n()
   const route = useRoute()
   const router = useRouter()
@@ -28,14 +29,14 @@ export function useMasterExamRunner() {
   let timerInterval = null
 
   const currentIndex = computed(() => attemptStore.currentIndex)
-  const answerSubmitting = computed(() => attemptStore.isAnswerLoading || finishing.value)
+  const answerSubmitting = computed(() => attemptStore.isAnswerLoading || attemptStore.isLoading || attemptStore.needsReview || finishing.value)
   useSessionLeaveGuard({
     active: () => Boolean(attemptStore.sessionId) && !attemptStore.isComplete,
-    busy: () => answerSubmitting.value,
+    busy: () => attemptStore.isAnswerLoading || attemptStore.isLoading || finishing.value,
   })
   const currentSavedAnswer = computed(() => {
     const raw = attemptStore.answers[String(attemptStore.currentQuestionId)]
-    return raw ? raw.answer : null
+    return attemptStore.pendingAnswer?.questionId===attemptStore.currentQuestionId ? attemptStore.pendingAnswer.answer : raw ? raw.answer : null
   })
 
   const currentConfidence = ref(3)
@@ -90,11 +91,14 @@ export function useMasterExamRunner() {
   }
 
   async function doStart() {
-    const result = await attemptStore.start(examId.value, { preview: isPreview.value })
+    const id=examId.value
+    const result = await attemptStore.start(id, { preview: isPreview.value })
+    if(!alive || id!==examId.value || attemptStore.examId!==id) return
     if (!result) {
       router.push('/master-exams')
       return
     }
+    if(attemptStore.isComplete) {navigateAfterFinish();return}
     await loadCurrent()
   }
 
@@ -125,26 +129,31 @@ export function useMasterExamRunner() {
     showPreStart.value = true
   }
 
+  async function reviewAnswer() {const id=examId.value;await attemptStore.reviewPending();if(alive && id===examId.value && !attemptStore.needsReview) await loadCurrent()}
+  async function keepAnswerDraft() {const id=examId.value;const result=await attemptStore.retryPending();if(result && alive && id===examId.value) await loadCurrent()}
+  async function useSavedAnswer() {attemptStore.useSavedAnswer();if(alive) await loadCurrent()}
   function exitAttempt() {
     router.push('/master-exams')
   }
 
   async function onSelectAnswer(answer) {
     if (answerSubmitting.value) return
-    await attemptStore.submitAnswer(answer, currentConfidence.value)
+    const id=examId.value;const result=await attemptStore.submitAnswer(answer, currentConfidence.value)
+    if(result && alive && id===examId.value) await loadCurrent()
   }
 
   async function onConfidenceChange(confidence) {
     currentConfidence.value = confidence
     const raw = attemptStore.answers[String(attemptStore.currentQuestionId)]
     if (raw?.answer && !answerSubmitting.value) {
-      await attemptStore.submitAnswer(raw.answer, currentConfidence.value)
+      const id=examId.value;const result=await attemptStore.submitAnswer(raw.answer, currentConfidence.value)
+      if(result && alive && id===examId.value) await loadCurrent()
     }
   }
 
   async function gotoQuestion(questionId) {
-    await attemptStore.goto(questionId)
-    await loadCurrent()
+    const id=examId.value;const result=await attemptStore.goto(questionId)
+    if(result && alive && id===examId.value) await loadCurrent()
   }
 
   async function gotoIndex(index) {
@@ -191,6 +200,7 @@ export function useMasterExamRunner() {
   }
 
   function navigateAfterFinish() {
+    if(!alive || attemptStore.examId!==examId.value) return
     const suffix = attemptStore.isPreview ? 'edit' : 'result'
     router.push(`/master-exams/${examId.value}/${suffix}`)
   }
@@ -203,9 +213,12 @@ export function useMasterExamRunner() {
   )
 
   useAutoRefresh(
-    async () => {
-      if (attemptStore.isPreview || attemptStore.isComplete) return { skipped: true }
-      return attemptStore.pollStatus()
+    async (context) => {
+      if (attemptStore.isAnswerLoading || attemptStore.isLoading || finishing.value) return {skipped:true}
+      if (!attemptStore.examId || !attemptStore.sessionId || attemptStore.isPreview || attemptStore.isComplete) return { skipped: true }
+      const result=await attemptStore.pollStatus(context)
+      if(result && context.isCurrent() && alive && !attemptStore.pendingAnswer && !attemptStore.isComplete) await loadCurrent()
+      return result
     },
     30_000,
     false,
@@ -222,31 +235,31 @@ export function useMasterExamRunner() {
     }
   })
 
-  onMounted(async () => {
-    timerInterval = setInterval(() => {
-      nowTick.value = Date.now()
-    }, 1000)
+  async function initialize() {
+    const id=examId.value
 
-    if (attemptStore.examId === examId.value && attemptStore.sessionId) {
+    if (attemptStore.examId === id && attemptStore.sessionId) {
       showPreStart.value = false
       await loadCurrent()
       return
     }
 
     attemptStore.reset()
-    const exam = await masterExamStore.fetchOne(examId.value)
-    if (exam) {
+    const exam = await masterExamStore.fetchOne(id)
+    if (exam && alive && id===examId.value) {
       attemptStore.hydrateFromExam(exam, { graceSeconds: 180 })
-      if (!isPreview.value) await masterExamStore.acknowledge(examId.value)
+      if (!isPreview.value) await masterExamStore.acknowledge(id)
     }
-  })
-
+  }
+  onMounted(()=>{timerInterval=setInterval(()=>{nowTick.value=Date.now()},1000);initialize()})
+  watch([examId,isPreview],()=>{if(preCountdownTimer) clearInterval(preCountdownTimer);preCountdownTimer=null;showPreStart.value=true;initialize()})
   onBeforeUnmount(() => {
+    alive=false
     if (timerInterval) clearInterval(timerInterval)
     if (preCountdownTimer) clearInterval(preCountdownTimer)
   })
 
-  return {
+  return {reviewAnswer,keepAnswerDraft,useSavedAnswer,
     t,
     attemptStore,
     showPreStart,
