@@ -25,6 +25,7 @@ const active = ref(false)
 const error = ref('')
 let timer
 let disposed = false
+let requestEpoch = 0
 let owner = sessionGeneration()
 const isCurrent = generation => !disposed && generation === sessionGeneration()
 function applyStatus(status) {
@@ -34,9 +35,10 @@ function applyStatus(status) {
 }
 onMounted(async () => {
   const generation = sessionGeneration()
+  const epoch = ++requestEpoch
   try {
     const status = await adminService.importLimitStatus()
-    if (isCurrent(generation)) applyStatus(status)
+    if (isCurrent(generation) && epoch === requestEpoch) applyStatus(status)
   } catch { /* The password action remains usable when the status read fails. */ }
 })
 onBeforeUnmount(() => { disposed = true; clearTimeout(timer); password.value = '' })
@@ -50,6 +52,7 @@ async function unlock() {
     return
   }
   const generation = sessionGeneration()
+  ++requestEpoch
   busy.value = true
   error.value = ''
   try {

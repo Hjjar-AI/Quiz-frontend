@@ -126,3 +126,18 @@ it('retains the existing single-file selection and clears it after success', asy
   expect(send.mock.calls.map(([value]) => value.name)).toEqual(['replacement.json'])
   expect(wrapper.findAllComponents(EntityRow)).toHaveLength(0)
 })
+
+
+it('retains a rate-limited file for an explicit retry without resending confirmed imports', async () => {
+  const send = vi.fn().mockResolvedValueOnce({ message: 'First confirmed' })
+    .mockRejectedValueOnce({ code: 429, message: 'Rate limit' }).mockResolvedValue({ message: 'Imported' })
+  const wrapper = mountTab(send)
+  select(wrapper, [file('one.csv'), file('two.json'), file('three.csv')])
+  await upload(wrapper)
+  await flushPromises()
+  expect(send).toHaveBeenCalledTimes(2)
+  expect(wrapper.find('.simple-import-tab__actions button').element.disabled).toBe(false)
+  await upload(wrapper)
+  await flushPromises()
+  expect(send.mock.calls.map(([value]) => value.name)).toEqual(['one.csv', 'two.json', 'two.json', 'three.csv'])
+})

@@ -300,3 +300,15 @@ describe('flagService and adminService — flags and maintenance', () => {
     expect(apiClient.post).toHaveBeenCalledWith('/admin/seed-sample-questions/')
   })
 })
+
+
+describe('adminService import throttle reauthentication', () => {
+  it('reads current session status', async () => {
+    await adminService.importLimitStatus()
+    expect(apiClient.get).toHaveBeenCalledWith('/database/import/unlock/')
+  })
+  it('sends the password only to the unlock endpoint', async () => {
+    await adminService.unlockImportLimit('secret')
+    expect(apiClient.post).toHaveBeenCalledWith('/database/import/unlock/', { admin_password: 'secret' })
+  })
+})
