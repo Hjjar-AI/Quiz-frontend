@@ -22,6 +22,7 @@
         </template>
       </EntityRow>
     </div>
+    <FeedbackRegion v-if="hasLimited" scope="section" :warning="t('admin.import.unlock.limited')" />
     <FeedbackRegion v-if="hasFailure" scope="section" :warning="t('admin.import.queue.reviewFailure')" />
 
     <div class="simple-import-tab__actions">
@@ -59,10 +60,13 @@ const emit = defineEmits(['imported'])
 const { notify } = useNotify()
 const files = ref([])
 const loading = ref(false)
-const hasPending = computed(() => files.value.some(entry => entry.status === 'pending'))
+const isQueued = entry => ['pending', 'limited'].includes(entry.status)
+const hasPending = computed(() => files.value.some(isQueued))
 const hasFailure = computed(() => files.value.some(entry => entry.status === 'failed'))
+const hasLimited = computed(() => files.value.some(entry => entry.status === 'limited'))
 const statusLabels = computed(() => ({
   pending: t('admin.import.queue.pending'),
+  limited: t('admin.import.queue.limited'),
   uploading: t('admin.import.queue.uploading'),
   success: t('admin.import.queue.success'),
   failed: t('admin.import.queue.failed'),
@@ -105,7 +109,7 @@ function removeFile(entry) {
 
 async function upload() {
   if (loading.value || disposed || resetChangedSession()) return
-  const pending = files.value.filter(entry => entry.status === 'pending')
+  const pending = files.value.filter(isQueued)
   if (!pending.length) {
     notify(t('admin.import.noFile'), 'warning')
     return
@@ -127,7 +131,7 @@ async function upload() {
         emit('imported')
       } catch (err) {
         if (!isCurrent()) break
-        entry.status = 'failed'
+        entry.status = err?.code === 429 ? 'limited' : 'failed'
         entry.message = err?.message || t('admin.import.failed')
         notify(`${entry.file.name}: ${entry.message}`, 'error')
         // A lost response can hide a committed import. Never replay this file;

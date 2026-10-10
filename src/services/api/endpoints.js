@@ -215,6 +215,7 @@ export const ENDPOINTS = {
     RESTORE: '/database/restore/',
     CLEAR: '/database/clear/',
     IMPORT: '/database/import/',
+    IMPORT_UNLOCK: '/database/import/unlock/',
     IMPORT_TELEGRAM: '/database/import/telegram/',
     EXPORT_STATE: '/database/export/state/',
     IMPORT_STATE: '/database/import/state/',

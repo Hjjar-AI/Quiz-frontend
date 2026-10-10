@@ -70,6 +70,12 @@ export const adminService = {
       admin_password: adminPassword,
     })
   },
+  async importLimitStatus() {
+    return apiClient.get(ENDPOINTS.DATABASE.IMPORT_UNLOCK)
+  },
+  async unlockImportLimit(adminPassword) {
+    return apiClient.post(ENDPOINTS.DATABASE.IMPORT_UNLOCK, { admin_password: adminPassword })
+  },
   async importDatabase(file) {
     const formData = new FormData()
     formData.append('file', file)

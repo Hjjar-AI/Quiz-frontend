@@ -36,7 +36,7 @@ function badTypeMessage(ext) {
 
 async function importDatabase(file) {
   const result = await databaseStore.importDatabase(file)
-  if (!result) throw new Error(databaseStore.error || t('admin.import.failed'))
+  if (!result) throw Object.assign(new Error(databaseStore.error || t('admin.import.failed')), { code: databaseStore.lastImportErrorCode })
   return result
 }
 

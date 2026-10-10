@@ -449,7 +449,15 @@
       "tooLarge": "File too large. Max: {max} MB",
       "success": "Imported successfully",
       "failed": "Import failed",
+      "unlock": {
+        "hint": "The normal limit is 10 imports per hour. Enter your administrator password to bypass that limit for this login session for 10 minutes. It returns automatically when the window expires.",
+        "password": "Administrator password",
+        "button": "Unlock imports for 10 minutes",
+        "active": "The import limit is temporarily bypassed for this login session. It returns automatically after 10 minutes.",
+        "limited": "The server import limit was reached. Unlock imports with your administrator password above, then click Import to resume the queued files."
+      },
       "queue": {
+        "limited": "Rate limited — queued",
         "pending": "Queued",
         "uploading": "Importing…",
         "success": "Imported",

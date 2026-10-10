@@ -8,6 +8,7 @@
       page-class="import-page"
     >
       <BaseCard>
+        <ImportLimitUnlock />
         <TabStrip
           v-model="activeTab"
           variant="pills"
@@ -29,6 +30,7 @@ import { useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import TabStrip from '@/components/common/TabStrip.vue'
+import ImportLimitUnlock from '../components/ImportLimitUnlock.vue'
 import FileImport from '../components/FileImport.vue'
 import TelegramImport from '../components/TelegramImport.vue'
 import StateImport from '../components/StateImport.vue'

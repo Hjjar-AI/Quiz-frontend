@@ -5,7 +5,7 @@ import { useCrudActions } from '@/composables/useCrudActions'
 import { standardState, standardGetters, makeReset } from '@/stores/storeHelpers'
 
 export const useAdminDatabaseStore = defineStore('adminDatabase', {
-  state: () => standardState({ databaseInfo: null, backups: [], qualityReport: null }),
+  state: () => standardState({ databaseInfo: null, backups: [], qualityReport: null, lastImportErrorCode: null }),
   getters: {
     ...standardGetters,
   },
@@ -53,8 +53,10 @@ export const useAdminDatabaseStore = defineStore('adminDatabase', {
     },
 
     async importDatabase(file) {
+      this.lastImportErrorCode = null
       return await useCrudActions(this).wrap(() => adminService.importDatabase(file), {
         errorMsgFallbackKey: 'admin.import.failed',
+        onError: (error) => { this.lastImportErrorCode = error?.code ?? null },
         suppressErrorToast: true,
       })
     },
