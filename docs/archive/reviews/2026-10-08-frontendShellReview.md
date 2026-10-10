@@ -1,3 +1,5 @@
+> Historical source review; findings may have subsequent fixes. Use [current status](../../workDone.md) and [remaining work](../../workPlan.md) before acting on them.
+
 # Frontend shell, layout and token review — 2026-10-08
 
 ## Tokenization risk review — 2026-10-08

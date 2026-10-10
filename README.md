@@ -1,5 +1,7 @@
 # Mukhtabir Frontend
 
+
+Documentation: [current map](docs/README.md) · [remaining work](docs/workPlan.md) · [source status](docs/workDone.md). Archived findings are historical; current contracts and verification gates are linked from the map.
 Arabic/English Vue SPA for Mukhtabir question bank/study/exam/admin; consumes Django in `../backend` and builds a backend-served production bundle.
 
 ## Main capabilities
@@ -32,7 +34,7 @@ pnpm dev
 
 The dev server listens on `http://localhost:5173`. `/api` requests are proxied to `http://127.0.0.1:5004`, matching the backend SQLite launcher default.
 
-Other backend ports (e.g. MariaDB 5005): set `VITE_BACKEND_PROXY_TARGET=http://127.0.0.1:5005` in `.env.local`; restart `pnpm dev`. Proxy forwards `/api`/`/media`; leave `VITE_API_BASE_URL` unset or `/api/v1`. [Startup guide](../backend/docs/START_HERE.md): simultaneous instances/Termux. Occupied frontend ports fail; select `pnpm dev --port 5174`.
+Other backend ports (e.g. MariaDB 5005): set `VITE_BACKEND_PROXY_TARGET=http://127.0.0.1:5005` in `.env.local`; restart `pnpm dev`. Proxy forwards `/api`/`/media`; leave `VITE_API_BASE_URL` unset or `/api/v1`. [Startup guide](../backend/docs/guides/START_HERE.md): simultaneous instances/Termux. Occupied frontend ports fail; select `pnpm dev --port 5174`.
 
 To select another API origin, create an uncommitted `.env`:
 
@@ -123,5 +125,5 @@ See the [documentation index](docs/README.md) for all supporting guides.
 - [Agents.md](Agents.md) — local contributor constraints
 - [workPlan.md](docs/workPlan.md) — current planned work
 - [workDone.md](docs/workDone.md) — completed work log
-- [theme-guidelines.md](docs/theme-guidelines.md) — visual theme guidance
-- [visual-qa-checklist.md](docs/visual-qa-checklist.md) — manual visual verification
+- [theme-guidelines.md](docs/guides/theme-guidelines.md) — visual theme guidance
+- [visual-qa-checklist.md](docs/verification/visual-qa-checklist.md) — manual visual verification

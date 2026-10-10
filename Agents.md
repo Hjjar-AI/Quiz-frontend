@@ -2,7 +2,7 @@
 
 ## Working rules
 
-- Read applicable instructions and [workPlan](docs/workPlan.md)/[workDone](docs/workDone.md)
+- Start at [documentation index](docs/README.md). Read applicable instructions and [workPlan](docs/workPlan.md)/[workDone](docs/workDone.md)
   first; inspect current production source and the working tree. Preserve unrelated
   edits and existing authorization; do not commit unless requested.
 - Trace affected contracts and callers before making focused corrections. Do not
@@ -45,8 +45,8 @@
 - Refresh affected cached selectors and authenticated profile/capabilities after
   relevant confirmed writes or safe re-entry; preserve drafts and active sessions.
 - Check Arabic/English text, RTL, keyboard/accessibility and responsive behavior.
-  Follow [UI conventions](docs/UI_CONVENTIONS.md), [themes](docs/theme-guidelines.md)
-  and the [visual checklist](docs/visual-qa-checklist.md) for relevant UI work.
+  Follow [UI conventions](docs/guides/UI_CONVENTIONS.md), [themes](docs/guides/theme-guidelines.md)
+  and the [visual checklist](docs/verification/visual-qa-checklist.md) for relevant UI work.
 - Keep palette, geometry, stacking and motion values in shared tokens. Measure
   resizable shell surfaces instead of copying fixed offsets into CSS or JavaScript.
 - Theme additions/renames must update the palette, shared registry, pre-paint bootstrap,
@@ -65,4 +65,4 @@
   at least 44px; shrink visual clutter without shrinking those targets.
 - Select the development API/media proxy through `VITE_BACKEND_PROXY_TARGET`; avoid
   machine-specific committed hosts. Keep backend port, browser origin and CSRF
-  settings aligned; see the [startup guide](../backend/docs/START_HERE.md).
+  settings aligned; see the [startup guide](../backend/docs/guides/START_HERE.md).

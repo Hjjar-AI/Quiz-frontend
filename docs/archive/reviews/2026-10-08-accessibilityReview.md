@@ -1,3 +1,5 @@
+> Historical source review; findings may have subsequent fixes. Use [current status](../../workDone.md) and [remaining work](../../workPlan.md) before acting on them.
+
 # Accessibility recommendation review — 2026-10-08
 
 Source review of the supplied 16-item list, followed by implementation. No rendered/browser,
