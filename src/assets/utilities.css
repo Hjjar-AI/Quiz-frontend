@@ -1,0 +1,28 @@
+/* Utility helpers */
+.hover-lift {
+  transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover-lift);
+}
+
+
+.tags { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xs); }
+.tag {
+  background: var(--color-bg-alt);
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+blockquote { hanging-punctuation: first allow-end last; }
+
+/* Deterministic, theme-aware tones for avatars in dense user lists. */
+.avatar-tone-0 { --avatar-color: var(--color-avatar-0); }
+.avatar-tone-1 { --avatar-color: var(--color-avatar-1); }
+.avatar-tone-2 { --avatar-color: var(--color-avatar-2); }
+.avatar-tone-3 { --avatar-color: var(--color-avatar-3); }
+.avatar-tone-4 { --avatar-color: var(--color-avatar-4); }
+.avatar-tone-5 { --avatar-color: var(--color-avatar-5); }

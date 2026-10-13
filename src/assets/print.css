@@ -1,0 +1,269 @@
+/* frontend/src/assets/print.css */
+/* Print-specific styles for the entire app */
+
+@page {
+  size: auto;
+  margin: 15mm;
+}
+
+/*
+  RTL/LTR note
+  ------------
+  The print stylesheet does not declare `direction` explicitly.
+  Browsers apply the ELEMENT's computed `direction` to the printed
+  layout, which for `<html dir="rtl">` is RTL — correct. The `<html>`
+  attribute is set by `applyLocaleToDOM` (i18n/helpers/direction.js),
+  which runs before first paint, so any print performed from a live
+  session sees the correct direction.
+
+  `direction` is intentionally NOT forced here: a future "print this
+  English summary from an Arabic session" affordance would set
+  `direction: ltr` on its own container without touching this file.
+*/
+@media print {
+  /* Theme hues are intentional in print. Separate palette seeds let us
+     adapt bright dark-theme accents to white paper without changing the
+     screen palette or creating self-referencing custom properties.
+     Match the themed-root specificity used by the shared derivation rule. */
+  :root,
+  :root[data-theme] {
+    color-scheme: light;
+    --color-primary: color-mix(in srgb, var(--color-palette-primary) var(--print-accent-weight), black);
+    --color-success: color-mix(in srgb, var(--color-palette-success) var(--print-accent-weight), black);
+    --color-danger: color-mix(in srgb, var(--color-palette-danger) var(--print-accent-weight), black);
+    --color-warning: color-mix(in srgb, var(--color-palette-warning) var(--print-accent-weight), black);
+    --color-info: color-mix(in srgb, var(--color-palette-info) var(--print-accent-weight), black);
+    --color-tint-base: #ffffff;
+    --color-strong-weight: 85%;
+    --color-glow-weight: 0%;
+    --color-border-weight: 72%;
+
+    --color-primary-soft-text: var(--color-primary);
+    --color-success-soft-text: var(--color-success);
+    --color-danger-soft-text: var(--color-danger);
+    --color-warning-soft-text: var(--color-warning);
+    --color-info-soft-text: var(--color-info);
+
+    --color-bg-body: #ffffff;
+    --color-bg-card: #ffffff;
+    --color-bg-alt: #f5f5f5;
+    --color-text-primary: #000000;
+    --color-text-secondary: #333333;
+    --color-text-muted: #666666;
+    --color-text-inverse: #ffffff;
+    --color-on-primary: #ffffff;
+    --color-on-success: #ffffff;
+    --color-on-danger: #ffffff;
+    --color-on-warning: #ffffff;
+    --color-on-info: #ffffff;
+    --color-on-primary-light: #000000;
+    --color-overlay: rgba(0, 0, 0, 0.5);
+  }
+
+  /* ── Chrome hidden in the printed output ────────────────────── */
+  .navbar,
+  .navbar-progress,
+  .footer,
+  .scroll-to-top,
+  .theme-dropdown,
+  .error-banner,
+  .bulk-actions,
+  .import-preview,
+  .modal,
+  .toast,
+  .toast-container,
+  .base-modal-overlay,
+  .navbar__toggle,
+  .navbar__links,
+  .bottom-nav,
+  .offline-banner,
+  .base-pagination,
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    padding-top: 0 !important;
+    margin: 0 !important;
+    font-size: 12pt;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  a,
+  a:visited {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+
+  a[href^='http://']::after,
+  a[href^='https://']::after,
+  a[href^='mailto:']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+    font-weight: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .bi::before {
+    color: currentColor !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .layout__main {
+    padding: 0 !important;
+  }
+
+  .base-card,
+  .question-card,
+  .stat-tile,
+  .review-item {
+    box-shadow: none !important;
+    border: var(--border-width) solid var(--color-border) !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .review-item {
+    margin-bottom: 1rem;
+  }
+
+  .test-results {
+    max-width: 100% !important;
+  }
+
+  .test-results__actions,
+  .motivational-quote,
+  .export-section {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    break-inside: avoid;
+  }
+
+  .print-table tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-table th,
+  .print-table td {
+    border: var(--border-width) solid var(--color-border);
+    padding: 0.5rem;
+    text-align: start;
+  }
+
+  .chart-card,
+  .chart-card__body {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .chart-card__body {
+    height: 240px !important;
+  }
+
+  .chart-card__body canvas {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+  }
+
+  img,
+  svg {
+    max-width: 100% !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  p,
+  li,
+  blockquote {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .table-shell,
+  .base-data-table,
+  .history-table-wrap,
+  .master-exam-results__table--scrollable,
+  .report-table-wrap {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+  .table-shell--sticky thead th,
+  .master-exam-results__table thead th,
+  .sticky-col {
+    position: static !important;
+  }
+  .table-shell table {
+    display: table !important;
+    min-width: 0 !important;
+    break-inside: auto;
+  }
+  .table-shell thead {
+    display: table-header-group !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+  }
+  .table-shell tbody { display: table-row-group !important; }
+  .table-shell tbody tr { display: table-row !important; }
+  .table-shell th,
+  .table-shell td {
+    display: table-cell !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+  .table-shell td::before { display: none !important; }
+
+  .table-shared {
+    width: 100%;
+    border-collapse: collapse;
+    break-inside: avoid;
+  }
+
+  .table-shared th,
+  .table-shared td {
+    border: var(--border-width) solid var(--color-border);
+    padding: 0.4rem;
+    text-align: start;
+  }
+
+  .table-shared tbody tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+@media screen {
+  .print-only {
+    display: none;
+  }
+}

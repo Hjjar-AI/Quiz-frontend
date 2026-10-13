@@ -1,0 +1,51 @@
+{
+  "name": "mukhtabir-frontend",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "pkg install": "pnpm install",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .js,.vue --fix && pnpm run lint:accessibility",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "bump:patch": "pnpm version patch",
+    "bump:minor": "pnpm version minor",
+    "bump:major": "pnpm version major",
+    "lint:accessibility": "node scripts/checkAccessibility.mjs"
+  },
+  "dependencies": {
+    "axios": "^1.20.0",
+    "chart.js": "^4.5.1",
+    "dompurify": "^3.4.15",
+    "markdown-it": "^15.0.2",
+    "markdown-it-multimd-table": "^4.2.3",
+    "pinia": "^4.0.3",
+    "vue": "^3.5.42",
+    "vue-i18n": "^11.4.10",
+    "vue-router": "^5.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vitest/coverage-v8": "^5.0.1",
+    "@vitest/ui": "^5.0.1",
+    "@vue/test-utils": "^2.5.1",
+    "eslint": "^10.10.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "eslint-plugin-vue": "^10.11.0",
+    "happy-dom": "^20.14.5",
+    "jsdom": "^30.1.0",
+    "prettier": "^3.9.6",
+    "unplugin-auto-import": "^21.1.0",
+    "unplugin-vue-components": "^32.1.0",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1"
+  },
+  "packageManager": "pnpm@12.10.1+sha512.ba40a37eb1a370d60fea8c4cf1d364c13bcccef518e98ad2bcee954f539d38da37458e58261a3fa55e06523450ea0ffff9f497b135be41f2c15c1642bacace6c"
+}

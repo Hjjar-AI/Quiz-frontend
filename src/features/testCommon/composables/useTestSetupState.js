@@ -1,0 +1,450 @@
+import { computed, onMounted, onBeforeUnmount, reactive, ref, watch } from 'vue'
+import { useConfigStore } from '@/stores/configStore'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useBookmarkStore } from '@/stores/bookmarkStore'
+import { useBlueprintStore } from '@/stores/blueprintStore'
+import { useAuthStore } from '@/stores/authStore'
+import { useWrongAnswerStore } from '@/stores/wrongAnswerStore'
+import { tagService } from '@/services/tagService'
+import { questionService } from '@/services/questionService'
+import { useDebounceFn } from '@/composables/useDebounceFn'
+
+function parseTags(value) {
+  return String(value || '')
+    .split(',')
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+}
+
+function unique(values) {
+  return [...new Set(values)]
+}
+
+export function useTestSetupState(props, emit, t) {
+  const configStore = useConfigStore()
+  const categoryStore = useCategoryStore()
+  const bookmarkStore = useBookmarkStore()
+  const blueprintStore = useBlueprintStore()
+  const authStore = useAuthStore()
+  const wrongAnswerStore = useWrongAnswerStore()
+
+  const mode = ref(props.initialMode)
+  const source = ref('')
+  const selectionStrategy = ref('coverage')
+  const selectedTags = ref([])
+  const selectedBook = ref(null)
+  const books = ref([])
+  const booksLoading = ref(false)
+  const booksError = ref(false)
+  const selectedCategories = ref([])
+  const selectedBlueprintId = ref(null)
+  const numQuestions = ref(10)
+  const tags = ref([])
+  const tagsLoading = ref(false)
+  let countRequestId = 0
+  let bookFilterRequestId = 0
+  const bookFilters = ref(null)
+  const bookFiltersLoading = ref(false)
+  const bookFiltersError = ref(false)
+  const bookFiltersReady = computed(() => source.value !== 'book' ||
+    (bookFilters.value?.source_document === selectedBook.value && !bookFiltersLoading.value && !bookFiltersError.value))
+  const sessionMaximum = computed(() => Math.min(props.maxAvailable, configStore.maxQuizQuestions))
+
+  const filters = reactive({
+    difficulty: '',
+    tags: '',
+    verified_only: false,
+  })
+
+  const categories = computed(() => source.value === 'book'
+    ? (bookFiltersReady.value ? bookFilters.value?.categories || [] : []) : categoryStore.items)
+  const categoriesLoading = computed(() => categoryStore.isLoading)
+  const activeBlueprints = computed(() => blueprintStore.activeBlueprints)
+
+  const tagItems = computed(() =>
+    (source.value === 'book' ? (bookFiltersReady.value ? bookFilters.value?.tags || [] : []) : tags.value).map((tag) => ({
+      value: tag.name,
+      label: tag.name,
+      count: tag.count,
+    })),
+  )
+
+  const categoryItems = computed(() =>
+    categories.value.map((category) => ({
+      value: category.id,
+      label: category.name,
+      color: category.color,
+    })),
+  )
+
+  const blueprintOptions = computed(() =>
+    activeBlueprints.value.map((blueprint) => ({
+      value: blueprint.id,
+      label: blueprint.name,
+    })),
+  )
+
+  const bookItems = computed(() => books.value.map(book => ({
+    value: book.name, label: book.name, count: book.count,
+  })))
+
+  const sourceBehaviors = {
+    book: {
+      isReady: () => books.value.some(book => book.name === selectedBook.value),
+      hint: () => t('tests.pickBook'),
+      apply(payload, forCount) {
+        payload.source_document = selectedBook.value
+        if (selectedCategories.value.length) payload.category_ids = forCount
+          ? selectedCategories.value.join(',') : [...selectedCategories.value]
+        if (selectedTags.value.length) payload.tags_filter = selectedTags.value.join(',')
+      },
+      label: () => selectedBook.value || t('tests.sourceBookShort'),
+    },
+    tag: {
+      isReady: () => selectedTags.value.length > 0,
+      hint: () => t('tests.pickTag'),
+      apply(payload) {
+        const tagsFilter = unique([...selectedTags.value, ...parseTags(filters.tags)])
+        if (tagsFilter.length) payload.tags_filter = tagsFilter.join(',')
+      },
+      label() {
+        if (selectedTags.value.length === 1) return selectedTags.value[0]
+        if (selectedTags.value.length > 1) {
+          return t('tests.sourceMultiTag', { count: selectedTags.value.length })
+        }
+        return t('tests.genericTag')
+      },
+    },
+    category: {
+      isReady: () => selectedCategories.value.length > 0,
+      hint: () => t('tests.categoryPickerEmptyHint'),
+      apply(payload, forCount) {
+        payload.category_ids = forCount
+          ? selectedCategories.value.join(',')
+          : [...selectedCategories.value]
+      },
+      label() {
+        if (selectedCategories.value.length === 1) {
+          return (
+            categories.value.find((category) => category.id === selectedCategories.value[0])
+              ?.name || ''
+          )
+        }
+        return t('tests.sourceMultiCategory')
+      },
+    },
+    bookmarks: {
+      isReady: () => (bookmarkStore.count || 0) > 0,
+      hint: () => t('tests.sourceNotReady'),
+      apply(payload, forCount) {
+        payload.use_bookmarks = forCount ? 'true' : true
+      },
+      label: () => t('tests.sourceBookmarksLabel'),
+    },
+    srs: {
+      isReady: () => (wrongAnswerStore.srsDueCount || 0) > 0,
+      hint: () => t('tests.sourceNotReady'),
+      apply(payload, forCount) {
+        payload.use_srs = forCount ? 'true' : true
+        if (!forCount) payload.disable_timer = true
+      },
+      label: () => t('tests.smartReviewTag'),
+    },
+    blueprint: {
+      isReady: () => Boolean(selectedBlueprintId.value),
+      hint: () => t('tests.sourceNotReady'),
+      apply(payload) {
+        payload.blueprint_id = selectedBlueprintId.value
+      },
+      label() {
+        return (
+          blueprintOptions.value.find((blueprint) => blueprint.value === selectedBlueprintId.value)
+            ?.label || ''
+        )
+      },
+    },
+  }
+
+  const activeSourceBehavior = computed(() => sourceBehaviors[source.value] || null)
+
+  const availableSources = computed(() => {
+    const definitions = [
+      {
+        value: 'book', icon: 'bi bi-book', labelKey: 'tests.sourceBookShort',
+        badge: books.value.length || null, disabled: books.value.length === 0,
+        disabledReason: t('tests.noBooksAvailable'),
+      },
+      {
+        value: 'tag',
+        icon: 'bi bi-tag',
+        labelKey: 'tests.sourceTagShort',
+        badge: tags.value.length || null,
+        disabled: tags.value.length === 0,
+        disabledReason: t('tests.noTagsAvailable'),
+      },
+      {
+        value: 'category',
+        icon: 'bi bi-folder2',
+        labelKey: 'tests.sourceCategoryShort',
+        badge: categoryStore.items.length || null,
+        disabled: categoryStore.items.length === 0,
+        disabledReason: t('categories.empty'),
+      },
+      {
+        value: 'bookmarks',
+        icon: 'bi bi-bookmark-heart',
+        labelKey: 'tests.sourceBookmarksShort',
+        badge: bookmarkStore.count || null,
+        disabled: bookmarkStore.count === 0,
+        disabledReason: t('questions.emptyBookmarks'),
+      },
+      {
+        value: 'srs',
+        icon: 'bi bi-arrow-repeat',
+        labelKey: 'tests.sourceSrsShort',
+        badge: wrongAnswerStore.srsDueCount || null,
+        disabled: wrongAnswerStore.srsDueCount === 0,
+        disabledReason: t('tests.srsNothingDue'),
+      },
+    ]
+
+    if (authStore.can('tests.use_blueprint')) {
+      definitions.push({
+        value: 'blueprint',
+        icon: 'bi bi-diagram-3',
+        labelKey: 'tests.sourceBlueprintShort',
+        badge: blueprintOptions.value.length || null,
+        disabled: blueprintOptions.value.length === 0,
+        disabledReason: t('admin.blueprints.empty'),
+      })
+    }
+
+    return definitions
+  })
+
+  const canStart = computed(() => {
+    if (props.loading || !bookFiltersReady.value) return false
+    return Boolean(activeSourceBehavior.value?.isReady() && props.maxAvailable > 0 &&
+      Number.isInteger(numQuestions.value) && numQuestions.value >= 1 && numQuestions.value <= sessionMaximum.value)
+  })
+
+  const hintForDisabled = computed(() => {
+    if (!activeSourceBehavior.value) return t('tests.chooseSource')
+    return activeSourceBehavior.value.hint()
+  })
+
+  function setMode(next) {
+    if (next === mode.value) return
+    mode.value = next
+    emit('update:mode', next)
+    queueAvailableCount()
+  }
+
+  function setSource(next) {
+    if (next === source.value) return
+    source.value = next
+    if (next !== 'book') selectedBook.value = null
+    if (next !== 'tag') selectedTags.value = []
+    if (next !== 'category') selectedCategories.value = []
+    if (next !== 'blueprint') selectedBlueprintId.value = null
+    queueAvailableCount()
+  }
+
+  function buildSelectionPayload(forCount = false) {
+    const payload = {}
+    activeSourceBehavior.value?.apply(payload, forCount)
+
+    if (source.value !== 'tag' && source.value !== 'book') {
+      const additionalTags = unique(parseTags(filters.tags))
+      if (additionalTags.length) payload.tags_filter = additionalTags.join(',')
+    }
+    if (filters.difficulty) payload.difficulty = filters.difficulty
+    if (filters.verified_only) {
+      payload.verified_only = forCount ? 'true' : true
+    }
+    return payload
+  }
+
+  function buildStartPayload() {
+    return {
+      ...buildSelectionPayload(false),
+      limit: numQuestions.value,
+      selection_strategy: selectionStrategy.value,
+      session_label: activeSourceBehavior.value?.label() || t('tests.genericTag'),
+    }
+  }
+
+  async function fetchAvailableCount() {
+    const requestId = countRequestId
+    if (!activeSourceBehavior.value?.isReady() || !bookFiltersReady.value) {
+      if (requestId === countRequestId) emit('max-update', 0)
+      return
+    }
+
+    try {
+      const result = await questionService.availableCount(buildSelectionPayload(true))
+      if (requestId === countRequestId && result.count !== undefined) {
+        emit('max-update', result.count)
+      }
+    } catch {
+      // The available count is a hint; starting remains governed by the API.
+    }
+  }
+
+  const { debounced: recomputeAvailableCount } = useDebounceFn(fetchAvailableCount, 300)
+
+  function queueAvailableCount() {
+    countRequestId += 1
+    emit('max-update', 0)
+    recomputeAvailableCount()
+  }
+
+  function submit() {
+    if (!canStart.value) return
+    emit('start', buildStartPayload())
+  }
+
+  watch(
+    () => props.initialMode,
+    (next) => {
+      if (next !== mode.value) mode.value = next
+    },
+  )
+
+  watch(
+    [source, selectedBook, selectedTags, selectedCategories, selectedBlueprintId, filters],
+    queueAvailableCount,
+    { deep: true },
+  )
+
+  async function fetchBookFilters() {
+    const requestId = ++bookFilterRequestId
+    const name = source.value === 'book' ? selectedBook.value : null
+    bookFiltersLoading.value = Boolean(name)
+    bookFiltersError.value = false
+    queueAvailableCount()
+    if (!name) return
+    try {
+      const data = await questionService.sourceBookFilters(name)
+      if (requestId !== bookFilterRequestId || selectedBook.value !== name || source.value !== 'book') return
+      if (data?.source_document !== name) throw new Error('Source book mismatch')
+      bookFilters.value = data
+      selectedCategories.value = selectedCategories.value.filter(id => data.categories.some(category => category.id === id))
+      selectedTags.value = selectedTags.value.filter(tag => data.tags.some(item => item.name === tag))
+    } catch {
+      if (requestId === bookFilterRequestId) bookFiltersError.value = true
+    } finally {
+      if (requestId === bookFilterRequestId) {
+        bookFiltersLoading.value = false
+        queueAvailableCount()
+      }
+    }
+  }
+
+  watch([source, selectedBook], ([nextSource, name], [, oldName]) => {
+    if (name !== oldName) {
+      selectedCategories.value = []
+      selectedTags.value = []
+      if (nextSource === 'book') filters.tags = ''
+    }
+    fetchBookFilters()
+  })
+  watch(sessionMaximum, maximum => {
+    if (maximum > 0) numQuestions.value = Math.max(1, Math.min(numQuestions.value || 10, maximum))
+  })
+  onBeforeUnmount(() => { countRequestId += 1; bookFilterRequestId += 1 })
+
+  async function fetchBooks() {
+    if (booksLoading.value) return
+    booksLoading.value = true
+    booksError.value = false
+    try {
+      const data = await questionService.sourceBooks()
+      books.value = data?.items || []
+      if (!books.value.some(book => book.name === selectedBook.value)) selectedBook.value = null
+      queueAvailableCount()
+    } catch {
+      booksError.value = true
+    } finally {
+      booksLoading.value = false
+    }
+  }
+
+  onMounted(async () => {
+    const bookRead = fetchBooks()
+    tagsLoading.value = true
+    try {
+      const [tagData] = await Promise.all([
+        tagService.list(),
+        bookRead,
+        categoryStore.fetchAll(),
+        bookmarkStore.fetchBookmarks(),
+        wrongAnswerStore.fetchSrsDueCount(),
+        authStore.can('tests.use_blueprint') ? blueprintStore.fetchAll() : Promise.resolve(),
+      ])
+      tags.value = tagData?.items || []
+    } finally {
+      tagsLoading.value = false
+    }
+
+    if (props.initialUseBookmarks && (bookmarkStore.count || 0) > 0) {
+      setSource('bookmarks')
+    }
+
+    queueAvailableCount()
+  })
+
+  return {
+    MODE_OPTIONS: [
+      {
+        value: 'study',
+        icon: 'bi bi-book-half',
+        titleKey: 'tests.modeStudyLabel',
+        descKey: 'tests.studyDescShort',
+      },
+      {
+        value: 'exam',
+        icon: 'bi bi-journal-check',
+        titleKey: 'tests.modeExamLabel',
+        descKey: 'tests.examDescShort',
+      },
+      {
+        value: 'recall',
+        icon: 'bi bi-chat-left-text',
+        titleKey: 'tests.modeRecallLabel',
+        descKey: 'tests.recallDescShort',
+      },
+    ],
+    mode,
+    source,
+    selectedBook,
+    bookItems,
+    booksLoading,
+    booksError,
+    fetchBooks,
+    selectedTags,
+    selectedCategories,
+    selectedBlueprintId,
+    selectionStrategy,
+    filters,
+    numQuestions,
+    sessionMaximum,
+    bookFiltersLoading,
+    bookFiltersError,
+    bookFiltersReady,
+    fetchBookFilters,
+    tagItems,
+    tagsLoading,
+    categoryItems,
+    categoriesLoading,
+    blueprintOptions,
+    availableSources,
+    bookmarkStore,
+    wrongAnswerStore,
+    canStart,
+    hintForDisabled,
+    setMode,
+    setSource,
+    submit,
+  }
+}

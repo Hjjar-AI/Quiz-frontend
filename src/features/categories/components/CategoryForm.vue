@@ -1,0 +1,167 @@
+<!-- frontend/src/features/categories/components/CategoryForm.vue -->
+<template>
+  <BaseModal
+    :is-open="isOpen"
+    :title="editMode ? t('categories.editTitle') : t('categories.addTitle')"
+    size="md"
+    @update:is-open="close"
+  >
+    <RevisionReview v-if="review.conflict.value" :latest="latestText" :missing="Boolean(review.latest.value && !review.latest.value.item)" :busy="review.busy.value" :error="review.error.value" :can-keep="Boolean(review.latest.value?.item) && authStore.can('categories.manage')" @refresh="review.refresh" @keep="review.resolve(true)" @use-server="review.resolve(false)" />
+    <form @submit.prevent="handleSubmit" class="category-form">
+      <FormGrid>
+        <BaseInput
+          v-model="form.name"
+          :label="t('categories.nameLabel')"
+          required
+          :error="errors.name"
+          @blur="touch('name')"
+          @input="revalidate('name')"
+        />
+        <BaseInput v-model="form.description" :label="t('categories.descriptionLabel')" />
+        <BaseField :label="t('categories.colorLabel')" id="cat-color">
+          <div class="category-form__presets">
+            <BaseButton
+              v-for="c in colorPresets"
+              :key="c"
+              variant="ghost"
+              size="small"
+              icon-only
+              class="category-form__preset"
+              :style="{ background: c }"
+              @click="form.color = c"
+              :class="{ 'category-form__preset--active': form.color === c }"
+              :aria-label="t('categories.colorPresetAria', { color: c })"
+            >
+              <span v-if="form.color === c" class="category-form__preset-check"><i class="bi bi-check-lg" aria-hidden="true"></i></span>
+            </BaseButton>
+            <input
+              type="color"
+              v-model="form.color"
+              class="category-form__custom-input"
+              :aria-label="t('categories.customColorAria')"
+            />
+          </div>
+        </BaseField>
+        <BaseSelect v-model="form.icon" :label="t('categories.iconLabel')" :options="iconOptions" />
+      </FormGrid>
+      <div class="form-actions">
+        <BaseButton type="button" variant="secondary" @click="close"><i class="bi bi-x-lg" aria-hidden="true"></i> {{ t('common.cancel') }}</BaseButton>
+        <BaseButton type="submit" variant="primary" :loading="categoryStore.isLoading" :disabled="review.conflict.value"><i class="bi bi-check-lg" aria-hidden="true"></i> {{ editMode ? t('categories.updateButtonLabel') : t('categories.addButtonLabel') }}</BaseButton>
+      </div>
+    </form>
+  </BaseModal>
+</template>
+
+<script setup>
+import RevisionReview from '@/components/common/RevisionReview.vue'
+import { useRevisionReview } from '@/composables/useRevisionReview'
+import { categoryService } from '@/services/categoryService'
+import { useAuthStore } from '@/stores/authStore'
+import { ref, reactive, computed } from 'vue'
+import BaseModal from '@/components/base/BaseModal.vue'
+import BaseField from '@/components/base/BaseField.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
+import BaseSelect from '@/components/base/BaseSelect.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import FormGrid from '@/components/common/FormGrid.vue'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useFormValidation } from '@/composables/useFormValidation'
+
+const { t } = useI18n()
+
+const categoryStore = useCategoryStore()
+const authStore=useAuthStore()
+
+const isOpen = ref(false)
+const editMode = ref(false)
+const editingVersion = ref(null)
+const editingId = ref(null)
+
+const DEFAULT_CATEGORY_COLOR = '#6a3f24'
+const colorPresets = [
+  DEFAULT_CATEGORY_COLOR,
+  '#285166',
+  '#2f5543',
+  '#7d342f',
+  '#654711',
+  '#51446f',
+  '#7f3455',
+  '#3d625e',
+  '#515b65',
+  '#83513a',
+  '#66465b',
+  '#456044',
+]
+
+const iconOptions = computed(() => [
+  { value: 'bi-folder',            label: t('categories.iconFolder') },
+  { value: 'bi-book',              label: t('categories.iconBook') },
+  { value: 'bi-heart-pulse',       label: t('categories.iconPsychiatry') },
+  { value: 'bi-brain',             label: t('categories.iconBrain') },
+  { value: 'bi-emoji-frown',       label: t('categories.iconDepression') },
+  { value: 'bi-emoji-angry',       label: t('categories.iconBipolar') },
+  { value: 'bi-chat-dots',         label: t('categories.iconAnxiety') },
+  { value: 'bi-cup-straw',         label: t('categories.iconAddiction') },
+  { value: 'bi-alarm',             label: t('categories.iconSleep') },
+  { value: 'bi-hospital',          label: t('categories.iconGeriatric') },
+  { value: 'bi-people',            label: t('categories.iconPediatric') },
+  { value: 'bi-capsule',           label: t('categories.iconMedication') },
+  { value: 'bi-gavel',             label: t('categories.iconForensic') },
+  { value: 'bi-exclamation-triangle', label: t('categories.iconEmergency') },
+])
+
+const form = reactive({ name: '', description: '', color: DEFAULT_CATEGORY_COLOR, icon: 'bi-folder' })
+const review=useRevisionReview({
+  allow:()=>authStore.can('categories.manage'),
+  load:async()=>{const result=await categoryService.list();return {item:result.items.find(item=>item.id===editingId.value) ?? null}},
+  apply:(keep,current)=>{if(!current.item) {editMode.value=false;editingId.value=null;editingVersion.value=null;categoryStore.error=null;return;}editingVersion.value=current.item.version;if(!keep) Object.assign(form,{name:current.item.name,description:current.item.description||'',color:current.item.color,icon:current.item.icon});categoryStore.error=null},
+})
+const latestText=computed(()=>review.latest.value?.item ? [review.latest.value.item.name,review.latest.value.item.description,review.latest.value.item.color,review.latest.value.item.icon].filter(Boolean).join(' · ') : review.latest.value ? t('common.revisionTargetMissing') : '')
+const { errors, touch, revalidate, validateAll, resetValidation } = useFormValidation({
+  name: () => form.name.trim() ? '' : t('categories.nameRequired'),
+})
+
+function open(category = null) {
+  review.reset()
+  resetValidation()
+  if (category) {
+    editMode.value = true
+    editingVersion.value = category.version
+    editingId.value = category.id
+    form.name = category.name
+    form.description = category.description || ''
+    form.color = category.color || DEFAULT_CATEGORY_COLOR
+    form.icon = category.icon || 'bi-folder'
+  } else {
+    editMode.value = false
+    editingVersion.value = null
+    editingId.value = null
+    form.name = ''
+    form.description = ''
+    form.color = DEFAULT_CATEGORY_COLOR
+    form.icon = 'bi-folder'
+  }
+  isOpen.value = true
+}
+
+function close() { isOpen.value = false }
+
+async function handleSubmit() {
+  if (review.conflict.value || categoryStore.isLoading || !authStore.can('categories.manage') || !validateAll()) return
+  const data = { name: form.name.trim(), description: form.description.trim() || '', color: form.color, icon: form.icon }
+  let result
+  if (editMode.value) {
+    result = await categoryStore.update(editingId.value, { ...data, expected_version: editingVersion.value })
+  } else {
+    result = await categoryStore.create(data)
+  }
+  if(!result && Number(categoryStore.lastErrorCode)===409) await review.refresh()
+  if (result) {
+    close()
+    emit('saved')
+  }
+}
+
+const emit = defineEmits(['saved'])
+defineExpose({ open, close })
+</script>

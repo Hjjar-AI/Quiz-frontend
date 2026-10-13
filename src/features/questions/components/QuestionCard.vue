@@ -1,0 +1,329 @@
+<!-- frontend/src/features/questions/components/QuestionCard.vue -->
+<template>
+  <BaseCard
+    class="question-card"
+    :class="[
+      question.verified ? 'question-card--verified' : 'question-card--unverified',
+      { 'question-card--selected': selected },
+    ]"
+  >
+    <Transition name="stamp">
+      <div v-if="showStamp" class="question-card__stamp">
+        <i class="bi bi-patch-check-fill" aria-hidden="true"></i>
+      </div>
+    </Transition>
+
+    <details v-if="displayQuestion.case?.stem || displayQuestion.case?.title" class="question-card__case" open>
+      <summary class="question-card__case-summary">
+        <i class="bi bi-journal-medical" aria-hidden="true"></i>
+        <span dir="auto">{{ displayQuestion.case.title || t('questions.caseClinicalTitle') }}</span>
+        <span v-if="question.case.key" class="question-card__case-group">
+          {{ question.case.key }}
+        </span>
+        <span v-if="question.case_sibling_count > 1" class="question-card__case-count">
+          {{ t('questions.caseQuestionCount', { n: question.case_sibling_count }) }}
+        </span>
+      </summary>
+      <div class="question-card__case-body">
+        <BaseMarkdown :text="displayQuestion.case.stem || ''" />
+      </div>
+    </details>
+
+    <div class="question-card__header">
+      <div class="question-card__top">
+        <div class="question-card__title">
+          <span class="question-card__text" dir="auto">
+            <BaseMarkdown :text="displayQuestion.question" inline />
+          </span>
+        </div>
+        <div class="question-card__badges">
+          <BaseBadge :variant="question.verified ? 'success' : 'warning'" status>
+            <i
+              :class="
+                question.verified
+                  ? 'bi bi-patch-check-fill icon-verified'
+                  : 'bi bi-patch-check icon-unverified'
+              "
+             aria-hidden="true"></i>
+            {{ question.verified ? t('questions.verified') : t('questions.unverified') }}
+          </BaseBadge>
+          <DifficultyBadge :difficulty="question.difficulty" />
+          <details v-if="extraBadgeCount" class="question-card__badge-disclosure">
+            <summary :aria-label="t('questions.moreStatuses', { count: extraBadgeCount })">
+              {{ t('questions.moreStatusesCompact', { count: extraBadgeCount }) }}
+            </summary>
+            <div class="question-card__badge-menu">
+              <BaseBadge v-if="question.knowledge_object_title" variant="info" status>
+                <i class="bi bi-bullseye" aria-hidden="true"></i> {{ question.knowledge_object_title }}
+              </BaseBadge>
+              <BaseBadge v-if="question.case" variant="info" status>
+                <i class="bi bi-journal-medical" aria-hidden="true"></i> {{ t('questions.caseBadge') }}
+              </BaseBadge>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <QuestionCardActions
+        :question="question"
+        :bookmarked="bookmarked"
+        :selected="selected"
+        :show-select="showSelect"
+        @toggle-select="$emit('toggle-select')"
+        @bookmark="$emit('bookmark')"
+        @edit="$emit('edit')"
+        @delete="$emit('delete')"
+        @verify="$emit('verify')"
+        @flag="$emit('flag')"
+        @duplicate="$emit('duplicate')"
+      />
+    </div>
+
+    <div class="question-card__choices">
+      <strong>{{ t('questions.choicesLabel') }}:</strong>
+      <ol class="choices-list">
+        <li
+          v-for="(choice, idx) in choices"
+          :key="idx"
+          class="choice-item"
+          :class="{ 'choice-item--correct': idx + 1 === question.correct_answer }"
+        >
+          <span class="choice-item__text" dir="auto">{{ idx + 1 }}. {{ choice }}</span>
+          <i v-if="idx + 1 === question.correct_answer" class="bi bi-check-lg text-success" aria-hidden="true"></i>
+        </li>
+      </ol>
+    </div>
+
+    <div v-if="displayQuestion.explanation" class="question-card__explanation">
+      <BaseButton
+        variant="ghost"
+        size="small"
+        raw-content
+        class="explanation-toggle"
+        :aria-expanded="explanationExpanded"
+        @click="explanationExpanded = !explanationExpanded"
+      >
+        <strong><i class="bi bi-lightbulb" aria-hidden="true"></i> {{ t('questions.explanationLabel') }}:</strong>
+        <span class="toggle-indicator">
+          <i :class="explanationExpanded ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" aria-hidden="true"></i>
+          {{ explanationExpanded ? t('questions.explainHide') : t('questions.explainShow') }}
+        </span>
+      </BaseButton>
+      <Transition name="explanation">
+        <p v-if="explanationExpanded" dir="auto" class="explanation-text">
+          {{ displayQuestion.explanation }}
+        </p>
+      </Transition>
+    </div>
+
+    <details class="question-card__advanced">
+      <summary class="question-card__advanced-summary">
+        <span><i class="bi bi-sliders" aria-hidden="true"></i> {{ t('questions.advancedInfo') }}</span>
+        <i class="bi bi-chevron-down question-card__advanced-chevron" aria-hidden="true"></i>
+      </summary>
+      <div class="question-card__advanced-content">
+        <div class="question-card__rating">
+          <span class="rating-label"><i class="bi bi-star" aria-hidden="true"></i> {{ t('questions.rating') }}</span>
+          <BaseIconButton
+            v-for="star in 5"
+            :key="star"
+            variant="ghost"
+            size="small"
+            class="star-btn"
+            :icon="star <= (userRating || 0) ? 'bi bi-star-fill' : 'bi bi-star'"
+            :label="t('questions.ratingAria', { star })"
+            :class="{ active: star <= (userRating || 0) }"
+            :disabled="ratingLoading"
+            @click="rate(star)"
+          />
+          <span v-if="avgRating > 0" class="rating-avg">
+            {{ avgRating.toFixed(1) }} ({{ ratingCount }})
+          </span>
+        </div>
+
+        <div
+          v-if="question.source || question.source_document || question.source_page"
+          class="question-card__source"
+        >
+          <strong><i class="bi bi-book" aria-hidden="true"></i> {{ t('questions.sourceLabel') }}:</strong>
+          <span v-if="question.source">{{ question.source }}</span>
+          <span v-if="question.source_document">
+            · {{ t('questions.sourceDocumentLabel') }}: {{ question.source_document }}
+          </span>
+          <span v-if="question.source_page">
+            · {{ t('questions.sourcePageLabel') }}: {{ question.source_page }}
+          </span>
+        </div>
+
+        <div class="question-card__meta">
+          <span class="question-card__author">
+            <i class="bi bi-person" aria-hidden="true"></i>
+            {{ question.authored_by_username || t('questions.unknownAuthor') }}
+            <BaseBadge
+              v-if="question.authored_by_rank"
+              :variant="authorRankVariant"
+              :title="t('profile.rankLabel')"
+              class="author-rank-badge"
+            >
+              <i :class="authorRankIcon" aria-hidden="true"></i>
+              {{ authorRankLabel }}
+            </BaseBadge>
+          </span>
+          <span
+            v-if="ownershipDiffers"
+            class="question-card__owner"
+            :title="t('questions.ownedByTooltip')"
+          >
+            <i class="bi bi-shield-check" aria-hidden="true"></i>
+            {{ t('questions.ownedBy', { username: question.owned_by_username }) }}
+          </span>
+          <span><i class="bi bi-calendar" aria-hidden="true"></i> {{ formatDate(question.created_at) }}</span>
+          <span v-if="question.updated_at">
+            <i class="bi bi-clock-history" aria-hidden="true"></i>
+            {{ t('questions.lastUpdated', { date: formatDate(question.updated_at) }) }}
+          </span>
+          <span v-if="question.last_revised_at">
+            <i class="bi bi-calendar-check" aria-hidden="true"></i>
+            {{ t('questions.lastRevised', { date: formatDate(question.last_revised_at) }) }}
+          </span>
+          <span>
+            <i class="bi bi-eye" aria-hidden="true"></i>
+            {{ t('questions.timesAnswered', { count: question.times_answered || 0 }) }}
+          </span>
+          <span>
+            <i class="bi bi-check2" aria-hidden="true"></i>
+            {{ t('questions.timesCorrect', { count: question.times_correct || 0 }) }}
+          </span>
+          <span v-if="question.tags && question.tags.length" class="tags">
+            <i class="bi bi-tags" aria-hidden="true"></i>
+            <BaseChip v-for="tag in question.tags" :key="tag">{{ tag }}</BaseChip>
+          </span>
+        </div>
+      </div>
+    </details>
+  </BaseCard>
+</template>
+
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
+import { formatDate } from '@/utils/formatters'
+import { useNotify } from '@/composables/useNotify'
+import { useDebounceFn } from '@/composables/useDebounceFn'
+import BaseCard from '@/components/base/BaseCard.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
+import BaseChip from '@/components/base/BaseChip.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BaseMarkdown from '@/components/markdown/BaseMarkdown.vue'
+import DifficultyBadge from '@/components/base/DifficultyBadge.vue'
+import QuestionCardActions from './QuestionCardActions.vue'
+import { enqueueRating } from '../composables/useRatingBatcher'
+import { useQuestionStore } from '@/stores/questionStore'
+import { authorRankVariantFor, authorRankIconFor, authorRankLabelFor } from '@/utils/authorRank'
+import { localizedQuestion } from '@/utils/localizedQuestion'
+
+const { t, locale } = useI18n()
+
+const props = defineProps({
+  question: { type: Object, required: true },
+  bookmarked: Boolean,
+  selected: Boolean,
+  showSelect: Boolean,
+})
+defineEmits([
+  'toggle-select',
+  'bookmark',
+  'edit',
+  'delete',
+  'verify',
+  'flag',
+  'duplicate',
+])
+
+const { notify } = useNotify()
+const questionStore = useQuestionStore()
+
+const explanationExpanded = ref(false)
+const showStamp = ref(false)
+
+const userRating = ref(0)
+const avgRating = ref(0)
+const ratingCount = ref(0)
+const ratingLoading = ref(false)
+
+watch(
+  () => props.question.verified,
+  (newVal, oldVal) => {
+    if (newVal && !oldVal) {
+      showStamp.value = true
+      setTimeout(() => {
+        showStamp.value = false
+      }, 600)
+    }
+  },
+)
+
+const extraBadgeCount = computed(() =>
+  Number(Boolean(props.question.knowledge_object_title)) + Number(Boolean(props.question.case)),
+)
+
+const ownershipDiffers = computed(() => {
+  const author = props.question.authored_by_username
+  const owner = props.question.owned_by_username
+  return Boolean(owner) && owner !== author
+})
+
+const authorRankVariant = computed(() =>
+  authorRankVariantFor(props.question?.authored_by_rank?.key),
+)
+
+const authorRankIcon = computed(() => authorRankIconFor(props.question?.authored_by_rank?.key))
+
+const authorRankLabel = computed(() => {
+  const rank = props.question?.authored_by_rank
+  if (!rank) return ''
+  return authorRankLabelFor(rank.key, t, rank.label || '')
+})
+
+const displayQuestion = computed(() => localizedQuestion(props.question, locale.value))
+const choices = computed(() => displayQuestion.value.choices || [])
+
+async function fetchRating() {
+  try {
+    const data = await enqueueRating(props.question.id)
+    if (!data) return
+    userRating.value = data.user_rating
+    avgRating.value = data.average
+    ratingCount.value = data.count
+  } catch (err) {
+    console.warn(`Failed to fetch rating for question ${props.question.id}:`, err)
+  }
+}
+
+const RATE_DEBOUNCE_MS = 500
+
+async function executeRate(val) {
+  if (ratingLoading.value) return
+  ratingLoading.value = true
+  try {
+    await questionStore.rate(props.question.id, val)
+    userRating.value = val
+    await fetchRating()
+    notify(t('questions.ratingSuccess'), 'success')
+  } catch (err) {
+    console.error(`Failed to rate question ${props.question.id}:`, err)
+    notify(t('questions.ratingFailed'), 'error')
+  } finally {
+    ratingLoading.value = false
+  }
+}
+
+const { debounced: debouncedRate } = useDebounceFn(executeRate, RATE_DEBOUNCE_MS)
+
+function rate(val) {
+  if (ratingLoading.value) return
+  debouncedRate(val)
+}
+
+onMounted(fetchRating)
+</script>

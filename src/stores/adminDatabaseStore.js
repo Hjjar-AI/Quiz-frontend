@@ -1,0 +1,126 @@
+// frontend/src/stores/adminDatabaseStore.js
+import { defineStore } from 'pinia'
+import { adminService } from '@/services/adminService'
+import { useCrudActions } from '@/composables/useCrudActions'
+import { standardState, standardGetters, makeReset } from '@/stores/storeHelpers'
+
+export const useAdminDatabaseStore = defineStore('adminDatabase', {
+  state: () => standardState({ databaseInfo: null, backups: [], qualityReport: null, lastImportErrorCode: null }),
+  getters: {
+    ...standardGetters,
+  },
+  actions: {
+    async fetchDatabaseInfo() {
+      return await useCrudActions(this).wrap(() => adminService.getDatabaseInfo(), {
+        errorMsgFallbackKey: 'notifications.dbInfoLoadFailed',
+        onSuccess: (info) => {
+          this.databaseInfo = info
+        },
+      })
+    },
+
+    async createBackup() {
+      return await useCrudActions(this).wrap(() => adminService.createBackup(), {
+        successMsgKey: 'notifications.backupCreated',
+        errorMsgFallbackKey: 'notifications.backupCreateFailed',
+      })
+    },
+
+    async fetchBackups() {
+      return await useCrudActions(this).wrap(() => adminService.listBackups(), {
+        errorMsgFallbackKey: 'notifications.backupsLoadFailed',
+        onSuccess: (res) => {
+          this.backups = res.items || []
+        },
+      })
+    },
+
+    async restoreBackup(name, adminPassword) {
+      return await useCrudActions(this).wrap(
+        () => adminService.restoreBackup(name, adminPassword),
+        {
+          successMsgKey: 'notifications.backupRestored',
+          errorMsgFallbackKey: 'notifications.backupRestoreFailed',
+        },
+      )
+    },
+
+    async clearDatabase(adminPassword) {
+      return await useCrudActions(this).wrap(() => adminService.clearDatabase(adminPassword), {
+        successMsgKey: 'notifications.databaseCleared',
+        errorMsgFallbackKey: 'notifications.databaseClearFailed',
+      })
+    },
+
+    async importDatabase(file) {
+      this.lastImportErrorCode = null
+      return await useCrudActions(this).wrap(() => adminService.importDatabase(file), {
+        errorMsgFallbackKey: 'admin.import.failed',
+        onError: (error) => { this.lastImportErrorCode = error?.code ?? null },
+        suppressErrorToast: true,
+      })
+    },
+
+    async importTelegram(file) {
+      return await useCrudActions(this).wrap(() => adminService.importTelegram(file), {
+        errorMsgFallbackKey: 'admin.import.failed',
+        suppressErrorToast: true,
+      })
+    },
+
+    async importState(file, mode = 'merge', options = {}) {
+      return await useCrudActions(this).wrap(() => adminService.importState(file, mode, options), {
+        errorMsgFallbackKey: 'admin.import.stateFailed',
+        suppressErrorToast: true,
+      })
+    },
+
+    exportStateUrl(includeImages = true, verifiedOnly = false, format = 'json', filters = {}) {
+      return adminService.exportStateUrl(includeImages, verifiedOnly, format, filters)
+    },
+
+    exportState(includeImages = true, verifiedOnly = false, format = 'json', filters = {}) {
+      return adminService.exportState(includeImages, verifiedOnly, format, filters)
+    },
+
+    async fetchDataQualityReport() {
+      return await useCrudActions(this).wrap(() => adminService.getDataQualityReport(), {
+        errorMsgFallbackKey: 'admin.database.qualityLoadFailed',
+        suppressErrorToast: true,
+        onSuccess: (report) => {
+          this.qualityReport = report
+        },
+      })
+    },
+
+    async flagDataQualityIssues() {
+      return await useCrudActions(this).wrap(() => adminService.flagDataQualityIssues(), {
+        errorMsgFallbackKey: 'admin.database.qualityFlagFailed',
+        suppressErrorToast: true,
+        onSuccess: (result) => {
+          this.qualityReport = result
+        },
+      })
+    },
+
+    exportUrl(format, options = {}) {
+      return adminService.exportUrl(format, options)
+    },
+
+    exportQuestions(format, options = {}, requestOptions = {}) {
+      return adminService.exportQuestions(format, options, requestOptions)
+    },
+
+    exportPdf(options = {}, requestOptions = {}) {
+      return adminService.exportPdf(options, requestOptions)
+    },
+
+    reset: makeReset({
+      databaseInfo: null,
+      backups: [],
+      qualityReport: null,
+      status: 'idle',
+      error: null,
+    }),
+  },
+})

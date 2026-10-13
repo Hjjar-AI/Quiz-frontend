@@ -1,0 +1,70 @@
+/* Shared focus, readable data alternatives and pointer geometry. */
+.base-chip__remove,
+.last-viewed-clear {
+  min-inline-size: var(--control-hit-size-min);
+  min-block-size: var(--control-hit-size-min);
+}
+.accessible-data {
+  margin-block-start: var(--space-md);
+  min-inline-size: 0;
+}
+
+.accessible-data > summary {
+  cursor: pointer;
+  padding: var(--space-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.accessible-data > summary:focus-visible,
+.accessible-data__list:focus-visible,
+h1[tabindex='-1']:focus-visible,
+#main-content[tabindex='-1']:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.accessible-data__list {
+  max-block-size: 20rem;
+  overflow-y: auto;
+  padding-inline-start: var(--space-xl);
+}
+
+.timer,
+.master-exam-runner__timer {
+  flex-wrap: wrap;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.top-bar {
+  flex-wrap: wrap;
+}
+
+.timer__status {
+  flex-basis: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+@media (pointer: coarse) {
+  .base-chip__remove,
+  .last-viewed-clear,
+  .tab-strip__tab,
+  .base-dropdown__item,
+  .notification-bell,
+  .navbar .navbar__toggle,
+  .accessible-data > summary,
+  .theme-dropdown__toggle,
+  .language-dropdown__toggle {
+    min-block-size: var(--control-height);
+    min-inline-size: var(--control-height);
+  }
+
+  .heatmap-card__toggle,
+  .confidence-score__option {
+    min-block-size: var(--control-height);
+  }
+}

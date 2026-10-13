@@ -1,0 +1,47 @@
+/* frontend/src/assets/icons.css */
+/* Icon system helpers for Bootstrap Icons */
+
+/* Verified / unverified icons */
+.icon-verified {
+  color: var(--color-success-soft-text);
+}
+.icon-unverified {
+  color: var(--color-warning-soft-text);
+}
+
+.icon-button {
+  position: relative;
+}
+.icon-button::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-text-primary);
+  color: var(--color-bg-card);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-fast);
+  z-index: var(--z-tooltip);
+}
+.icon-button:hover::after {
+  opacity: 1;
+}
+/* Compatibility names use glyphs available in the bundled font.
+   Keep persisted category icon values readable without a CDN or font upgrade. */
+.bi-brain::before { content: "\f46b"; }
+.bi-capsule::before { content: "\f681"; }
+.bi-cookie::before { content: "\f538"; }
+.bi-database::before { content: "\f52c"; }
+.bi-database-add::before { content: "\f4fa"; }
+.bi-database-fill::before { content: "\f410"; }
+.bi-gavel::before { content: "\f3ff"; }
+.bi-hand-wave::before { content: "\f407"; }
+.bi-person-gear::before { content: "\f4d3"; }
+.bi-rocket-takeoff::before { content: "\f589"; }
+.bi-universal-access::before { content: "\f4d7"; }

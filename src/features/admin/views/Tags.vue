@@ -1,0 +1,315 @@
+<!-- frontend/src/features/admin/views/Tags.vue -->
+<template>
+  <Layout>
+    <PageShell :title="t('admin.tags.title')" icon="bi bi-tags" page-class="admin-tags">
+        <template #actions>
+          <BaseButton
+            variant="primary"
+            @click="openMerge()"
+            :disabled="selectedTags.length < 1 || loading || mergeBusy || review.conflict.value || mergeUncertain"
+            :title="selectedTags.length < 1 ? t('admin.tags.mergeRequiresOne') : ''"
+          >
+            <i class="bi bi-shuffle" aria-hidden="true"></i> {{ t('admin.tags.mergeButton') }}
+          </BaseButton>
+        </template>
+      <FeedbackRegion :error="tagError" @dismiss="dismissTagError" />
+      <BaseListContainer
+        :loading="loading"
+        :error="tagError"
+        :items="tags"
+        :empty-title="t('admin.tags.empty')"
+        :empty-message="t('admin.tags.emptyDesc')"
+        empty-icon="bi-tags"
+        @retry="loadTags"
+      >
+        <template #default>
+          <!-- `tags-tree-scroll` (defined in admin.css) supplies the
+               horizontal-overflow wrapper. The recursive tag tree
+               adds `padding-inline-start: var(--space-lg)` per
+               nesting level, and each row's label renders through
+               `BaseCheckbox`'s inline-flex row whose label has no
+               `min-width: 0` escape. Without this wrapper, a deeply
+               nested tree or a row carrying an unbreakable token
+               would push past the card edge with nothing to catch
+               it. The class follows the same overflow strategy used
+               by `.heatmap-scroll` and the master-exam result
+               tables. -->
+          <div class="tags-tree tags-tree-scroll">
+            <ul class="tag-tree-root">
+              <TagTreeNode
+                v-for="node in tagTree"
+                :key="node.name"
+                :node="node"
+                :selected-names="selectedTags"
+                :disabled="loading || mergeBusy || review.conflict.value || mergeUncertain"
+                @merge="openMerge"
+                @rename="openRename"
+                @delete="confirmDelete"
+                @toggle-select="toggleTag"
+              />
+            </ul>
+          </div>
+          <div v-if="selectedTags.length > 0" class="selected-tags-summary">
+            <span class="text-muted">
+              <i class="bi bi-check-square" aria-hidden="true"></i>
+              {{ t('admin.tags.selectedCount', { count: selectedTags.length }) }}
+            </span>
+            <BaseButton variant="ghost" size="small" class="clear-all-filters" :disabled="mergeBusy || review.conflict.value || mergeUncertain" @click="selectedTags = []">
+              {{ t('admin.tags.clearSelection') }}
+            </BaseButton>
+          </div>
+        </template>
+      </BaseListContainer>
+
+      <RevisionReview v-if="review.conflict.value" :latest="latestText" :busy="review.busy.value" :error="review.error.value" :can-keep="canKeep" @refresh="review.refresh" @keep="review.resolve(true)" @use-server="review.resolve(false)" />
+      <BaseModal
+        :is-open="renameModalOpen"
+        :title="t('admin.tags.renameTitle')"
+        size="sm"
+        @update:is-open="renameModalOpen = false"
+      >
+        <form @submit.prevent="submitRename">
+          <RevisionReview v-if="review.conflict.value" :latest="latestText" :busy="review.busy.value" :error="review.error.value" :can-keep="canKeep" @refresh="review.refresh" @keep="review.resolve(true)" @use-server="review.resolve(false)" />
+        <FormGrid>
+            <BaseField :label="t('admin.tags.renameCurrent')">
+              <BaseInput :model-value="renameTagName" disabled />
+            </BaseField>
+            <BaseField :label="t('admin.tags.renameNew')" required>
+              <BaseInput v-model="newTagName" required />
+            </BaseField>
+          </FormGrid>
+          <div class="form-actions">
+            <BaseButton type="button" variant="secondary" @click="renameModalOpen = false">{{
+              t('common.cancel')
+            }}</BaseButton>
+            <BaseButton type="submit" variant="primary">{{ t('common.update') }}</BaseButton>
+          </div>
+        </form>
+      </BaseModal>
+
+      <BaseModal
+        :is-open="showMergeModal"
+        :title="t('admin.tags.mergeTitle')"
+        :dismissable="!mergeBusy && !mergeUncertain"
+        size="sm"
+        @update:is-open="showMergeModal = false"
+      >
+        <p>{{ t('admin.tags.mergeCount', { count: selectedTags.length }) }}</p>
+        <p>{{ t('admin.tags.mergeImpact') }}</p>
+        <p v-if="mergeUncertain" role="status">{{ t('admin.tags.mergeUnknown') }}</p>
+        <div class="merge-source-list">
+          <BaseBadge v-for="tag in selectedTags" :key="tag" variant="secondary">{{ tag }}</BaseBadge>
+        </div>
+        <RevisionReview v-if="review.conflict.value" :latest="latestText" :busy="review.busy.value" :error="review.error.value" :can-keep="canKeep" @refresh="review.refresh" @keep="review.resolve(true)" @use-server="review.resolve(false)" />
+        <FormGrid>
+          <BaseSelect :model-value="existingMergeTarget" :label="t('admin.tags.mergeExisting')"
+            :options="existingTargets" :placeholder="t('admin.tags.mergeChoose')"
+            :disabled="mergeBusy || review.conflict.value || mergeUncertain"
+            @update:model-value="mergeTarget = $event" />
+          <BaseField :label="t('admin.tags.mergeTarget')" required>
+            <BaseInput v-model="mergeTarget" :disabled="mergeBusy || review.conflict.value || mergeUncertain" required />
+          </BaseField>
+        </FormGrid>
+        <p
+          v-if="mergeTarget && selectedTags.includes(mergeTarget)"
+          class="text-danger admin-tags__merge-error"
+        >
+          {{ t('admin.tags.mergeSameError') }}
+        </p>
+        <div class="form-actions">
+          <BaseButton type="button" variant="secondary" :disabled="mergeBusy || mergeUncertain" @click="showMergeModal = false">{{
+            t('common.cancel')
+          }}</BaseButton>
+          <BaseButton
+            type="button"
+            variant="primary"
+            @click="mergeTags"
+            :loading="mergeBusy"
+            :disabled="!mergeTarget.trim() || selectedTags.includes(mergeTarget.trim()) || mergeBusy || loading || review.conflict.value || mergeUncertain"
+          >
+            {{ t('admin.tags.mergeDo') }}
+          </BaseButton>
+        </div>
+      </BaseModal>
+    </PageShell>
+  </Layout>
+</template>
+
+<script setup>
+import RevisionReview from '@/components/common/RevisionReview.vue'
+import { useRevisionReview } from '@/composables/useRevisionReview'
+import { tagService } from '@/services/tagService'
+import { useAuthStore } from '@/stores/authStore'
+
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
+import { sessionGeneration } from '@/services/api/sessionScope'
+import Layout from '@/components/common/Layout.vue'
+import PageShell from '@/components/common/PageShell.vue'
+import BaseListContainer from '@/components/base/BaseListContainer.vue'
+import BaseModal from '@/components/base/BaseModal.vue'
+import BaseField from '@/components/base/BaseField.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
+import BaseSelect from '@/components/base/BaseSelect.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
+import FormGrid from '@/components/common/FormGrid.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
+import TagTreeNode from '../components/TagTreeNode.vue'
+import { useTagStore } from '@/stores/tagStore'
+import { useNotify } from '@/composables/useNotify'
+import { useDialog } from '@/composables/useDialog'
+
+const { t } = useI18n()
+
+const tagStore = useTagStore()
+const authStore=useAuthStore()
+const tags = computed(() => tagStore.items)
+const tagTree = computed(() => tagStore.tree)
+const loading = computed(() => tagStore.isLoading || tagStore.isTreeLoading)
+const tagError = computed(() => tagStore.error || '')
+const selectedTags = ref([])
+const selectedVersion = ref(null)
+const renameVersion = ref(null)
+const renameModalOpen = ref(false)
+const renameTagName = ref('')
+const newTagName = ref('')
+const showMergeModal = ref(false)
+const mergeTarget = ref('')
+const mergeBusy = ref(false), mergeUncertain = ref(false)
+const pageScope = sessionGeneration()
+let alive = true
+const permitted = () => alive && pageScope === sessionGeneration() && authStore.can('questions.manage_tags')
+const renameSourceId=ref(null), selectionIds=ref([]), reviewAction=ref(null), mergeTargetId=ref(null)
+function flatten(tree) {return tree.flatMap(node=>[node,...flatten(node.children||[])])}
+const existingTargets = computed(() => {
+  const nodes = flatten(tagStore.tree)
+  const excluded = new Set(nodes.filter(node => selectedTags.value.includes(node.name))
+    .flatMap(node => flatten([node]).map(item => item.name)))
+  return nodes.filter(node => !excluded.has(node.name)).map(node => ({ value: node.name, label: node.name }))
+})
+const existingMergeTarget = computed(() => existingTargets.value.some(row => row.value === mergeTarget.value) ? mergeTarget.value : '')
+function openMerge(node = null) {
+  if (!permitted() || loading.value || mergeBusy.value || mergeUncertain.value || review.conflict.value || !tagStore.treeVersion) return
+  if (node) { selectedTags.value = [node.name]; selectionIds.value = [node.id]; selectedVersion.value = tagStore.treeVersion }
+  if (!selectedTags.value.length) return
+  mergeTarget.value = ''; showMergeModal.value = true
+}
+const review=useRevisionReview({allow:()=>authStore.can('questions.manage_tags'),load:()=>tagService.getTree(),
+  apply:(keep,current)=>{
+    mergeUncertain.value=false
+    const nodes=flatten(current.tree);tagStore.tree=current.tree;tagStore.treeVersion=current.version
+    const source=nodes.find(node=>node.id===renameSourceId.value)
+    if(reviewAction.value==='rename' && source) {renameTagName.value=source.name;renameVersion.value=current.version;if(!keep) newTagName.value=source.name}
+    selectedTags.value=nodes.filter(node=>selectionIds.value.includes(node.id)).map(node=>node.name);selectedVersion.value=current.version
+    if(reviewAction.value==='rename' && !source) renameModalOpen.value=false
+    if(!keep) mergeTarget.value=''
+    else if(mergeTargetId.value!=null) mergeTarget.value=nodes.find(node=>node.id===mergeTargetId.value)?.name || mergeTarget.value
+    tagStore.error=null
+  },
+})
+const latestText=computed(()=>review.latest.value ? flatten(review.latest.value.tree).map(node=>node.name).join(' · ') || t('common.revisionEmpty') : '')
+const canKeep=computed(()=>{if(!review.latest.value || !authStore.can('questions.manage_tags')) return false;const nodes=flatten(review.latest.value.tree);return reviewAction.value==='rename' ? nodes.some(node=>node.id===renameSourceId.value) : reviewAction.value==='merge' && (mergeTargetId.value==null || nodes.some(node=>node.id===mergeTargetId.value)) && selectionIds.value.every(id=>nodes.some(node=>node.id===id))})
+async function checkConflict() {if(Number(tagStore.lastErrorCode)===409) await review.refresh()}
+
+
+const { notify } = useNotify()
+const { confirm } = useDialog()
+
+function dismissTagError() {
+  tagStore.error = null
+  tagStore.treeError = null
+}
+
+async function loadTags() {
+  await tagStore.refresh()
+}
+
+function toggleTag(name) {
+  if(review.conflict.value || mergeBusy.value || mergeUncertain.value) return
+  if (!selectedTags.value.length) selectedVersion.value = tagStore.treeVersion
+  const idx = selectedTags.value.indexOf(name)
+  if (idx === -1) selectedTags.value.push(name)
+  else selectedTags.value.splice(idx, 1)
+  selectionIds.value=flatten(tagStore.tree).filter(node=>selectedTags.value.includes(node.name)).map(node=>node.id)
+}
+
+function openRename(node) {
+  if(review.conflict.value || mergeBusy.value || mergeUncertain.value) return
+  renameSourceId.value=node.id
+  renameVersion.value = tagStore.treeVersion
+  renameTagName.value = node.name
+  newTagName.value = node.name
+  renameModalOpen.value = true
+}
+
+async function submitRename() {
+  if(review.conflict.value || loading.value || mergeBusy.value || mergeUncertain.value || !authStore.can('questions.manage_tags')) return
+  reviewAction.value='rename'
+  try {
+    const result = await tagStore.rename(renameTagName.value, newTagName.value, renameVersion.value)
+    if (!result) {await checkConflict();return}
+    notify(t('admin.tags.renameSuccess'), 'success')
+    renameModalOpen.value = false
+    const idx = selectedTags.value.indexOf(renameTagName.value)
+    if (idx !== -1) selectedTags.value.splice(idx, 1)
+  } catch (e) {
+    notify(e.message || t('admin.tags.renameFailed'), 'error')
+  }
+}
+
+async function confirmDelete(node) {
+  if(review.conflict.value || loading.value || mergeBusy.value || mergeUncertain.value || !authStore.can('questions.manage_tags')) return
+  reviewAction.value='delete'
+  const version = tagStore.treeVersion
+  if (!(await confirm(t('admin.tags.deleteConfirm', { name: node.name })))) return
+  try {
+    const result = await tagStore.remove(node.name, version)
+    if (!result) {await checkConflict();return}
+    notify(t('admin.tags.deleteSuccess'), 'success')
+    const idx = selectedTags.value.indexOf(node.name)
+    if (idx !== -1) selectedTags.value.splice(idx, 1)
+  } catch (e) {
+    notify(e.message || t('admin.tags.deleteFailed'), 'error')
+  }
+}
+
+async function mergeTags() {
+  if(review.conflict.value || loading.value || mergeBusy.value || mergeUncertain.value || !permitted()) return
+  mergeTarget.value=mergeTarget.value.trim()
+  reviewAction.value='merge'
+  mergeTargetId.value=flatten(tagStore.tree).find(node=>node.name===mergeTarget.value)?.id ?? null
+  if (!mergeTarget.value) {
+    notify(t('admin.tags.mergeTargetRequired'), 'error')
+    return
+  }
+  if (selectedTags.value.includes(mergeTarget.value)) {
+    notify(t('admin.tags.mergeSameError'), 'error')
+    return
+  }
+  if (!selectedTags.value.length || !selectedVersion.value) return
+  mergeBusy.value = true
+  try {
+    await tagService.mergeTags([...selectedTags.value], mergeTarget.value, selectedVersion.value)
+    if (!permitted()) return
+    notify(t('admin.tags.mergeSuccess'), 'success')
+    showMergeModal.value = false
+    selectedTags.value = []
+    mergeTarget.value = ''
+    await tagStore.refresh()
+  } catch (e) {
+    if (!permitted()) return
+    notify(e.message || t('admin.tags.mergeFailed'), 'error')
+    mergeUncertain.value = ![400, 401, 403, 404, 409, 422, 429].includes(Number(e.code))
+    if (mergeUncertain.value || Number(e.code) === 409) await review.refresh()
+  } finally {
+    mergeBusy.value = false
+  }
+}
+
+const protectLeave = event => { if (mergeBusy.value || mergeUncertain.value) { event.preventDefault(); event.returnValue = '' } }
+window.addEventListener('beforeunload', protectLeave)
+onBeforeRouteLeave(() => !mergeBusy.value && !mergeUncertain.value)
+onBeforeUnmount(() => { alive = false; window.removeEventListener('beforeunload', protectLeave) })
+onMounted(loadTags)
+</script>

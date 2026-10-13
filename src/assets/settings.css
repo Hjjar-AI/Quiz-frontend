@@ -1,0 +1,100 @@
+/* Shared settings composition: semantic tokens and logical sizing for both locales. */
+.settings-page .settings-card {
+  min-inline-size: 0;
+  scroll-margin-block-start: calc(var(--shell-sticky-offset) + var(--space-md));
+}
+.settings-page > .settings-card, .settings-page > .async-content, .settings-page > .settings-jump-links { margin-block-end: var(--space-md); }
+.settings-card .section-header { margin-block-end: var(--space-lg); }
+.settings-form { display: flex; flex-direction: column; gap: var(--space-md); }
+.settings-form > .settings-card { margin: 0; }
+.settings-notice {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  margin: 0 0 var(--space-md);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  color: var(--color-info-soft-text);
+  background: var(--color-info-light);
+  font-size: var(--font-size-sm);
+}
+.settings-jump-links, .settings-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.settings-jump-links a, .settings-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-block-size: var(--control-height);
+  max-inline-size: 100%;
+  padding: var(--space-xs) var(--space-md);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+  color: var(--color-primary-soft-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.settings-jump-links a:hover, .settings-link:hover { background: var(--color-bg-alt); }
+.settings-jump-links a:focus-visible, .settings-link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+.settings-save-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+}
+.settings-save-bar__status { margin: 0; color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.settings-save-bar__actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+.settings-operations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
+.settings-operation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  min-inline-size: 0;
+  padding: var(--space-md);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-alt);
+  overflow-wrap: anywhere;
+}
+.settings-operation h3 { margin: 0; font-size: var(--font-size-base); line-height: var(--line-height-heading); }
+.settings-operation p { margin: 0; color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.settings-operation .settings-operation__result { color: var(--color-success-soft-text); }
+.settings-operation > .base-button { margin-block-start: auto; }
+.settings-operation .feedback-region { inline-size: 100%; }
+@media (max-width: 640px) {
+  .settings-operations { grid-template-columns: minmax(0, 1fr); }
+  .settings-save-bar__actions { inline-size: 100%; }
+  .settings-save-bar__actions > .base-button { flex: 1 1 auto; }
+}
+@media (max-width: 360px) {
+  .settings-jump-links a, .settings-link { inline-size: 100%; }
+  .settings-operation > .base-button { inline-size: 100%; }
+}
+
+.settings-font-preview {
+  margin-block-start: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--color-bg-alt);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow-wrap: anywhere;
+}
+.settings-font-preview p { margin: 0; }
+.settings-font-preview p + p { margin-block-start: var(--space-sm); }
+.settings-font-preview .settings-font-preview__label { color: var(--color-text-muted); font-size: var(--font-size-sm); }

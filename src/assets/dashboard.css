@@ -1,0 +1,239 @@
+/* Dashboard hierarchy: one decisive Today card, followed by progressively
+   quieter study, progress, recent-content, and activity sections. */
+
+.dashboard__welcome {
+  max-width: 52rem;
+  margin: 0 auto var(--space-2xl);
+  padding: var(--space-md);
+  text-align: center;
+}
+.dashboard__welcome h2 {
+  margin: 0;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+}
+.dashboard__welcome p { margin: var(--space-xs) 0 0; }
+.dashboard__welcome--animated {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-primary) 9%, transparent),
+    color-mix(in srgb, var(--color-success) 4%, transparent),
+    transparent
+  );
+  background-size: 200% 200%;
+  animation: gradientShift 16s var(--ease-in-out) 1 both;
+}
+
+.welcome-back-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-warning) 9%, var(--color-bg-card));
+  color: var(--color-warning-soft-text);
+  font-size: var(--font-size-sm);
+}
+
+.dashboard-section { margin-block-end: var(--space-2xl); }
+.dashboard-section--today { margin-block-end: calc(var(--space-2xl) + var(--space-md)); }
+.dashboard-section--secondary {
+  padding-block-start: var(--space-md);
+  border-block-start: var(--border-width) solid var(--color-border);
+}
+
+.today-card {
+  padding: clamp(var(--space-lg), 4vw, var(--space-2xl));
+  box-shadow: var(--elevation-2);
+}
+.today-card__action {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+.today-card__icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg-card));
+  color: var(--color-primary-soft-text);
+  font-size: var(--icon-lg);
+}
+.today-card__copy { flex: 1; min-width: 0; }
+.today-card__eyebrow {
+  display: block;
+  margin-bottom: var(--space-2xs);
+  color: var(--color-primary-soft-text);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+}
+.today-card__copy h3 { margin: 0; font-size: var(--font-size-xl); }
+.today-card__copy p {
+  max-width: 62ch;
+  margin: var(--space-xs) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+.today-card__footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-xl);
+  align-items: end;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: var(--border-width) solid var(--color-border);
+}
+.today-card__progress { min-width: 0; }
+.today-card__progress-title {
+  display: block;
+  margin-bottom: var(--space-xs);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+.today-card__metric {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+.today-card__metric-value {
+  color: var(--color-streak-end);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard__tests {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+.test-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-lg);
+  border: var(--border-width) solid var(--color-border);
+  border-inline-start: 4px solid var(--card-accent, var(--color-primary));
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-sm);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: transform var(--motion-fast), box-shadow var(--motion-fast), border-color var(--motion-fast);
+  animation: card-enter var(--motion-base-out) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+.test-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--card-accent, var(--color-primary));
+  box-shadow: var(--shadow-hover-lift);
+}
+.test-card:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+.test-card__icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--card-accent, var(--color-primary)) 10%, var(--color-bg-card));
+  color: var(--card-accent, var(--color-primary));
+  font-size: var(--icon-md);
+}
+.test-card__title { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); }
+.test-card__desc { margin-top: var(--space-2xs); color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.test-card__arrow { color: var(--color-text-muted); font-size: var(--icon-sm); }
+[dir="rtl"] .test-card__arrow { transform: rotate(180deg); }
+
+.dashboard__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+}
+
+/* These are reference metrics, not calls to action: flat surfaces and a
+   small color marker create hierarchy without four competing cards. */
+.dashboard .attempt-summary { gap: 0; border-block: var(--border-width) solid var(--color-border); }
+.dashboard .attempt-tile {
+  padding: var(--space-md);
+  border: 0;
+  border-inline-end: var(--border-width) solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.dashboard .attempt-tile:last-child { border-inline-end: 0; }
+.dashboard .attempt-tile::before {
+  content: '';
+  width: 3px;
+  height: 2rem;
+  flex: 0 0 auto;
+  border-radius: var(--radius-pill);
+  background: var(--tile-accent, var(--color-primary));
+}
+.dashboard .attempt-tile:hover { transform: none; background: var(--color-bg-alt); box-shadow: none; }
+.attempt-tile--open { --tile-accent: var(--color-danger); }
+.attempt-tile--fragile { --tile-accent: var(--color-warning); }
+.attempt-tile--mastered { --tile-accent: var(--color-success); }
+.attempt-tile--seen { --tile-accent: var(--color-info); }
+.attempt-tile--static { cursor: default; }
+
+.dashboard__stat-grid { margin: var(--space-lg) 0 0; }
+.dashboard__heatmap { margin-top: 0; }
+.dashboard__recent .base-list-container { --layout-gap: var(--space-md); }
+
+.dashboard__tip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: calc(-1 * var(--space-lg));
+  padding: var(--space-sm) 0;
+  border-block-start: var(--border-width) solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+.dashboard__tip i { flex-shrink: 0; color: var(--color-info-soft-text); }
+.dashboard__tip strong { color: var(--color-text-secondary); }
+
+@media (max-width: 640px) {
+  .dashboard__welcome { margin-bottom: var(--space-xl); padding-inline: 0; }
+  .dashboard-section,
+  .dashboard-section--today { margin-block-end: var(--space-2xl); }
+  .today-card { padding: var(--space-lg); }
+  .today-card__action { align-items: stretch; flex-direction: column; }
+  .today-card__icon { width: 48px; height: 48px; }
+  .today-card__action > .base-button { width: 100%; }
+  .today-card__footer { grid-template-columns: 1fr; gap: var(--space-md); }
+  .today-card__metric { justify-content: flex-start; }
+  .today-card__progress .progress-bar { align-items: stretch; flex-direction: column; }
+  .today-card__progress .progress-bar__label { min-width: 0; text-align: start; }
+  .dashboard__tests { grid-template-columns: 1fr; }
+  .dashboard .attempt-summary { grid-template-columns: repeat(2, 1fr); }
+  .dashboard .attempt-tile:nth-child(2) { border-inline-end: 0; }
+  .dashboard .attempt-tile:nth-child(-n + 2) { border-block-end: var(--border-width) solid var(--color-border); }
+  .dashboard__actions > .base-button:first-child { flex-basis: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard__welcome--animated,
+  .test-card { animation: none !important; }
+  .test-card:hover { transform: none; }
+}

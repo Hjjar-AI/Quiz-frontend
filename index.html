@@ -1,0 +1,145 @@
+<!-- frontend/index.html -->
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="iris">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#cfc0ed" />
+
+    <title>Mukhtabir</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <!-- ============================================================
+       Locale bootstrap.
+       Reads the persisted language from localStorage and applies
+       it to <html lang dir data-locale> BEFORE any CSS paints.
+       Must run above the font stylesheet links and the
+       theme bootstrap so the initial render is already in
+       the correct direction (no LTR→RTL flash).
+       Mirrors the theme bootstrap below.
+       ============================================================ -->
+    <script>
+      ;(function () {
+        try {
+          var supported = { ar: 'rtl', en: 'ltr' }
+          var saved = localStorage.getItem('locale')
+          var locale = saved && supported[saved] ? saved : 'ar'
+          document.documentElement.setAttribute('lang', locale)
+          document.documentElement.setAttribute('dir', supported[locale])
+          document.documentElement.setAttribute('data-locale', locale)
+        } catch (e) {
+          /* storage disabled / private mode — keep defaults */
+        }
+      })()
+    </script>
+
+    <script>
+      ;(function () {
+        try {
+          var savedDensity = localStorage.getItem('pref_density')
+          var density = savedDensity === 'compact' ? 'compact' : 'comfortable'
+          document.documentElement.setAttribute('data-density', density)
+        } catch (e) {
+          /* storage disabled / private mode — keep CSS defaults */
+        }
+      })()
+    </script>
+
+    <!-- Apply only the font choice before paint; font styles load on demand in main.js. -->
+    <script>
+      ;(function () {
+        var font = 'default'
+        try {
+          var supportedFonts = ['default', 'system', 'noto-arabic', 'tajawal', 'cairo', 'ibm-plex-arabic', 'amiri', 'inter', 'outfit']
+          var savedFont = localStorage.getItem('pref_font')
+          if (supportedFonts.indexOf(savedFont) !== -1) font = savedFont
+        } catch (e) {
+          /* storage unavailable: keep the project default */
+        }
+        document.documentElement.setAttribute('data-font', font)
+      })()
+    </script>
+
+    <!-- ============================================================
+       Theme bootstrap.
+       Reads the persisted theme from localStorage and applies it
+       to <html data-theme> BEFORE any CSS paints.
+
+       WHY THIS EXISTS
+       ---------------
+       Without this, a user whose preference differs from Stone
+       would see a default-theme flash on every reload: the CSS was
+       parsed and the first paint happened before main.js called
+       useTheme().loadSavedTheme(), which is what used to be the
+       only writer of `data-theme`. The default in the CSS is
+       Stone, so the flash would be "Stone → chosen theme".
+
+       The supported list here must stay in sync with
+       `THEMES` in frontend/src/utils/constants.js and with the
+       set of `[data-theme="…"]` blocks in the CSS. The old `light`
+       value is normalized to `stone`; former `sepia` and `fresh`
+       values migrate to `amber` and `lagoon` for existing installations.
+       ============================================================ -->
+    <script>
+      ;(function () {
+        try {
+          var supported = [
+            'stone',
+            'iris',
+            'blossom',
+            'lagoon',
+            'slate',
+            'ink',
+            'amber',
+            'ruby',
+            'dark',
+            'midnight',
+            'onyx',
+            'contrast',
+          ]
+          var themeColors = {
+            stone: '#d8cebc',
+            iris: '#cfc0ed',
+            blossom: '#f0bdcd',
+            lagoon: '#98d4ce',
+            slate: '#b2c5db',
+            ink: '#c4c4bc',
+            amber: '#e8c77d',
+            'ruby': '#d5a0b2',
+            dark: '#0d1218',
+            midnight: '#0a0f1e',
+            onyx: '#031412',
+            contrast: '#c4d7f7',
+          }
+          var saved = localStorage.getItem('theme')
+          if (saved === 'light') saved = 'stone'
+          if (saved === 'sepia') saved = 'amber'
+          if (saved === 'fresh') saved = 'lagoon'
+          if (saved === 'blood-red') saved = 'ruby'
+          var theme =
+            saved === 'auto'
+              ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'midnight'
+                : 'iris'
+              : saved && supported.indexOf(saved) !== -1
+                ? saved
+                : 'iris'
+          document.documentElement.setAttribute('data-theme', theme)
+          document
+            .querySelector('meta[name="theme-color"]')
+            .setAttribute('content', themeColors[theme])
+        } catch (e) {
+          /* storage disabled / private mode — keep defaults */
+        }
+      })()
+    </script>
+
+    <!-- Icons are independent of the optional text-font CDN. -->
+    <link id="bootstrapIconsCss" rel="stylesheet" href="/bootstrapIcons.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
