@@ -205,7 +205,7 @@ describe('masterExamService — drafts library', () => {
   })
 
   it('deleteDraft DELETEs the detail URL', async () => {
-    await masterExamService.deleteDraft(9)
-    expect(apiClient.delete).toHaveBeenCalledWith('/exam/master/drafts/9/')
+    await masterExamService.deleteDraft(9, 4)
+    expect(apiClient.delete).toHaveBeenCalledWith('/exam/master/drafts/9/', { params: { expected_version: 4 } })
   })
 })

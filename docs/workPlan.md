@@ -1,5 +1,17 @@
 # Vue remaining work
 
+## 2026-10-17 theme visual verification
+
+- Verify adjusted Lagoon/Slate/Ink/Ruby muted text/placeholders/borders and Stone/Amber warnings/Ruby danger on screen, focus states, RTL and actual themed print/PDF output after matching deployment. All 951 Node tests and seven PDF-theme tests pass; all 12 web/PDF palettes match. [Latest evidence](../../backend/docs/archive/reviews/2026-10-17-testRun.md#theme-token-follow-up). Browser checks remain excluded from this run; no visual outcome is inferred from token calculations.
+
+## 2026-10-17 draft revision/recovery verification
+
+- Deploy matching draft-read/body/query revision contracts and verify concurrent saves/deletes versus publication/attachment, unknown responses, failed review reads, explicit use-server/keep-draft/discard, retained forms and account/route changes. Verify read-only comparison, disabled pending controls, bilingual/RTL/focus and unaffected draft creation. [Shared C1–C7 closure](../../backend/docs/archive/reviews/2026-10-17-remainingLogicReview.md#extended-findings-and-source-corrections). Templates/browser/HTTP remain unverified.
+
+## 2026-10-17 completion/review verification
+
+- Verify matching backend-first completion while another exam overlaps: score/history/learning saved, explicit withheld-review notice without false unanswered warnings, successful later GET reveal, read failure retaining the confirmed summary, duplicate clicks and stale/account/attempt responses. See [B1–B4 closure](../../backend/docs/archive/reviews/2026-10-17-backendMajorReview.md#source-corrections). Verify case form reuse/detach, private-case rejection and differing shared-stem guidance through the existing revisioned case editor. Source checks do not establish browser/HTTP/runtime behavior.
+
 Updated 2026-10-10. [Current source status](workDone.md) · [Project map](../../Android/docs/README.md).
 
 The seven rescan and eight deeper-review findings are source-complete. Do not reopen historical unchecked items without tracing current production source. Add new defects with reproduction, affected clients/contracts and priority.

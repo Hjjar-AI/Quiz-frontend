@@ -204,6 +204,17 @@ exports[`ENDPOINTS snapshot > every endpoint in the registry 1`] = `
     "value": "/questions/categories/1/delete/",
   },
   {
+    "kind": "string",
+    "path": "ENDPOINTS.CATEGORIES.MERGE",
+    "value": "/questions/categories/merge/",
+  },
+  {
+    "arity": 1,
+    "kind": "function",
+    "path": "ENDPOINTS.CATEGORIES.MERGE_RECEIPT",
+    "value": "/recovery/operations/1/",
+  },
+  {
     "arity": 1,
     "kind": "function",
     "path": "ENDPOINTS.CATEGORIES.UPDATE",

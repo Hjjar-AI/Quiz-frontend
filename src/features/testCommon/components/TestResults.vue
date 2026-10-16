@@ -52,7 +52,7 @@
           </div>
         </div>
 
-        <div class="print-only">
+        <div v-if="!results.review_withheld" class="print-only">
           <h3>{{ t('tests.breakdown') }}</h3>
           <table class="print-table">
             <thead>
@@ -100,7 +100,12 @@
         </div>
       </BaseCard>
 
-      <SectionHeader class="no-print" :title="t('tests.reviewDetail')" icon="bi bi-list-check" />
+      <BaseCard v-if="results.review_withheld">
+        <AlertBox variant="info" :message="t('tests.reviewWithheld')" />
+        <AlertBox v-if="reviewError" variant="warning" :message="reviewError" />
+        <BaseButton class="no-print" :disabled="reviewRefreshing" @click="$emit('refresh-review')">{{ t('tests.refreshReview') }}</BaseButton>
+      </BaseCard>
+      <SectionHeader v-else class="no-print" :title="t('tests.reviewDetail')" icon="bi bi-list-check" />
       <ReviewItem v-for="(result, idx) in results.results" :key="idx" :result="result" :index="idx + 1" />
     </PageShell>
   </Layout>
@@ -130,6 +135,8 @@ const { formatNumber, formatPercent } = useLocaleFormatters()
 
 const props = defineProps({
   results: { type: Object, required: true },
+  reviewRefreshing: { type: Boolean, default: false },
+  reviewError: { type: String, default: null },
   mode: { type: String, required: true },
   tag: { type: String, default: '' },
   showWarning: { type: Boolean, default: false },
@@ -139,7 +146,7 @@ const props = defineProps({
   showShare: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['retry', 'home'])
+const emit = defineEmits(['retry', 'home', 'refresh-review'])
 const { notify } = useNotify()
 
 const config = computed(() => MODES[props.mode] || MODES.exam)

@@ -1,5 +1,7 @@
 {
   "tests": {
+    "reviewWithheld": "Completion and learning progress are saved. Question review is withheld until overlapping exams are finished.",
+    "refreshReview": "Check saved question review",
     "savedSessionMissing": "The session is no longer available and no saved result was found. Your draft remains here until you discard it.",
     "reviewProgressRequired": "Your attempted answer is retained. Read saved progress and review it before continuing.",
     "retainedAnswer": "Your draft: answer {answer}, confidence {confidence}.",

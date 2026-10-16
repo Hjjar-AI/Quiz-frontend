@@ -1,6 +1,7 @@
 <template>
-  <form class="master-exam-draft-form" @submit.prevent="$emit('submit')">
+  <form class="master-exam-draft-form" @submit.prevent="!loading && !readOnly && $emit('submit')">
     <BaseTextarea
+      :disabled="loading || readOnly"
       v-model="form.question"
       :label="t('masterExams.questionTextLabel')"
       :rows="3"
@@ -19,6 +20,7 @@
           {{ index + 1 }}
         </span>
         <BaseInput
+          :disabled="loading || readOnly"
           v-model="form.choices[index]"
           :maxlength="300"
           show-count
@@ -28,11 +30,12 @@
           variant="danger"
           size="small"
           icon="bi bi-x"
-          :disabled="form.choices.length <= 2"
+          :disabled="loading || readOnly || form.choices.length <= 2"
           :label="t('masterExams.removeChoiceAria')"
           @click="removeChoice(index)"
         />
         <BaseRadio
+          :disabled="loading || readOnly"
           v-model="form.correct_answer"
           :name="correctAnswerName"
           :value="index + 1"
@@ -41,6 +44,7 @@
       </div>
       <BaseButton
         v-if="form.choices.length < maxChoices"
+        :disabled="loading || readOnly"
         type="button"
         variant="secondary"
         size="small"
@@ -52,12 +56,14 @@
 
     <FormGrid>
       <BaseTextarea
+        :disabled="loading || readOnly"
         v-model="form.explanation"
         :label="t('questions.explanationLabel')"
         :rows="2"
         :maxlength="3000"
       />
       <BaseInput
+        :disabled="loading || readOnly"
         v-model="form.source"
         :label="t('questions.sourceLabel')"
         :maxlength="200"
@@ -67,11 +73,13 @@
 
     <FormGrid>
       <BaseSelect
+        :disabled="loading || readOnly"
         v-model="form.difficulty"
         :label="t('questions.difficultyLabel')"
         :options="difficultyOptions"
       />
       <BaseSelect
+        :disabled="loading || readOnly"
         v-model="form.category"
         :label="t('questions.categoryLabel')"
         :options="categoryOptions"
@@ -81,6 +89,7 @@
 
     <div>
       <BaseInput
+        :disabled="loading || readOnly"
         :model-value="form.case_key"
         :label="t('questions.caseKeyLabel')"
         :hint="t('questions.caseKeyHint')"
@@ -96,8 +105,8 @@
       </datalist>
     </div>
 
-    <div class="form-actions">
-      <BaseButton type="button" variant="secondary" @click="$emit('cancel')">
+    <div v-if="!readOnly" class="form-actions">
+      <BaseButton type="button" variant="secondary" :disabled="loading" @click="$emit('cancel')">
         {{ t('common.cancel') }}
       </BaseButton>
       <BaseButton type="submit" variant="primary" :loading="loading">
@@ -137,6 +146,7 @@ const props = defineProps({
   categories: { type: Array, default: () => [] },
   cases: { type: Array, default: () => [] },
   loading: { type: Boolean, default: false },
+  readOnly: { type: Boolean, default: false },
   submitLabel: { type: String, required: true },
   caseListId: { type: String, default: 'draft-case-key-suggestions' },
   correctAnswerName: { type: String, default: 'draft-correct-answer' },

@@ -1,5 +1,9 @@
 # Frontend automated suite
 
+2026-10-17 theme follow-up: **all 951 tests pass in 73 files**, zero failures/skips (47.92s), after correcting the seven palette tokens and matching PDF values. Existing assertions were retained. [Changes, measured contrast and PDF checks](../../../backend/docs/archive/reviews/2026-10-17-testRun.md#theme-token-follow-up). No browser tests or coverage run.
+
+2026-10-17 initial run: **944 passed, seven failed, zero skipped across 951 tests in 73 files** (76.70s). Those seven theme-token failures are resolved by the follow-up above. Related contract/locale/store repairs and limits are in the [shared run report](../../../backend/docs/archive/reviews/2026-10-17-testRun.md). No browser tests or coverage run. Older totals/coverage below remain historical.
+
 2026-10-10 · source revision `18729dc` plus the corrections below · Node 24.21.0 / pnpm 12.10.1 / Vitest 5.0.1 / happy-dom.
 
 The final complete run passed **931 tests in 70 files**, with zero failures, skips or TODOs. Reported test duration was 56.63s. [Structured results and per-file coverage](frontendTests.json) retain the baseline failure inventory and final totals. Temporary annotated coverage is at `/tmp/quiz-frontend-suite/coverage/index.html`.

@@ -44,3 +44,7 @@ Print intentionally preserves the selected theme's semantic hues on a white canv
 ## 2026-10-13 richer palette identities
 
 Stone uses parchment/brown, Iris lavender, Blossom rose, Lagoon aqua, Slate blue-grey, Ink sage-grey, Amber gold, Ruby berry, Contrast cobalt and Onyx teal-black. Body and card/alternate surfaces are visibly tinted. Existing keys/aliases remain; Dark and Midnight palettes are unchanged. Android-only Terracotta has copper surfaces; the former Violet light/dark choices display as Sage/Plum while retaining their enum keys. The native Sky and Lime palettes are unchanged. Core source colour calculations and registry/bootstrap/PDF matching do not establish browser/device/print appearance; all-theme visual verification remains pending.
+
+## 2026-10-17 token contrast corrections
+
+Lagoon, Slate, Ink and Ruby muted text is darkened so its derived 96% placeholder stays above 4.8:1 against each screen surface. Stone/Amber warnings and Ruby danger are separated from their primary colors while retaining solid/tinted text contrast. PDF semantic/text seeds match all 12 web palettes; surfaces, theme keys, aliases and initial body colors are retained. Existing token thresholds remain the acceptance criteria; real focus/RTL/device/print appearance still needs visual verification.

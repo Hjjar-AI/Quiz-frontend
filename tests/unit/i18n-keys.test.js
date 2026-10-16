@@ -70,7 +70,7 @@ const LITERAL_KEY_RE = /\b(?:t|safeT)\s*\(\s*(['"`])([^'"`$\\]+)\1\s*(?=[,)])/g
 
 const CONCAT_PREFIX_RE = /\b(?:t|safeT)\s*\(\s*(['"])([^'"]+)\1\s*\+/g
 
-const DYNAMIC_PREFIX_RE = /\b(?:t|safeT)\s*\(\s*`([^`]*)\$\{/g
+const DYNAMIC_PREFIX_RE = /\b(?:t|safeT)\s*\(\s*`([^`]*?)\$\{/g
 
 const EXPECTED_DYNAMIC_PREFIXES = new Set([
   'about.features.',
@@ -85,6 +85,7 @@ const EXPECTED_DYNAMIC_PREFIXES = new Set([
   'preferences.fontOptions.',
   'analytics.',
   'tests.selection_',
+  'tests.reflection',
   'knowledge.status.',
   'theme.',
   'theme.group.',

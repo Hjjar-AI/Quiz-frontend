@@ -35,6 +35,7 @@ beforeEach(() => {
   setActivePinia(createPinia())
   vi.clearAllMocks()
   sessionStorage.clear()
+  mocks.service.getQuestion.mockResolvedValue({ index: 0, total: 2, question: { id: 10, choices: ['A', 'B'] }, saved_answer: null, saved_confidence: null })
 })
 
 describe('testSessionStore — start', () => {
@@ -100,9 +101,10 @@ describe('testSessionStore — submitAnswer', () => {
       session_id: 's1',
       question_ids: [10, 20],
     })
-    mocks.service.submitAnswer.mockResolvedValueOnce({ new_index: 1 })
+    mocks.service.submitAnswer.mockResolvedValueOnce({ new_index: 1, saved_slot: { answer: 1, confidence: 3 } })
     const store = useTestSessionStore()
     await store.start('exam', {})
+    await store.fetchQuestion()
     await store.submitAnswer(1, 'next', null, true)
     expect(store.answers[0]).toBe(1)
     expect(store.currentIndex).toBe(1)
@@ -134,9 +136,10 @@ describe('testSessionStore — submitAnswer', () => {
       session_id: 's1',
       question_ids: [10],
     })
-    mocks.service.submitAnswer.mockResolvedValueOnce({ new_index: 0 })
+    mocks.service.submitAnswer.mockResolvedValueOnce({ new_index: 0, saved_slot: { answer: 1, confidence: 2 } })
     const store = useTestSessionStore()
     await store.start('exam', {})
+    await store.fetchQuestion()
     await store.submitAnswer(1, 'next', null, 2)
     expect(store.confidence[0]).toBe(2)
   })
@@ -146,10 +149,11 @@ describe('testSessionStore — submitAnswer', () => {
       session_id: 'recall-1',
       question_ids: [10],
     })
-    mocks.service.submitAnswer.mockResolvedValueOnce({ new_index: 0 })
+    mocks.service.submitAnswer.mockResolvedValueOnce({ new_index: 0, saved_slot: { answer: null, confidence: 3, pre_answer: 'My free recall' } })
     const store = useTestSessionStore()
     await store.start('recall', {})
 
+    await store.fetchQuestion()
     await store.submitAnswer(null, 'same', null, 3, null, 'My free recall')
 
     expect(mocks.service.submitAnswer).toHaveBeenCalledWith(
@@ -160,6 +164,8 @@ describe('testSessionStore — submitAnswer', () => {
       3,
       null,
       'My free recall',
+      0,
+      { answer: null, confidence: null, pre_answer: null, error_reason: null },
     )
     expect(store.answeredCount).toBe(0)
     expect(store.mode).toBe('recall')

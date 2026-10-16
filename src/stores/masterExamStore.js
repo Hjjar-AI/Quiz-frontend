@@ -22,6 +22,9 @@ export const useMasterExamStore = defineStore('masterExam', {
       draftsUsageFilter: '',
       needsAckCount: 0,
       needsAckItems: [],
+      draftWriteReview: null,
+      ...subResourceState('draftWrite'),
+      ...subResourceState('draftRead'),
       ...subResourceState('drafts'),
     }),
 
@@ -266,26 +269,48 @@ export const useMasterExamStore = defineStore('masterExam', {
       this.draftsUsageFilter = v
     },
 
-    async updateDraft(draftId, data) {
-      const { wrap } = useCrudActions(this)
-      return await wrap(() => masterExamService.updateDraft(draftId, data), {
-        successMsgKey: 'notifications.masterExamDraftUpdated',
-        errorMsgFallbackKey: 'masterExams.draftUpdateFailed',
-        onSuccess: (draft) => {
-          const idx = this.drafts.findIndex((d) => d.id === draftId)
-          if (idx !== -1) this.drafts.splice(idx, 1, draft)
-        },
+    async readDraftForReview() {
+      const owner = this.draftWriteReview
+      if (!owner || this.draftReadStatus === 'loading' || this.draftWriteStatus === 'loading') return null
+      const { wrap } = useCrudActions(this, { statusKey: 'draftReadStatus', errorKey: 'draftReadError' })
+      return await wrap(() => masterExamService.getDraft(owner.id), {
+        isCurrent: () => this.draftWriteReview === owner,
+        onSuccess: (latest) => { this.draftWriteReview = { ...owner, latest } },
       })
     },
 
-    async deleteDraft(draftId) {
-      const { wrap } = useCrudActions(this)
-      return await wrap(() => masterExamService.deleteDraft(draftId), {
-        successMsgKey: 'notifications.masterExamDraftDeleted',
-        errorMsgFallbackKey: 'masterExams.draftDeleteFailed',
-        onSuccess: () => {
-          this.drafts = this.drafts.filter((d) => d.id !== draftId)
-          this.draftsTotal = Math.max(0, this.draftsTotal - 1)
+    clearDraftReview() {
+      if (this.draftWriteStatus === 'loading' || this.draftReadStatus === 'loading') return
+      this.draftWriteReview = null
+      this.draftWriteError = null
+    },
+
+    async updateDraft(draftId, data) {
+      return await this.writeDraft(draftId, data.expected_version, data)
+    },
+
+    async deleteDraft(draftId, version) {
+      return await this.writeDraft(draftId, version, null)
+    },
+
+    async writeDraft(draftId, version, data) {
+      if (this.draftWriteStatus === 'loading' || this.draftWriteReview) return null
+      this.draftWriteReview = { id: draftId, version, data, latest: null }
+      const { wrap } = useCrudActions(this, { statusKey: 'draftWriteStatus', errorKey: 'draftWriteError' })
+      return await wrap(() => data ? masterExamService.updateDraft(draftId, data) : masterExamService.deleteDraft(draftId, version), {
+        successMsgKey: data ? 'notifications.masterExamDraftUpdated' : 'notifications.masterExamDraftDeleted',
+        onSuccess: (draft) => {
+          this.draftWriteReview = null
+          if (data) {
+            const idx = this.drafts.findIndex((d) => d.id === draftId)
+            if (idx !== -1) this.drafts.splice(idx, 1, draft)
+          } else {
+            this.drafts = this.drafts.filter((d) => d.id !== draftId)
+            this.draftsTotal = Math.max(0, this.draftsTotal - 1)
+          }
+        },
+        onError: (error) => {
+          if ([400, 403, 404, 429].includes(error?.code)) this.draftWriteReview = null
         },
       })
     },
@@ -302,6 +327,11 @@ export const useMasterExamStore = defineStore('masterExam', {
       needsAckItems: [],
       draftsStatus: 'idle',
       draftsError: null,
+      draftWriteReview: null,
+      draftWriteStatus: 'idle',
+      draftWriteError: null,
+      draftReadStatus: 'idle',
+      draftReadError: null,
       status: 'idle',
       error: null,
     }),

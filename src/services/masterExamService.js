@@ -129,7 +129,7 @@ export const masterExamService = {
   updateDraft(draftId, data) {
     return apiClient.put(E.DRAFT_DETAIL(draftId), data)
   },
-  deleteDraft(draftId) {
-    return apiClient.delete(E.DRAFT_DETAIL(draftId))
+  deleteDraft(draftId, version) {
+    return apiClient.delete(E.DRAFT_DETAIL(draftId), { params: { expected_version: version } })
   },
 }

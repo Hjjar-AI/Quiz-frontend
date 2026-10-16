@@ -3,6 +3,9 @@
 <template>
   <TestResults
     :results="store.results"
+    :review-refreshing="store.reviewStatus === 'loading'"
+    :review-error="store.reviewError"
+    @refresh-review="store.refreshCompletedReview()"
     :mode="mode"
     :tag="store.tag"
     :show-time="config.showTime"
@@ -38,7 +41,7 @@ const config = computed(() => MODES[props.mode] || MODES.exam)
 const isCompleted = computed(() => {
   if (!store.results) return false
   const questions = store.results.results || []
-  const answered = questions.filter(q => q.user_answer !== null).length
+  const answered = store.results.answered_count ?? questions.filter(q => q.user_answer !== null).length
   return answered === store.results.total_questions
 })
 

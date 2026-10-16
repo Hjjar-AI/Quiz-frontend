@@ -88,6 +88,7 @@ export const useTestSessionStore = defineStore('testSession', {
     submissionRecoveryRequired: false,
     submissionReview: null,
     ...subResourceState('submit'),
+    ...subResourceState('review'),
   }),
   getters: {
     ...standardGetters,
@@ -129,6 +130,8 @@ export const useTestSessionStore = defineStore('testSession', {
       this.blueprintId = null
       this.status = 'idle'
       this.error = null
+      this.reviewStatus = 'idle'
+      this.reviewError = null
       this.submitStatus = 'idle'
       this.submitError = null
       this.currentPage = null
@@ -244,6 +247,8 @@ export const useTestSessionStore = defineStore('testSession', {
           this.accumulatedTime = 0
           this.isActive = true
           this.results = null
+          this.reviewStatus = 'idle'
+          this.reviewError = null
           this.blueprintId = res.blueprint || null
 
           // Timer decision:
@@ -471,6 +476,8 @@ export const useTestSessionStore = defineStore('testSession', {
         errorMsgFallbackKey: 'notifications.resultsFetchFailed',
         onSuccess: (results) => {
           this.results = results
+          this.reviewStatus = 'idle'
+          this.reviewError = null
           this.isActive = false
           this.sessionId = null
           this.questionIds = []
@@ -482,6 +489,23 @@ export const useTestSessionStore = defineStore('testSession', {
           safeSessionRemove(SESSION_MODE_KEY)
           safeSessionRemove(SESSION_ID_KEY)
         },
+      })
+    },
+
+    async refreshCompletedReview() {
+      const owner = this.results
+      if (!owner?.review_withheld || !owner.source_session_id || !owner.history_id || this.reviewStatus === 'loading') return null
+      const mode = owner.mode || this.mode
+      if (!VALID_MODES.includes(mode)) return null
+      const { wrap } = useCrudActions(this, { statusKey: 'reviewStatus', errorKey: 'reviewError' })
+      return await wrap(async () => {
+        const result = await getService(mode).completedResult(owner.source_session_id)
+        if (result.source_session_id !== owner.source_session_id || result.history_id !== owner.history_id || result.mode !== mode) throw new Error(i18n.global.t('tests.reviewProgressRequired'))
+        return result
+      }, {
+        isCurrent: () => this.results?.source_session_id === owner.source_session_id && this.results?.history_id === owner.history_id && this.mode === mode,
+        errorMsgFallbackKey: 'notifications.resultsFetchFailed',
+        onSuccess: (result) => { this.results = result },
       })
     },
 

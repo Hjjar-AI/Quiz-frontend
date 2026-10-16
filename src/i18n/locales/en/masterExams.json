@@ -217,6 +217,7 @@
     "answerOutcomeUnknown": "Check the saved answer before continuing. Your draft is retained.",
     "draftAnswerValue": "Your draft answer: {n}",
     "serverAnswerValue": "Server answer: {n}",
-    "answerUnset": "Unanswered"
+    "answerUnset": "Unanswered",
+    "draftWriteReview": "The write needs review. Check the saved question before deciding what to keep or explicitly saving again. Your draft is retained; no write will be replayed automatically."
   }
 }

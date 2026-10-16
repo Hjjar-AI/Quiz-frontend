@@ -1,5 +1,27 @@
 # Current Vue source status
 
+## 2026-10-17 theme-token corrections
+
+Fixed all seven token failures: darkened four muted-text seeds for derived placeholder contrast and separated Stone/Amber warning and Ruby danger from primary. Mirrored all seven values in backend PDF palettes; verified semantic/surface/text parity across all 12 themes. Existing surfaces, keys/aliases, pre-paint colors and test thresholds are retained.
+
+Full Vitest/happy-dom suite passes **951/951 across 73 files**, zero failures/skips (47.92s). Focused token/export checks pass 28/28; backend PDF-theme tests pass 7/7. No browser tests, production builds, migrations, dependency/version changes or visual/device/print verification. [Shared follow-up](../../backend/docs/archive/reviews/2026-10-17-testRun.md#theme-token-follow-up).
+
+## 2026-10-17 authorized Node test run
+
+Full Vitest/happy-dom run: 944 passed, seven failed, zero skipped out of 951 (73 files, 76.70s). All failures are unchanged theme-token contrast/distinction assertions. Fixed the draft comparison's missing translation reference; corrected locale prefix extraction, baseline/slot fixtures, revisioned draft-delete expectations and reviewed endpoint snapshot additions. [Shared evidence and limits](../../backend/docs/archive/reviews/2026-10-17-testRun.md). No browser tests, production build, dependency/version changes or coverage run.
+
+## 2026-10-17 draft revisions and explicit write review
+
+Draft save/delete send displayed revisions. Independent pending/read state guards duplicate mutations, retains uncertain/conflicted intent and failed reads, and offers explicit server comparison/use-server/keep-draft/discard without replay. Shared draft form supports read-only comparison and disabled pending controls. Baselines are adopted only by explicit decisions; existing creation flows remain. [Backend C1–C7 corrections](../../backend/docs/archive/reviews/2026-10-17-remainingLogicReview.md#extended-findings-and-source-corrections).
+
+Changed JS/extracted SFC scripts, imports, bilingual JSON/placeholders and whitespace checked. Vue parser unavailable; no browser/HTTP/build/suite/migration/version work. Matching backend/client rollout and manual verification remain pending.
+
+## 2026-10-17 saved completion with withheld review
+
+Matched the backend completion correction: real score/count/time and durable identity remain confirmed while `review_withheld` hides question review. Results explain the saved state, offer an owner-scoped GET refresh, retain confirmed results on failed reads and reject stale target/account responses. Completion warnings use the authoritative answered count instead of interpreting withheld rows as unanswered. Shared bilingual controls remain; no automatic finish or answer replay is introduced. Existing case-form guidance already directs shared-stem changes to the revisioned case editor.
+
+Changed JavaScript/extracted Vue scripts, bilingual JSON placeholders and whitespace/source-contract checks only; no Vue SFC parser, browser/HTTP/runtime verification, builds, suites, migrations or versions. [Shared closure and limits](../../backend/docs/archive/reviews/2026-10-17-backendMajorReview.md#source-corrections).
+
 ## 2026-10-17 ordinary learning-write recovery
 
 Coordinated the backend learning-flow fixes with ordinary Vue writes: retained index/slot preconditions, normalized successful-write acknowledgements, preserved semantic errors and typed-expiry-only forced finish. Failed answer/confidence/reflection/recall/navigation attempts remain memory-only; conflicting actions and navigation wait for explicit server-state read/review. Users may accept saved progress/discard the draft, or explicitly retry the same original question only against an unchanged baseline. Missing/completed/paused/withheld cases retain recovery; generation/session checks reject stale results, logout/reset clears private drafts, and older servers without acknowledgements use a follow-up read without replaying confirmed writes. Arabic/English recovery controls use existing shared components. Other session parity items remain pending.
