@@ -13,12 +13,12 @@ Pending verification: co-attending choices include moderators/admins and members
 
 ## Session parity implementation findings (2026-10-13 source review)
 
-- P1: ordinary web answer/navigation writes omit backend `expected_index`/`expected_slot`. The controller rolls a failed answer back to its previous store value and re-enables controls without reading acknowledgement; every exam 409 triggers forced finish. Preserve the attempted draft, reconcile uncertain writes before another mutation, and coordinate machine-readable expiry/progress-conflict reasons with the backend (currently both share an undifferentiated 409).
+- P1 source-complete 2026-10-17: ordinary answer/navigation now sends retained `expected_index`/`expected_slot`, preserves failed attempts in memory and blocks mutations until explicit read/review; only typed expiry forces exam finish. Verify matching backend-first deployment, response loss, explicit unchanged-baseline retry versus use-server/discard, changed/paused/completed/missing sessions, failed reads, account switches, Arabic/English/RTL and timer expiry during review. See the [backend closure](../../backend/docs/archive/reviews/2026-10-17-learningFlowReview.md#source-corrections); no browser/HTTP/build/suite verification.
 - P1 enhancement: web service/store lacks owned-session prefetch and local downloaded study feedback. Any parity implementation must retain exam/recall reveal rules, explicit uncertain-write recovery, account-scoped browser storage policy and server deadlines; Android encrypted persistence is not automatically a browser storage authorization.
 - P2: align setup with current Android all-bank default, optional book, shared category/tag filters and removable summaries. Current source clears source-specific selections on pool changes, requires book metadata even without chosen chips and automatically clamps typed counts when availability changes.
 - P2 UI parity: active choice feedback labels/highlights and question bookmark; results All/Incorrect/Unanswered and unanswered metric; real-heading explanation links/opacity-only reveal; conditional stable image loading/Retry; compact measured-shell navigation/tools and fuller resume summary. Reuse existing score/progress/timer/Markdown/RTL components. Browser haptics are optional platform-specific follow-up, not a required backend compatibility fix.
 
-Implementation has not started; this is a bounded source review, not an exhaustive parity claim. Existing availability/book-facet/merge/import updates are already present. The backend socket cleanup changes require no frontend API adjustment.
+Only the ordinary-write recovery item above has been implemented; the other session parity items remain unimplemented. This is not an exhaustive parity claim. Existing availability/book-facet/merge/import updates are already present. The backend socket cleanup changes require no frontend API adjustment.
 
 ## Pending verification
 

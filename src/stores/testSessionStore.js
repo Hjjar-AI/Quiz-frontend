@@ -7,6 +7,7 @@ import { useConfigStore } from '@/stores/configStore'
 import { i18n } from '@/i18n'
 import { FALLBACK_MAX_CHOICES } from '@/utils/constants'
 import { normalizeConfidenceScore } from '@/utils/confidence'
+import { sessionGeneration, sessionCancelled } from '@/services/api/sessionScope'
 import {
   standardState,
   standardGetters,
@@ -80,6 +81,12 @@ export const useTestSessionStore = defineStore('testSession', {
     results: null,
     durationMinutes: null,
     blueprintId: null,
+    requestEpoch: 0,
+    currentPage: null,
+    answerBaseline: null,
+    pendingSubmission: null,
+    submissionRecoveryRequired: false,
+    submissionReview: null,
     ...subResourceState('submit'),
   }),
   getters: {
@@ -106,6 +113,7 @@ export const useTestSessionStore = defineStore('testSession', {
       safeSessionRemove(SESSION_ID_KEY)
     },
     _clearMemory() {
+      this.requestEpoch += 1
       this.sessionId = null
       this.mode = null
       this.questionIds = []
@@ -123,6 +131,11 @@ export const useTestSessionStore = defineStore('testSession', {
       this.error = null
       this.submitStatus = 'idle'
       this.submitError = null
+      this.currentPage = null
+      this.answerBaseline = null
+      this.pendingSubmission = null
+      this.submissionRecoveryRequired = false
+      this.submissionReview = null
     },
     hydrateFromSession() {
       const savedMode = safeSessionGet(SESSION_MODE_KEY)
@@ -177,6 +190,8 @@ export const useTestSessionStore = defineStore('testSession', {
     // A failed start leaves the store's previous mode untouched, so
     // the caller's sessionStorage and the store stay coherent.
     async start(mode, config) {
+      if (this.pendingSubmission || this.submissionRecoveryRequired) return null
+      this.requestEpoch += 1
       const { wrap } = useCrudActions(this)
       const service = getService(mode)
 
@@ -219,6 +234,11 @@ export const useTestSessionStore = defineStore('testSession', {
           this.currentIndex = 0
           this.answers = {}
           this.confidence = {}
+          this.currentPage = null
+          this.answerBaseline = null
+          this.pendingSubmission = null
+          this.submissionRecoveryRequired = false
+          this.submissionReview = null
           const parsedStart = res.started_at ? new Date(res.started_at) : new Date()
           this.startedAt = isNaN(parsedStart.getTime()) ? new Date() : parsedStart
           this.accumulatedTime = 0
@@ -263,79 +283,176 @@ export const useTestSessionStore = defineStore('testSession', {
       })
     },
 
-    async fetchQuestion() {
-      if (!this.isActive || this.currentIndex < 0 || this.currentIndex >= this.totalQuestions) {
-        return null
+    _applyQuestionPage(page) {
+      this.currentIndex = page.index
+      this.currentPage = page
+      this.answerBaseline = {
+        answer: page.saved_answer ?? null,
+        confidence: page.saved_confidence ?? null,
+        pre_answer: page.saved_pre_answer || null,
+        error_reason: page.saved_error_reason || null,
       }
+      const answers = { ...this.answers }
+      const confidence = { ...this.confidence }
+      if (page.saved_answer == null) delete answers[page.index]
+      else answers[page.index] = page.saved_answer
+      if (page.saved_confidence == null) delete confidence[page.index]
+      else confidence[page.index] = normalizeConfidenceScore(page.saved_confidence)
+      this.answers = answers
+      this.confidence = confidence
+    },
+
+    async fetchQuestion() {
+      if (!this.isActive || this.pendingSubmission || this.submissionRecoveryRequired || this.currentIndex < 0 || this.currentIndex >= this.totalQuestions) return null
+      const owner = this.sessionId
+      const mode = this.mode
+      const generation = sessionGeneration()
+      const epoch = ++this.requestEpoch
       const { wrap } = useCrudActions(this)
-      const service = getService(this.mode)
-      return await wrap(() => service.getQuestion(this.sessionId), {
+      return await wrap(() => getService(mode).getQuestion(owner), {
+        isCurrent: () => this.sessionId === owner && this.mode === mode && this.requestEpoch === epoch && !this.pendingSubmission && !this.submissionRecoveryRequired,
         successMsg: null,
         errorMsgFallbackKey: 'notifications.questionLoadFailed',
+        onSuccess: (page) => {
+          if (this.sessionId === owner && this.mode === mode && sessionGeneration() === generation && !this.submissionRecoveryRequired) this._applyQuestionPage(page)
+        },
       })
     },
 
-    async submitAnswer(
-      answer,
-      action = 'next',
-      targetIndex = null,
-      confidence = null,
-      errorReason = null,
-      preAnswer = null,
-    ) {
-      if (!this.isActive) return null
-      if (answer !== null && answer !== undefined) {
+    async submitAnswer(answer, action = 'next', targetIndex = null, confidence = null, errorReason = null, preAnswer = null) {
+      if (this.pendingSubmission || this.submissionRecoveryRequired || !this.isActive || !this.answerBaseline || this.currentPage?.index !== this.currentIndex) {
+        throw new Error(i18n.global.t('tests.reviewProgressRequired'))
+      }
+      if (answer != null) {
         const configStore = useConfigStore()
         const maxChoices = configStore.maxChoices || FALLBACK_MAX_CHOICES
         if (!Number.isInteger(answer) || answer < 1 || answer > maxChoices) {
-          const err = new Error(i18n.global.t('tests.invalidAnswer', { max: maxChoices }))
-          err.code = 400
-          throw err
+          const error = new Error(i18n.global.t('tests.invalidAnswer', { max: maxChoices }))
+          error.code = 400
+          throw error
         }
       }
+      const owner = this.sessionId
+      const mode = this.mode
+      const generation = sessionGeneration()
       const requestIndex = this.currentIndex
+      this.requestEpoch += 1
+      const draft = {
+        sessionId: owner, mode, index: requestIndex,
+        question: this.currentPage.question,
+        answer, action, targetIndex, confidence, errorReason, preAnswer,
+        baseline: { ...this.answerBaseline },
+      }
+      this.pendingSubmission = draft
+      this.submissionReview = null
       this.submitStatus = 'loading'
       this.submitError = null
       try {
-        const service = getService(this.mode)
-        const response = await service.submitAnswer(
-          this.sessionId,
-          answer,
-          action,
-          targetIndex,
-          confidence,
-          errorReason,
-          preAnswer,
-        )
-        if (answer !== undefined && answer !== null) {
-          this.answers[requestIndex] = answer
-          if (confidence !== null && confidence !== undefined) {
-            this.confidence = {
-              ...this.confidence,
-              [requestIndex]: normalizeConfidenceScore(confidence),
-            }
-          }
+        const response = await getService(mode).submitAnswer(owner, answer, action, targetIndex, confidence, errorReason, preAnswer, requestIndex, draft.baseline)
+        if (this.sessionId !== owner || this.mode !== mode || sessionGeneration() !== generation) throw sessionCancelled()
+        // Matching backend returns the acknowledged slot, including normalized confidence/reflection.
+        if (response.saved_slot) {
+          const slot = response.saved_slot
+          this._applyQuestionPage({ ...this.currentPage,
+            saved_answer: slot.answer, saved_confidence: slot.confidence,
+            saved_pre_answer: slot.pre_answer, saved_error_reason: slot.error_reason,
+            saved_is_correct: response.is_correct,
+          })
+        } else {
+          this.answerBaseline = null
         }
-        if (action === 'next') {
-          this.currentIndex = response.new_index ?? this.currentIndex + 1
-        } else if (action === 'previous') {
-          this.currentIndex = response.new_index ?? this.currentIndex - 1
-        } else if (action === 'goto') {
-          this.currentIndex = response.new_index ?? targetIndex
+        this.currentIndex = response.new_index ?? requestIndex
+        if (this.currentIndex !== requestIndex) {
+          this.currentPage = null
+          this.answerBaseline = null
         }
+        this.pendingSubmission = null
         this.submitStatus = 'success'
         return response
-      } catch (e) {
-        const msg = e?.message || i18n.global.t('tests.answerSaveFailed')
+      } catch (error) {
+        if (this.sessionId !== owner || this.mode !== mode || sessionGeneration() !== generation) throw sessionCancelled()
         this.submitStatus = 'error'
-        this.submitError = msg
-        const outErr = new Error(msg)
-        outErr.code = e?.code
-        throw outErr
+        this.submitError = error?.message || i18n.global.t('tests.answerSaveFailed')
+        if (error?.details?.code === 'TIME_EXPIRED') this.pendingSubmission = null
+        else this.submissionRecoveryRequired = true
+        const outgoing = new Error(this.submitError)
+        outgoing.code = error?.code
+        outgoing.details = error?.details
+        throw outgoing
       }
     },
 
+    async readSubmissionState() {
+      const draft = this.pendingSubmission
+      if (!draft || !this.submissionRecoveryRequired || this.submitStatus === 'loading') return null
+      const generation = sessionGeneration()
+      const owns = () => this.pendingSubmission === draft && this.sessionId === draft.sessionId && this.mode === draft.mode && sessionGeneration() === generation
+      this.submitStatus = 'loading'
+      this.submissionReview = null
+      try {
+        const service = getService(draft.mode)
+        const status = await service.status(draft.sessionId)
+        if (!owns()) return null
+        // This endpoint represents a missing session with 200 and no session_id.
+        if (!status?.session_id) {
+          try {
+            const result = await service.completedResult(draft.sessionId)
+            if (owns()) this.submissionReview = { result }
+          } catch (error) {
+            if (error?.code !== 404) throw error
+            if (owns()) this.submissionReview = { missing: true }
+          }
+          return owns() ? this.submissionReview : null
+        }
+        if (status.session_id !== draft.sessionId) throw new Error(i18n.global.t('tests.reviewProgressRequired'))
+        let page = null
+        if (status.is_active && status.current_index >= 0 && status.current_index < status.question_ids.length) {
+          try {
+            page = await service.getQuestion(draft.sessionId)
+          } catch (error) {
+            if (error?.code !== 404 && error?.details?.code !== 'ANSWERS_WITHHELD') throw error
+          }
+          if (!owns()) return null
+          if (page && (page.index !== status.current_index || page.question.id !== status.question_ids[page.index])) throw new Error(i18n.global.t('tests.reviewProgressRequired'))
+        }
+        this.submissionReview = { status, page }
+        return this.submissionReview
+      } catch (error) {
+        if (owns()) this.submitError = error?.message || i18n.global.t('tests.reviewProgressRequired')
+        throw error
+      } finally {
+        if (owns()) this.submitStatus = 'error'
+      }
+    },
+
+    acceptSubmissionReview() {
+      const review = this.submissionReview
+      if (!review || this.submitStatus === 'loading') return null
+      this.requestEpoch += 1
+      if (review.missing) {
+        this.reset()
+      } else if (review.result) {
+        this.results = review.result
+        this.isActive = false
+        this.sessionId = null
+        safeSessionRemove(SESSION_MODE_KEY)
+        safeSessionRemove(SESSION_ID_KEY)
+      } else {
+        const retainedDuration = this.durationMinutes
+        this._applySessionState(review.status, Boolean(review.status.is_active))
+        this.durationMinutes = retainedDuration
+        if (review.page) this._applyQuestionPage(review.page)
+      }
+      this.pendingSubmission = null
+      this.submissionReview = null
+      this.submissionRecoveryRequired = false
+      this.submitStatus = 'success'
+      this.submitError = null
+      return review
+    },
+
     async finish({ forced = false } = {}) {
+      if (this.pendingSubmission || this.submissionRecoveryRequired) return null
       if (!this.isActive) return null
       if (!forced) {
         const { confirm } = useDialog()
@@ -369,6 +486,7 @@ export const useTestSessionStore = defineStore('testSession', {
     },
 
     async pause() {
+      if (this.pendingSubmission || this.submissionRecoveryRequired) return null
       if (!this.isActive) return
       const { wrap } = useCrudActions(this)
       const service = getService(this.mode)
@@ -383,6 +501,8 @@ export const useTestSessionStore = defineStore('testSession', {
     },
 
     async resume() {
+      if (this.pendingSubmission || this.submissionRecoveryRequired) return null
+      this.requestEpoch += 1
       if (!this.mode) {
         const savedMode = safeSessionGet(SESSION_MODE_KEY)
         const savedSessionId = safeSessionGet(SESSION_ID_KEY)
@@ -431,6 +551,7 @@ export const useTestSessionStore = defineStore('testSession', {
     },
 
     async discardProgress() {
+      if (this.pendingSubmission || this.submissionRecoveryRequired) return null
       if (!this.mode) {
         const savedMode = safeSessionGet(SESSION_MODE_KEY)
         if (savedMode) this.mode = savedMode
@@ -445,6 +566,7 @@ export const useTestSessionStore = defineStore('testSession', {
     },
 
     async restoreFullState() {
+      if (this.pendingSubmission || this.submissionRecoveryRequired) return null
       if (!this.mode) {
         const savedMode = safeSessionGet(SESSION_MODE_KEY)
         const savedSessionId = safeSessionGet(SESSION_ID_KEY)
@@ -457,7 +579,11 @@ export const useTestSessionStore = defineStore('testSession', {
       const { wrap } = useCrudActions(this)
       const service = getService(this.mode)
       if (!service.status) return
-      return await wrap(() => service.status(this.sessionId), {
+      const owner = this.sessionId
+      const mode = this.mode
+      const epoch = ++this.requestEpoch
+      return await wrap(() => service.status(owner), {
+        isCurrent: () => this.sessionId === owner && this.mode === mode && this.requestEpoch === epoch && !this.pendingSubmission && !this.submissionRecoveryRequired,
         errorMsgFallbackKey: 'notifications.sessionRestoreFailed',
         onSuccess: (status) => {
           if (!status) return
@@ -497,6 +623,8 @@ export const useTestSessionStore = defineStore('testSession', {
       this.accumulatedTime = status.accumulated_time || 0
       this.isActive = isActive
       this.results = null
+      this.currentPage = null
+      this.answerBaseline = null
       this.durationMinutes = status.duration_minutes ?? null
     },
 

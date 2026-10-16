@@ -1,5 +1,14 @@
 {
   "tests": {
+    "savedSessionMissing": "The session is no longer available and no saved result was found. Your draft remains here until you discard it.",
+    "reviewProgressRequired": "Your attempted answer is retained. Read saved progress and review it before continuing.",
+    "retainedAnswer": "Your draft: answer {answer}, confidence {confidence}.",
+    "savedProgressReview": "Server progress: question {question}, saved answer {answer}, confidence {confidence}.",
+    "savedSessionComplete": "The server has a completed result for this session.",
+    "savedSessionPaused": "The saved session is paused. Use saved progress, then resume it.",
+    "useSavedProgress": "Use saved progress and discard this draft",
+    "retryReviewedDraft": "Retry this draft with the reviewed unchanged state",
+    "readSavedProgress": "Read saved progress",
     "modeLabel": "Mode",
     "refinements": "Refinements",
     "sourceBookShort": "Source book",

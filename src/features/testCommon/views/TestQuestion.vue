@@ -17,6 +17,23 @@
       />
     </div>
 
+    <BaseCard v-if="submissionRecoveryRequired" role="status" aria-live="polite">
+      <p>{{ t('tests.reviewProgressRequired') }}</p>
+      <p v-if="store.submitError">{{ store.submitError }}</p>
+      <p>{{ t('tests.retainedAnswer', { answer: submissionDraft?.answer ?? submissionDraft?.baseline?.answer ?? '—', confidence: submissionDraft?.confidence ?? submissionDraft?.baseline?.confidence ?? '—' }) }}</p>
+      <p v-if="submissionDraft?.preAnswer || submissionDraft?.baseline?.pre_answer" dir="auto">{{ submissionDraft.preAnswer ?? submissionDraft.baseline.pre_answer }}</p>
+      <p v-if="submissionDraft?.errorReason">{{ t(`tests.reflection${submissionDraft.errorReason[0].toUpperCase()}${submissionDraft.errorReason.slice(1)}`) }}</p>
+      <template v-if="submissionReview">
+        <p v-if="submissionReview.result">{{ t('tests.savedSessionComplete') }}</p>
+        <p v-else-if="submissionReview.missing">{{ t('tests.savedSessionMissing') }}</p>
+        <p v-else-if="!submissionReview.status.is_active">{{ t('tests.savedSessionPaused') }}</p>
+        <p v-else>{{ t('tests.savedProgressReview', { question: submissionReview.status.current_index + 1, answer: submissionReview.page?.saved_answer ?? '—', confidence: submissionReview.page?.saved_confidence ?? '—' }) }}</p>
+        <BaseButton :disabled="submitting" @click="useSavedProgress">{{ t('tests.useSavedProgress') }}</BaseButton>
+        <BaseButton v-if="canRetrySubmission" :disabled="submitting" @click="retryReviewedSubmission">{{ t('tests.retryReviewedDraft') }}</BaseButton>
+      </template>
+      <BaseButton :disabled="submitting" @click="readSubmissionState">{{ t('tests.readSavedProgress') }}</BaseButton>
+    </BaseCard>
+
     <template v-if="question">
       <QuestionDisplay
         :question="displayQuestion"
@@ -90,6 +107,7 @@ import QuestionNavDots from '@/components/base/QuestionNavDots.vue'
 import ShortcutHint from '@/components/common/ShortcutHint.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseCard from '@/components/base/BaseCard.vue'
 import { useTestQuestionController } from '../composables/useTestQuestionController'
 import { MODES } from '../modes'
 import { localizedQuestion } from '@/utils/localizedQuestion'
@@ -105,6 +123,13 @@ const config = computed(() => MODES[props.mode] || MODES.exam)
 
 const {
   store,
+  submissionRecoveryRequired,
+  submissionDraft,
+  submissionReview,
+  canRetrySubmission,
+  readSubmissionState,
+  useSavedProgress,
+  retryReviewedSubmission,
   question,
   selectedAnswer,
   confidence,

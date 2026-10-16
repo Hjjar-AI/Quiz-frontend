@@ -1,5 +1,14 @@
 {
   "tests": {
+    "savedSessionMissing": "لم تعد الجلسة متاحة ولم يتم العثور على نتيجة محفوظة. تبقى مسودتك هنا حتى تتخلى عنها.",
+    "reviewProgressRequired": "تم الاحتفاظ بمحاولة إجابتك. اقرأ التقدم المحفوظ وراجعه قبل المتابعة.",
+    "retainedAnswer": "مسودتك: الإجابة {answer}، الثقة {confidence}.",
+    "savedProgressReview": "تقدم الخادم: السؤال {question}، الإجابة المحفوظة {answer}، الثقة {confidence}.",
+    "savedSessionComplete": "توجد نتيجة مكتملة لهذه الجلسة على الخادم.",
+    "savedSessionPaused": "الجلسة المحفوظة متوقفة. استخدم التقدم المحفوظ ثم استأنفها.",
+    "useSavedProgress": "استخدام التقدم المحفوظ والتخلي عن هذه المسودة",
+    "retryReviewedDraft": "إعادة محاولة المسودة بالحالة المراجعة التي لم تتغير",
+    "readSavedProgress": "قراءة التقدم المحفوظ",
     "modeLabel": "الوضع",
     "refinements": "تصفية إضافية",
     "sourceBookShort": "الكتاب المصدر",

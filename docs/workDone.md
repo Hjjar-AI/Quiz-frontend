@@ -1,5 +1,11 @@
 # Current Vue source status
 
+## 2026-10-17 ordinary learning-write recovery
+
+Coordinated the backend learning-flow fixes with ordinary Vue writes: retained index/slot preconditions, normalized successful-write acknowledgements, preserved semantic errors and typed-expiry-only forced finish. Failed answer/confidence/reflection/recall/navigation attempts remain memory-only; conflicting actions and navigation wait for explicit server-state read/review. Users may accept saved progress/discard the draft, or explicitly retry the same original question only against an unchanged baseline. Missing/completed/paused/withheld cases retain recovery; generation/session checks reject stale results, logout/reset clears private drafts, and older servers without acknowledgements use a follow-up read without replaying confirmed writes. Arabic/English recovery controls use existing shared components. Other session parity items remain pending.
+
+Changed JavaScript/extracted Vue-script syntax, bilingual JSON keys/placeholders, source/caller tracing and whitespace checked. Vue SFC parser unavailable; template/browser/accessibility/concurrency/HTTP behavior unverified. No builds/compilation, suites, migrations, versions or Android changes. Deploy matching backend first; [shared closure and limits](../../backend/docs/archive/reviews/2026-10-17-learningFlowReview.md#source-corrections).
+
 Updated 2026-10-10. [Remaining gates](workPlan.md) · [Historical evidence](archive/README.md).
 
 ## 2026-10-13 distinct tinted theme palettes

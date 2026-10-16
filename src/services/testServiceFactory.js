@@ -28,8 +28,12 @@ export function createTestService(mode) {
       confidence = null,
       errorReason = null,
       preAnswer = null,
+      expectedIndex = null,
+      expectedSlot = null,
     ) {
       const payload = { session_id: sessionId, answer, action }
+      if (expectedIndex !== null) payload.expected_index = expectedIndex
+      if (expectedSlot !== null) payload.expected_slot = expectedSlot
       if (targetIndex !== null) payload.target_index = targetIndex
       if (answer !== null && answer !== undefined) {
         if (confidence !== null && confidence !== undefined) {
@@ -39,6 +43,10 @@ export function createTestService(mode) {
       }
       if (preAnswer !== null && preAnswer !== undefined) payload.pre_answer = preAnswer
       return apiClient.post(endpoints.ANSWER, payload)
+    },
+
+    completedResult(sessionId) {
+      return apiClient.get(endpoints.RESULTS, { params: { session_id: sessionId, mode } })
     },
 
     finish(sessionId) {

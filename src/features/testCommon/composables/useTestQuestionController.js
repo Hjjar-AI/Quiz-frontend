@@ -11,6 +11,7 @@ import { useDialog } from '@/composables/useDialog'
 import { useSound } from '@/composables/useSound'
 import { i18n } from '@/i18n'
 import { normalizeConfidenceScore } from '@/utils/confidence'
+import { sessionGeneration } from '@/services/api/sessionScope'
 
 export function useTestQuestionController(modeRef) {
   const router = useRouter()
@@ -42,10 +43,23 @@ export function useTestQuestionController(modeRef) {
   let advanceTimer = null
   let pendingSubmission = null
   const finishing = ref(false)
+  let disposed = false
+  const submissionRecoveryRequired = computed(() => store.submissionRecoveryRequired)
+  const submissionDraft = computed(() => store.pendingSubmission)
+  const submissionReview = computed(() => store.submissionReview)
+  const canRetrySubmission = computed(() => {
+    const draft = submissionDraft.value
+    const review = submissionReview.value
+    if (!draft || !review?.status?.is_active || !review.page || review.page.index !== draft.index || review.page.question.id !== draft.question.id) return false
+    const page = review.page
+    const baseline = { answer: page.saved_answer ?? null, confidence: page.saved_confidence ?? null,
+      pre_answer: page.saved_pre_answer || null, error_reason: page.saved_error_reason || null }
+    return Object.keys(baseline).every((key) => baseline[key] === draft.baseline[key])
+  })
 
   useSessionLeaveGuard({
-    active: () => store.isActive,
-    busy: () => submitting.value || interactionBusy.value || finishing.value,
+    active: () => store.isActive || submissionRecoveryRequired.value,
+    busy: () => submitting.value || interactionBusy.value || finishing.value || submissionRecoveryRequired.value,
     beforeLeave: clearAdvanceTimer,
   })
 
@@ -78,14 +92,14 @@ export function useTestQuestionController(modeRef) {
   ))
 
   const pauseDisabled = computed(() => (
-    submitting.value || interactionBusy.value || finishing.value || needsConfidence.value
+    submitting.value || interactionBusy.value || finishing.value || submissionRecoveryRequired.value || needsConfidence.value
   ))
   const navigationDisabled = computed(() => (
     pauseDisabled.value
     || (mode() === 'recall' && (!choicesRevealed.value || selectedAnswer.value == null))
   ))
   const answerControlsBusy = computed(() => (
-    submitting.value || interactionBusy.value || finishing.value
+    submitting.value || interactionBusy.value || finishing.value || submissionRecoveryRequired.value || questionLoadFailed.value || !store.answerBaseline
   ))
 
   function onTimerTick({ remaining }) {
@@ -93,8 +107,13 @@ export function useTestQuestionController(modeRef) {
   }
 
   function track(promise) {
-    pendingSubmission = promise
-    return promise
+    pendingSubmission = promise.then(async (response) => {
+      // Older backends do not return saved_slot. Refresh without replaying a
+      // confirmed mutation; failed reads use the normal question Retry UI.
+      if (!disposed && !store.answerBaseline && store.currentIndex < store.totalQuestions && !store.submissionRecoveryRequired) await loadQuestion()
+      return response
+    })
+    return pendingSubmission
   }
 
   function clearAdvanceTimer() {
@@ -104,7 +123,8 @@ export function useTestQuestionController(modeRef) {
   }
 
   function handleSubmissionFailure(error, fallbackKey) {
-    if (error?.code === 409 && mode() === 'exam') {
+    if (disposed || error?.code === 'CANCEL') return
+    if (error?.code === 409 && error?.details?.code === 'TIME_EXPIRED' && mode() === 'exam') {
       if (!autoFinishTriggered) {
         autoFinishTriggered = true
         notify(t('tests.timeUp'), 'warning')
@@ -133,13 +153,23 @@ export function useTestQuestionController(modeRef) {
   }
 
   async function loadQuestion() {
+    if (disposed) return
+    if (submissionRecoveryRequired.value) {
+      restoreAttemptedDraft()
+      return
+    }
     if (store.isComplete) {
       router.push(`/${mode()}/results`)
       return
     }
 
     questionLoadFailed.value = false
-    const response = await store.fetchQuestion()
+    const owner = store.sessionId
+    const generation = sessionGeneration()
+    const request = store.fetchQuestion()
+    const epoch = store.requestEpoch
+    const response = await request
+    if (disposed || store.sessionId !== owner || generation !== sessionGeneration() || store.requestEpoch !== epoch || submissionRecoveryRequired.value) return
     if (!response) {
       if (store.status === 'error') {
         question.value = null
@@ -167,7 +197,6 @@ export function useTestQuestionController(modeRef) {
 
   async function handleConfidence(value) {
     if (interactionBusy.value || submitting.value) return
-    const previousConfidence = confidence.value
     confidence.value = value
     if (selectedAnswer.value === null || selectedAnswer.value === undefined) {
       return
@@ -178,7 +207,6 @@ export function useTestQuestionController(modeRef) {
     try {
       await track(submitAnswer(selectedAnswer.value, 'same', null, value))
     } catch (error) {
-      confidence.value = previousConfidence
       handleSubmissionFailure(error, 'tests.confidenceSaveFailed')
       return
     } finally {
@@ -201,6 +229,7 @@ export function useTestQuestionController(modeRef) {
   async function handleReveal(value) {
     const clean = String(value || '').trim()
     if (!clean || submitting.value || interactionBusy.value) return
+    preAnswer.value = clean
     interactionBusy.value = true
     try {
       await track(submitAnswer(null, 'same', null, confidence.value, null, clean))
@@ -233,6 +262,7 @@ export function useTestQuestionController(modeRef) {
     if (interactionBusy.value || submitting.value) return
 
     const submittedQuestionId = store.currentQuestionId
+    reflectionReason.value = reason
     interactionBusy.value = true
     try {
       await track(submitAnswer(selectedAnswer.value, 'same', null, confidence.value, reason))
@@ -260,7 +290,6 @@ export function useTestQuestionController(modeRef) {
     try {
       response = await track(submitAnswer(submittedValue, 'same', null, submittedConfidence))
     } catch (error) {
-      selectedAnswer.value = store.answers[store.currentIndex] ?? null
       handleSubmissionFailure(error, 'tests.answerSaveFailed')
       return
     } finally {
@@ -356,7 +385,7 @@ export function useTestQuestionController(modeRef) {
   }
 
   async function finish({ forced = false } = {}) {
-    if (finishing.value || (!forced && navigationDisabled.value)) return
+    if (finishing.value || submissionRecoveryRequired.value || (!forced && navigationDisabled.value)) return
     finishing.value = true
     try {
       clearAdvanceTimer()
@@ -382,6 +411,59 @@ export function useTestQuestionController(modeRef) {
     }
   }
 
+  function restoreAttemptedDraft() {
+    const draft = submissionDraft.value
+    if (!draft) return
+    question.value = draft.question
+    selectedAnswer.value = draft.answer ?? draft.baseline.answer
+    confidence.value = draft.confidence ?? draft.baseline.confidence ?? 3
+    preAnswer.value = draft.preAnswer ?? draft.baseline.pre_answer ?? ''
+    reflectionReason.value = draft.errorReason ?? draft.baseline.error_reason ?? 'unknown'
+  }
+
+  async function readSubmissionState() {
+    if (interactionBusy.value || submitting.value) return
+    clearAdvanceTimer()
+    interactionBusy.value = true
+    try {
+      await store.readSubmissionState()
+    } catch (error) {
+      notify(error?.message || t('tests.reviewProgressRequired'), 'error')
+    } finally {
+      interactionBusy.value = false
+    }
+  }
+
+  async function useSavedProgress() {
+    if (interactionBusy.value || submitting.value) return
+    interactionBusy.value = true
+    try {
+      const review = store.acceptSubmissionReview()
+      if (!review) return
+      if (review.result) router.push(`/${mode()}/results`)
+      else if (review.missing || !review.status.is_active) router.push(`/${mode()}`)
+      else if (review.status.current_index >= store.totalQuestions) await finish({ forced: true })
+      else await loadQuestion()
+    } finally {
+      interactionBusy.value = false
+    }
+  }
+
+  async function retryReviewedSubmission() {
+    if (!canRetrySubmission.value || interactionBusy.value || submitting.value) return
+    const draft = submissionDraft.value
+    store.acceptSubmissionReview()
+    interactionBusy.value = true
+    try {
+      await track(submitAnswer(draft.answer, draft.action, draft.targetIndex, draft.confidence, draft.errorReason, draft.preAnswer))
+      await loadQuestion()
+    } catch (error) {
+      handleSubmissionFailure(error, 'tests.answerSaveFailed')
+    } finally {
+      interactionBusy.value = false
+    }
+  }
+
   const { setup: setupNavigation, cleanup: cleanupNavigation } = useTestNavigation({
     onNext: goNext,
     onPrevious: goPrevious,
@@ -389,7 +471,8 @@ export function useTestQuestionController(modeRef) {
     enabled: () => !answerControlsBusy.value && (mode() !== 'recall' || choicesRevealed.value),
   })
 
-  watch(tickedRemaining, (remaining) => {
+  watch([tickedRemaining, submissionRecoveryRequired, submitting, interactionBusy, finishing], ([remaining, recovering, saving, busy, completing]) => {
+    if (recovering || saving || busy || completing) return
     if (remaining === null || remaining > 0 || mode() !== 'exam') return
     if (autoFinishTriggered) return
     autoFinishTriggered = true
@@ -410,12 +493,20 @@ export function useTestQuestionController(modeRef) {
   })
 
   onBeforeUnmount(() => {
+    disposed = true
     clearAdvanceTimer()
     if (swipeContainer.value) cleanupNavigation(swipeContainer.value)
   })
 
   return {
     store,
+    submissionRecoveryRequired,
+    submissionDraft,
+    submissionReview,
+    canRetrySubmission,
+    readSubmissionState,
+    useSavedProgress,
+    retryReviewedSubmission,
     question,
     selectedAnswer,
     confidence,

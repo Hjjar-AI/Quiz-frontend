@@ -5,7 +5,7 @@ Start with [current status](workDone.md), [remaining work](workPlan.md), and [ag
 | Topic | Canonical location |
 | --- | --- |
 | Whole project navigation and maintenance rules | [Project documentation map](../../Android/docs/README.md) |
-| This repository's functional guides | [UI conventions](guides/UI_CONVENTIONS.md) · [Themes](guides/theme-guidelines.md) · [GitHub workflow](guides/GITHUB_WORKFLOW.md) · [Visual QA](verification/visual-qa-checklist.md) |
+| This repository's functional guides | [UI conventions](guides/UI_CONVENTIONS.md) · [Themes](guides/theme-guidelines.md) · [Git & GitHub start note](guides/Git/Git-GitHub-Start-Here.md) · [Visual QA](verification/visual-qa-checklist.md) |
 | Learning, selection and planner chronology | [Learning contracts](../../backend/docs/contracts/learningConsistency.md) |
 | Revisions, receipts, master writes and recovery | [Write/recovery contracts](../../backend/docs/contracts/writeRecovery.md) |
 | Schema/setup and coordinated deployment | [Schema readiness](../../backend/docs/contracts/schemaReadiness.md) |
