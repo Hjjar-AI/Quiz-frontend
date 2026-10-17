@@ -2,7 +2,7 @@
 
 # Frontend remaining work
 
-Updated 2026-10-09. Detailed previous checks/priorities: [archive](../2026-10-09-workPlan.md). Current native comparison: [Android source review](../../../../Android/docs/reference/functionalityReview.md).
+Updated 2026-10-09. Detailed previous checks/priorities: [archive](../2026-10-09-workPlan.md). Current native comparison: [Android source review](../../../../Android/README.md#features).
 
 - Verify Permissions role/user controls for tests.download_full_bank: localized description, individual Allow/Deny/Inherit and saved grant/revocation applied by Android permission refresh.
 - Browser/screen-reader verify [accessibility corrections](../reviews/2026-10-08-accessibilityReview.md): explicit answer submission/confidence focus, pending-write/navigation guards, route context, timed warnings, chart alternatives/toasts/reduced motion and targets.
@@ -25,13 +25,13 @@ Verify the matching category/case/tag/settings revisions and browser operation-i
 
 ## 2026-10-09 project rescan follow-up
 
-The [new source review](../../../../Android/docs/archive/reviews/2026-10-09-projectRescan.md) identifies seven additional bounded gaps: web account-generation guards; orphan pending-create/form association; transactional question ownership checks; knowledge-delete revisions; terminal/deleted receipt recovery; web conflict resolution; learner case pagination/read retention. All seven are now addressed in source; remaining checks are runtime release gates.
+The new source review identifies seven additional bounded gaps: web account-generation guards; orphan pending-create/form association; transactional question ownership checks; knowledge-delete revisions; terminal/deleted receipt recovery; web conflict resolution; learner case pagination/read retention. All seven are now addressed in source; remaining checks are runtime release gates.
 
 The seven rescan findings are source-complete. Validate coordinated DELETE/receipt contracts, account-switch cancellation, conflict review, orphan-save recovery and learner paging; see the latest [work log](../../workDone.md).
 
 ## 2026-10-09 deeper transaction/lifecycle findings
 
-The [deeper source review](../../../../Android/docs/archive/reviews/2026-10-09-deepTransactionReview.md) records eight new follow-up areas: knowledge/learning lock order, import revision reuse, master attempt resume/makeup and fresh access gates, master answer/navigation concurrency and web uncertainty handling, polling disposal/attempt scope, and planner revision/scope epochs. All eight findings are now source-complete; verify coordinated contracts, fresh planner schema and live interleavings. See the latest work log.
+The deeper source review records eight new follow-up areas: knowledge/learning lock order, import revision reuse, master attempt resume/makeup and fresh access gates, master answer/navigation concurrency and web uncertainty handling, polling disposal/attempt scope, and planner revision/scope epochs. All eight findings are now source-complete; verify coordinated contracts, fresh planner schema and live interleavings. See the latest work log.
 
 ## 2026-10-10 deeper consistency release scenarios
 

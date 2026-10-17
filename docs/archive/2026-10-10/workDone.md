@@ -15,7 +15,7 @@ Prior isolated source/helper checks are recorded in the archive; they do not est
 
 ## 2026-10-09 Android comparison
 
-Read current production routes/endpoints, analytics UI/store, question cards and custom export controls against Android/Django. Recorded remaining native parity in [Android review](../../../../Android/docs/reference/functionalityReview.md). Compacted work records with full historical snapshots retained. Documentation only; no source changes, build, suites, migrations or versions.
+Read current production routes/endpoints, analytics UI/store, question cards and custom export controls against Android/Django. Recorded remaining native parity in [Android review](../../../../Android/README.md#features). Compacted work records with full historical snapshots retained. Documentation only; no source changes, build, suites, migrations or versions.
 
 ## 2026-10-09 agent guidance maintenance
 
@@ -25,7 +25,7 @@ Compacted shared working rules without relaxing explicit build/suite/migration/v
 
 Added `admin.settings`-gated **Android connection file** to web System settings. The handler independently checks the capability; a memory-only phone-address field uses existing form validation timing, bilingual labels/errors and a separate download status. Public unencrypted v1 nested JSON matches Android first-launch/Change-server import; decorative randomized identities grant no server/account authority. Existing browser download helper handles Blob/object-URL cleanup. Export does not save runtime settings, reset their draft or call the backend. URL validation rejects credentials/query/fragment/non-HTTP schemes and preserves explicit deployment-prefix API paths.
 
-JavaScript helper/extracted setup-script syntax checks, JSON parsing/bilingual key references and whitespace checks passed. `@vue/compiler-sfc` is unavailable here, so Vue template parsing, browser downloads/accessibility and Android interoperability remain unverified. No dependencies, builds, suites, migrations, backend changes, deployment or versions. See [Android file contract and retained profiles](../../../../Android/docs/contracts/serverConfiguration.md).
+JavaScript helper/extracted setup-script syntax checks, JSON parsing/bilingual key references and whitespace checks passed. `@vue/compiler-sfc` is unavailable here, so Vue template parsing, browser downloads/accessibility and Android interoperability remain unverified. No dependencies, builds, suites, migrations, backend changes, deployment or versions. See [Android file contract and retained profiles](../../../../Android/README.md#setup).
 
 ## 2026-10-09 full-bank capability description
 
@@ -47,7 +47,7 @@ Production JavaScript/extracted Vue script syntax, locale JSON and whitespace so
 
 ## 2026-10-09 project rescan
 
-Inventoried production source and traced recovery/pagination/account/CRUD/ownership/conflict paths across Django, Android and Vue. Recorded seven prioritized findings in [project rescan](../../../../Android/docs/archive/reviews/2026-10-09-projectRescan.md). Review/documentation only; production unchanged, no builds/suites/migrations/database/runtime work. Existing completed source features remain completed; newly evidenced gaps are in the plan.
+Inventoried production source and traced recovery/pagination/account/CRUD/ownership/conflict paths across Django, Android and Vue. Recorded seven prioritized findings in project rescan. Review/documentation only; production unchanged, no builds/suites/migrations/database/runtime work. Existing completed source features remain completed; newly evidenced gaps are in the plan.
 
 ## 2026-10-09 seven rescan findings fixed in source
 
@@ -62,7 +62,7 @@ Validation: production Python AST (242 files), JavaScript/extracted Vue script s
 
 ## 2026-10-09 deeper source review
 
-Traced master/ordinary session transactions and callers, offline completion, learning evidence, import updates, planner configuration and web polling. Recorded eight source-evidenced follow-up areas in [deep review](../../../../Android/docs/archive/reviews/2026-10-09-deepTransactionReview.md). Review/documentation only: production unchanged, no builds/suites/migrations/database/runtime actions. Existing learning/offline protections were distinguished from new gaps; concurrency impact remains unexercised.
+Traced master/ordinary session transactions and callers, offline completion, learning evidence, import updates, planner configuration and web polling. Recorded eight source-evidenced follow-up areas in deep review. Review/documentation only: production unchanged, no builds/suites/migrations/database/runtime actions. Existing learning/offline protections were distinguished from new gaps; concurrency impact remains unexercised.
 
 ## 2026-10-10 eight deeper findings fixed in source
 

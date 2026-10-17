@@ -4,12 +4,12 @@ Start with [current status](workDone.md), [remaining work](workPlan.md), and [ag
 
 | Topic | Canonical location |
 | --- | --- |
-| Whole project navigation and maintenance rules | [Project documentation map](../../Android/docs/README.md) |
+| Whole project navigation and maintenance rules | [Project documentation map](../../Android/README.md) |
 | This repository's functional guides | [UI conventions](guides/UI_CONVENTIONS.md) · [Themes](guides/theme-guidelines.md) · [Git & GitHub start note](guides/Git/Git-GitHub-Start-Here.md) · [Visual QA](verification/visual-qa-checklist.md) |
 | Learning, selection and planner chronology | [Learning contracts](../../backend/docs/contracts/learningConsistency.md) |
 | Revisions, receipts, master writes and recovery | [Write/recovery contracts](../../backend/docs/contracts/writeRecovery.md) |
 | Schema/setup and coordinated deployment | [Schema readiness](../../backend/docs/contracts/schemaReadiness.md) |
-| Shared HTTP/device/concurrency scenarios | [Manual matrix](../../Android/docs/verification/manualVerification.md) |
+| Shared HTTP/device/concurrency scenarios | [Android verification checklist](../../Android/README.md#verification) |
 | Frontend automated results and coverage | [Suite report](verification/frontendTests.md) |
 | Previous reviews/change details | [Dated archive](archive/README.md) |
 
