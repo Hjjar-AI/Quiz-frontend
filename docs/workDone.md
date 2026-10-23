@@ -1,5 +1,15 @@
 # Current Vue source status
 
+## 2026-10-23 complete frontend test run
+
+User-authorized complete suite: `pnpm exec vitest run --maxWorkers=1` passed **951/951 tests across 73 files**, zero failures/skips, in **82.52s** (Vitest 5.0.1, Node 24.21.0, happy-dom). Existing installed dependencies were used; no application/test source, dependency or version changes, snapshot updates, production packaging, browser/print checks or coverage collection. Log: `/tmp/mukhtabir-frontend-full-tests.log`. The test process exited; no watch/recurring runner remains. These are Node DOM results, not browser/accessibility or deployed-HTTP evidence.
+
+## 2026-10-23 compatibility and milestone test policy
+
+Updated both agent instruction files: support matching post-fix clients only (also when revisiting earlier fixes), inspect current Vue dependencies without unauthorized frontend application changes, and request scoped internal Android/Python/Vue test-file/run approval after implementation at each milestone. Specific existing approval remains valid within its scope. Prohibit recurring/watch-mode verification; check active runners/memory before approved heavy work and retain concise results. Migration/version/build restrictions remain explicit.
+
+Documentation/link/whitespace checks only for this policy update; no frontend application changes, builds or test runs. The current Android test-file creation was explicitly authorized separately.
+
 ## 2026-10-17 theme-token corrections
 
 Fixed all seven token failures: darkened four muted-text seeds for derived placeholder contrast and separated Stone/Amber warning and Ruby danger from primary. Mirrored all seven values in backend PDF palettes; verified semantic/surface/text parity across all 12 themes. Existing surfaces, keys/aliases, pre-paint colors and test thresholds are retained.
